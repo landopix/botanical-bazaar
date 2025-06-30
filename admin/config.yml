@@ -1,0 +1,25 @@
+
+backend:
+  name: github
+  repo: landopix/botanical-bazaar
+  branch: main
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: "homepage"
+    label: "Homepage Content"
+    files:
+      - file: "content/home.md"
+        label: "Home"
+        name: "home"
+        fields:
+          - { label: "Hero Title", name: "hero_title", widget: "string" }
+          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
+          - { label: "Featured Plants", name: "featured_plants", widget: "list", fields: [
+              { label: "Name", name: "name", widget: "string" },
+              { label: "Size", name: "size", widget: "string" },
+              { label: "Type", name: "type", widget: "string" }
+            ]
+          }
