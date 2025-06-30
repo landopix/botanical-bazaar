@@ -1,25 +1,18 @@
 
 backend:
-  name: github
-  repo: landopix/botanical-bazaar
+  name: git-gateway
   branch: main
 
-media_folder: "assets/uploads"
-public_folder: "/assets/uploads"
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
 
 collections:
   - name: "homepage"
-    label: "Homepage Content"
+    label: "Homepage"
     files:
-      - file: "content/home.md"
-        label: "Home"
-        name: "home"
+      - label: "Main Page"
+        name: "main"
+        file: "content/home.md"
         fields:
-          - { label: "Hero Title", name: "hero_title", widget: "string" }
-          - { label: "Hero Subtitle", name: "hero_subtitle", widget: "string" }
-          - { label: "Featured Plants", name: "featured_plants", widget: "list", fields: [
-              { label: "Name", name: "name", widget: "string" },
-              { label: "Size", name: "size", widget: "string" },
-              { label: "Type", name: "type", widget: "string" }
-            ]
-          }
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Body", name: "body", widget: "markdown" }
