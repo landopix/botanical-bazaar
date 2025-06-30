@@ -2,6 +2,8 @@ backend:
   name: github
   repo: landopix/botanical-bazaar
   branch: main
+  auth_scope: repo
+  base_url: https://incredible-babka-ff6dc9.netlify.app
 
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
