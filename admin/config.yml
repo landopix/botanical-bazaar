@@ -1,7 +1,11 @@
 
 backend:
-  name: git-gateway
+  name: github
+  repo: landon-pixley/botanical-bazaar
   branch: main
+  auth_scope: repo
+
+site_url: https://incredible-babka-ff6dc9.netlify.app
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
