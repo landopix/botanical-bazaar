@@ -1,7 +1,7 @@
 
 backend:
   name: github
-  repo: landon-pixley/botanical-bazaar
+  repo: landopix/botanical-bazaar
   branch: main
   auth_scope: repo
 
