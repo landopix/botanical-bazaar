@@ -1,0 +1,42 @@
+
+body {
+    font-family: serif;
+    background-color: #1c5b34;
+    color: #f4e2b9;
+    margin: 0;
+    padding: 0;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+.logo {
+    height: 60px;
+}
+nav a {
+    margin: 0 1rem;
+    color: #f4e2b9;
+    text-decoration: none;
+}
+.hero {
+    text-align: center;
+    padding: 4rem 1rem;
+}
+.cta {
+    color: #f4e2b9;
+    font-weight: bold;
+}
+.featured {
+    background: #208642;
+    padding: 2rem;
+    text-align: center;
+}
+.plant-card {
+    background: #B5E6A2;
+    color: #208642;
+    margin: 1rem;
+    padding: 1rem;
+    display: inline-block;
+}

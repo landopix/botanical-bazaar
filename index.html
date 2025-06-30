@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Botanical Bazaar</title>
+    <style>
+        :root {
+            --deep-green: #208642;
+            --mint-green: #e5d9b6;
+            --gold: #D4AF37;
+            --beige: #f5f5dc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #0f3b27;
+            color: white;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #0f3b27;
+            height: 130px;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        header img {
+            height: 70px;
+            border-radius: 8px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        nav a {
+            color: var(--mint-green);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .hero {
+            background: url('https://cdn.pixabay.com/photo/2017/03/28/12/10/garden-2189176_1280.jpg') no-repeat center center/cover;
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-top: 1rem;
+        }
+
+        .section {
+            padding: 2rem;
+            background-color: var(--beige);
+            color: var(--deep-green);
+        }
+
+        .section h2 {
+            color: var(--mint-green);
+            margin-bottom: 1rem;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .product img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: var(--gold);
+            color: var(--deep-green);
+        }
+
+        .cta button {
+            background-color: var(--mint-green);
+            color: var(--deep-green);
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: #1a5734;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body style='background-color:#0f3b27;'>
+
+<header>
+    <img src="assets/logo_optimized_v2.png" alt="Botanical Bazaar Logo">
+    <nav>
+        <a href="#">Shop</a>
+        <a href="#">Consult</a>
+        <a href="#">Blog</a>
+        <a href="#">Events</a>
+        <a href="#">Contact</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Rooted in Beauty. Grown for You.</h1>
+    <p>Take a scroll through the garden →</p>
+</section>
+
+<section class="section">
+    <h2>Featured Plants</h2>
+    <div class="products">
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2017/08/06/10/53/tomatoes-2591412_1280.jpg" alt="Everglades Tomato">
+            <h3>Everglades Tomato</h3>
+            <p><em>Solanum lycopersicum</em><br>1 gal • $21.40</p>
+        </div>
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2018/07/12/17/25/banana-3534110_1280.jpg" alt="Gros Michel Banana">
+            <h3>Gros Michel Banana</h3>
+            <p><em>Musa acuminata</em><br>3 gal • $37.45</p>
+        </div>
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2020/05/14/17/58/jamaica-cherry-5170237_1280.jpg" alt="Jamaica Cherry">
+            <h3>Jamaica Cherry</h3>
+            <p><em>Muntingia calabura</em><br>1 gal • $37.45</p>
+        </div>
+        <div class="product">
+            <img src="https://cdn.pixabay.com/photo/2023/07/12/10/33/peanut-butter-fruit-8121523_1280.jpg" alt="Peanut Butter Fruit">
+            <h3>Peanut Butter Fruit</h3>
+            <p><em>Bunchosia argentea</em><br>3 gal • $37.45</p>
+        </div>
+    </div>
+</section>
+
+<div class="cta">
+    <h2>Ready to Grow Together?</h2>
+    <button>Book a Consultation</button>
+</div>
+
+<footer>
+    &copy; 2025 The Botanical Bazaar · St. Petersburg, FL
+</footer>
+
+</body>
+</html>
