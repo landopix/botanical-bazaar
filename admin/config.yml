@@ -2,23 +2,17 @@ backend:
   name: github
   repo: landopix/botanical-bazaar
   branch: main
-  auth_scope: repo
-  base_url: https://incredible-babka-ff6dc9.netlify.app
 
-media_folder: "static/images/uploads"
+media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
-
-site_url: https://incredible-babka-ff6dc9.netlify.app
-logo_url: /images/logo.png
 
 collections:
   - name: "blog"
     label: "Blog"
-    folder: "content/blog"
+    folder: "src/content/blog"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Body", name: "body", widget: "markdown" }
-
