@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Botanical Bazaar | Rare Tropical Plants in St. Petersburg FL</title>
+  <!-- Primary meta description for search engines -->
+  <meta name="description" content="Rare and resilient tropical plants in St. Petersburg, Florida. Shop local pickup plants and seeds from The Botanical Bazaar.">
+  <!-- Canonical URL to avoid duplicate content issues -->
+  <!-- Use a trailing slash on the root URL for consistency across the site -->
+  <link rel="canonical" href="https://thebotanicalbazaar.com/">
+  <!-- Open Graph metadata for social sharing -->
+  <meta property="og:site_name" content="The Botanical Bazaar">
+  <meta property="og:title" content="The Botanical Bazaar | Rare Tropical Plants in St. Petersburg FL">
+  <meta property="og:description" content="Rare and resilient tropical plants in St. Petersburg, Florida. Shop local pickup plants and seeds from The Botanical Bazaar.">
+  <meta property="og:url" content="https://thebotanicalbazaar.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png">
+  <!-- Twitter Card metadata -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Botanical Bazaar | Rare Tropical Plants in St. Petersburg FL">
+  <meta name="twitter:description" content="Rare and resilient tropical plants in St. Petersburg, Florida. Shop local pickup plants and seeds from The Botanical Bazaar.">
+  <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/lantern.png">
+  <!-- LocalBusiness structured data in JSON-LD format -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "The Botanical Bazaar",
+      "url": "https://thebotanicalbazaar.com",
+      "description": "The Botanical Bazaar is a tropical plant nursery based in St. Petersburg, Florida. We grow and curate rare and resilient tropical plants for local pickup and the Tampa Bay community.",
+      "image": "https://thebotanicalbazaar.com/assets/lantern.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "St. Petersburg",
+        "addressRegion": "FL",
+        "postalCode": "33712",
+        "addressCountry": "US"
+      },
+      "areaServed": [
+        "St. Petersburg FL",
+        "Tampa FL",
+        "Pinellas County FL",
+        "Tampa Bay FL"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/thebotanicalbazaar"
+      ]
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Sidebar styles -->
+  <link rel="stylesheet" href="sidebar.css">
+  <style>
+body {
+      margin: 0;
+      /* Use the body font defined in the global stylesheet. Do not set
+         a separate background or color here; sidebar.css will apply
+         the site's dark green base and text colours. */
+      font-family: var(--font-body);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #00301e;
+      flex-wrap: wrap;
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #E9DCBE;
+      font-weight: 700;
+      font-family: 'Crimson Text', serif;
+    }
+    /* Align the hero content centrally on all screen sizes. Using a column
+       layout ensures the brand message, animated logo and Almanac signup
+       stack vertically and remain centred. The gap between items creates
+       breathing room without relying on separate margins. */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 2rem;
+      position: relative;
+    }
+    .hero-text h1 {
+      font-size: 2.5rem;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    /* Ensure hero text container is centered and stacks on both desktop and mobile.
+       By turning the hero text into a flex column and centering its children,
+       headings, paragraphs and CTA buttons remain centred horizontally.
+       This prevents misalignment on mobile where the logo and text may have
+       previously drifted to one side. */
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .hero-text a {
+      text-decoration: none;
+      color: #E9DCBE;
+      font-weight: bold;
+    }
+    .featured {
+      padding: 2rem;
+    }
+    .featured h2 {
+      margin-bottom: 1rem;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-around;
+    }
+    .product-card {
+      background-color: #F5E7C4;
+      border-radius: 10px;
+      padding: 1rem;
+      width: 220px;
+      text-align: center;
+      color: #1C3D2E;
+      transition: transform 0.12s;
+      box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+    }
+    /* Sold out styles on the homepage featured products. These match the
+       shop page so that low-quantity items are clearly marked and not
+       interactive. The opacity and badge help visitors recognise stock
+       limitations immediately. */
+    .product-card.sold-out {
+      opacity: 0.55;
+      pointer-events: none;
+      position: relative;
+    }
+    .product-card .sold-out-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #ba2f2f;
+      color: #ffffff;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: 'Crimson Text', serif;
+    }
+    .product-card:hover {
+      transform: translateY(-4px) scale(1.025);
+      box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+    }
+    .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #e9dcbe11;
+      margin-bottom: 0.8em;
+    }
+    .product-card strong {
+      display: block;
+      margin-top: 0.2em;
+      font-size: 1.22em;
+    }
+    .product-card p {
+      margin: 0.1em 0;
+    }
+    .product-card a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .cta {
+      background-color: #D4B06A;
+      padding: 2rem;
+      margin: 2rem;
+      text-align: center;
+      border-radius: 12px;
+      color: #1C3D2E;
+      position: relative;
+    }
+    /* Overlay the leaf pattern inside gold call-to-action boxes.
+       Using a ::before pseudo-element allows the pattern to sit
+       beneath the text without affecting layout. The background
+       color remains the same, but the pattern adds visual interest.
+       A very low opacity ensures the pattern does not compete with
+       legibility. */
+    .cta::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background-image: url('assets/vine-pattern.png');
+      background-repeat: repeat;
+      /* Use a larger size within the CTA so very few vines appear */
+      background-size: 800px;
+      opacity: 0.06;
+      /* Use soft-light blending inside CTA to echo the background effect */
+      mix-blend-mode: soft-light;
+      border-radius: inherit;
+      z-index: 0;
+    }
+    .cta * {
+      position: relative;
+      z-index: 1;
+    }
+    .cta button {
+      background-color: #1C3D2E;
+      color: #F5E7C4;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      margin-top: 1rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.08em;
+    }
+    .almanac {
+      padding: 2rem;
+    }
+    .almanac h2 {
+      margin-bottom: 0.5rem;
+    }
+    .almanac a {
+      display: block;
+      color: #E9DCBE;
+      text-decoration: none;
+      font-style: italic;
+      margin-bottom: 0.3rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #E9DCBE;
+    }
+    /* Shop categories section styles */
+    .shop-categories {
+      padding: 2rem;
+    }
+    .shop-categories h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #D4B06A;
+      font-family: var(--font-heading, 'Cinzel', serif);
+    }
+    .categories-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .category-card {
+      background-color: #F5E7C4;
+      color: #1C3D2E;
+      padding: 1.2rem 1.6rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+    .category-card:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+    }
+    @media (max-width: 900px) {
+      .products { flex-direction: column; align-items: center; }
+      .hero { flex-direction: column; text-align: center; }
+      /* Center header navigation links on small screens. Ensure
+         navigation wraps nicely and stays centred below the logo. */
+      header nav {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0.6rem;
+      }
+      header nav a {
+        margin: 0.4rem 0.8rem;
+      }
+    }
+
+    /* Hero image (GIF) styles */
+    .hero-image {
+      width: 45%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Radial gradient behind the animated GIF to soften edges */
+      position: relative;
+      background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+    }
+    .hero-image img {
+      width: 100%;
+      height: auto;
+    }
+    @media (max-width: 900px) {
+      .hero-image {
+        width: 80%;
+        margin-top: 1.5rem;
+      }
+    }
+  </style>
+  <!-- Site favicons and icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <!-- Global Analytics & Heatmap -->
+  <!-- Google tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0XS3CDM9G');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxxgho3991");
+  </script>
+  <!-- Custom Clarity tags to record page type, Almanac visibility and user interactions. This script
+       waits for the DOM to load before registering event handlers so it works on static pages
+       without any extra dependencies. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set the page type to 'home' and note that the Almanac is visible at page load.
+      if (typeof clarity === 'function') {
+        clarity('set', 'page_type', 'home');
+        clarity('set', 'almanac_visible', true);
+      }
+      // Track consultation CTA clicks. There may be multiple consultation links on the page,
+      // so iterate through them. GA tracking already exists; this complements it for Clarity.
+      document.querySelectorAll('a[href="consultations.html"]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (typeof clarity === 'function') {
+            clarity('track', 'consultation_click');
+          }
+        });
+      });
+      // Track Almanac link clicks within the hero. Include the destination in the metadata.
+      document.querySelectorAll('.almanac-hero a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (typeof clarity === 'function') {
+            clarity('track', 'almanac_link_click', { link: link.getAttribute('href') });
+          }
+        });
+      });
+      // Track newsletter signup submissions.
+      var almanacForm = document.querySelector('.almanac-hero form');
+      if (almanacForm) {
+        almanacForm.addEventListener('submit', function() {
+          if (typeof clarity === 'function') {
+            clarity('track', 'almanac_signup_submit');
+          }
+        });
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- Quick actions: search toggle, cart, wishlist and account icons -->
+  <div class="quick-actions">
+    <button class="sidebar-toggle" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
+      </svg>
+    </button>
+    <a href="cart.html" class="cart-btn" aria-label="View cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+    </a>
+    <a href="wishlist.html" class="wishlist-btn" aria-label="View wishlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </a>
+    <a href="account.html" class="account-btn" aria-label="My account">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </a>
+  </div>
+  <!-- Sidebar navigation -->
+  <nav id="site-sidebar" class="sidebar" role="navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="consultations.html">Consultations</a></li>
+      <li><a href="almanac.html">The Almanac</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <!-- Link to the collector's gallery so visitors can easily find the awarded orchid collection -->
+      <li><a href="orchids-gallery.html">Gallery</a></li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="guides-submenu">Plant Guides</button>
+        <ul id="guides-submenu" class="submenu">
+          <li><a href="garden-month.html">This Month in the Garden</a></li>
+          <li><a href="zones.html">Best Plants for Your Zone</a></li>
+        </ul>
+      </li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="policies-submenu">Policies</button>
+        <ul id="policies-submenu" class="submenu">
+          <li><a href="shipping-pickup.html">Shipping &amp; Pickup</a></li>
+          <li><a href="returns.html">Live Plant Guarantee</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <header>
+  <a href="index.html" style="display:inline-block;">
+    <!-- Use lantern sub mark for header branding -->
+    <img src="assets/lantern.png" alt="Lantern sub mark">
+  </a>
+    <nav>
+      <a href="shop.html">Shop</a>
+      <a href="consultations.html">Consultations</a>
+      <a href="almanac.html">The Almanac</a>
+      <a href="events.html">Events</a>
+      <a href="orchids-gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+    </nav>
+</header>
+  <section class="hero">
+    <div class="hero-text">
+      <!-- The homepage must have exactly one H1 for the brand name -->
+      <h1>The Botanical Bazaar</h1>
+      <p style="font-size:2rem;line-height:1.4;margin:0.4rem 0 0.8rem 0;font-family: var(--font-heading);">Rooted in Beauty.<br />Grown for You.</p>
+      <!-- Clear positioning statement -->
+      <p style="font-size:1.1rem;margin:0.5em 0 1em 0;max-width:28ch;line-height:1.4;">Rare and resilient tropical plants, curated in St.&nbsp;Petersburg, FL - lovingly grown for our community and beyond.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <a href="shop.html" style="background:#D4B06A;color:#1C3D2E;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','click', { event_category: 'CTA', event_label: 'Shop the Store' }); }">Shop the Store</a>
+        <a href="consultations.html" style="background:transparent;color:#D4B06A;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;border:2px solid #D4B06A;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','consultation_click', { event_category: 'CTA', event_label: 'Book Consultation' }); }">Book a Consultation</a>
+      </div>
+    </div>
+    <!-- Optimised animated logo in place of the slideshow. The original
+         GIF was heavy (~5 MB) and has been resized and compressed to
+         improve loading on mobile and desktop. You can update
+         assets/logo-animation-optimized.gif with a new version if needed. -->
+    <div class="hero-image">
+      <img src="assets/logo-animation-optimized.gif" alt="The Botanical Bazaar Animated Logo" loading="lazy" />
+    </div>
+    <!-- Almanac links and signup have been elevated into the hero. This
+         container holds quick links into the gardening guides and a
+         signup form to collect email addresses. Keeping everything
+         together in the hero makes it immediately visible on page load. -->
+    <div class="almanac-hero" style="width:100%;max-width:600px;margin-top:1rem;text-align:center;">
+      <h2 style="color:#D4B06A;margin-bottom:0.4rem;">The Almanac</h2>
+      <a href="garden-month.html" style="display:block;color:#E9DCBE;text-decoration:none;font-style:italic;margin-bottom:0.3rem;">This Month in the Garden</a>
+      <a href="zones.html" style="display:block;color:#E9DCBE;text-decoration:none;margin-bottom:0.6rem;">Best Plants for Your Zone</a>
+      <div class="almanac-signup-inner" style="background:#123826;color:#F5E7C4;padding:1.5rem;margin:1rem auto;border-radius:12px;max-width:600px;text-align:center;box-shadow:0 3px 14px rgba(20,40,30,0.10);">
+        <h3 style="color:#D4B06A;margin-top:0;margin-bottom:0.5rem;">Join Our Almanac</h3>
+        <p style="margin:0.5rem auto 1rem auto;max-width:500px;font-size:1.05rem;line-height:1.4;">Subscribe to receive seasonal gardening tips, new plant arrivals and exclusive offers directly to your inbox.</p>
+        <form name="almanac-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;max-width:500px;margin:0 auto;">
+          <input type="hidden" name="form-name" value="almanac-signup" />
+          <p style="display:none;"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
+          <input type="email" name="email" placeholder="Your email address" required style="flex:1;min-width:200px;padding:0.5rem 0.8rem;border-radius:8px;border:1px solid #749c7f;background:#F5E7C4;color:#1C3D2E;font-family:'Crimson Text',serif;font-size:1rem;" />
+          <button type="submit" style="background:#D4B06A;color:#1C3D2E;border:none;border-radius:8px;padding:0.5rem 1.2rem;font-family:'Crimson Text',serif;font-size:1rem;cursor:pointer;">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Local Pickup Banner: emphasise that all sales are for pickup at the nursery. Uses gold background with dark green text for visibility. -->
+  <div class="pickup-banner" style="background:#D4B06A;color:#1C3D2E;padding:0.8rem 1.2rem;margin:1rem auto;border-radius:10px;max-width:800px;font-size:1rem;text-align:center;">
+    <strong>Local Pickup Only</strong>&nbsp;–&nbsp;Our plants are available for pick&nbsp;up in St.&nbsp;Petersburg, FL. We do not ship live plants at this time.
+  </div>
+  <!-- Category browsing section -->
+  <section class="shop-categories">
+    <h2>Browse by Category</h2>
+    <div class="categories-grid">
+      <!-- Updated category structure for easier browsing and alignment with business goals -->
+      <!-- Category cards updated to mirror the inventory‑driven taxonomy.  These
+           links point to filtered views on the shop page by setting the
+           category query parameter.  Only categories that exist in the
+           inventory are exposed here to avoid dead‑end pages. -->
+      <a href="shop.html" class="category-card">Shop&nbsp;All</a>
+      <a href="shop.html?category=herbs-medicinal" class="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</a>
+      <a href="shop.html?category=fruit-trees" class="category-card">Fruit&nbsp;Trees</a>
+      <a href="shop.html?category=houseplants" class="category-card">Houseplants</a>
+      <a href="shop.html?category=orchids-tropicals" class="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</a>
+      <a href="shop.html?category=seeds" class="category-card">Seeds</a>
+      <a href="shop.html?category=exotics-rare" class="category-card">Exotics&nbsp;&amp;&nbsp;Rare</a>
+      <a href="zones.html" class="category-card">Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone</a>
+      <!-- Dedicated card linking to the collector's gallery page -->
+      <a href="orchids-gallery.html" class="category-card">Collector's&nbsp;Gallery</a>
+    </div>
+  </section>
+  <section class="featured" id="collection">
+    <h2>Featured Plants</h2>
+    <div class="products">
+      <!-- JS will inject featured product cards here -->
+    </div>
+  </section>
+  <section class="cta">
+    <h2>Book Time with a Plant Guide</h2>
+    <button onclick="location.href='consultations.html'">Book a Consultation</button>
+  </section>
+  <!-- Almanac content has been moved into the hero above. The original
+       standalone Almanac and signup sections are no longer rendered
+       here to keep the page concise and focused on the centred hero. -->
+  <footer>
+    <p style="margin:0.5rem 0;">
+      <a href="shipping-pickup.html" style="color:#E9DCBE;text-decoration:underline;margin-right:0.6rem;">Shipping &amp; Pickup</a>
+      |
+      <a href="returns.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Live Plant Guarantee</a>
+      |
+      <a href="terms.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Terms &amp; Conditions</a>
+      |
+      <a href="privacy.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Privacy Policy</a>
+    </p>
+    &copy; 2025 The Botanical Bazaar. All rights reserved.
+  </footer>
+
+  <!-- Back to Top Button: appears after scrolling and returns the user to the top of the page. -->
+  <button id="back-to-top" title="Back to Top" aria-label="Back to top" style="display:none;position:fixed;bottom:20px;right:20px;background:#D4B06A;color:#1C3D2E;border:none;border-radius:50%;width:48px;height:48px;font-size:1.5rem;cursor:pointer;z-index:999;box-shadow:0 2px 6px rgba(0,0,0,0.2);">↑</button>
+
+  <!-- Dynamic Product Loader -->
+  <script src="products.js"></script>
+  <script src="sidebar.js"></script>
+  <script>
+    function renderFeaturedProducts() {
+      const featured = document.querySelector('.products');
+      if (!featured || !window.PRODUCTS) return;
+      // Limit to the first five products so the homepage feels less cluttered
+      const featuredProducts = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.slice(0, 5) : [];
+      featured.innerHTML = featuredProducts.map(product => {
+        const isSoldOut = !product.quantity || product.quantity < 3;
+        if (isSoldOut) {
+          return `
+        <div class="product-card sold-out">
+          <div>
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/placeholder.png'">
+          </div>
+          <strong>${product.name}</strong>
+          <p>${product.sizes}</p>
+          <p>${product.type}</p>
+          <div class="sold-out-badge">Sold Out</div>
+        </div>
+          `;
+        }
+        return `
+        <div class="product-card">
+          <a href="product.html?item=${encodeURIComponent(product.slug)}">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/placeholder.png'">
+          </a>
+          <strong>${product.name}</strong>
+          <p>${product.sizes}</p>
+          <p>${product.type}</p>
+        </div>
+        `;
+      }).join('');
+    }
+    document.addEventListener('DOMContentLoaded', renderFeaturedProducts);
+    // Back to Top logic. Show the button when the user scrolls down and scroll smoothly to the top when clicked.
+    document.addEventListener('DOMContentLoaded', function () {
+      const backBtn = document.getElementById('back-to-top');
+      if (!backBtn) return;
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 300) {
+          backBtn.style.display = 'block';
+        } else {
+          backBtn.style.display = 'none';
+        }
+      });
+      backBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>

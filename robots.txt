@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+Disallow: /account.html
+Disallow: /cart.html
+Disallow: /checkout.html
+Disallow: /cancel.html
+Disallow: /success.html
+# Allow product.html route for dynamic products to be indexed
+# The previous Disallow prevented Google from crawling product detail pages.
+# Removing this rule ensures our dynamic product pages are discoverable.
+# Other transactional pages remain disallowed.
+# See crawlability notes for context.
+#
+# Removed: Disallow: /product.html
+Disallow: /wishlist.html
+
+User-agent: OAI-SearchBot
+Allow: /
+
+Sitemap: https://thebotanicalbazaar.com/sitemap.xml
