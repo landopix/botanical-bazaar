@@ -1,0 +1,327 @@
+/* Sidebar navigation styles for The Botanical Bazaar */
+
+/* Import custom fonts used in the main logo. Cinzel provides a classic, elegant
+   serif reminiscent of the small caps seen in the logo, while Crimson Text
+   continues to serve as a body font fallback. Including both weights allows
+   headings and body copy to harmonize across the site. */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap');
+
+/* Define CSS variables for fonts so they can be referenced throughout the
+   stylesheets. This makes it easy to update the typeface in one place. */
+:root {
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Crimson Text', serif;
+}
+
+/* Apply the body font to all text by default. Individual pages can override
+   this if needed. */
+body {
+  font-family: var(--font-body);
+  /* Set a base dark green background matching the submark color.
+     Individual pages should not override this. */
+  background-color: #00301e;
+  color: #E9DCBE;
+}
+
+/* Headings inherit the Cinzel font to echo the logo styling. Adjust the
+   line-height to ensure readability and avoid crowding. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+/* Base sidebar container */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: #00301e;
+  color: #E9DCBE;
+  padding: 1rem;
+  overflow-y: auto;
+  /* Hidden by default on mobile */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Toggle button to open/close sidebar.
+   Position it in the lower right corner of the screen so it never overlaps navigation links or logos.
+   Using bottom placement also makes it easily reachable on mobile. */
+/* The individual toggle button will be placed within the quick-actions container.
+   Remove the fixed positioning here so it can be positioned by its parent. */
+.sidebar-toggle {
+  background-color: #00301e;
+  color: #E9DCBE;
+  border: none;
+  padding: 0.4rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Quick actions container holds the search toggle, cart, wishlist and account icons. */
+.quick-actions {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 1100;
+}
+
+/* Style for each quick action button or link. These share the same circle shape and colors. */
+.quick-actions button,
+.quick-actions a {
+  width: 44px;
+  height: 44px;
+  background-color: #00301e;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #D4B06A;
+  text-decoration: none;
+  /* Prevent SVG icons from being clipped by hiding overflow */
+  overflow: hidden;
+  /* Provide inner padding so icons do not touch the edges of the circle */
+  padding: 6px;
+}
+
+.quick-actions button svg,
+/* Ensure icons fit comfortably within their circular backgrounds by
+   explicitly sizing them. Without specifying width and height, SVG
+   strokes can be clipped at the edges of the bubbles. */
+/* Size icons consistently and allow them to scale within their parent */
+.quick-actions button svg,
+.quick-actions a svg {
+  width: 24px;
+  height: 24px;
+  stroke: #D4B06A;
+  object-fit: contain;
+}
+
+/* On larger screens keep the toggle visible and sidebar hidden by default. The menu will open via the toggle. */
+
+/* Sidebar list styling */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Global link colors: make inline links gold for better readability on dark backgrounds.
+   Product cards and specific components override this to inherit their own color if needed. */
+body a {
+  color: #D4B06A;
+}
+body a:hover {
+  color: #E9DCBE;
+}
+.sidebar li {
+  margin-bottom: 0.3rem;
+}
+.sidebar a {
+  color: #E9DCBE;
+  text-decoration: none;
+  display: block;
+  padding: 0.35rem 0.2rem;
+  border-radius: 4px;
+}
+.sidebar a:hover {
+  background-color: #1C3D2E;
+  color: #D4B06A;
+}
+.sidebar a.active {
+  background-color: #1C3D2E;
+  color: #D4B06A;
+}
+
+/* Footer links: use the gold palette instead of default blue. */
+footer a {
+  color: #D4B06A;
+  text-decoration: underline;
+}
+footer a:hover {
+  color: #E9DCBE;
+}
+
+/* When the sidebar is open, slide the page content to the right instead of overlaying it. */
+/* When the sidebar opens, overlay it on top of the content without
+   dramatically shifting the page. Removing the large margin prevents
+   layout jumping on mobile and desktop. */
+body.sidebar-open {
+  margin-left: 0;
+  overflow: hidden;
+  transition: none;
+}
+
+/* Add a subtle radial gradient behind the header logo (first link in the header).
+   This softens the transition between the logo's dark background and the page
+   background by fading outwards from the centre of the logo. The pseudo
+   element sits behind the logo and does not interfere with interactions. */
+header > a:first-of-type {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+header > a:first-of-type::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  /* Softer radial gradient: start with a slightly lighter green and fade to transparent.
+     This creates a subtle glow around the logo rather than a dark halo. */
+  background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Reduce the horizontal margin between header navigation links slightly so that
+   the full word "Contact" fits comfortably on one line without getting truncated.
+   This style applies to any nav inside a header across the site. */
+header nav a {
+  margin: 0 0.8rem;
+}
+
+/*
+ * Subtle glow around branding images
+ * Applying a diffuse box-shadow creates a radial gradient effect around the
+ * lantern sub mark in the header and the animated logo in the hero section.
+ * The glow uses a dark green hue similar to the site palette so that
+ * edges blend seamlessly with the page background without obvious borders.
+ */
+header img {
+  box-shadow: 0 0 25px 12px rgba(1, 61, 36, 0.45);
+  border-radius: 50%;
+}
+
+.hero-image img {
+  box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+  border-radius: 12px;
+}
+
+/*
+ * Global decorative overlay
+ *
+ * Many pages on the site share the same dark green background. To introduce
+ * minimal botanical details without altering the underlying brand colors,
+ * this pseudo-element renders a repeating leaf pattern behind all content.
+ * The pattern image (leaf-pattern.png) consists of simple leaf silhouettes
+ * on a light background. By placing it on the ::before layer with very
+ * low opacity, the white parts of the image softly lighten the dark green
+ * canvas while the leaves add subtle texture. Because the element is
+ * fixed and spans the viewport, it gives the appearance of a seamless
+ * pattern across every page. The z-index is negative so it never
+ * interferes with clickable elements. Adjust the opacity or size to
+ * increase or decrease visibility.
+ */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Use the elongated vine pattern, spaced widely for a minimal feel */
+  /* Use the lighter vine pattern with increased brightness so that
+     the Art Nouveau botanical overlay remains visible across all
+     pages. */
+  background-image: url('assets/vine-pattern-light.png');
+  background-repeat: repeat;
+  /* Increase the size so the motifs are large and appear less frequently */
+  /* Adjust pattern scale and opacity so the vines appear larger and less frequent.
+     Increasing the size makes the spacing between motifs larger, while a slightly
+     higher opacity ensures the pattern is subtly visible across all pages. */
+  /* Scale the pattern slightly larger so motifs appear less often.
+     Increasing the size decreases repetition and adds a more subtle
+     decorative effect. */
+  background-size: 700px;
+  /* Increase opacity so the overlay is more visible on darker pages
+     without compromising readability. Raising to 0.25 helps ensure the
+     vine motifs can be seen against the dark green background. */
+  /* Lower opacity so the pattern softens the background without washing
+     out the dark green base. This value balances visibility and
+     subtlety. */
+  opacity: 0.12;
+  z-index: -2;
+  /* Use a soft-light blend so the light portions of the pattern gently
+     lighten the dark green beneath while the vines remain discernible.
+     This prevents the white background of the pattern from drastically
+     shifting the overall page colour. */
+  mix-blend-mode: soft-light;
+}
+
+/* The header no longer needs extra right padding since the toggle is placed in the bottom right of the viewport. */
+
+/* Expandable groups */
+.sidebar .group-toggle {
+  background: none;
+  border: none;
+  color: #E9DCBE;
+  padding: 0.35rem 0.2rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.sidebar .group-toggle:hover {
+  background-color: #1C3D2E;
+  color: #D4B06A;
+}
+.sidebar .submenu {
+  display: none;
+  padding-left: 1rem;
+}
+.sidebar .submenu.open {
+  display: block;
+}
+
+/* Search bar at top of sidebar */
+#sidebar-search {
+  width: 100%;
+  margin-bottom: 0.8rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #1C3D2E;
+  border-radius: 6px;
+  background-color: #123826;
+  color: #F5E7C4;
+  font-family: inherit;
+  font-size: 1rem;
+}
+#sidebar-search::placeholder {
+  color: #8da38b;
+}
+
+/* -----------------------------------------------
+ * Mobile navigation enhancements
+ *
+ * On narrow screens the sidebar menu should centre its content for a more
+ * balanced presentation. Centering the text within links and group
+ * toggles improves legibility and reduces the perception of left‑aligned
+ * clutter. This rule applies only on screens 900px wide or smaller.
+ */
+@media (max-width: 900px) {
+  #site-sidebar a,
+  #site-sidebar .group-toggle {
+    text-align: center;
+  }
+}

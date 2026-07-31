@@ -1,0 +1,10 @@
+# The Botanical Bazaar AI crawler guidance
+# Public pages may be crawled for discovery and indexing.
+# User-specific, checkout, and transient pages should not be relied on as canonical public content.
+
+User-agent: *
+Allow: /
+
+Public-site: https://thebotanicalbazaar.com/
+Sitemap: https://thebotanicalbazaar.com/sitemap.xml
+Preferred-canonical-host: https://thebotanicalbazaar.com
