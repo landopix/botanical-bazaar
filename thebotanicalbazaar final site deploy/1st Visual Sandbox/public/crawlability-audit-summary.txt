@@ -1,0 +1,32 @@
+The Botanical Bazaar crawlability update
+
+Files created
+- robots.txt
+- llms.txt
+- crawlability-audit-summary.txt
+
+Files updated
+- sitemap.xml
+- account.html
+- cart.html
+- checkout.html
+- cancel.html
+- success.html
+- product.html
+- wishlist.html
+- consultations.html
+- events.html
+- everglades-tomato.html
+- gros-michel-banana.html
+- jamaica-cherry.html
+- peanut-butter-fruit.html
+- zone9b.html
+
+Changes made
+- Allowed public crawling in robots.txt
+- Disallowed user-specific and transactional routes in robots.txt
+- Added sitemap reference to robots.txt
+- Added llms.txt for simple AI crawler guidance
+- Added canonical tags to public pages that were missing them
+- Added noindex meta tags to user-specific and transactional pages
+- Added zone9b.html to sitemap.xml

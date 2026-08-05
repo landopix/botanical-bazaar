@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Remove noindex directive so product pages can be crawled -->
+  <!-- Meta robots is intentionally omitted on product pages to allow indexing -->
+  <title>Product | The Botanical Bazaar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Canonical will be populated dynamically via JavaScript based on the product slug -->
+  <link id="canonical-link" rel="canonical" href="https://thebotanicalbazaar.com/product.html" />
+  <!-- Sidebar styles -->
+  <link rel="stylesheet" href="sidebar.css">
+  <style>
+body {
+      margin: 0;
+      min-height: 100vh;
+      /* Inherit the global dark green background and overlay; use
+         the site-wide body font. */
+      font-family: var(--font-body);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #00301e;
+      flex-wrap: wrap;
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #E9DCBE;
+      font-weight: 700;
+      font-family: 'Crimson Text', serif;
+    }
+    main {
+      max-width: 720px;
+      margin: 2.5rem auto;
+      background: #123826;
+      border-radius: 16px;
+      box-shadow: 0 3px 14px rgba(20,40,30,0.12);
+      padding: 2rem 1.5rem;
+      color: #F5E7C4;
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    .product-img {
+      flex: 1;
+      min-width: 200px;
+      max-width: 250px;
+    }
+    .product-img img {
+      width: 100%;
+      border-radius: 14px;
+      background: #e9dcbe11;
+      object-fit: cover;
+    }
+    .product-info {
+      flex: 2;
+      text-align: left;
+    }
+    .product-info h1 {
+      margin-top: 0;
+      font-size: 2rem;
+      color: #D4B06A;
+    }
+    .product-info p {
+      margin: 0.5rem 0;
+      font-size: 1.12em;
+    }
+    .product-info .price {
+      color: #D4B06A;
+      font-size: 1.6em;
+      font-weight: bold;
+      margin: 0.7em 0;
+    }
+
+    /* Tag chips styling for quick-reference tags shown at the top of
+       product pages. These mirror the category chips on the shop page. */
+    .product-info .product-tag-link {
+      display: inline-block;
+      background-color: #1C3D2E;
+      color: #F5E7C4;
+      border: 1px solid #749c7f;
+      border-radius: 14px;
+      padding: 0.15rem 0.55rem;
+      margin: 0 0.2rem 0.4rem 0;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+    .product-info .product-tag-link:hover {
+      background-color: #249160;
+      color: #fffde6;
+    }
+    .back-link {
+      color: #E9DCBE;
+      text-decoration: underline;
+      margin-bottom: 1.5em;
+      display: inline-block;
+      font-size: 1em;
+    }
+    .add-cart-btn {
+      display: inline-block;
+      background: #1C3D2E;
+      color: #F5E7C4;
+      font-family: 'Crimson Text', serif;
+      font-size: 1.07em;
+      padding: 0.6em 1.7em;
+      border: none;
+      border-radius: 24px;
+      margin-top: 1em;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .add-cart-btn:hover {
+      background: #D4B06A;
+      color: #1C3D2E;
+    }
+
+    /* Styles for plant specifications collapsible panels */
+    .plant-specs details {
+      margin-top: 0.6rem;
+      background: #123826;
+      border-radius: 8px;
+      padding: 0.4rem 0.8rem;
+      color: #F5E7C4;
+    }
+    .plant-specs summary {
+      cursor: pointer;
+      font-weight: bold;
+      color: #D4B06A;
+      outline: none;
+    }
+    .plant-specs summary::-webkit-details-marker {
+      display: none;
+    }
+    .plant-specs details[open] summary {
+      margin-bottom: 0.3rem;
+    }
+    .plant-specs ul {
+      margin: 0 0 0.3rem 1rem;
+      padding: 0;
+      list-style: disc;
+    }
+    .plant-specs li {
+      margin: 0.2rem 0;
+      font-size: 0.95em;
+    }
+    @media (max-width: 800px) {
+      main { flex-direction: column; align-items: center; gap: 1.5rem; padding: 1.2rem 0.5rem; }
+      .product-info { text-align: center; }
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #E9DCBE;
+    }
+  </style>
+  <!-- Site favicons and icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <!-- Global Analytics & Heatmap -->
+  <!-- Google tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0XS3CDM9G');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxxgho3991");
+  </script>
+  <!-- Clarity page context for product pages. Sets the page type and names once
+       the product is loaded. Additionally tracks add‑to‑cart attempts. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for the product data to be loaded before setting tags.
+      function setClarityTags() {
+        try {
+          // Grab the slug from the URL and look up the product in window.PRODUCTS
+          var params = new URLSearchParams(window.location.search);
+          var slug = params.get('item');
+          var prod = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(function(p){ return p.slug === slug; }) : null;
+          if (typeof clarity === 'function') {
+            clarity('set', 'page_type', 'product');
+            if (prod) {
+              clarity('set', 'product_name', prod.name);
+              var state = (!prod.quantity || prod.quantity < 3) ? 'sold_out' : 'active';
+              clarity('set', 'product_stock_state', state);
+            }
+          }
+        } catch (e) {
+          // ignore errors
+        }
+      }
+      setClarityTags();
+      // Attach handler for Add to Cart button after renderProduct runs. Use
+      // a MutationObserver to wait until the button exists in the DOM.
+      var observer = new MutationObserver(function(mutations, obs) {
+        var btn = document.querySelector('.add-cart-btn');
+        if (btn) {
+          btn.addEventListener('click', function() {
+            if (typeof clarity === 'function') {
+              try {
+                var slug = new URLSearchParams(window.location.search).get('item');
+                var prod = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(function(p){ return p.slug === slug; }) : null;
+                clarity('track', 'add_to_cart_attempt', { product_name: prod ? prod.name : slug });
+              } catch(e) {}
+            }
+          });
+          obs.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
+</head>
+<body>
+  <!-- Quick actions: search toggle, cart, wishlist and account icons -->
+  <div class="quick-actions">
+    <button class="sidebar-toggle" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
+      </svg>
+    </button>
+    <a href="cart.html" class="cart-btn" aria-label="View cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+    </a>
+    <a href="wishlist.html" class="wishlist-btn" aria-label="View wishlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </a>
+    <a href="account.html" class="account-btn" aria-label="My account">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </a>
+  </div>
+  <!-- Sidebar navigation -->
+  <nav id="site-sidebar" class="sidebar" role="navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="consultations.html">Consultations</a></li>
+      <li><a href="almanac.html">The Almanac</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="guides-submenu">Plant Guides</button>
+        <ul id="guides-submenu" class="submenu">
+          <li><a href="garden-month.html">This Month in the Garden</a></li>
+          <li><a href="zones.html">Best Plants for Your Zone</a></li>
+        </ul>
+      </li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="policies-submenu">Policies</button>
+        <ul id="policies-submenu" class="submenu">
+          <li><a href="shipping-pickup.html">Shipping &amp; Pickup</a></li>
+          <li><a href="returns.html">Live Plant Guarantee</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <header>
+    <a href="index.html" style="display:inline-block;">
+      <!-- Use lantern sub mark for header branding -->
+      <img src="assets/lantern.png" alt="Lantern sub mark">
+    </a>
+    <nav>
+      <a href="shop.html">Shop</a>
+      <a href="consultations.html">Consultations</a>
+      <a href="almanac.html">The Almanac</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+  <main id="main-content">
+    <!-- Product details will be injected here by JS -->
+  </main>
+  <footer>
+    <p style="margin:0.5rem 0;">
+      <a href="shipping-pickup.html" style="color:#E9DCBE;text-decoration:underline;margin-right:0.6rem;">Shipping &amp; Pickup</a>
+      |
+      <a href="returns.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Live Plant Guarantee</a>
+      |
+      <a href="terms.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Terms &amp; Conditions</a>
+      |
+      <a href="privacy.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Privacy Policy</a>
+    </p>
+    &copy; 2025 The Botanical Bazaar. All rights reserved.
+  </footer>
+  <script src="products.js"></script>
+  <!-- Sidebar script -->
+  <script src="sidebar.js"></script>
+  <script>
+    // Get slug from URL query
+    function getProductSlug() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('item');
+    }
+
+    /**
+     * Build HTML for plant specification panels based on the product’s tags and
+     * other metadata. Each panel corresponds to a category (e.g. light,
+     * moisture, hardiness, pet safety, growth habit, special features).  The
+     * values are derived from the tags and other product fields.  A short
+     * description accompanies each value, modelled after the format on
+     * Logee’s product pages【236332633556407†L245-L269】.
+     */
+    function buildSpecsHtml(product) {
+      // Helper to create a panel HTML string
+      function createPanel(title, items) {
+        if (!items || items.length === 0) return '';
+        let list = items.map(function(item) {
+          return `<li><strong>${item.label}:</strong> ${item.description}</li>`;
+        }).join('');
+        return `<details><summary>${title}</summary><ul>${list}</ul></details>`;
+      }
+      const specsSections = [];
+      const tags = Array.isArray(product.tags) ? product.tags.slice() : [];
+      // Light Requirements
+      const lightItems = [];
+      if (tags.includes('bright-indirect')) lightItems.push({ label: 'Bright Indirect', description: 'Thrives in bright, indirect light. Avoid direct afternoon sun.' });
+      if (tags.includes('full-sun')) lightItems.push({ label: 'Full Sun', description: 'Requires at least 6 hours of direct sunlight per day.' });
+      if (tags.includes('low-light')) lightItems.push({ label: 'Low Light', description: 'Tolerates low light; avoid deep shade but does not need direct sun.' });
+      const lightPanel = createPanel('Light Requirements', lightItems);
+      // Moisture & Humidity
+      const moistureItems = [];
+      if (tags.includes('high-humidity')) moistureItems.push({ label: 'High Humidity', description: 'Requires high humidity and consistent moisture; mist regularly or use a humid environment.' });
+      if (tags.includes('drought-tolerant')) moistureItems.push({ label: 'Drought Tolerant', description: 'Allow soil to dry between waterings; avoid overwatering.' });
+      const moisturePanel = createPanel('Moisture & Humidity', moistureItems);
+      // Hardiness & Temperature
+      const hardinessItems = [];
+      if (product.zones && Array.isArray(product.zones) && product.zones.length > 0) {
+        const zoneRange = product.zones.length > 1 ? `${product.zones[0]}–${product.zones[product.zones.length - 1]}` : product.zones[0];
+        hardinessItems.push({ label: 'USDA Zones', description: `Hardy in zones ${zoneRange}.` });
+      }
+      if (tags.includes('protect-below-50')) hardinessItems.push({ label: 'Protect below 50°F', description: 'Move indoors or provide protection when temperatures dip below 50°F.' });
+      const hardinessPanel = createPanel('Temperature & Hardiness', hardinessItems);
+      // Pet Safety
+      const petItems = [];
+      if (tags.includes('pet-friendly')) petItems.push({ label: 'Pet Friendly', description: 'Non‑toxic to cats and dogs.' });
+      if (tags.includes('toxic-to-pets')) petItems.push({ label: 'Toxic to Pets', description: 'Contains compounds that may be harmful if ingested; keep out of reach of pets.' });
+      const petPanel = createPanel('Pet Safety', petItems);
+      // Growth Habit / Plant Type
+      const typeItems = [];
+      if (tags.includes('aroid')) typeItems.push({ label: 'Aroid', description: 'Member of the Araceae family; tropical foliage plant often with climbing habit.' });
+      if (tags.includes('bromeliad')) typeItems.push({ label: 'Bromeliad', description: 'Tropical plant in the Bromeliaceae family; many are epiphytic and appreciate bright, indirect light.' });
+      if (tags.includes('cactus')) typeItems.push({ label: 'Cactus', description: 'Drought‑tolerant succulent with spines; needs full sun and well‑draining soil.' });
+      if (tags.includes('succulent') && !tags.includes('cactus')) typeItems.push({ label: 'Succulent', description: 'Stores water in fleshy leaves or stems; prefers bright light and infrequent watering.' });
+      if (tags.includes('epiphytic')) typeItems.push({ label: 'Epiphytic', description: 'Grows on other plants or surfaces without soil; absorbs moisture from the air.' });
+      if (tags.includes('air-plant')) typeItems.push({ label: 'Air Plant', description: 'A type of epiphyte that grows without soil; appreciate bright, indirect light and good air circulation.' });
+      if (tags.includes('tree')) typeItems.push({ label: 'Tree', description: 'Woody perennial plant; requires ample space and support.' });
+      if (tags.includes('shrubs')) typeItems.push({ label: 'Shrub', description: 'Small to medium‑sized woody plant; may produce flowers or berries.' });
+      if (tags.includes('herb')) typeItems.push({ label: 'Herb', description: 'Plant used for culinary or medicinal purposes; often aromatic.' });
+      if (tags.includes('fruit-tree')) typeItems.push({ label: 'Fruit Tree', description: 'Produces edible fruit; typically requires full sun and pollination.' });
+      if (tags.includes('medicinal')) typeItems.push({ label: 'Medicinal', description: 'Known for traditional medicinal uses; parts of the plant may be used in herbal remedies.' });
+      if (tags.includes('fern')) typeItems.push({ label: 'Fern', description: 'Non‑flowering vascular plant with feathery fronds; thrives in high humidity and indirect light.' });
+      if (tags.includes('orchid')) typeItems.push({ label: 'Orchid', description: 'Member of the Orchidaceae family; often epiphytic with exotic blooms requiring high humidity and bright, indirect light.' });
+      if (tags.includes('tropical')) typeItems.push({ label: 'Tropical', description: 'Native to warm, humid regions; prefers temperatures above 60°F and high moisture.' });
+      if (tags.includes('beginner-friendly')) typeItems.push({ label: 'Beginner Friendly', description: 'Easy to care for and forgiving of minor mistakes; suitable for novice gardeners.' });
+      if (tags.includes('rare')) typeItems.push({ label: 'Collector Plant', description: 'Sought‑after, hard‑to‑find plant prized by collectors.' });
+      const typePanel = createPanel('Plant Type & Habit', typeItems);
+      // Special Features
+      const featureItems = [];
+      if (tags.includes('fragrant') || tags.includes('aromatic')) featureItems.push({ label: 'Fragrant', description: 'Produces aromatic flowers or foliage.' });
+      if (tags.includes('root-crop')) featureItems.push({ label: 'Edible Root', description: 'Grown for its edible roots or tubers.' });
+      if (tags.includes('medicinal') && !featureItems.some(it => it.label === 'Medicinal')) featureItems.push({ label: 'Medicinal', description: 'Used in herbal remedies or traditional medicine.' });
+      if (tags.includes('climbing')) featureItems.push({ label: 'Climbing', description: 'Has a climbing habit; may need support or a trellis.' });
+      if (tags.includes('drought-tolerant') && !moistureItems.some(it => it.label === 'Drought Tolerant')) featureItems.push({ label: 'Drought Tolerant', description: 'Allows soil to dry between waterings and thrives in dry conditions.' });
+      const featurePanel = createPanel('Special Features', featureItems);
+      // Combine panels
+      const panels = [lightPanel, moisturePanel, hardinessPanel, petPanel, typePanel, featurePanel].filter(Boolean).join('');
+      return `<div class="plant-specs">${panels}</div>`;
+    }
+    function showProductDetails() {
+      if (!window.PRODUCTS) return;
+      const slug = getProductSlug();
+      const prod = window.PRODUCTS.find(p => p.slug === slug);
+
+      const main = document.getElementById('main-content');
+      if (!prod) {
+        main.innerHTML = `
+          <div style="width:100%;text-align:center;">
+            <h1>Product Not Found</h1>
+            <a class="back-link" href="shop.html">Back to Shop</a>
+          </div>
+        `;
+        return;
+      }
+
+      // Build the inner HTML. Treat any quantity below three as sold out. When
+      // sold out, display a simple label and omit the Add to Cart button. No
+      // low‑stock warning is shown because we do not sell very low quantities.
+      const isSoldOut = !prod.quantity || prod.quantity < 3;
+      let priceDisplay;
+      if (isSoldOut) {
+        priceDisplay = '<span class="sold-out" style="color:#ba2f2f;font-weight:bold;">Sold\u00A0Out</span>';
+      } else {
+        priceDisplay = '$' + (prod.price ? prod.price.toFixed(2) : '-');
+      }
+      const addBtnHtml = isSoldOut ? '' : '<button class="add-cart-btn">Add to Cart</button>';
+      // Build the visible product details markup. In addition to the
+      // existing fields, display a list of tags (if provided) and a
+      // concise notice about our pickup‑only shipping and live plant
+      // guarantee. Tags are linked to tag pages (tag.html?tag=slug) and
+      // formatted nicely. If no tags exist on the product, the list is
+      // omitted entirely.
+      let tagsHtml = '';
+      if (Array.isArray(prod.tags) && prod.tags.length) {
+        // Convert slug‑style tags (e.g. bright-indirect) into a
+        // human‑readable label (Bright Indirect) and link to the tag
+        // landing page. Each tag is separated by a comma.
+        const tagLinks = prod.tags.map(function(tag) {
+          // Convert tag slug to display label by replacing dashes with
+          // spaces and capitalizing each word. Use a simple helper.
+          const label = tag.split('-').map(function(part) {
+            return part.charAt(0).toUpperCase() + part.slice(1);
+          }).join(' ');
+          return `<a href="tag.html?tag=${encodeURIComponent(tag)}" class="product-tag-link">${label}</a>`;
+        }).join(' ');
+        tagsHtml = `<p style="margin-top:0.8rem;"><strong>Tags:</strong> ${tagLinks}</p>`;
+      }
+      // Shipping & return notice: remind customers that we only offer
+      // local pickup and outline the live plant guarantee. This text
+      // aligns with the policy documents and supports the schema data.
+      const policyHtml = `
+        <div class="policy-note" style="margin-top:1.2rem;font-size:0.95em;line-height:1.45;color:#d9cba9;">
+          <strong>Local Pickup Only:</strong> All purchases are available for pickup at our nursery in St.&nbsp;Petersburg, Florida. We do not ship at this time. <br>
+          <strong>Live Plant Guarantee:</strong> Please inspect your plant at pickup. If any hidden issues arise within 7&nbsp;days, we\'ll exchange it or issue store credit. Beyond this window, returns are not accepted.
+        </div>`;
+      main.innerHTML = `
+        <a href="shop.html" class="back-link">&larr; Back to Shop</a>
+        <div class="product-img">
+          <img src="${prod.image}" alt="${prod.name}" onerror="this.src='assets/placeholder.png'" loading="lazy">
+        </div>
+        <div class="product-info">
+          <h1>${prod.name}</h1>
+          <p><strong>Size(s):</strong> ${prod.sizes}</p>
+          <p><strong>Type:</strong> ${prod.type}</p>
+          <p>${prod.description || ""}</p>
+          <div class="price">${priceDisplay}</div>
+          ${addBtnHtml}
+          <!-- Display tags up front for quick reference. Show each tag as a
+               clickable link before the specifications. This mirrors the
+               Logee’s style of surfacing all plant tags at the top of
+               the product page for quick browsing. -->
+          ${tagsHtml}
+          <!-- Plant specifications panels -->
+          ${buildSpecsHtml(prod)}
+          ${policyHtml}
+        </div>
+      `;
+
+      // Create or update structured data scripts. Remove any existing
+      // product or breadcrumb schema elements so we don't duplicate them on
+      // repeated navigation events.
+      const oldProductSchema = document.getElementById('product-schema');
+      if (oldProductSchema) oldProductSchema.remove();
+      const oldBreadcrumbSchema = document.getElementById('breadcrumb-schema');
+      if (oldBreadcrumbSchema) oldBreadcrumbSchema.remove();
+
+      // Build Product schema using the loaded product data.
+      // Build structured data for this product. If sold out, set offer
+      // availability to OutOfStock; otherwise use InStock. Include
+      // low‑stock and sold‑out conditions in the offer metadata so search
+      // engines display accurate availability.
+      const availabilityUrl = isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
+      // Build a description that never falls back to an empty string. If no
+      // description is provided in the product data, use a simple default
+      // incorporating the product name. Search engines require a non-empty
+      // description for merchant listings.
+      const descriptionText = (prod.description && prod.description.trim())
+        ? prod.description
+        : `${prod.name} live plant available for purchase.`;
+
+      // Build the product schema. Add a MerchantReturnPolicy and
+      // OfferShippingDetails to satisfy Google Merchant Center requirements.
+      const productSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': prod.name,
+        'description': descriptionText,
+        'image': new URL(prod.image, window.location.href).href,
+        'sku': prod.slug,
+        'offers': {
+          '@type': 'Offer',
+          'priceCurrency': 'USD',
+          'price': prod.price,
+          'availability': availabilityUrl,
+          'url': new URL(window.location.href).href,
+          // Add a truthful merchant return policy. Live plants can be
+          // exchanged or store credit issued within 7 days after pickup. No
+          // traditional returns are accepted beyond this window.
+          'hasMerchantReturnPolicy': {
+            '@type': 'MerchantReturnPolicy',
+            'name': 'Live Plant Guarantee',
+            'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
+            'merchantReturnDays': 7,
+            'returnMethod': 'InStoreOnly',
+            'refundType': 'StoreCredit'
+          },
+          // Local pickup is the only delivery mode currently offered. The
+          // shipping rate is zero because customers collect plants in person.
+          'shippingDetails': {
+            '@type': 'OfferShippingDetails',
+            'shippingRate': {
+              '@type': 'MonetaryAmount',
+              'value': 0,
+              'currency': 'USD'
+            },
+            'shippingDestination': {
+              '@type': 'DefinedRegion',
+              'addressCountry': 'US',
+              'addressRegion': 'FL',
+              'addressLocality': 'St. Petersburg'
+            },
+            'deliveryTime': {
+              '@type': 'ShippingDeliveryTime',
+              'handlingTime': {
+                '@type': 'QuantitativeValue',
+                'minValue': 0,
+                'maxValue': 2,
+                'unitCode': 'DAY'
+              },
+              'transitTime': {
+                '@type': 'QuantitativeValue',
+                'minValue': 0,
+                'maxValue': 0,
+                'unitCode': 'DAY'
+              }
+            },
+            'deliveryMode': 'https://schema.org/DeliveryModePickUp'
+          }
+        },
+        'brand': {
+          '@type': 'Brand',
+          'name': 'The Botanical Bazaar'
+        }
+      };
+      const productScript = document.createElement('script');
+      productScript.id = 'product-schema';
+      productScript.type = 'application/ld+json';
+      productScript.text = JSON.stringify(productSchema);
+      document.head.appendChild(productScript);
+
+      // Update page metadata dynamically based on the selected product. Only
+      // title, description and Open Graph/Twitter tags are overridden. Existing
+      // meta elements are updated if present; otherwise they are created. This
+      // prevents duplication when navigating between products.
+      // Title
+      document.title = `${prod.name} | The Botanical Bazaar`;
+      // Helper to get or create a meta element
+      function setMeta(selectorObj, content) {
+        let el;
+        if (selectorObj.name) {
+          el = document.querySelector(`meta[name="${selectorObj.name}"]`);
+        } else if (selectorObj.property) {
+          el = document.querySelector(`meta[property="${selectorObj.property}"]`);
+        }
+        if (!el) {
+          el = document.createElement('meta');
+          Object.keys(selectorObj).forEach(k => el.setAttribute(k, selectorObj[k]));
+          document.head.appendChild(el);
+        }
+        el.setAttribute('content', content);
+      }
+      const descriptionContent = prod.description ? prod.description : `${prod.name} available at The Botanical Bazaar`;
+      setMeta({ name: 'description' }, descriptionContent);
+      setMeta({ property: 'og:title' }, `${prod.name} | The Botanical Bazaar`);
+      setMeta({ property: 'og:description' }, descriptionContent);
+      // Build absolute URL for image
+      const absoluteImg = new URL(prod.image, window.location.href).href;
+      setMeta({ property: 'og:image' }, absoluteImg);
+      setMeta({ name: 'twitter:title' }, `${prod.name} | The Botanical Bazaar`);
+      setMeta({ name: 'twitter:description' }, descriptionContent);
+      setMeta({ name: 'twitter:image' }, absoluteImg);
+
+      // Ensure a canonical link exists and points to the current product URL.  
+      // Search engines use the canonical tag to determine the preferred version of a page.  
+      // If none exists in the document, create one; otherwise update its href.  
+      (function updateCanonical() {
+        let link = document.querySelector('link[rel="canonical"]');
+        if (!link) {
+          link = document.createElement('link');
+          link.setAttribute('rel', 'canonical');
+          document.head.appendChild(link);
+        }
+        link.setAttribute('href', new URL(window.location.href).href);
+      })();
+
+      /* canonical link is handled above; duplicate block removed */
+
+      // Build BreadcrumbList schema for this product page
+      const breadcrumbSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': new URL('index.html', window.location.origin).href
+          },
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Shop',
+            'item': new URL('shop.html', window.location.origin).href
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': prod.name,
+            'item': new URL(window.location.href).href
+          }
+        ]
+      };
+      const breadcrumbScript = document.createElement('script');
+      breadcrumbScript.id = 'breadcrumb-schema';
+      breadcrumbScript.type = 'application/ld+json';
+      breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
+      document.head.appendChild(breadcrumbScript);
+
+      // Fire GA4 view_item event
+      if (typeof gtag === 'function') {
+        gtag('event', 'view_item', {
+          currency: 'USD',
+          value: prod.price,
+          items: [
+            {
+              item_id: prod.slug,
+              item_name: prod.name,
+              price: prod.price,
+              item_category: (prod.categories && prod.categories[0]) || 'Plant'
+            }
+          ]
+        });
+      }
+
+      // Attach event handler to the Add to Cart button for GA4 tracking and local cart management
+      const addBtn = main.querySelector('.add-cart-btn');
+      if (addBtn) {
+        addBtn.addEventListener('click', function () {
+          // Send GA4 event
+          if (typeof gtag === 'function') {
+            gtag('event', 'add_to_cart', {
+              currency: 'USD',
+              value: prod.price,
+              items: [
+                {
+                  item_id: prod.slug,
+                  item_name: prod.name,
+                  price: prod.price,
+                  item_category: (prod.categories && prod.categories[0]) || 'Plant',
+                  quantity: 1
+                }
+              ]
+            });
+          }
+          // Persist cart in localStorage. Use an array of items so multiple products can be stored.
+          try {
+            const cartRaw = localStorage.getItem('cart');
+            const cart = cartRaw ? JSON.parse(cartRaw) : [];
+            // Check if this product is already in the cart
+            const existing = cart.find(item => item.slug === prod.slug);
+            if (existing) {
+              existing.quantity = (existing.quantity || 1) + 1;
+            } else {
+              cart.push({ slug: prod.slug, name: prod.name, price: prod.price, quantity: 1, image: prod.image });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Provide visual feedback on the button
+            const originalText = addBtn.textContent;
+            addBtn.textContent = 'Added!';
+            setTimeout(() => { addBtn.textContent = originalText; }, 1600);
+          } catch (e) {
+            console.error('Error storing cart', e);
+          }
+        });
+      }
+    }
+    document.addEventListener('DOMContentLoaded', showProductDetails);
+  </script>
+</body>
+</html>
