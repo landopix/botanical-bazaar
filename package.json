@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@builder.io/react": "^9.4.2",
-    "@netlify/plugin-nextjs": "^5.15.13",
     "@sanity/client": "^7.26.2",
     "@sanity/image-url": "^2.1.1",
     "next": "^14.2.35",
