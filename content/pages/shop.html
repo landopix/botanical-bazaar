@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shop | The Botanical Bazaar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Page description for search engines -->
+  <meta name="description" content="Browse our collection of rare and resilient tropical plants available for local pickup at The Botanical Bazaar in St. Petersburg, Florida." />
+  <!-- Canonical URL to avoid duplicate content issues -->
+  <link rel="canonical" href="https://thebotanicalbazaar.com/shop.html" />
+  <!-- Open Graph data -->
+  <meta property="og:title" content="Shop Tropical Plants | The Botanical Bazaar" />
+  <meta property="og:description" content="Browse our collection of rare and resilient tropical plants available for local pickup at The Botanical Bazaar in St. Petersburg, Florida." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thebotanicalbazaar.com/shop.html" />
+  <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
+  <!-- Twitter Card metadata -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shop Tropical Plants | The Botanical Bazaar" />
+  <meta name="twitter:description" content="Browse our collection of rare and resilient tropical plants available for local pickup at The Botanical Bazaar in St. Petersburg, Florida." />
+  <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Sidebar styles -->
+  <link rel="stylesheet" href="sidebar.css">
+  <!-- Favicon for browser tab and URL bar -->
+  <link rel="icon" type="image/png" href="assets/lantern.png">
+  <style>
+body {
+      margin: 0;
+      /* Use the body font defined globally; avoid overriding the
+         background or colour so the overlay and base colour apply. */
+      font-family: var(--font-body);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #00301e;
+      flex-wrap: wrap;
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #E9DCBE;
+      font-weight: 700;
+      font-family: 'Crimson Text', serif;
+    }
+    .shop-container {
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 1.5rem;
+    }
+    h1 {
+      margin-top: 0.3em;
+      margin-bottom: 1.5em;
+      color: #E9DCBE;
+      font-size: 2.2rem;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .shop-intro {
+      max-width: 750px;
+      margin: -1.0em auto 1.8em auto;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #E9DCBE;
+      text-align: center;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .product-card {
+      background-color: #F5E7C4;
+      border-radius: 10px;
+      padding: 1rem;
+      width: 220px;
+      text-align: center;
+      color: #1C3D2E;
+      transition: transform 0.12s;
+      box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+      position:relative;
+    }
+
+    /* When a product is sold out (quantity less than 3), reduce its
+       opacity and disable pointer events so it cannot be clicked. A
+       badge is positioned in the upper right corner to clearly mark
+       the sold-out state on both desktop and mobile. */
+    .product-card.sold-out {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .product-card .sold-out-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #ba2f2f;
+      color: #ffffff;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-family: 'Crimson Text', serif;
+    }
+    .product-card:hover {
+      transform: translateY(-4px) scale(1.025);
+      box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+      z-index:2;
+    }
+    .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #e9dcbe11;
+      margin-bottom: 0.8em;
+    }
+    .product-card strong {
+      display: block;
+      margin-top: 0.2em;
+      font-size: 1.22em;
+    }
+    .product-card p {
+      margin: 0.1em 0;
+    }
+    .product-card a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .price {
+      color: #249160;
+      font-weight: 700;
+      margin: 0.5em 0 0.2em 0;
+    }
+    .view-btn {
+      background: #1C3D2E;
+      color: #F5E7C4;
+      padding: 0.5em 1.4em;
+      border-radius: 18px;
+      border: none;
+      margin-top: 0.6em;
+      font-size:1em;
+      cursor:pointer;
+      font-family:'Crimson Text', serif;
+      transition: background 0.12s;
+    }
+    .view-btn:hover { background: #249160; color:#fffde6;}
+    @media (max-width: 900px) {
+      .products { flex-direction: column; align-items: center; }
+      .shop-container{padding:0.5rem;}
+    }
+  </style>
+  <!-- Site favicons and icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <!-- Global Analytics & Heatmap -->
+  <!-- Google tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0XS3CDM9G');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxxgho3991");
+  </script>
+  <!-- Clarity page context for the shop. Set the page type and record the number of
+       products and sold‑out items loaded on first render. Additional events can
+       be sent from JavaScript when users interact with filters or search. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof clarity === 'function') {
+        clarity('set', 'page_type', 'shop');
+        // Provide counts so sessions can be filtered later by product availability. Compute
+        // counts directly from the PRODUCTS array if available.
+        try {
+          var total = 0, soldOut = 0;
+          if (Array.isArray(window.PRODUCTS)) {
+            total = window.PRODUCTS.length;
+            window.PRODUCTS.forEach(function(p) {
+              if (!p.quantity || p.quantity < 3) soldOut++;
+            });
+          }
+          clarity('set', 'product_count', total);
+          clarity('set', 'sold_out_count', soldOut);
+        } catch (e) {
+          // silently ignore counting errors
+        }
+      }
+    });
+  </script>
+  <script src="products.js"></script>
+</head>
+<body>
+  <!-- Quick actions: search toggle, cart, wishlist and account icons -->
+  <div class="quick-actions">
+    <button class="sidebar-toggle" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
+      </svg>
+    </button>
+    <a href="cart.html" class="cart-btn" aria-label="View cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+    </a>
+    <a href="wishlist.html" class="wishlist-btn" aria-label="View wishlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </a>
+    <a href="account.html" class="account-btn" aria-label="My account">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </a>
+  </div>
+  <!-- Sidebar navigation -->
+  <nav id="site-sidebar" class="sidebar" role="navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="consultations.html">Consultations</a></li>
+      <li><a href="almanac.html">The Almanac</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="guides-submenu">Plant Guides</button>
+        <ul id="guides-submenu" class="submenu">
+          <li><a href="garden-month.html">This Month in the Garden</a></li>
+          <li><a href="zones.html">Best Plants for Your Zone</a></li>
+        </ul>
+      </li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="policies-submenu">Policies</button>
+        <ul id="policies-submenu" class="submenu">
+          <li><a href="shipping-pickup.html">Shipping &amp; Pickup</a></li>
+          <li><a href="returns.html">Live Plant Guarantee</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <header>
+  <a href="index.html" style="display:inline-block;">
+    <!-- Use lantern sub mark for header branding -->
+    <img src="assets/lantern.png" alt="Lantern sub mark">
+  </a>
+  <nav>
+      <a href="shop.html">Shop</a>
+      <a href="consultations.html">Consultations</a>
+      <a href="almanac.html">The Almanac</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+  </nav>
+</header>
+  <div class="shop-container">
+    <h1>Shop All Plants</h1>
+    <!-- Local Pickup Banner: emphasise that all purchases are for local pickup in St. Petersburg. This banner uses the brand’s gold accent with dark green text for contrast. -->
+    <div class="pickup-banner" style="background:#D4B06A;color:#1C3D2E;padding:0.8rem 1.2rem;border-radius:10px;margin-bottom:1.2rem;text-align:center;font-size:1rem;">
+      <strong>Local Pickup Only</strong>&nbsp;–&nbsp;All purchases are available for pick&nbsp;up at our nursery in St.&nbsp;Petersburg, FL. We do not ship at this time.
+    </div>
+    <p class="shop-intro">Browse our curated selection of rare and resilient tropical plants grown in St.&nbsp;Petersburg. Use the filters to explore categories like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp; Unusual, Best Plants for Your Zone and more. All listings reflect live inventory—quantities are limited and updated daily.</p>
+    <!-- Filter controls: category and zone selectors -->
+    <div id="filters" style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:1.5rem;">
+      <div id="category-filter" style="display:flex;flex-wrap:wrap;gap:0.6rem;justify-content:center;"></div>
+      <div id="zone-filter" style="display:flex;align-items:center;gap:0.4rem;">
+        <label for="zone-select" style="font-size:1rem;color:#E9DCBE;">Zone:</label>
+        <select id="zone-select" name="zone" style="padding:0.35rem 0.6rem;border-radius:6px;border:1px solid #749c7f;font-family:'Crimson Text',serif;font-size:1rem;background:#F5E7C4;color:#1C3D2E;">
+          <option value="">All</option>
+          <!-- Options will be populated by script based on available zones -->
+        </select>
+      </div>
+    </div>
+    <!-- Search bar for live filtering of products. The width is constrained for readability on large screens and scales to full width on mobile. -->
+    <div id="search-bar" style="text-align:center;margin:-0.5rem auto 1.2rem auto;max-width:320px;width:100%;">
+      <input type="text" id="search-input" placeholder="Search plants…" aria-label="Search plants" style="width:100%;padding:0.5rem 0.8rem;border-radius:8px;border:1px solid #749c7f;background:#F5E7C4;color:#1C3D2E;font-family:'Crimson Text',serif;font-size:1rem;" />
+    </div>
+    <p style="max-width:600px;margin:0 auto 2rem auto;font-size:1.1rem;line-height:1.5;">
+      Browse our curated selection of plants grown and sourced for our St.&nbsp;Petersburg and Tampa Bay community. We stock tropical houseplants, fruit trees and edibles, orchids, and hardy landscape plants. Inventory changes regularly, so check back often or drop us a note if you're looking for something special.
+    </p>
+    <div class="products" id="shop-products"></div>
+  </div>
+  <footer style="text-align:center;padding:2rem;font-size:0.9rem;color:#E9DCBE;">
+    <p style="margin:0.5rem 0;">
+      <a href="shipping-pickup.html" style="color:#E9DCBE;text-decoration:underline;margin-right:0.6rem;">Shipping &amp; Pickup</a>
+      |
+      <a href="returns.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Live Plant Guarantee</a>
+      |
+      <a href="terms.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Terms &amp; Conditions</a>
+      |
+      <a href="privacy.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Privacy Policy</a>
+    </p>
+    &copy; 2025 The Botanical Bazaar. All rights reserved.
+  </footer>
+
+  <!-- Back to Top Button: hidden by default and revealed on scroll. The inline styles ensure consistent positioning across devices without adding additional CSS files. -->
+  <button id="back-to-top" title="Back to Top" aria-label="Back to top" style="display:none;position:fixed;bottom:20px;right:20px;background:#D4B06A;color:#1C3D2E;border:none;border-radius:50%;width:48px;height:48px;font-size:1.5rem;cursor:pointer;z-index:999;box-shadow:0 2px 6px rgba(0,0,0,0.2);">↑</button>
+  <script>
+    /**
+     * Render the list of products based on the current filters. Filters come
+     * from URL query parameters and from the interactive controls above.
+     */
+    function renderShopProducts() {
+      const allProducts = window.PRODUCTS || [];
+      const params = new URLSearchParams(window.location.search);
+      const filterZone = params.get('zone') || document.getElementById('zone-select').value || '';
+      const searchTerm = (document.getElementById('search-input') && document.getElementById('search-input').value.trim().toLowerCase()) || '';
+      const filterCat = params.get('category') || '';
+      // Determine selected category from filters UI if query param is absent
+      const selectedCategoryElem = document.querySelector('#category-filter .selected');
+      const uiCategory = selectedCategoryElem ? selectedCategoryElem.dataset.category : '';
+      const selectedCategory = filterCat || uiCategory;
+      // Filter based on zone and category
+      const filtered = allProducts.filter(product => {
+        // Zone filter: if zone param is provided, product.zones must include it
+        const zoneMatch = !filterZone || (Array.isArray(product.zones) && product.zones.includes(filterZone));
+        // Category filter: if category param is provided, product.categories must include it
+        const catMatch = !selectedCategory || (Array.isArray(product.categories) && product.categories.includes(selectedCategory));
+        // Search filter: match on name, type, description and categories
+        let searchMatch = true;
+        if (searchTerm) {
+        let haystack = [product.name, product.type, product.description, product.sku].filter(Boolean).join(' ').toLowerCase();
+          // also include categories and zones in the haystack.  Searching on
+          // SKU helps customers find products by SKU code as well.
+          if (Array.isArray(product.categories)) haystack += ' ' + product.categories.join(' ').toLowerCase();
+          if (Array.isArray(product.zones)) haystack += ' ' + product.zones.join(' ').toLowerCase();
+          searchMatch = haystack.includes(searchTerm);
+        }
+        return zoneMatch && catMatch && searchMatch;
+      });
+      const container = document.getElementById('shop-products');
+      if (!container) return;
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="color:#E9DCBE;">No products found.</p>`;
+        return;
+      }
+      container.innerHTML = filtered.map(product => {
+        // Treat any quantity under three as sold out. This includes zero, one and
+        // two units which are too few to sell confidently. Sold‑out items are
+        // visually disabled and cannot be clicked. No low‑stock badge is used
+        // anymore, as per the updated stock policy.
+        const isSoldOut = !product.quantity || product.quantity < 3;
+        // Build the price display. When sold out, show a simple label;
+        // otherwise use the product price formatted to two decimal places.
+        let priceHtml;
+        if (isSoldOut) {
+          priceHtml = '<span class="sold-out" style="color:#ba2f2f;font-weight:bold;">Sold\u00A0Out</span>';
+        } else {
+          priceHtml = '$' + (product.price ? product.price.toFixed(2) : '');
+        }
+        // Hardiness badge: show the plant’s cold tolerance. Default to 50°F if not provided.
+        const hardy = product.temp_threshold ? product.temp_threshold : '50';
+        const hardyBadge = `<div style="font-size:0.8rem;color:#3a604d;margin-top:0.2rem;">Hardy to: ${hardy}°F</div>`;
+        // Build the card differently based on stock state. When sold out
+        // there is no link wrapper or view button and a badge is added.
+        if (isSoldOut) {
+          return `
+        <div class="product-card sold-out">
+          <div>
+            <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='assets/placeholder.png'">
+            <strong>${product.name}</strong>
+          </div>
+          <p>${product.sizes}</p>
+          <p>${product.type}</p>
+          <div class="price">${priceHtml}</div>
+          ${hardyBadge}
+          <div class="sold-out-badge">Sold Out</div>
+        </div>
+        `;
+        }
+        // For available items, include links and a view button to product detail page.
+        return `
+        <div class="product-card">
+          <a href="product.html?item=${encodeURIComponent(product.slug)}">
+            <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='assets/placeholder.png'">
+            <strong>${product.name}</strong>
+          </a>
+          <p>${product.sizes}</p>
+          <p>${product.type}</p>
+          <div class="price">${priceHtml}</div>
+          ${hardyBadge}
+          <button class="view-btn" onclick="window.location='product.html?item=${encodeURIComponent(product.slug)}'">View Details</button>
+        </div>
+        `;
+      }).join('');
+    }
+
+    /**
+     * Populate filter controls based on the products array. Unique categories
+     * and zones will be extracted from the data. This function also sets up
+     * click/change handlers to update the filters and re-render the products.
+     */
+    function initFilters() {
+      const products = window.PRODUCTS || [];
+      const catFilterElem = document.getElementById('category-filter');
+      const zoneSelect = document.getElementById('zone-select');
+      if (!products || !catFilterElem || !zoneSelect) return;
+      // Extract unique categories and zones
+      const categories = new Set();
+      const zones = new Set();
+      products.forEach(prod => {
+        if (Array.isArray(prod.categories)) {
+          prod.categories.forEach(cat => categories.add(cat));
+        }
+        if (Array.isArray(prod.zones)) {
+          prod.zones.forEach(zone => zones.add(zone));
+        }
+      });
+      // We deliberately avoid adding predefined categories that are not present in
+      // the inventory.  Categories will only appear if at least one product
+      // belongs to them, preventing the user from clicking into empty filters
+      // that would otherwise lead to a "No products found" state.  The
+      // category 'plants' (all) is added by default elsewhere.
+      // Render category chips
+      catFilterElem.innerHTML = '';
+      categories.forEach(cat => {
+        const chip = document.createElement('button');
+        chip.textContent = cat.replace(/-/g, ' ').replace(/\b(\w)/g, c => c.toUpperCase());
+        chip.dataset.category = cat;
+        chip.style.background = '#1C3D2E';
+        chip.style.color = '#F5E7C4';
+        chip.style.border = '1px solid #749c7f';
+        chip.style.borderRadius = '14px';
+        chip.style.padding = '0.3rem 0.8rem';
+        chip.style.fontFamily = 'Crimson Text, serif';
+        chip.style.fontSize = '0.95rem';
+        chip.style.cursor = 'pointer';
+        chip.addEventListener('click', function () {
+          // Toggle selection.  When a category chip is clicked we update
+          // the query parameter so that the category can be bookmarked and
+          // navigated back to using the browser’s back button.  Clearing
+          // selection removes the query entirely.
+          const wasSelected = chip.classList.contains('selected');
+          document.querySelectorAll('#category-filter button').forEach(btn => btn.classList.remove('selected'));
+          let selectedCategory = '';
+          if (!wasSelected) {
+            chip.classList.add('selected');
+            selectedCategory = chip.dataset.category;
+          }
+          // Update the URL query parameters without reloading the page.
+          const params = new URLSearchParams(window.location.search);
+          if (selectedCategory) {
+            params.set('category', selectedCategory);
+          } else {
+            params.delete('category');
+          }
+          // Preserve other parameters (like zone) and update the history state.
+          const newQuery = params.toString();
+          history.replaceState(null, '', newQuery ? ('?' + newQuery) : window.location.pathname);
+          // Fire GA4 select_item event for category selection
+          if (selectedCategory && typeof gtag === 'function') {
+            gtag('event', 'select_item', {
+              item_list_name: 'Category Filter',
+              items: [ { item_category: selectedCategory } ]
+            });
+          }
+          renderShopProducts();
+        });
+        catFilterElem.appendChild(chip);
+      });
+      // Populate zones select, skipping unsupported zones 1 and 2
+      zones.forEach(z => {
+        if (z === '1' || z === '2') return; // do not display extremely cold zones
+        const opt = document.createElement('option');
+        opt.value = z;
+        opt.textContent = z;
+        zoneSelect.appendChild(opt);
+      });
+      zoneSelect.addEventListener('change', function () {
+        const zone = zoneSelect.value;
+        // Update URL query parameter for zone
+        const params = new URLSearchParams(window.location.search);
+        if (zone) {
+          params.set('zone', zone);
+        } else {
+          params.delete('zone');
+        }
+        const newQuery = params.toString();
+        history.replaceState(null, '', newQuery ? ('?' + newQuery) : window.location.pathname);
+        // Fire GA4 search event when user selects a zone filter
+        if (typeof gtag === 'function' && zone) {
+          gtag('event', 'search', { search_term: 'zone ' + zone });
+        }
+        renderShopProducts();
+      });
+
+      // On first load, preselect category and zone from the current URL.  This
+      // ensures that navigating directly to a filtered view (e.g.
+      // shop.html?category=herbs-medicinal&zone=9) highlights the appropriate
+      // filter chips and sets the zone select value before the initial
+      // render. Without this, the UI would not reflect the active filters.
+      const params = new URLSearchParams(window.location.search);
+      const currentCat = params.get('category');
+      if (currentCat) {
+        const btn = document.querySelector(`#category-filter button[data-category="${currentCat}"]`);
+        if (btn) btn.classList.add('selected');
+      }
+      const currentZone = params.get('zone');
+      if (currentZone) {
+        zoneSelect.value = currentZone;
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      initFilters();
+      renderShopProducts();
+      // Attach live search handler
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+        searchInput.addEventListener('input', function () {
+          renderShopProducts();
+        });
+      }
+      // Back to top button handler: show the button after scrolling down
+      const backToTop = document.getElementById('back-to-top');
+      if (backToTop) {
+        window.addEventListener('scroll', function () {
+          if (window.scrollY > 300) {
+            backToTop.style.display = 'block';
+          } else {
+            backToTop.style.display = 'none';
+          }
+        });
+        backToTop.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+  <!-- Sidebar script -->
+  <script src="sidebar.js"></script>
+</body>
+</html>
