@@ -283,7 +283,7 @@ export default function Layout({ children }) {
       {/* High-Fidelity Desktop Site Header */}
       <header>
         <Link href="/" style={{ display: 'inline-block' }}>
-          <img src="/assets/lantern.png" alt="Lantern sub mark" style={{ height: '60px' }} />
+          <img src="/assets/lantern.png" alt="Lantern sub mark" className="lantern-emblem" style={{ height: '60px' }} />
         </Link>
         <nav>
           <Link href="/shop">Shop</Link>
