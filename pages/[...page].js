@@ -70,8 +70,59 @@ const LOCAL_TEMPLATES = {
   }
 };
 
+// Robust React Error Boundary class to prevent rendering crashes
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
+          <h1 style={{ color: '#D4B06A', marginBottom: '1.5rem', fontFamily: 'Cinzel, serif' }}>Something Went Wrong</h1>
+          <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>
+            An unexpected error occurred while loading this page. Let's redirect you back safely.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <Button variant="gold-filled" href="/shop">Browse Store</Button>
+            <button
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+                window.location.replace('/');
+              }}
+              style={{
+                background: 'transparent',
+                color: '#D4B06A',
+                border: '1px solid #D4B06A',
+                borderRadius: '24px',
+                padding: '0.6rem 1.4rem',
+                fontFamily: 'Cinzel, serif',
+                cursor: 'pointer'
+              }}
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 export async function getServerSideProps(context) {
-  const { params, res } = context;
+  const { params, res, req } = context;
   const pagePath = '/' + (params?.page?.join('/') || '');
   let pageName = params?.page?.join('/') || 'index';
 
@@ -86,6 +137,19 @@ export async function getServerSideProps(context) {
 
   if (fs.existsSync(htmlPath)) {
     try {
+      // Check if this is a Next.js client-side data request
+      const isDataRequest = !!req.headers['x-nextjs-data'];
+
+      if (isDataRequest) {
+        // Return props directly for clean client-side redirection instead of writing raw HTML
+        return {
+          props: {
+            isGrapesJSPage: true,
+            pagePath
+          }
+        };
+      }
+
       let htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
       // Read custom styles if exists
@@ -104,7 +168,7 @@ export async function getServerSideProps(context) {
         }
       }
 
-      // Send the high-fidelity HTML response
+      // Send the high-fidelity HTML response for direct browser navigation
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.write(htmlContent);
       res.end();
@@ -145,16 +209,42 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function BuilderCatchAll({ builderContent, pagePath, isGrapesJSPage }) {
+function BuilderCatchAll({ builderContent, pagePath, isGrapesJSPage }) {
   const router = useRouter();
+
+  // If this page was requested on the client side, redirect to get the full static HTML response
+  React.useEffect(() => {
+    if (isGrapesJSPage) {
+      window.location.replace(pagePath);
+    }
+  }, [isGrapesJSPage, pagePath]);
 
   if (router.isFallback) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading dynamic page...</div>;
   }
 
-  // If this was served directly from fs (GrapesJS HTML), React element shouldn't actually render
+  // Render high-fidelity loading state during client redirection
   if (isGrapesJSPage) {
-    return null;
+    return (
+      <div style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
+        <div className="spinner" style={{
+          border: '4px solid rgba(212, 176, 106, 0.1)',
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          borderLeftColor: '#D4B06A',
+          animation: 'spin 1s linear infinite',
+          margin: '0 auto 1.5rem'
+        }} />
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: '400' }}>Loading Page...</h2>
+        <style dangerouslySetInnerHTML={{ __html: `
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        ` }} />
+      </div>
+    );
   }
 
   // Handle local file fallback if Builder key is not active or page is not created yet
@@ -193,5 +283,14 @@ export default function BuilderCatchAll({ builderContent, pagePath, isGrapesJSPa
     <>
       <BuilderComponent model="page" content={builderContent} />
     </>
+  );
+}
+
+// Wrap export with ErrorBoundary
+export default function SafeBuilderCatchAll(props) {
+  return (
+    <ErrorBoundary>
+      <BuilderCatchAll {...props} />
+    </ErrorBoundary>
   );
 }
