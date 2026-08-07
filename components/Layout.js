@@ -1,75 +1,31 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { useCart } from '../context/CartContext';
-import { useWishlist } from '../context/WishlistContext';
 
 export default function Layout({ children }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const router = useRouter();
-  const { cartCount } = useCart();
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-    }
-  };
-
   return (
-    <>
-      {/* Global Header */}
+    <div className="site-wrapper">
       <header className="site-header">
         <div className="header-inner">
           <Link href="/" className="logo-link">
-            <img src="/assets/lantern.png" alt="Lantern sub mark" className="lantern-logo" />
+            <img src="/assets/lantern.png" alt="TBB Lantern Emblem" className="logo-img" />
+            <span className="brand-title">The Botanical Bazaar</span>
           </Link>
-          
           <nav className="main-nav">
-            <Link href="/shop">Shop</Link>
-            <Link href="/consultations">Consultations</Link>
-            <Link href="/almanac">The Almanac</Link>
-            <Link href="/events">Events</Link>
-            <Link href="/gallery">Gallery</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/faq">FAQ</Link>
-            <Link href="/about">About</Link>
+            <Link href="/shop" className="nav-link">Shop</Link>
+            <Link href="/consultations" className="nav-link">Consultations</Link>
           </nav>
-
-          <div className="header-actions">
-            <form onSubmit={handleSearchSubmit} className="search-form">
-              <input
-                type="search"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </form>
-            <Link href="/cart" className="cart-link">
-              Cart ({cartCount})
-            </Link>
-          </div>
         </div>
       </header>
-
-      {/* Main Content Area */}
-      <main style={{ minHeight: '80vh' }}>
+      
+      <main className="site-main">
         {children}
       </main>
 
-      {/* Global Footer */}
-      <footer>
-        <p style={{ margin: '0.5rem 0' }}>
-          <Link href="/shipping-pickup">Shipping &amp; Pickup</Link>
-          |
-          <Link href="/returns">Live Plant Guarantee</Link>
-          |
-          <Link href="/terms">Terms &amp; Conditions</Link>
-          |
-          <Link href="/privacy">Privacy Policy</Link>
-        </p>
-        &copy; {new Date().getFullYear()} The Botanical Bazaar. All rights reserved.
+      <footer className="site-footer">
+        <div className="footer-inner">
+          <p>&copy; {new Date().getFullYear()} The Botanical Bazaar (TBB). Rooted in Beauty. Grown for You.</p>
+        </div>
       </footer>
-    </>
+    </div>
   );
 }
