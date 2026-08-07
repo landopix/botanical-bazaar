@@ -21,3 +21,24 @@ body {
   color: var(--matte-gold);
   font-weight: 600;
 }
+
+/* --- Added Hero Banner & Emblem Sizing Fix --- */
+.hero-banner, 
+section.banner, 
+.hero-section {
+    max-height: 600px;
+    min-height: 400px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.hero-banner img, 
+.hero-banner svg, 
+.lantern-emblem {
+    max-width: 280px !important;
+    max-height: 380px !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain;
+}
