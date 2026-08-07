@@ -42,3 +42,26 @@ section.banner,
     height: auto !important;
     object-fit: contain;
 }
+
+/* --- Universal GrapesJS Oversized Banner & Emblem Override --- */
+main img, 
+main svg, 
+header img, 
+header svg,
+body > div img,
+body > div svg {
+    max-width: 220px !important;
+    max-height: 280px !important;
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+section, 
+header, 
+div[data-gjs-type],
+.gjs-row,
+.gjs-cell {
+    min-height: auto !important;
+    height: auto !important;
+}
