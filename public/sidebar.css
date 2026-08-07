@@ -193,11 +193,46 @@ header > a:first-of-type::before {
   pointer-events: none;
 }
 
-/* Reduce the horizontal margin between header navigation links slightly so that
-   the full word "Contact" fits comfortably on one line without getting truncated.
-   This style applies to any nav inside a header across the site. */
+/* Header container layout, centering, and spacing to match the staging reference precisely */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2.5rem;
+  background-color: #00301e;
+  flex-wrap: wrap;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 60px; /* Balance the left-aligned lantern logo for perfect screen centering */
+}
+
+@media (max-width: 900px) {
+  header nav {
+    margin-right: 0;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+/* Header Nav Links Typography: Remove underline, use normal weight, apply elegant heading font */
 header nav a {
-  margin: 0 0.8rem;
+  margin: 0 1.2rem;
+  text-decoration: none !important;
+  color: #E9DCBE !important;
+  font-weight: 400 !important;
+  font-family: var(--font-heading), 'Cinzel', serif !important;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+header nav a:hover {
+  color: #D4B06A !important;
 }
 
 /*

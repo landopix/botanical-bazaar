@@ -90,12 +90,14 @@ export default function Index() {
           text-align: center;
         }
         .hero-text h1 {
-          font-size: 2.5rem;
-          line-height: 1.4;
+          font-size: 3.2rem;
+          line-height: 1.2;
           text-align: center;
           color: #D4B06A;
           margin-bottom: 0.5rem;
           font-family: var(--font-heading, 'Cinzel', serif);
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
         }
         .hero-image {
           width: 45%;
@@ -270,9 +272,17 @@ export default function Index() {
       {/* Hero section */}
       <section className="hero">
         <div className="hero-text">
-          <h1>The Botanical Bazaar</h1>
-          <p style={{ fontSize: '2rem', lineHeight: '1.4', margin: '0.4rem 0 0.8rem 0', fontFamily: 'var(--font-heading, Cinzel, serif)' }}>
-            Rooted in Beauty.<br />Grown for You.
+          <h1>THE BOTANICAL BAZAAR</h1>
+          <p style={{
+            fontSize: '1.8rem',
+            lineHeight: '1.4',
+            margin: '0.6rem 0 1.2rem 0',
+            fontFamily: 'var(--font-heading, Cinzel, serif)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            color: '#E9DCBE'
+          }}>
+            ROOTED IN BEAUTY.<br />GROWN FOR YOU.
           </p>
           <p style={{ fontSize: '1.1rem', margin: '0.5rem 0 1.5rem 0', maxWidth: '28ch', lineHeight: '1.4' }}>
             Rare and resilient tropical plants, curated in St.&nbsp;Petersburg, FL - lovingly grown for our community and beyond.
