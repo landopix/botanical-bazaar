@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import { BuilderComponent, builder, useBuilderState } from '@builder.io/react';
+import { BuilderComponent, builder } from '@builder.io/react';
 import Button from '../components/Button';
+import fs from 'fs';
+import path from 'path';
 
 // Setup key or fall back gracefully
 const BUILDER_KEY = process.env.NEXT_PUBLIC_BUILDER_API_KEY || 'mock-key';
@@ -68,16 +70,58 @@ const LOCAL_TEMPLATES = {
   }
 };
 
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: 'blocking'
-  };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps(context) {
+  const { params, res } = context;
   const pagePath = '/' + (params?.page?.join('/') || '');
+  let pageName = params?.page?.join('/') || 'index';
 
+  // Strip .html extension if present to support direct linking between pages
+  if (pageName.endsWith('.html')) {
+    pageName = pageName.substring(0, pageName.length - 5);
+  }
+
+  // 1. Check if GrapesJS custom HTML exists in content/pages/
+  const htmlPath = path.join(process.cwd(), 'content', 'pages', `${pageName}.html`);
+  const cssPath = path.join(process.cwd(), 'content', 'pages', `${pageName}.css`);
+
+  if (fs.existsSync(htmlPath)) {
+    try {
+      let htmlContent = fs.readFileSync(htmlPath, 'utf8');
+
+      // Read custom styles if exists
+      let cssContent = '';
+      if (fs.existsSync(cssPath)) {
+        cssContent = fs.readFileSync(cssPath, 'utf8');
+      }
+
+      // Inject custom CSS into the head before </head>
+      if (cssContent && cssContent.trim()) {
+        const styleTag = `\n<style id="grapesjs-custom-styles">\n${cssContent}\n</style>\n`;
+        if (htmlContent.includes('</head>')) {
+          htmlContent = htmlContent.replace('</head>', `${styleTag}</head>`);
+        } else {
+          htmlContent = styleTag + htmlContent;
+        }
+      }
+
+      // Send the high-fidelity HTML response
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.write(htmlContent);
+      res.end();
+
+      // Return a dummy prop since response is finished
+      return {
+        props: {
+          isGrapesJSPage: true,
+          pagePath
+        }
+      };
+    } catch (error) {
+      console.error(`Error rendering GrapesJS page ${pageName}:`, error);
+    }
+  }
+
+  // 2. Fallback to Builder.io content
   let builderContent = null;
   try {
     if (BUILDER_KEY && BUILDER_KEY !== 'mock-key') {
@@ -97,16 +141,20 @@ export async function getStaticProps({ params }) {
     props: {
       builderContent,
       pagePath
-    },
-    revalidate: 5
+    }
   };
 }
 
-export default function BuilderCatchAll({ builderContent, pagePath }) {
+export default function BuilderCatchAll({ builderContent, pagePath, isGrapesJSPage }) {
   const router = useRouter();
 
   if (router.isFallback) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading dynamic page...</div>;
+  }
+
+  // If this was served directly from fs (GrapesJS HTML), React element shouldn't actually render
+  if (isGrapesJSPage) {
+    return null;
   }
 
   // Handle local file fallback if Builder key is not active or page is not created yet
