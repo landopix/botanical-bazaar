@@ -132,7 +132,7 @@ export default function Layout({ children }) {
       {/* Global Header */}
       <header>
         <Link href="/" style={{ display: 'inline-block' }}>
-          <img src="/assets/lantern.png" alt="Lantern sub mark" />
+          <img src="/assets/lantern.png" alt="Lantern sub mark" style={{ width: '90px', height: 'auto' }} />
         </Link>
         <nav>
           <Link href="/shop">Shop</Link>
