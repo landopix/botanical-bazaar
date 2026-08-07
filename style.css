@@ -1,1 +1,23 @@
-body { background: #11402A; color: #F4F1E1; font-family: Georgia, serif; }
+:root {
+  --forest-green: #11402A;
+  --matte-gold: #D4B06A;
+  --text-light: #F4F1E1;
+}
+
+body {
+  background: var(--forest-green);
+  color: var(--text-light);
+  font-family: Georgia, serif;
+  margin: 0;
+}
+
+.site-header {
+  padding: 0.8rem 1.5rem;
+  background-color: var(--forest-green);
+  border-bottom: 1px solid rgba(212, 176, 106, 0.2);
+}
+
+.brand-title {
+  color: var(--matte-gold);
+  font-weight: 600;
+}
