@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Almanac | Tropical Plant Guides &amp; Stories | The Botanical Bazaar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Sidebar styles -->
+  <link rel="stylesheet" href="sidebar.css">
+  <style>
+body {
+      margin: 0;
+      min-height: 100vh;
+      /* Use global font and let the site-wide dark green background and
+         overlay display. */
+      font-family: var(--font-body);
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #00301e;
+      flex-wrap: wrap;
+    }
+    header img {
+      height: 60px;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #E9DCBE;
+      font-weight: 700;
+      font-family: 'Crimson Text', serif;
+    }
+    main {
+      max-width: 800px;
+      margin: 2.5rem auto;
+      padding: 1rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.8rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #E9DCBE;
+    }
+    /* Almanac intro and grid styles for blog */
+    .almanac-intro {
+      max-width: 700px;
+      margin: 1rem auto 2rem auto;
+      font-size: 1.15rem;
+      line-height: 1.6;
+    }
+    .almanac-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      justify-content: center;
+    }
+    .almanac-card {
+      background-color: #F5E7C4;
+      color: #1C3D2E;
+      padding: 1.2rem 1.4rem;
+      border-radius: 12px;
+      box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+      text-align: left;
+      max-width: 260px;
+      flex: 1 1 250px;
+      transition: transform 0.12s;
+    }
+    .almanac-card:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+    }
+    .almanac-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.4rem;
+      color: #1C3D2E;
+    }
+    .almanac-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+    .almanac-card p {
+      margin: 0;
+      font-size: 1rem;
+    }
+  </style>
+  <!-- Descriptive metadata -->
+  <meta name="description" content="Dive into in‑depth articles on tropical plant care, hardiness zones, seasonal tips and behind‑the‑scenes stories from The Botanical Bazaar in St. Petersburg, Florida." />
+  <link rel="canonical" href="https://thebotanicalbazaar.com/blog.html" />
+  <meta property="og:title" content="The Almanac | Tropical Plant Guides &amp; Stories" />
+  <meta property="og:description" content="Explore our growing library of tropical plant guides, zone‑based advice and seasonal gardening stories from The Botanical Bazaar." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thebotanicalbazaar.com/blog.html" />
+  <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="The Almanac | Tropical Plant Guides &amp; Stories" />
+  <meta name="twitter:description" content="Explore our growing library of tropical plant guides, zone‑based advice and seasonal gardening stories from The Botanical Bazaar." />
+  <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
+  <!-- Site favicons and icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <!-- Global Analytics & Heatmap -->
+  <!-- Google tag (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-S0XS3CDM9G');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "vxxgho3991");
+  </script>
+</head>
+<body>
+  <!-- Quick actions: search toggle, cart, wishlist and account icons -->
+  <div class="quick-actions">
+    <button class="sidebar-toggle" aria-label="Open navigation" aria-controls="site-sidebar" aria-expanded="false">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
+      </svg>
+    </button>
+    <a href="cart.html" class="cart-btn" aria-label="View cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+    </a>
+    <a href="wishlist.html" class="wishlist-btn" aria-label="View wishlist">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </a>
+    <a href="account.html" class="account-btn" aria-label="My account">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </a>
+  </div>
+  <!-- Sidebar navigation -->
+  <nav id="site-sidebar" class="sidebar" role="navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="consultations.html">Consultations</a></li>
+      <li><a href="almanac.html">The Almanac</a></li>
+      <li><a href="events.html">Events</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="guides-submenu">Plant Guides</button>
+        <ul id="guides-submenu" class="submenu">
+          <li><a href="garden-month.html">This Month in the Garden</a></li>
+          <li><a href="zones.html">Best Plants for Your Zone</a></li>
+        </ul>
+      </li>
+      <li class="group">
+        <button class="group-toggle" aria-expanded="false" aria-controls="policies-submenu">Policies</button>
+        <ul id="policies-submenu" class="submenu">
+          <li><a href="shipping-pickup.html">Shipping &amp; Pickup</a></li>
+          <li><a href="returns.html">Live Plant Guarantee</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <header>
+    <a href="index.html" style="display:inline-block;">
+      <!-- Use lantern sub mark for header branding -->
+      <img src="assets/lantern.png" alt="Lantern sub mark">
+    </a>
+    <nav>
+      <a href="shop.html">Shop</a>
+      <a href="consultations.html">Consultations</a>
+      <a href="almanac.html">The Almanac</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+  <main>
+    <h1>The Almanac</h1>
+    <section class="almanac-intro">
+      <p>Welcome to our Almanac, a curated library of tropical plant knowledge for curious growers. Here you'll find seasonal checklists, zone‑specific planting guides, medicinal and culinary plant highlights, and behind‑the‑scenes stories from our nursery in St.&nbsp;Petersburg, Florida. Whether you're new to gardening or an experienced plant collector, we hope these resources inspire you to cultivate your own lush oasis.</p>
+    </section>
+    <section class="almanac-grid">
+      <!-- Card linking to the current month's guide -->
+      <article class="almanac-card">
+        <h3><a href="garden-month.html">This Month in the Garden</a></h3>
+        <p>Discover what to plant, prune and enjoy in St.&nbsp;Pete this month, complete with zone‑9 tips and reminders.</p>
+      </article>
+      <!-- Card linking to zone guide -->
+      <article class="almanac-card">
+        <h3><a href="zones.html">Hardiness Zone Guide</a></h3>
+        <p>Learn about USDA hardiness zones and browse plants tailored to your climate, from cool to tropical.</p>
+      </article>
+      <!-- Card linking to shop categories -->
+      <article class="almanac-card">
+        <h3><a href="shop.html">Shop by Category</a></h3>
+        <p>Explore our medicinal, culinary, fragrant and rare plant collections and fill your garden with purpose.</p>
+      </article>
+    </section>
+  </main>
+  <footer>
+    <p style="margin:0.5rem 0;">
+      <a href="shipping-pickup.html" style="color:#E9DCBE;text-decoration:underline;margin-right:0.6rem;">Shipping &amp; Pickup</a>
+      |
+      <a href="returns.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Live Plant Guarantee</a>
+      |
+      <a href="terms.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Terms &amp; Conditions</a>
+      |
+      <a href="privacy.html" style="color:#E9DCBE;text-decoration:underline;margin-left:0.6rem;">Privacy Policy</a>
+    </p>
+    &copy; 2025 The Botanical Bazaar. All rights reserved.
+  </footer>
+  <script src="sidebar.js"></script>
+</body>
+</html>
