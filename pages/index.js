@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Button from '../components/Button';
+import { useRouter } from 'next/router';
+import { useWishlist } from '../context/WishlistContext';
+import { isSanityConfigured, sanityClient } from '../lib/sanity';
 
 export default function Index() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [products, setProducts] = useState([]);
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -13,44 +17,318 @@ export default function Index() {
     }
   };
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (isSanityConfigured()) {
+        try {
+          const sanityData = await sanityClient.fetch(`*[_type == "product"]{
+            "slug": slug.current,
+            name,
+            sku,
+            "image": image.asset->url,
+            type,
+            description,
+            price,
+            quantity,
+            zones,
+            categories,
+            sizes,
+            tags
+          }`);
+          if (sanityData && sanityData.length > 0) {
+            setProducts(sanityData);
+            return;
+          }
+        } catch (err) {
+          console.error('Failed to fetch from Sanity.io. Falling back to local catalog.', err);
+        }
+      }
+
+      // Local offline fallback
+      if (typeof window !== 'undefined') {
+        const loadProducts = () => {
+          const raw = window.PRODUCTS || [];
+          setProducts(raw);
+        };
+        if (window.PRODUCTS) {
+          loadProducts();
+        } else {
+          const script = document.createElement('script');
+          script.src = '/products.js';
+          script.onload = loadProducts;
+          document.body.appendChild(script);
+        }
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Slice the first 5 products for Featured Plants section
+  const featuredProducts = products.slice(0, 5);
+
   return (
     <div className="home-container">
+      {/* Homepage specific styles injected cleanly */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        /* Homepage-specific styles */
+        .hero {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding: 2rem;
+          gap: 2rem;
+          position: relative;
+        }
+        .hero-text {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+        }
+        .hero-text h1 {
+          font-size: 2.5rem;
+          line-height: 1.4;
+          text-align: center;
+          color: #D4B06A;
+          margin-bottom: 0.5rem;
+          font-family: var(--font-heading, 'Cinzel', serif);
+        }
+        .hero-image {
+          width: 45%;
+          max-width: 400px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+        }
+        .hero-image img {
+          width: 100%;
+          height: auto;
+          box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+          border-radius: 12px;
+        }
+        .featured {
+          padding: 2rem;
+          text-align: center;
+        }
+        .featured h2 {
+          color: #D4B06A;
+          margin-bottom: 2rem;
+          font-family: var(--font-heading, 'Cinzel', serif);
+          font-size: 2rem;
+        }
+        .products {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          justify-content: center;
+        }
+        .product-card {
+          background-color: #F5E7C4;
+          border-radius: 10px;
+          padding: 1rem;
+          width: 220px;
+          text-align: center;
+          color: #1C3D2E;
+          transition: transform 0.12s, box-shadow 0.12s;
+          box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+          text-decoration: none;
+        }
+        .product-card:hover {
+          transform: translateY(-4px) scale(1.025);
+          box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+        }
+        .product-card.sold-out {
+          opacity: 0.55;
+          pointer-events: none;
+          position: relative;
+        }
+        .product-card .sold-out-badge {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          background: #ba2f2f;
+          color: #ffffff;
+          padding: 0.2rem 0.4rem;
+          border-radius: 4px;
+          font-size: 0.8rem;
+          font-family: 'Crimson Text', serif;
+        }
+        .product-card img {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+          border-radius: 8px;
+          background: #e9dcbe11;
+          margin-bottom: 0.8em;
+        }
+        .product-card strong {
+          display: block;
+          margin-top: 0.2em;
+          font-size: 1.22em;
+        }
+        .product-card p {
+          margin: 0.1em 0;
+        }
+        .shop-categories {
+          padding: 2rem;
+          text-align: center;
+        }
+        .shop-categories h2 {
+          text-align: center;
+          margin-bottom: 2rem;
+          color: #D4B06A;
+          font-family: var(--font-heading, 'Cinzel', serif);
+          font-size: 2rem;
+        }
+        .categories-grid {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.2rem;
+          justify-content: center;
+        }
+        .category-card {
+          background-color: #F5E7C4;
+          color: #1C3D2E;
+          padding: 1.2rem 1.6rem;
+          border-radius: 12px;
+          text-decoration: none;
+          font-size: 1.1rem;
+          font-weight: bold;
+          box-shadow: 0 3px 14px rgba(20,40,30,0.10);
+          transition: transform 0.12s, box-shadow 0.12s;
+        }
+        .category-card:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 5px 18px rgba(20,40,30,0.14);
+        }
+        .cta {
+          background-color: #D4B06A;
+          padding: 3rem 2rem;
+          margin: 2rem auto;
+          max-width: 800px;
+          text-align: center;
+          border-radius: 12px;
+          color: #1C3D2E;
+          position: relative;
+          overflow: hidden;
+        }
+        .cta::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          background-image: url('/assets/vine-pattern-light.png');
+          background-repeat: repeat;
+          background-size: 800px;
+          opacity: 0.06;
+          mix-blend-mode: soft-light;
+          border-radius: inherit;
+          z-index: 0;
+        }
+        .cta * {
+          position: relative;
+          z-index: 1;
+        }
+        .cta h2 {
+          font-family: var(--font-heading, 'Cinzel', serif);
+          margin-top: 0;
+          font-size: 2rem;
+        }
+        .cta button {
+          background-color: #1C3D2E;
+          color: #F5E7C4;
+          border: none;
+          padding: 0.6rem 1.4rem;
+          margin-top: 1rem;
+          border-radius: 24px;
+          cursor: pointer;
+          font-family: 'Crimson Text', serif;
+          font-size: 1.1rem;
+          font-weight: bold;
+        }
+        @media (max-width: 900px) {
+          .products {
+            flex-direction: column;
+            align-items: center;
+          }
+          .hero {
+            flex-direction: column;
+            text-align: center;
+          }
+        }
+      ` }} />
+
       {/* Hero section */}
-      <section className="hero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '2rem', gap: '2rem' }}>
+      <section className="hero">
         <div className="hero-text">
-          <h1 style={{ fontSize: '3rem', margin: '0 0 1rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>The Botanical Bazaar</h1>
-          <p style={{ fontSize: '2rem', lineHeight: '1.4', margin: '0.4rem 0 0.8rem 0', fontFamily: 'Cinzel, serif' }}>
+          <h1>The Botanical Bazaar</h1>
+          <p style={{ fontSize: '2rem', lineHeight: '1.4', margin: '0.4rem 0 0.8rem 0', fontFamily: 'var(--font-heading, Cinzel, serif)' }}>
             Rooted in Beauty.<br />Grown for You.
           </p>
-          <p style={{ fontSize: '1.1rem', margin: '0.5rem 0 1.5rem 0', maxWidth: '30ch', lineHeight: '1.4', marginLeft: 'auto', marginRight: 'auto' }}>
+          <p style={{ fontSize: '1.1rem', margin: '0.5rem 0 1.5rem 0', maxWidth: '28ch', lineHeight: '1.4' }}>
             Rare and resilient tropical plants, curated in St.&nbsp;Petersburg, FL - lovingly grown for our community and beyond.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Button variant="gold-filled" href="/shop">Shop the Store</Button>
-            <Button variant="outline" href="/consultations">Book a Consultation</Button>
+            <Link
+              href="/shop"
+              style={{
+                background: '#D4B06A',
+                color: '#1C3D2E',
+                padding: '0.6rem 1.4rem',
+                borderRadius: '24px',
+                fontWeight: 'bold',
+                textDecoration: 'none'
+              }}
+            >
+              Shop the Store
+            </Link>
+            <Link
+              href="/consultations"
+              style={{
+                background: 'transparent',
+                color: '#D4B06A',
+                padding: '0.6rem 1.4rem',
+                borderRadius: '24px',
+                fontWeight: 'bold',
+                border: '2px solid #D4B06A',
+                textDecoration: 'none'
+              }}
+            >
+              Book a Consultation
+            </Link>
           </div>
         </div>
 
         {/* Hero image with animated GIF */}
-        <div className="hero-image" style={{ width: '45%', maxWidth: '400px', margin: '1rem auto' }}>
+        <div className="hero-image">
           <img
             src="/assets/logo-animation-optimized.gif"
             alt="The Botanical Bazaar Animated Logo"
-            style={{ width: '100%', height: 'auto', borderRadius: '12px' }}
+            loading="lazy"
           />
         </div>
 
         {/* Almanac Signup Inside Hero */}
         <div className="almanac-hero" style={{ width: '100%', maxWidth: '600px', marginTop: '1rem', textAlign: 'center' }}>
-          <h2 style={{ color: '#D4B06A', marginBottom: '0.4rem', fontFamily: 'Cinzel, serif' }}>The Almanac</h2>
+          <h2 style={{ color: '#D4B06A', marginBottom: '0.4rem', fontFamily: 'var(--font-heading, Cinzel, serif)' }}>The Almanac</h2>
           <Link href="/garden-month" style={{ display: 'block', color: '#E9DCBE', textDecoration: 'none', fontStyle: 'italic', marginBottom: '0.3rem' }}>
             This Month in the Garden
           </Link>
           <Link href="/zones" style={{ display: 'block', color: '#E9DCBE', textDecoration: 'none', marginBottom: '1rem' }}>
             Best Plants for Your Zone
           </Link>
+
           <div className="almanac-signup-inner" style={{ background: '#123826', color: '#F5E7C4', padding: '1.5rem', margin: '1rem auto', borderRadius: '12px', maxWidth: '600px', textAlign: 'center', boxShadow: '0 3px 14px rgba(20,40,30,0.10)', border: '1px solid #D4B06A' }}>
-            <h3 style={{ color: '#D4B06A', marginTop: '0', marginBottom: '0.5rem', fontFamily: 'Cinzel, serif' }}>Join Our Almanac</h3>
+            <h3 style={{ color: '#D4B06A', marginTop: '0', marginBottom: '0.5rem', fontFamily: 'var(--font-heading, Cinzel, serif)' }}>Join Our Almanac</h3>
             <p style={{ margin: '0.5rem auto 1rem auto', maxWidth: '500px', fontSize: '1.05rem', lineHeight: '1.4' }}>
               Subscribe to receive seasonal gardening tips, new plant arrivals and exclusive offers directly to your inbox.
             </p>
@@ -66,38 +344,97 @@ export default function Index() {
                   onChange={(e) => setEmail(e.target.value)}
                   style={{ flex: 1, minWidth: '200px', padding: '0.5rem 0.8rem', borderRadius: '8px', border: '1px solid #749c7f', background: '#F5E7C4', color: '#1C3D2E', fontFamily: 'inherit', fontSize: '1rem' }}
                 />
-                <Button type="submit" variant="gold-filled">Subscribe</Button>
+                <button
+                  type="submit"
+                  style={{
+                    background: '#D4B06A',
+                    color: '#1C3D2E',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem 1.2rem',
+                    fontFamily: 'inherit',
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Subscribe
+                </button>
               </form>
             )}
           </div>
         </div>
       </section>
 
-      {/* Local Pickup Banner */}
-      <div className="pickup-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.8rem 1.2rem', margin: '2rem auto', borderRadius: '10px', maxWidth: '800px', fontSize: '1rem', textAlign: 'center' }}>
+      {/* Local Pickup Only Warning */}
+      <div className="pickup-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.8rem 1.2rem', margin: '1rem auto', borderRadius: '10px', maxWidth: '800px', fontSize: '1rem', textAlign: 'center' }}>
         <strong>Local Pickup Only</strong>&nbsp;–&nbsp;Our plants are available for pick&nbsp;up in St.&nbsp;Petersburg, FL. We do not ship live plants at this time.
       </div>
 
-      {/* Shop Categories Grid */}
-      <section className="shop-categories" style={{ padding: '2rem 1.5rem' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>Browse by Category</h2>
-        <div className="categories-grid" style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', justifyContent: 'center' }}>
-          <Link href="/shop" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Shop All</Link>
-          <Link href="/shop?category=herbs-medicinal" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Herbs &amp; Medicinal</Link>
-          <Link href="/shop?category=fruit-trees" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Fruit Trees</Link>
-          <Link href="/shop?category=houseplants" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Houseplants</Link>
-          <Link href="/shop?category=seeds" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Seeds</Link>
-          <Link href="/zones" style={{ textDecoration: 'none', color: '#1C3D2E', background: '#F5E7C4', padding: '1.2rem 1.6rem', borderRadius: '12px', fontWeight: 'bold', boxShadow: '0 3px 14px rgba(0,0,0,0.1)' }}>Best Plants for Your Zone</Link>
+      {/* Browse by Category Grid */}
+      <section className="shop-categories">
+        <h2>Browse by Category</h2>
+        <div className="categories-grid">
+          <Link href="/shop" className="category-card">Shop&nbsp;All</Link>
+          <Link href="/shop?category=herbs-medicinal" className="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</Link>
+          <Link href="/shop?category=fruit-trees" className="category-card">Fruit&nbsp;Trees</Link>
+          <Link href="/shop?category=houseplants" className="category-card">Houseplants</Link>
+          <Link href="/shop?category=orchids-tropicals" className="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</Link>
+          <Link href="/shop?category=seeds" className="category-card">Seeds</Link>
+          <Link href="/shop?category=exotics-rare" className="category-card">Exotics&nbsp;&amp;&nbsp;Rare</Link>
+          <Link href="/zones" className="category-card">Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone</Link>
+          <Link href="/orchids-gallery" className="category-card">Collector's&nbsp;Gallery</Link>
         </div>
       </section>
 
-      {/* Book Consult Section */}
-      <section style={{ backgroundColor: '#D4B06A', padding: '3rem 2rem', margin: '3rem auto', textAlign: 'center', borderRadius: '12px', color: '#1C3D2E', maxWidth: '800px', position: 'relative' }}>
-        <h2 style={{ fontFamily: 'Cinzel, serif', margin: '0 0 1rem 0' }}>Book Time with a Plant Guide</h2>
-        <p style={{ fontSize: '1.1rem', margin: '0 0 2rem 0', maxWidth: '50ch', marginLeft: 'auto', marginRight: 'auto' }}>
-          Schedule an in-person, local horticultural consultation with our experienced nursery guides. We will help curate the ultimate resilient companion package for your yard.
-        </p>
-        <Button variant="green-filled" href="/consultations">Book a Consultation</Button>
+      {/* Featured Plants Grid */}
+      <section className="featured" id="collection">
+        <h2>Featured Plants</h2>
+        <div className="products">
+          {featuredProducts.map((product) => {
+            const isSoldOut = !product.quantity || product.quantity < 3;
+            if (isSoldOut) {
+              return (
+                <div key={product.slug} className="product-card sold-out">
+                  <div>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
+                    />
+                  </div>
+                  <strong>{product.name}</strong>
+                  <p>{product.sizes || 'Standard Pot'}</p>
+                  <p>{product.type}</p>
+                  <div className="sold-out-badge">Sold Out</div>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={product.slug}
+                href={`/product/${product.slug}`}
+                className="product-card"
+              >
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
+                />
+                <strong>{product.name}</strong>
+                <p>{product.sizes || 'Standard Pot'}</p>
+                <p>{product.type}</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Book a Consultation Call to Action */}
+      <section className="cta">
+        <h2>Book Time with a Plant Guide</h2>
+        <button onClick={() => router.push('/consultations')}>Book a Consultation</button>
       </section>
     </div>
   );

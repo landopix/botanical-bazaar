@@ -325,3 +325,44 @@ body::before {
     text-align: center;
   }
 }
+
+/* Precise sizing, padding, and aspect ratio definitions to prevent asset distortion or layout shifts */
+header img,
+header .lantern-emblem {
+  height: 60px !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  box-shadow: 0 0 25px 12px rgba(1, 61, 36, 0.45);
+  border-radius: 50%;
+  display: block;
+}
+
+/* Ensure the hero-image animated logo GIF scales beautifully on mobile and desktop without layout shifts */
+.hero-image {
+  position: relative;
+  width: 45%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  aspect-ratio: 1 / 1; /* Match the exact 1:1 ratio of the brand logo GIF */
+  box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+  border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+  .hero-image {
+    width: 80% !important;
+    margin-top: 1.5rem;
+  }
+}
