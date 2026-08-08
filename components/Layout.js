@@ -31,6 +31,23 @@ export default function Layout({ children }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isSidebarOpen]);
 
+  // Manage click outside to close sidebar
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (
+        isSidebarOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(e.target) &&
+        toggleBtnRef.current &&
+        !toggleBtnRef.current.contains(e.target)
+      ) {
+        setIsSidebarOpen(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, [isSidebarOpen]);
+
   // Handle scroll trigger for Back to Top and body class toggle
   useEffect(() => {
     const handleScroll = () => {
@@ -122,6 +139,26 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
+      {/* Sidebar backdrop overlay (Click outside to close) */}
+      {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)}
+          className="sidebar-backdrop"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.45)',
+            backdropFilter: 'blur(3px)',
+            zIndex: 999,
+            cursor: 'pointer',
+            transition: 'opacity 0.2s ease-in-out'
+          }}
+        />
+      )}
+
       {/* Quick Actions Bubble Panel (Bottom Right) */}
       <div className="quick-actions">
         {/* Toggle / Search Bubble */}
