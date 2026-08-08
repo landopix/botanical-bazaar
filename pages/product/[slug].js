@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Button from '../../components/Button';
 import { useCart } from '../../context/CartContext';
@@ -39,6 +40,13 @@ export default function ProductDetail() {
       document.body.appendChild(script);
     }
   }, [slug]);
+
+  // Dynamic redirect for inactive/non-existent product pages straight back to /shop
+  useEffect(() => {
+    if (!loading && !product) {
+      router.replace('/shop');
+    }
+  }, [loading, product, router]);
 
   if (loading) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading plant details...</div>;
@@ -354,11 +362,15 @@ export default function ProductDetail() {
 
       <main className="product-main-container">
         {/* Product Image */}
-        <div className="product-img">
-          <img
-            src={product.image}
+        <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px' }}>
+          <Image
+            src={product.image || '/assets/placeholder.png'}
             alt={product.name}
-            onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
+            fill
+            sizes="(max-width: 800px) 100vw, 250px"
+            style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
+            priority
+            unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
           />
         </div>
 

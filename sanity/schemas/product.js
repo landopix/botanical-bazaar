@@ -17,7 +17,13 @@ export default {
         source: 'name',
         maxLength: 96
       },
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required(),
+      // Editors programmatically restricted from altering SEO slugs or deleting core components
+      readOnly: ({ currentUser }) => {
+        const isEditor = currentUser?.roles?.some(r => r.name === 'editor');
+        const isAdmin = currentUser?.roles?.some(r => r.name === 'administrator' || r.name === 'owner');
+        return isEditor && !isAdmin;
+      }
     },
     {
       name: 'sku',
@@ -25,24 +31,18 @@ export default {
       type: 'string'
     },
     {
-      name: 'image',
-      title: 'Image',
-      type: 'image',
-      options: {
-        hotspot: true
-      }
-    },
-    {
-      name: 'type',
-      title: 'Type',
+      name: 'price_mode',
+      title: 'Price Display Mode',
       type: 'string',
-      description: 'e.g. Plant, Seed, Shrub'
-    },
-    {
-      name: 'description',
-      title: 'Dual-Layer Description Specs',
-      type: 'text',
-      description: 'First layer: engaging marketing copy; Second layer: technical specifications'
+      options: {
+        list: [
+          { title: 'Fixed Price', value: 'fixed' },
+          { title: 'Price on Request', value: 'request' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'fixed',
+      validation: Rule => Rule.required()
     },
     {
       name: 'price',
@@ -57,6 +57,54 @@ export default {
       validation: Rule => Rule.required().min(0)
     },
     {
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true
+      },
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'image_alt',
+      title: 'Product Image Alt Text',
+      type: 'string',
+      validation: Rule => Rule.required()
+    },
+    {
+      name: 'type',
+      title: 'Type',
+      type: 'string',
+      description: 'e.g. Plant, Seed, Shrub'
+    },
+    {
+      name: 'description',
+      title: 'Rich-Text Description',
+      type: 'array',
+      of: [{ type: 'block' }],
+      description: 'Engaging marketing copy and technical specifications in rich text format'
+    },
+    {
+      name: 'variants',
+      title: 'Variants Repeater',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Variant Label (Size/Container)', type: 'string', validation: Rule => Rule.required() },
+            { name: 'price', title: 'Price (optional override)', type: 'number' }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'sizes',
+      title: 'Legacy Pipe-Separated Sizes (Fallback)',
+      type: 'string',
+      description: 'Pipe-separated sizes (e.g. 4" Pot | 1 Gal. Pot)'
+    },
+    {
       name: 'zones',
       title: 'USDA Zones',
       type: 'array',
@@ -64,32 +112,16 @@ export default {
       description: 'USDA Hardiness Zones (e.g. 9, 10, 11)'
     },
     {
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [{ type: 'string' }],
-      options: {
-        list: [
-          { title: 'Herbs & Medicinal', value: 'herbs-medicinal' },
-          { title: 'Fruit Trees', value: 'fruit-trees' },
-          { title: 'Houseplants', value: 'houseplants' },
-          { title: 'Orchids & Tropicals', value: 'orchids-tropicals' },
-          { title: 'Seeds', value: 'seeds' },
-          { title: 'Exotics & Rare', value: 'exotics-rare' }
-        ]
-      }
-    },
-    {
-      name: 'sizes',
-      title: 'Pricing Tiers / Sizes',
-      type: 'string',
-      description: 'Size variants separated by pipes (e.g. 4" Pot | 1 Gal. Pot)'
-    },
-    {
       name: 'tags',
       title: 'Tags',
       type: 'array',
       of: [{ type: 'string' }]
+    },
+    {
+      name: 'featured_order',
+      title: 'Featured Order Placement',
+      type: 'number',
+      description: 'Lower numbers place higher in featured section lists (e.g. 1, 2, 3)'
     }
   ]
 };

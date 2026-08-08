@@ -5,10 +5,36 @@ export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.name && formData.email && formData.message) {
-      setSubmitted(true);
+      setSubmitting(true);
+      try {
+        const res = await fetch('/api/submit-form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            formType: 'contact',
+            name: formData.name,
+            email: formData.email,
+            message: formData.message
+          })
+        });
+        if (res.ok) {
+          setSubmitted(true);
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      } catch (err) {
+        console.error('Error submitting form:', err);
+        alert('Network error. Please try again later.');
+      } finally {
+        setSubmitting(false);
+      }
     }
   };
 
@@ -60,7 +86,9 @@ export default function Contact() {
             />
           </div>
 
-          <Button type="submit" variant="gold-filled" style={{ width: '100%' }}>Send Message</Button>
+          <Button type="submit" variant="gold-filled" disabled={submitting} style={{ width: '100%' }}>
+            {submitting ? 'Sending...' : 'Send Message'}
+          </Button>
         </form>
       )}
     </div>
