@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Button from '../../components/Button';
 import { useCart } from '../../context/CartContext';
@@ -52,83 +54,335 @@ export default function ProductDetail() {
     );
   }
 
-  const sizesArray = product.sizes ? product.sizes.split('|').map(s => s.trim()) : [];
-  const isSoldOut = !product.quantity || product.quantity <= 0;
+  // Treat any quantity below three as sold out to match legacy stock policy
+  const isSoldOut = !product.quantity || product.quantity < 3;
   const isWishlisted = wishlist.some(item => item.slug === product.slug);
+  const sizesArray = product.sizes ? product.sizes.split('|').map(s => s.trim()) : [];
 
   const handleAddToCart = () => {
     addToCart(product, quantity, selectedSize);
     router.push('/cart');
   };
 
+  const renderSpecs = (productObj) => {
+    const tags = Array.isArray(productObj.tags) ? productObj.tags : [];
+
+    const createPanel = (title, items) => {
+      if (!items || items.length === 0) return null;
+      return (
+        <details key={title} className="plant-spec-detail">
+          <summary className="plant-spec-summary">{title}</summary>
+          <ul className="plant-spec-list">
+            {items.map((item, idx) => (
+              <li key={idx} className="plant-spec-item">
+                <strong>{item.label}:</strong> {item.description}
+              </li>
+            ))}
+          </ul>
+        </details>
+      );
+    };
+
+    const panels = [];
+
+    // Light Requirements
+    const lightItems = [];
+    if (tags.includes('bright-indirect')) lightItems.push({ label: 'Bright Indirect', description: 'Thrives in bright, indirect light. Avoid direct afternoon sun.' });
+    if (tags.includes('full-sun')) lightItems.push({ label: 'Full Sun', description: 'Requires at least 6 hours of direct sunlight per day.' });
+    if (tags.includes('low-light')) lightItems.push({ label: 'Low Light', description: 'Tolerates low light; avoid deep shade but does not need direct sun.' });
+    if (lightItems.length > 0) panels.push(createPanel('Light Requirements', lightItems));
+
+    // Moisture & Humidity
+    const moistureItems = [];
+    if (tags.includes('high-humidity')) moistureItems.push({ label: 'High Humidity', description: 'Requires high humidity and consistent moisture; mist regularly or use a humid environment.' });
+    if (tags.includes('drought-tolerant')) moistureItems.push({ label: 'Drought Tolerant', description: 'Allow soil to dry between waterings; avoid overwatering.' });
+    if (moistureItems.length > 0) panels.push(createPanel('Moisture & Humidity', moistureItems));
+
+    // Temperature & Hardiness
+    const hardinessItems = [];
+    if (productObj.zones && Array.isArray(productObj.zones) && productObj.zones.length > 0) {
+      const zoneRange = productObj.zones.length > 1 ? `${productObj.zones[0]}–${productObj.zones[productObj.zones.length - 1]}` : productObj.zones[0];
+      hardinessItems.push({ label: 'USDA Zones', description: `Hardy in zones ${zoneRange}.` });
+    }
+    if (tags.includes('protect-below-50')) hardinessItems.push({ label: 'Protect below 50°F', description: 'Move indoors or provide protection when temperatures dip below 50°F.' });
+    if (hardinessItems.length > 0) panels.push(createPanel('Temperature & Hardiness', hardinessItems));
+
+    // Pet Safety
+    const petItems = [];
+    if (tags.includes('pet-friendly')) petItems.push({ label: 'Pet Friendly', description: 'Non-toxic to cats and dogs.' });
+    if (tags.includes('toxic-to-pets')) petItems.push({ label: 'Toxic to Pets', description: 'Contains compounds that may be harmful if ingested; keep out of reach of pets.' });
+    if (petItems.length > 0) panels.push(createPanel('Pet Safety', petItems));
+
+    // Plant Type & Habit
+    const typeItems = [];
+    if (tags.includes('aroid')) typeItems.push({ label: 'Aroid', description: 'Member of the Araceae family; tropical foliage plant often with climbing habit.' });
+    if (tags.includes('bromeliad')) typeItems.push({ label: 'Bromeliad', description: 'Tropical plant in the Bromeliaceae family; many are epiphytic and appreciate bright, indirect light.' });
+    if (tags.includes('cactus')) typeItems.push({ label: 'Cactus', description: 'Drought-tolerant succulent with spines; needs full sun and well-draining soil.' });
+    if (tags.includes('succulent') && !tags.includes('cactus')) typeItems.push({ label: 'Succulent', description: 'Stores water in fleshy leaves or stems; prefers bright light and infrequent watering.' });
+    if (tags.includes('epiphytic')) typeItems.push({ label: 'Epiphytic', description: 'Grows on other plants or surfaces without soil; absorbs moisture from the air.' });
+    if (tags.includes('air-plant')) typeItems.push({ label: 'Air Plant', description: 'A type of epiphyte that grows without soil; appreciate bright, indirect light and good air circulation.' });
+    if (tags.includes('tree')) typeItems.push({ label: 'Tree', description: 'Woody perennial plant; requires ample space and support.' });
+    if (tags.includes('shrubs')) typeItems.push({ label: 'Shrub', description: 'Small to medium-sized woody plant; may produce flowers or berries.' });
+    if (tags.includes('herb')) typeItems.push({ label: 'Herb', description: 'Plant used for culinary or medicinal purposes; often aromatic.' });
+    if (tags.includes('fruit-tree')) typeItems.push({ label: 'Fruit Tree', description: 'Produces edible fruit; typically requires full sun and pollination.' });
+    if (tags.includes('medicinal')) typeItems.push({ label: 'Medicinal', description: 'Known for traditional medicinal uses; parts of the plant may be used in herbal remedies.' });
+    if (tags.includes('fern')) typeItems.push({ label: 'Fern', description: 'Non-flowering vascular plant with feathery fronds; thrives in high humidity and indirect light.' });
+    if (tags.includes('orchid')) typeItems.push({ label: 'Orchid', description: 'Member of the Orchidaceae family; often epiphytic with exotic blooms requiring high humidity and bright, indirect light.' });
+    if (tags.includes('tropical')) typeItems.push({ label: 'Tropical', description: 'Native to warm, humid regions; prefers temperatures above 60°F and high moisture.' });
+    if (tags.includes('beginner-friendly')) typeItems.push({ label: 'Beginner Friendly', description: 'Easy to care for and forgiving of minor mistakes; suitable for novice gardeners.' });
+    if (tags.includes('rare')) typeItems.push({ label: 'Collector Plant', description: 'Sought-after, hard-to-find plant prized by collectors.' });
+    if (typeItems.length > 0) panels.push(createPanel('Plant Type & Habit', typeItems));
+
+    // Special Features
+    const featureItems = [];
+    if (tags.includes('fragrant') || tags.includes('aromatic')) featureItems.push({ label: 'Fragrant', description: 'Produces aromatic flowers or foliage.' });
+    if (tags.includes('root-crop')) featureItems.push({ label: 'Edible Root', description: 'Grown for its edible roots or tubers.' });
+    if (tags.includes('medicinal') && !featureItems.some(it => it.label === 'Medicinal')) featureItems.push({ label: 'Medicinal', description: 'Used in herbal remedies or traditional medicine.' });
+    if (tags.includes('climbing')) featureItems.push({ label: 'Climbing', description: 'Has a climbing habit; may need support or a trellis.' });
+    if (tags.includes('drought-tolerant') && !moistureItems.some(it => it.label === 'Drought Tolerant')) featureItems.push({ label: 'Drought Tolerant', description: 'Allows soil to dry between waterings and thrives in dry conditions.' });
+    if (featureItems.length > 0) panels.push(createPanel('Special Features', featureItems));
+
+    return <div className="plant-specs">{panels}</div>;
+  };
+
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const imageUrl = product.image ? (product.image.startsWith('http') ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image}`) : '';
+  const descriptionText = product.description || `${product.name} live plant available for purchase.`;
+
+  const structuredSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    'name': product.name,
+    'description': descriptionText,
+    'image': imageUrl,
+    'sku': product.slug,
+    'offers': {
+      '@type': 'Offer',
+      'priceCurrency': 'USD',
+      'price': product.price,
+      'availability': isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      'url': pageUrl,
+      'hasMerchantReturnPolicy': {
+        '@type': 'MerchantReturnPolicy',
+        'name': 'Live Plant Guarantee',
+        'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
+        'merchantReturnDays': 7,
+        'returnMethod': 'InStoreOnly',
+        'refundType': 'StoreCredit'
+      },
+      'shippingDetails': {
+        '@type': 'OfferShippingDetails',
+        'shippingRate': {
+          '@type': 'MonetaryAmount',
+          'value': 0,
+          'currency': 'USD'
+        },
+        'shippingDestination': {
+          '@type': 'DefinedRegion',
+          'addressCountry': 'US',
+          'addressRegion': 'FL',
+          'addressLocality': 'St. Petersburg'
+        },
+        'deliveryTime': {
+          '@type': 'ShippingDeliveryTime',
+          'handlingTime': {
+            '@type': 'QuantitativeValue',
+            'minValue': 0,
+            'maxValue': 2,
+            'unitCode': 'DAY'
+          },
+          'transitTime': {
+            '@type': 'QuantitativeValue',
+            'minValue': 0,
+            'maxValue': 0,
+            'unitCode': 'DAY'
+          }
+        },
+        'deliveryMode': 'https://schema.org/DeliveryModePickUp'
+      }
+    },
+    'brand': {
+      '@type': 'Brand',
+      'name': 'The Botanical Bazaar'
+    }
+  };
+
   return (
-    <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem' }}>
+    <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto', boxSizing: 'border-box' }}>
+      <Head>
+        <title>{`${product.name} | The Botanical Bazaar`}</title>
+        <meta name="description" content={descriptionText} />
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:title" content={`${product.name} | The Botanical Bazaar`} />
+        <meta property="og:description" content={descriptionText} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={`${product.name} | The Botanical Bazaar`} />
+        <meta name="twitter:description" content={descriptionText} />
+        <meta name="twitter:image" content={imageUrl} />
+        <script
+          id="product-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredSchema) }}
+        />
+      </Head>
+
+      <style jsx global>{`
+        .product-main-container {
+          max-width: 720px;
+          margin: 2.5rem auto;
+          background: #123826;
+          border-radius: 16px;
+          box-shadow: 0 3px 14px rgba(20,40,30,0.12);
+          padding: 2rem 1.5rem;
+          color: #F5E7C4;
+          display: flex;
+          flex-direction: row;
+          gap: 2rem;
+          align-items: flex-start;
+          font-family: Georgia, serif;
+          box-sizing: border-box;
+        }
+        .product-img {
+          flex: 1;
+          min-width: 200px;
+          max-width: 250px;
+          box-sizing: border-box;
+        }
+        .product-img img {
+          width: 100%;
+          border-radius: 14px;
+          background: #e9dcbe11;
+          object-fit: cover;
+          display: block;
+        }
+        .product-info {
+          flex: 2;
+          text-align: left;
+          box-sizing: border-box;
+        }
+        .product-info h1 {
+          margin-top: 0;
+          font-size: 2rem;
+          color: #D4B06A;
+          font-family: Georgia, serif;
+          line-height: 1.2;
+        }
+        .product-info p {
+          margin: 0.5rem 0;
+          font-size: 1.12rem;
+          line-height: 1.5;
+        }
+        .product-info .price {
+          color: #D4B06A;
+          font-size: 1.6rem;
+          font-weight: bold;
+          margin: 0.7rem 0;
+        }
+        .product-info .product-tag-link {
+          display: inline-block;
+          background-color: #1C3D2E;
+          color: #F5E7C4;
+          border: 1px solid #749c7f;
+          border-radius: 14px;
+          padding: 0.15rem 0.55rem;
+          margin: 0 0.2rem 0.4rem 0;
+          font-size: 0.85rem;
+          text-decoration: none;
+          transition: background 0.12s, color 0.12s;
+        }
+        .product-info .product-tag-link:hover {
+          background-color: #249160;
+          color: #fffde6;
+        }
+        .back-link {
+          color: #E9DCBE;
+          text-decoration: underline;
+          margin-bottom: 1.5rem;
+          display: inline-block;
+          font-size: 1rem;
+        }
+
+        /* Plant specifications collapsible panels styled strictly to match legacy */
+        .plant-specs {
+          margin-top: 1rem;
+        }
+        .plant-spec-detail {
+          margin-top: 0.6rem;
+          background: #123826;
+          border-radius: 8px;
+          padding: 0.4rem 0.8rem;
+          color: #F5E7C4;
+        }
+        .plant-spec-summary {
+          cursor: pointer;
+          font-weight: bold;
+          color: #D4B06A;
+          outline: none;
+        }
+        .plant-spec-summary::-webkit-details-marker {
+          display: none;
+        }
+        .plant-spec-detail[open] .plant-spec-summary {
+          margin-bottom: 0.3rem;
+        }
+        .plant-spec-list {
+          margin: 0 0 0.3rem 1rem;
+          padding: 0;
+          list-style: disc;
+        }
+        .plant-spec-item {
+          margin: 0.2rem 0;
+          font-size: 0.95rem;
+        }
+
+        @media (max-width: 800px) {
+          .product-main-container {
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.2rem 0.5rem;
+          }
+          .product-info {
+            text-align: center;
+          }
+        }
+      `}</style>
+
+      <Link href="/shop" className="back-link">
+        &larr; Back to Shop
+      </Link>
+
+      <main className="product-main-container">
         {/* Product Image */}
-        <div style={{ flex: '1 1 400px' }}>
+        <div className="product-img">
           <img
             src={product.image}
             alt={product.name}
             onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-            style={{ width: '100%', borderRadius: '12px', boxShadow: '0 8px 25px rgba(0,0,0,0.15)' }}
           />
         </div>
 
-        {/* Product Meta & Actions */}
-        <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div>
-            <span style={{
-              background: '#D4B06A',
-              color: '#1C3D2E',
-              padding: '0.3rem 0.8rem',
-              borderRadius: '12px',
-              fontSize: '0.85rem',
-              fontWeight: 'bold',
-              textTransform: 'uppercase'
-            }}>
-              {product.type}
-            </span>
-            <h1 style={{ color: '#D4B06A', margin: '0.5rem 0 0 0', fontFamily: 'Georgia, serif', fontSize: '2.5rem' }}>
-              {product.name}
-            </h1>
-          </div>
+        {/* Product Meta, Specifications, Actions */}
+        <div className="product-info">
+          <h1>{product.name}</h1>
+          <p><strong>Size(s):</strong> {product.sizes || 'Standard Pot'}</p>
+          <p><strong>Type:</strong> {product.type}</p>
+          <p>
+            {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
+          </p>
 
-          <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#F4F1E1' }}>
-            {isNaN(product.price) || !product.price ? 'Price on Request' : `$${product.price.toFixed(2)}`}
-          </div>
-
-          <div>
-            <p style={{ lineHeight: '1.6', fontSize: '1.1rem' }}>
-              {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
-            </p>
-          </div>
-
-          {/* USDA Zones / Info */}
-          <div style={{ borderTop: '1px solid #1C3D2E', borderBottom: '1px solid #1C3D2E', padding: '1rem 0', display: 'flex', flexWrap: 'wrap', gap: '1.5rem' }}>
-            <div>
-              <strong>USDA Zone Compatibility:</strong>
-              <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
-                {product.zones && product.zones.map(z => (
-                  <span key={z} style={{ background: '#1C3D2E', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem' }}>Zone {z}</span>
-                ))}
-              </div>
-            </div>
-            {product.tags && product.tags.length > 0 && (
-              <div>
-                <strong>Tags:</strong>
-                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.4rem' }}>
-                  {product.tags.map(t => (
-                    <span key={t} style={{ background: '#123826', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.85rem' }}>{t}</span>
-                  ))}
-                </div>
-              </div>
+          <div className="price">
+            {isSoldOut ? (
+              <span style={{ color: '#ba2f2f', fontWeight: 'bold' }}>Sold Out</span>
+            ) : (
+              isNaN(product.price) || !product.price ? 'Price on Request' : `$${product.price.toFixed(2)}`
             )}
           </div>
 
-          {/* Size Select */}
+          {/* Size dropdown selection */}
           {sizesArray.length > 0 && (
-            <div>
-              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Select Size:</label>
+            <div style={{ marginBottom: '1.2rem', textAlign: 'left' }}>
+              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem', color: '#F5E7C4' }}>Select Size:</label>
               <select
                 value={selectedSize}
                 onChange={(e) => setSelectedSize(e.target.value)}
@@ -140,7 +394,8 @@ export default function ProductDetail() {
                   backgroundColor: '#1C3D2E',
                   color: '#F4F1E1',
                   fontFamily: 'inherit',
-                  fontSize: '1rem'
+                  fontSize: '1rem',
+                  outline: 'none'
                 }}
               >
                 {sizesArray.map(size => (
@@ -150,32 +405,32 @@ export default function ProductDetail() {
             </div>
           )}
 
-          {/* Quantity and Actions */}
+          {/* Actions: Quantity Selector & Add to Cart */}
           {!isSoldOut && (
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', border: '2px solid #D4B06A', borderRadius: '24px', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', border: '2px solid #D4B06A', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#1C3D2E' }}>
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer', outline: 'none' }}
                 >
                   -
                 </button>
                 <span style={{ padding: '0 1rem', color: '#F4F1E1', fontWeight: 'bold' }}>{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer', outline: 'none' }}
                 >
                   +
                 </button>
               </div>
 
-              <Button variant="gold-filled" onClick={handleAddToCart} style={{ flex: 1 }}>
+              <Button variant="gold-filled" onClick={handleAddToCart} style={{ flex: '1 1 auto', minWidth: '150px' }}>
                 Add to Cart
               </Button>
             </div>
           )}
 
-          {/* Sold Out Badge */}
+          {/* Sold out indicator if sold out */}
           {isSoldOut && (
             <div style={{
               background: '#ba2f2f',
@@ -184,22 +439,48 @@ export default function ProductDetail() {
               borderRadius: '8px',
               textAlign: 'center',
               fontWeight: 'bold',
-              fontSize: '1.2rem'
+              fontSize: '1.2rem',
+              marginBottom: '1.5rem'
             }}>
               Temporarily Sold Out
             </div>
           )}
 
-          <div style={{ display: 'flex', gap: '1rem' }}>
-            <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: 1 }}>
+          {/* Secondary Actions: Wishlist and Back buttons */}
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem', justifyContent: 'center' }}>
+            <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: '1 1 auto' }}>
               {isWishlisted ? '♥ In Wishlist' : '♡ Add to Wishlist'}
             </Button>
-            <Button variant="outline" href="/shop" style={{ flex: 1 }}>
+            <Button variant="outline" href="/shop" style={{ flex: '1 1 auto' }}>
               Back to Shop
             </Button>
           </div>
+
+          {/* Render linked tag list if present */}
+          {product.tags && product.tags.length > 0 && (
+            <div style={{ marginTop: '0.8rem', marginBottom: '1rem', textAlign: 'left' }}>
+              <strong style={{ color: '#F5E7C4' }}>Tags: </strong>
+              {product.tags.map(tag => {
+                const label = tag.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+                return (
+                  <Link key={tag} href={`/shop?search=${encodeURIComponent(tag)}`} className="product-tag-link">
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Collapsible Plant specifications details panels */}
+          {renderSpecs(product)}
+
+          {/* Policy notes (Local Pickup only and Live Plant Guarantee) */}
+          <div className="policy-note" style={{ marginTop: '1.5rem', fontSize: '0.95rem', lineHeight: '1.45', color: '#d9cba9', textAlign: 'left', borderTop: '1px solid rgba(212,176,106,0.2)', paddingTop: '1.2rem' }}>
+            <strong>Local Pickup Only:</strong> All purchases are available for pickup at our nursery in St.&nbsp;Petersburg, Florida. We do not ship at this time. <br />
+            <strong>Live Plant Guarantee:</strong> Please inspect your plant at pickup. If any hidden issues arise within 7&nbsp;days, we'll exchange it or issue store credit. Beyond this window, returns are not accepted.
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
