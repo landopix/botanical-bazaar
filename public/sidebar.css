@@ -45,6 +45,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1000;
+  border-right: 2px solid #D4B06A;
 }
 .sidebar.open {
   transform: translateX(0);

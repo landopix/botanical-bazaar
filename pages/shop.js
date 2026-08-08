@@ -15,6 +15,7 @@ export default function Shop() {
   const [selectedCategory, setSelectedCategory] = useState(category || '');
   const [searchQuery, setSearchQuery] = useState(search || '');
   const [selectedZone, setSelectedZone] = useState(zone || '');
+  const [hideSoldOut, setHideSoldOut] = useState(false);
   const { toggleWishlist, wishlist } = useWishlist();
 
   useEffect(() => {
@@ -90,6 +91,10 @@ export default function Shop() {
       result = result.filter(p => p.zones && p.zones.includes(selectedZone));
     }
 
+    if (hideSoldOut) {
+      result = result.filter(p => p.quantity && p.quantity >= 3);
+    }
+
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(p => {
@@ -101,7 +106,7 @@ export default function Shop() {
     }
 
     setFilteredProducts(result);
-  }, [selectedCategory, searchQuery, selectedZone, products]);
+  }, [selectedCategory, searchQuery, selectedZone, hideSoldOut, products]);
 
   // Extract unique categories and zones dynamic behavior from products
   const availableCategories = new Set();
@@ -239,6 +244,24 @@ export default function Shop() {
         />
       </div>
 
+      {/* Hide Sold Out Toggle */}
+      <div style={{ textAlign: 'center', marginBottom: '1.8rem' }}>
+        <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', color: '#E9DCBE', fontSize: '1.05rem', fontFamily: 'Crimson Text, Georgia, serif' }}>
+          <input
+            type="checkbox"
+            checked={hideSoldOut}
+            onChange={(e) => setHideSoldOut(e.target.checked)}
+            style={{
+              width: '18px',
+              height: '18px',
+              accentColor: '#D4B06A',
+              cursor: 'pointer'
+            }}
+          />
+          Hide Sold Out Plants
+        </label>
+      </div>
+
       <p style={{ maxWidth: '600px', margin: '0 auto 2rem auto', fontSize: '1.1rem', lineHeight: '1.5', textAlign: 'center', color: '#E9DCBE' }}>
         Browse our curated selection of plants grown and sourced for our St.&nbsp;Petersburg and Tampa Bay community. We stock tropical houseplants, fruit trees and edibles, orchids, and hardy landscape plants. Inventory changes regularly, so check back often or drop us a note if you're looking for something special.
       </p>
@@ -300,7 +323,7 @@ export default function Shop() {
                       fill
                       sizes="220px"
                       style={{ objectFit: 'cover', borderRadius: '8px', background: '#e9dcbe11' }}
-                      unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
+                      unoptimized={true}
                     />
                   </div>
                   <strong>
@@ -319,27 +342,29 @@ export default function Shop() {
               </div>
 
               {/* Bottom aligned button or Sold out text box */}
-              {isSoldOut ? (
-                <div className="sold-out-btn">
-                  Sold Out
-                </div>
-              ) : (
-                <Button
-                  variant="green-filled"
-                  href={`/product/${product.slug}`}
-                  style={{
-                    width: '100%',
-                    marginTop: '0.6rem',
-                    fontFamily: 'Crimson Text, Georgia, serif',
-                    fontSize: '1rem',
-                    padding: '0.5rem 1.4rem',
-                    borderRadius: '18px',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  View Plant
-                </Button>
-              )}
+              <div style={{ width: '100%', marginTop: 'auto' }}>
+                {isSoldOut ? (
+                  <div className="sold-out-btn">
+                    Sold Out
+                  </div>
+                ) : (
+                  <Button
+                    variant="green-filled"
+                    href={`/product/${product.slug}`}
+                    style={{
+                      width: '100%',
+                      marginTop: '0.6rem',
+                      fontFamily: 'Crimson Text, Georgia, serif',
+                      fontSize: '1rem',
+                      padding: '0.5rem 1.4rem',
+                      borderRadius: '18px',
+                      boxSizing: 'border-box'
+                    }}
+                  >
+                    View Plant
+                  </Button>
+                )}
+              </div>
             </div>
           );
         })}
