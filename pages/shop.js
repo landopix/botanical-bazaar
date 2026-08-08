@@ -333,7 +333,8 @@ export default function Shop() {
                     fontFamily: 'Crimson Text, Georgia, serif',
                     fontSize: '1rem',
                     padding: '0.5rem 1.4rem',
-                    borderRadius: '18px'
+                    borderRadius: '18px',
+                    boxSizing: 'border-box'
                   }}
                 >
                   View Plant
@@ -376,6 +377,9 @@ export default function Shop() {
             flex-direction: column;
             align-items: center;
           }
+        }
+        .product-card, .product-card * {
+          box-sizing: border-box;
         }
         .product-card {
           background-color: #F5E7C4;
