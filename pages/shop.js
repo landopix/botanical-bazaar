@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Button from '../components/Button';
 import { useWishlist } from '../context/WishlistContext';
@@ -292,11 +293,16 @@ export default function Shop() {
               {/* Top content wrapper keeps image, title, properties together */}
               <div style={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1, textAlign: 'center' }}>
                 <Link href={`/product/${product.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-                  />
+                  <div style={{ position: 'relative', width: '100%', height: '160px', marginBottom: '0.8rem' }}>
+                    <Image
+                      src={product.image || '/assets/placeholder.png'}
+                      alt={product.name}
+                      fill
+                      sizes="220px"
+                      style={{ objectFit: 'cover', borderRadius: '8px', background: '#e9dcbe11' }}
+                      unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
+                    />
+                  </div>
                   <strong>
                     {product.name}
                   </strong>
