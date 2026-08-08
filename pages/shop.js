@@ -323,7 +323,7 @@ export default function Shop() {
                       fill
                       sizes="220px"
                       style={{ objectFit: 'cover', borderRadius: '8px', background: '#e9dcbe11' }}
-                      unoptimized={true}
+                      unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
                     />
                   </div>
                   <strong>

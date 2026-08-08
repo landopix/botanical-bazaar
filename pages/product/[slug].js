@@ -370,11 +370,7 @@ export default function ProductDetail() {
             sizes="(max-width: 800px) 100vw, 250px"
             style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
             priority
-            unoptimized={true}
-            onError={(e) => {
-              // Fallback image handling
-              e.target.src = '/assets/placeholder.png';
-            }}
+            unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
           />
         </div>
 
