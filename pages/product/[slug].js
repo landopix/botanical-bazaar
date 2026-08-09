@@ -7,24 +7,6 @@ import Button from '../../components/Button';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
-export function getProductImage(image) {
-  if (!image) return '/assets/placeholder.png';
-  if (typeof image === 'string') {
-    if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:')) {
-      return image;
-    }
-    if (image.startsWith('/')) {
-      return image;
-    }
-    return `/${image}`;
-  }
-  if (image && typeof image === 'object') {
-    if (image.asset && image.asset.url) return image.asset.url;
-    if (image.url) return image.url;
-  }
-  return '/assets/placeholder.png';
-}
-
 export default function ProductDetail() {
   const router = useRouter();
   const { slug } = router.query;
@@ -329,10 +311,7 @@ export default function ProductDetail() {
           margin-top: 0;
           font-size: 2rem;
           color: #D4B06A;
-          font-family: var(--font-heading, Cinzel, serif);
-          font-weight: 400;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
+          font-family: Georgia, serif;
           line-height: 1.2;
         }
         .product-info p {
@@ -422,19 +401,15 @@ export default function ProductDetail() {
 
       <main className="product-main-container">
         {/* Product Image */}
-        <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px', overflow: 'hidden' }}>
+        <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px' }}>
           <Image
-            src={getProductImage(product.image)}
+            src={product.image || '/assets/placeholder.png'}
             alt={product.name}
             fill
             sizes="(max-width: 800px) 100vw, 250px"
             style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
             priority
-            unoptimized={true}
-            onError={(e) => {
-              // Fallback image handling
-              e.target.src = '/assets/placeholder.png';
-            }}
+            unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
           />
         </div>
 
