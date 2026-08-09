@@ -18,6 +18,45 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const { toggleWishlist, wishlist } = useWishlist();
 
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [notifySubscribed, setNotifySubscribed] = useState(false);
+  const [notifyLoading, setNotifyLoading] = useState(false);
+  const [notifyError, setNotifyError] = useState('');
+
+  const handleNotifyMe = async (e) => {
+    e.preventDefault();
+    if (!notifyEmail || !notifyEmail.trim()) return;
+
+    setNotifyLoading(true);
+    setNotifyError('');
+
+    try {
+      const response = await fetch('/api/notify-me', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: notifyEmail.trim(),
+          slug: product.slug,
+          name: product.name
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setNotifySubscribed(true);
+      } else {
+        setNotifyError(data.error || 'Failed to submit. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting notify me request:', err);
+      setNotifyError('An error occurred. Please try again.');
+    } finally {
+      setNotifyLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!slug) return;
 
@@ -154,7 +193,7 @@ export default function ProductDetail() {
   };
 
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const imageUrl = product.image ? (product.image.startsWith('http') ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image}`) : '';
+  const imageUrl = product.image ? (product.image.startsWith('http') ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image.startsWith('/') ? product.image : '/' + product.image}`) : '';
   const descriptionText = product.description || `${product.name} live plant available for purchase.`;
 
   const structuredSchema = {
@@ -444,17 +483,95 @@ export default function ProductDetail() {
 
           {/* Sold out indicator if sold out */}
           {isSoldOut && (
-            <div style={{
-              background: '#ba2f2f',
-              color: '#ffffff',
-              padding: '0.8rem',
-              borderRadius: '8px',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: '1.2rem',
-              marginBottom: '1.5rem'
-            }}>
-              Temporarily Sold Out
+            <div style={{ marginBottom: '1.5rem' }}>
+              <div style={{
+                background: '#ba2f2f',
+                color: '#ffffff',
+                padding: '0.8rem',
+                borderRadius: '8px',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+                marginBottom: '1rem'
+              }}>
+                Temporarily Sold Out
+              </div>
+
+              {/* Notify Me Form or Confirmation */}
+              <div style={{
+                background: '#1C3D2E',
+                border: '1px solid #D4B06A',
+                borderRadius: '8px',
+                padding: '1.2rem',
+                color: '#F5E7C4',
+                textAlign: 'left',
+                boxSizing: 'border-box'
+              }}>
+                {notifySubscribed ? (
+                  <div style={{
+                    color: '#D4B06A',
+                    fontWeight: 'bold',
+                    fontSize: '1.1rem',
+                    textAlign: 'center',
+                    fontFamily: "'Crimson Text', Georgia, serif"
+                  }}>
+                    You're on the list! We'll email you the moment this specimen returns.
+                  </div>
+                ) : (
+                  <form onSubmit={handleNotifyMe} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                    <label style={{ fontWeight: 'bold', fontSize: '1rem', color: '#D4B06A', fontFamily: "'Crimson Text', Georgia, serif" }}>
+                      Email me when available:
+                    </label>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <input
+                        type="email"
+                        placeholder="Your email address"
+                        required
+                        value={notifyEmail}
+                        onChange={(e) => setNotifyEmail(e.target.value)}
+                        disabled={notifyLoading}
+                        style={{
+                          flex: '1 1 200px',
+                          padding: '0.6rem 0.8rem',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(212, 176, 106, 0.4)',
+                          background: '#F5E7C4',
+                          color: '#00301E',
+                          fontFamily: 'inherit',
+                          fontSize: '1rem',
+                          outline: 'none',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                      <button
+                        type="submit"
+                        disabled={notifyLoading}
+                        style={{
+                          background: '#D4B06A',
+                          color: '#00301E',
+                          border: 'none',
+                          borderRadius: '8px',
+                          padding: '0.6rem 1.2rem',
+                          fontFamily: 'inherit',
+                          fontSize: '1rem',
+                          fontWeight: 'bold',
+                          cursor: notifyLoading ? 'not-allowed' : 'pointer',
+                          flex: '0 0 auto',
+                          transition: 'opacity 0.2s',
+                          opacity: notifyLoading ? 0.7 : 1
+                        }}
+                      >
+                        {notifyLoading ? 'Submitting...' : 'Notify Me'}
+                      </button>
+                    </div>
+                    {notifyError && (
+                      <p style={{ color: '#ba2f2f', margin: '0.4rem 0 0 0', fontSize: '0.9rem', fontWeight: 'bold' }}>
+                        {notifyError}
+                      </p>
+                    )}
+                  </form>
+                )}
+              </div>
             </div>
           )}
 

@@ -12,7 +12,8 @@ const COLLECTIONS = [
   { id: 'orchids-tropicals', name: 'Orchids & Tropicals' },
   { id: 'fruit-trees', name: 'Fruit Trees' },
   { id: 'herbs-medicinal', name: 'Herbs & Medicinal' },
-  { id: 'exotics-rare', name: 'Exotics & Rare' }
+  { id: 'exotics-rare', name: 'Exotics & Rare' },
+  { id: 'seeds', name: 'Seeds' }
 ];
 
 export default function Shop() {
@@ -30,7 +31,7 @@ export default function Shop() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedZone, setSelectedZone] = useState('');
   const [sortOrder, setSortOrder] = useState('');
-  const [hideSoldOut, setHideSoldOut] = useState(false);
+  const [hideSoldOut, setHideSoldOut] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch products from Sanity.io or local fallback
@@ -94,7 +95,11 @@ export default function Shop() {
     if (size !== undefined) setSelectedSize(size || '');
     if (zone !== undefined) setSelectedZone(zone || '');
     if (sort !== undefined) setSortOrder(sort || '');
-    if (hide_sold_out !== undefined) setHideSoldOut(hide_sold_out === 'true');
+    if (hide_sold_out !== undefined) {
+      setHideSoldOut(hide_sold_out === 'true');
+    } else {
+      setHideSoldOut(true); // default to true on first load
+    }
     if (search !== undefined) setSearchQuery(search || '');
   }, [router.isReady, router.query]);
 
@@ -125,7 +130,7 @@ export default function Shop() {
     if (updates.hide_sold_out !== undefined) {
       setHideSoldOut(updates.hide_sold_out);
       if (updates.hide_sold_out) params.set('hide_sold_out', 'true');
-      else params.delete('hide_sold_out');
+      else params.set('hide_sold_out', 'false');
     }
     if (updates.search !== undefined) {
       setSearchQuery(updates.search);
@@ -166,6 +171,9 @@ export default function Shop() {
         }
         if (catLower === 'exotics-rare' || catLower === 'exotics & rare') {
           return hasCategory('exotics-rare') || hasTag('rare') || hasTag('exotic') || textMatches('rare') || textMatches('exotic') || textMatches('unusual');
+        }
+        if (catLower === 'seeds') {
+          return hasCategory('seeds') || hasTag('seed') || textMatches('seed');
         }
 
         // Exact fallback
@@ -216,6 +224,17 @@ export default function Shop() {
       result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     }
 
+    // Always sort in-stock items to the top if hideSoldOut is false
+    if (!hideSoldOut) {
+      result.sort((a, b) => {
+        const aSold = !a.quantity || a.quantity < 3;
+        const bSold = !b.quantity || b.quantity < 3;
+        if (aSold && !bSold) return 1;
+        if (!aSold && bSold) return -1;
+        return 0; // maintain relative sorted order
+      });
+    }
+
     setFilteredProducts(result);
   }, [products, selectedCategory, selectedSize, selectedZone, sortOrder, hideSoldOut, searchQuery]);
 
@@ -247,6 +266,48 @@ export default function Shop() {
   });
   const sortedSizes = Array.from(availableSizes).sort();
 
+  // Helper to determine active in-stock count for collections dynamically
+  const getActiveInStockCountForCategory = (categoryId) => {
+    return products.filter(product => {
+      const isSoldOut = !product.quantity || product.quantity < 3;
+      if (isSoldOut) return false;
+
+      const catLower = categoryId.toLowerCase();
+      const hasCategory = (c) => Array.isArray(product.categories) && product.categories.some(pc => pc.toLowerCase() === c.toLowerCase());
+      const hasTag = (t) => Array.isArray(product.tags) && product.tags.some(pt => pt.toLowerCase() === t.toLowerCase());
+      const textMatches = (keyword) => {
+        const text = `${product.name} ${product.description || ''}`.toLowerCase();
+        return text.includes(keyword);
+      };
+
+      if (catLower === 'houseplants') {
+        return hasCategory('houseplants') || hasTag('houseplant') || textMatches('houseplant');
+      }
+      if (catLower === 'orchids-tropicals' || catLower === 'orchids & tropicals') {
+        return hasCategory('orchids-tropicals') || hasCategory('plants') || hasTag('tropical') || hasTag('orchid') || textMatches('orchid') || textMatches('tropical');
+      }
+      if (catLower === 'fruit-trees' || catLower === 'fruit trees') {
+        return hasCategory('fruit-trees') || hasTag('fruit-tree') || textMatches('fruit tree') || textMatches('fruit');
+      }
+      if (catLower === 'herbs-medicinal' || catLower === 'herbs & medicinal') {
+        return hasCategory('herbs-medicinal') || hasTag('herb') || hasTag('medicinal') || textMatches('herb') || textMatches('medicinal') || textMatches('aromatic');
+      }
+      if (catLower === 'exotics-rare' || catLower === 'exotics & rare') {
+        return hasCategory('exotics-rare') || hasTag('rare') || hasTag('exotic') || textMatches('rare') || textMatches('exotic') || textMatches('unusual');
+      }
+      if (catLower === 'seeds') {
+        return hasCategory('seeds') || hasTag('seed') || textMatches('seed');
+      }
+
+      return hasCategory(categoryId);
+    }).length;
+  };
+
+  const visibleCollections = COLLECTIONS.filter(collection => {
+    if (products.length === 0) return true; // keep visible during initial load
+    return getActiveInStockCountForCategory(collection.id) > 0;
+  });
+
   return (
     <div className="shop-container">
       {/* Page Heading styled strictly using Cinzel serif with uppercase spacing */}
@@ -276,7 +337,7 @@ export default function Shop() {
             >
               Shop All
             </button>
-            {COLLECTIONS.map(collection => (
+            {visibleCollections.map(collection => (
               <button
                 key={collection.id}
                 onClick={() => updateFilters({ category: collection.id })}
@@ -381,100 +442,136 @@ export default function Shop() {
       </div>
 
       {/* Products Grid */}
-      <div className="products">
-        {filteredProducts.map(product => {
-          const isSoldOut = !product.quantity || product.quantity < 3;
-          const isWishlisted = wishlist.some(item => item.slug === product.slug);
+      {selectedCategory && products.length > 0 && getActiveInStockCountForCategory(selectedCategory) === 0 ? (
+        <div style={{
+          width: '100%',
+          maxWidth: '800px',
+          margin: '2rem auto',
+          background: '#00301E',
+          border: '1px solid #D4B06A',
+          padding: '3rem 2rem',
+          borderRadius: '12px',
+          textAlign: 'center',
+          color: '#F5E7C4',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+          fontFamily: "'Crimson Text', Georgia, serif",
+          boxSizing: 'border-box'
+        }}>
+          <h3 style={{
+            color: '#D4B06A',
+            fontFamily: "'Cinzel', serif",
+            fontSize: '1.8rem',
+            margin: '0 0 1rem 0',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em'
+          }}>
+            Upcoming Batch / Gathering Inventory
+          </h3>
+          <p style={{
+            fontSize: '1.25rem',
+            lineHeight: '1.6',
+            maxWidth: '650px',
+            margin: '0 auto'
+          }}>
+            This batch is currently out of stock as we grow our next generation—check back soon or browse our available inventory above.
+          </p>
+        </div>
+      ) : (
+        <div className="products">
+          {filteredProducts.map(product => {
+            const isSoldOut = !product.quantity || product.quantity < 3;
+            const isWishlisted = wishlist.some(item => item.slug === product.slug);
 
-          return (
-            <div
-              key={product.slug}
-              className={`product-card ${isSoldOut ? 'sold-out' : ''}`}
-            >
-              {/* Wishlist Heart Icon */}
-              <button
-                onClick={() => toggleWishlist(product)}
-                className="wishlist-heart-btn"
-                aria-label="Add to wishlist"
+            return (
+              <div
+                key={product.slug}
+                className={`product-card ${isSoldOut ? 'sold-out' : ''}`}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill={isWishlisted ? '#ba2f2f' : 'none'}
-                  stroke={isWishlisted ? '#ba2f2f' : '#1C3D2E'}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                {/* Wishlist Heart Icon */}
+                <button
+                  onClick={() => toggleWishlist(product)}
+                  className="wishlist-heart-btn"
+                  aria-label="Add to wishlist"
                 >
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill={isWishlisted ? '#ba2f2f' : 'none'}
+                    stroke={isWishlisted ? '#ba2f2f' : '#1C3D2E'}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
 
-              {/* Absolute sold-out-badge in upper right if sold out */}
-              {isSoldOut && (
-                <div className="sold-out-badge">
-                  Sold Out
-                </div>
-              )}
-
-              {/* Top content wrapper keeps image, title, properties together */}
-              <div className="product-card-top">
-                <Link href={`/product/${product.slug}`} className="product-link">
-                  <div className="product-image-container">
-                    <Image
-                      src={product.image || '/assets/placeholder.png'}
-                      alt={product.name}
-                      fill
-                      sizes="220px"
-                      className="product-image"
-                      unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
-                    />
-                  </div>
-                  <strong className="product-card-title">
-                    {product.name}
-                  </strong>
-                </Link>
-                <p className="product-sizes">{product.sizes || 'Standard Pot'}</p>
-                <p className="product-type">{product.type}</p>
-                <div className={`price ${isSoldOut ? 'sold' : 'available'}`}>
-                  {isSoldOut ? 'Sold Out' : (isNaN(product.price) || !product.price ? 'Price on Request' : `$${product.price.toFixed(2)}`)}
-                </div>
-                {/* Cold tolerance hardiness badge */}
-                <div className="hardiness-badge">
-                  Hardy to: {product.temp_threshold || '50'}°F
-                </div>
-              </div>
-
-              {/* Bottom aligned button or Sold out text box */}
-              <div className="product-card-bottom">
-                {isSoldOut ? (
-                  <div className="sold-out-btn">
+                {/* Absolute sold-out-badge in upper right if sold out */}
+                {isSoldOut && (
+                  <div className="sold-out-badge">
                     Sold Out
                   </div>
-                ) : (
-                  <Button
-                    variant="green-filled"
-                    href={`/product/${product.slug}`}
-                    style={{
-                      width: '100%',
-                      marginTop: '0.6rem',
-                      fontFamily: "'Crimson Text', Georgia, serif",
-                      fontSize: '1rem',
-                      padding: '0.5rem 1.4rem',
-                      borderRadius: '18px',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    View Plant
-                  </Button>
                 )}
+
+                {/* Top content wrapper keeps image, title, properties together */}
+                <div className="product-card-top">
+                  <Link href={`/product/${product.slug}`} className="product-link">
+                    <div className="product-image-container">
+                      <Image
+                        src={product.image || '/assets/placeholder.png'}
+                        alt={product.name}
+                        fill
+                        sizes="220px"
+                        className="product-image"
+                        unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
+                      />
+                    </div>
+                    <strong className="product-card-title">
+                      {product.name}
+                    </strong>
+                  </Link>
+                  <p className="product-sizes">{product.sizes || 'Standard Pot'}</p>
+                  <p className="product-type">{product.type}</p>
+                  <div className={`price ${isSoldOut ? 'sold' : 'available'}`}>
+                    {isSoldOut ? 'Sold Out' : (isNaN(product.price) || !product.price ? 'Price on Request' : `$${product.price.toFixed(2)}`)}
+                  </div>
+                  {/* Cold tolerance hardiness badge */}
+                  <div className="hardiness-badge">
+                    Hardy to: {product.temp_threshold || '50'}°F
+                  </div>
+                </div>
+
+                {/* Bottom aligned button or Sold out text box */}
+                <div className="product-card-bottom">
+                  {isSoldOut ? (
+                    <div className="sold-out-btn">
+                      Sold Out
+                    </div>
+                  ) : (
+                    <Button
+                      variant="green-filled"
+                      href={`/product/${product.slug}`}
+                      style={{
+                        width: '100%',
+                        marginTop: '0.6rem',
+                        fontFamily: "'Crimson Text', Georgia, serif",
+                        fontSize: '1rem',
+                        padding: '0.5rem 1.4rem',
+                        borderRadius: '18px',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      View Plant
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Styled JSX strictly using Cinzel and Crimson Text font tokens and our verified color design tokens */}
       <style jsx>{`
