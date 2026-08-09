@@ -98,7 +98,7 @@ export default function Account() {
           boxShadow: '0 8px 32px rgba(18,56,38,0.3)',
           textAlign: 'center'
         }}>
-          <h2 style={{ color: '#D4B06A', fontFamily: 'Georgia, serif', fontSize: '2rem', marginBottom: '0.5rem' }}>
+          <h2 style={{ color: '#D4B06A', fontFamily: 'var(--font-heading, Cinzel, serif)', letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '1.6rem', fontWeight: '400', marginBottom: '0.5rem' }}>
             Garden Sanctuary Login
           </h2>
           <p style={{ color: '#E9DCBE', fontSize: '1rem', lineHeight: '1.5', marginBottom: '2rem' }}>
@@ -144,7 +144,7 @@ export default function Account() {
       {/* Header section with Sign Out */}
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', gap: '1rem' }}>
         <div>
-          <h1 style={{ color: '#D4B06A', fontFamily: 'Georgia, serif', fontSize: '2.8rem', marginBottom: '0.5rem' }}>
+          <h1 style={{ color: '#D4B06A', fontFamily: 'var(--font-heading, Cinzel, serif)', letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '2.2rem', fontWeight: '400', marginBottom: '0.5rem' }}>
             {dashboardCopy.title}
           </h1>
           <p style={{ fontSize: '1.2rem', color: '#E9DCBE', fontStyle: 'italic', margin: 0 }}>
@@ -182,7 +182,7 @@ export default function Account() {
 
           {/* Orders History */}
           <div>
-            <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4B06A', borderBottom: '1px solid #1C3D2E', paddingBottom: '0.5rem', marginBottom: '1.2rem' }}>
+            <h2 style={{ fontFamily: 'var(--font-heading, Cinzel, serif)', letterSpacing: '0.1em', textTransform: 'uppercase', fontSize: '1.4rem', fontWeight: '400', color: '#D4B06A', borderBottom: '1px solid #1C3D2E', paddingBottom: '0.5rem', marginBottom: '1.2rem' }}>
               Your Stripe Orders
             </h2>
 

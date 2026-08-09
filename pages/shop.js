@@ -6,6 +6,24 @@ import Button from '../components/Button';
 import { useWishlist } from '../context/WishlistContext';
 import { isSanityConfigured, sanityClient } from '../lib/sanity';
 
+export function getProductImage(image) {
+  if (!image) return '/assets/placeholder.png';
+  if (typeof image === 'string') {
+    if (image.startsWith('http://') || image.startsWith('https://') || image.startsWith('data:')) {
+      return image;
+    }
+    if (image.startsWith('/')) {
+      return image;
+    }
+    return `/${image}`;
+  }
+  if (image && typeof image === 'object') {
+    if (image.asset && image.asset.url) return image.asset.url;
+    if (image.url) return image.url;
+  }
+  return '/assets/placeholder.png';
+}
+
 export default function Shop() {
   const router = useRouter();
   const { category, search, zone } = router.query;
@@ -154,7 +172,7 @@ export default function Shop() {
 
   return (
     <div className="shop-container">
-      <h1 style={{ color: '#E9DCBE', fontSize: '2.2rem', textAlign: 'center', letterSpacing: '0.02em', marginTop: '0.3em', marginBottom: '1.5em', fontFamily: 'Georgia, serif' }}>
+      <h1 style={{ color: '#E9DCBE', fontSize: '2.2rem', textAlign: 'center', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '0.3em', marginBottom: '1.5em', fontFamily: 'var(--font-heading, Cinzel, serif)', fontWeight: '400' }}>
         Shop All Plants
       </h1>
 
@@ -316,14 +334,14 @@ export default function Shop() {
               {/* Top content wrapper keeps image, title, properties together */}
               <div style={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1, textAlign: 'center' }}>
                 <Link href={`/product/${product.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-                  <div style={{ position: 'relative', width: '100%', height: '160px', marginBottom: '0.8rem' }}>
+                  <div style={{ position: 'relative', width: '100%', height: '160px', marginBottom: '0.8rem', overflow: 'hidden' }}>
                     <Image
-                      src={product.image || '/assets/placeholder.png'}
+                      src={getProductImage(product.image)}
                       alt={product.name}
                       fill
                       sizes="220px"
-                      style={{ objectFit: 'cover', borderRadius: '8px', background: '#e9dcbe11' }}
-                      unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
+                      style={{ objectFit: 'cover', borderRadius: '8px', background: '#e9dcbe11', height: '160px', width: '100%' }}
+                      unoptimized={true}
                     />
                   </div>
                   <strong>
@@ -430,19 +448,21 @@ export default function Shop() {
           pointer-events: none;
         }
         .product-card img {
-          width: 100%;
-          height: 160px;
-          object-fit: cover;
+          width: 100% !important;
+          height: 160px !important;
+          object-fit: cover !important;
           border-radius: 8px;
           background: #e9dcbe11;
           margin-bottom: 0.8rem;
           display: block;
+          overflow: hidden !important;
         }
         .product-card strong {
           display: block;
           margin-top: 0.2rem;
-          font-size: 1.22rem;
-          font-family: Georgia, serif;
+          font-size: 1.15rem;
+          font-family: var(--font-heading, Cinzel, serif);
+          font-weight: 700;
           line-height: 1.2;
           min-height: 3.2rem;
           color: #1C3D2E;
