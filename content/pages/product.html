@@ -512,7 +512,7 @@ body {
         '@type': 'Product',
         'name': prod.name,
         'description': descriptionText,
-        'image': new URL(prod.image, window.location.href).href,
+        'image': prod.image ? (prod.image.startsWith('http') ? prod.image : new URL(prod.image.startsWith('/') ? prod.image : '/' + prod.image, window.location.origin).href) : '',
         'sku': prod.slug,
         'offers': {
           '@type': 'Offer',
@@ -601,7 +601,7 @@ body {
       setMeta({ property: 'og:title' }, `${prod.name} | The Botanical Bazaar`);
       setMeta({ property: 'og:description' }, descriptionContent);
       // Build absolute URL for image
-      const absoluteImg = new URL(prod.image, window.location.href).href;
+      const absoluteImg = prod.image ? (prod.image.startsWith('http') ? prod.image : new URL(prod.image.startsWith('/') ? prod.image : '/' + prod.image, window.location.origin).href) : '';
       setMeta({ property: 'og:image' }, absoluteImg);
       setMeta({ name: 'twitter:title' }, `${prod.name} | The Botanical Bazaar`);
       setMeta({ name: 'twitter:description' }, descriptionContent);

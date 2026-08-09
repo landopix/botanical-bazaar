@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useWishlist } from '../context/WishlistContext';
 import { isSanityConfigured, sanityClient } from '../lib/sanity';
@@ -67,6 +68,48 @@ export default function Index() {
   // Slice the first 5 products for Featured Plants section
   const featuredProducts = products.slice(0, 5);
 
+  // Helper to determine active in-stock count for categories dynamically
+  const getActiveCount = (catId) => {
+    return products.filter(product => {
+      const isSoldOut = !product.quantity || product.quantity < 3;
+      if (isSoldOut) return false;
+
+      const catLower = catId.toLowerCase();
+      const hasCategory = (c) => Array.isArray(product.categories) && product.categories.some(pc => pc.toLowerCase() === c.toLowerCase());
+      const hasTag = (t) => Array.isArray(product.tags) && product.tags.some(pt => pt.toLowerCase() === t.toLowerCase());
+      const textMatches = (keyword) => {
+        const text = `${product.name} ${product.description || ''}`.toLowerCase();
+        return text.includes(keyword);
+      };
+
+      if (catLower === 'houseplants') {
+        return hasCategory('houseplants') || hasTag('houseplant') || textMatches('houseplant');
+      }
+      if (catLower === 'orchids-tropicals' || catLower === 'orchids & tropicals') {
+        return hasCategory('orchids-tropicals') || hasCategory('plants') || hasTag('tropical') || hasTag('orchid') || textMatches('orchid') || textMatches('tropical');
+      }
+      if (catLower === 'fruit-trees' || catLower === 'fruit trees') {
+        return hasCategory('fruit-trees') || hasTag('fruit-tree') || textMatches('fruit tree') || textMatches('fruit');
+      }
+      if (catLower === 'herbs-medicinal' || catLower === 'herbs & medicinal') {
+        return hasCategory('herbs-medicinal') || hasTag('herb') || hasTag('medicinal') || textMatches('herb') || textMatches('medicinal') || textMatches('aromatic');
+      }
+      if (catLower === 'exotics-rare' || catLower === 'exotics & rare') {
+        return hasCategory('exotics-rare') || hasTag('rare') || hasTag('exotic') || textMatches('rare') || textMatches('exotic') || textMatches('unusual');
+      }
+      if (catLower === 'seeds') {
+        return hasCategory('seeds') || hasTag('seed') || textMatches('seed');
+      }
+
+      return hasCategory(catId);
+    }).length;
+  };
+
+  const showCategory = (catId) => {
+    if (products.length === 0) return true; // keep visible during initial load
+    return getActiveCount(catId) > 0;
+  };
+
   return (
     <div className="home-container">
       {/* Homepage specific styles injected cleanly */}
@@ -107,12 +150,6 @@ export default function Index() {
           justify-content: center;
           position: relative;
           background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
-        }
-        .hero-image img {
-          width: 100%;
-          height: auto;
-          box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
-          border-radius: 12px;
         }
         .featured {
           padding: 2rem;
@@ -318,12 +355,21 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Hero image with animated GIF */}
+        {/* Hero image with animated GIF using Next.js Image component with unoptimized=true */}
         <div className="hero-image">
-          <img
+          <Image
             src="/assets/logo-animation-optimized.gif"
             alt="The Botanical Bazaar Animated Logo"
-            loading="lazy"
+            width={350}
+            height={350}
+            priority
+            unoptimized={true}
+            style={{
+              width: '100%',
+              height: 'auto',
+              boxShadow: '0 0 40px 20px rgba(1, 61, 36, 0.35)',
+              borderRadius: '12px'
+            }}
           />
         </div>
 
@@ -386,12 +432,24 @@ export default function Index() {
         <h2>Browse by Category</h2>
         <div className="categories-grid">
           <Link href="/shop" className="category-card">Shop&nbsp;All</Link>
-          <Link href="/shop?category=herbs-medicinal" className="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</Link>
-          <Link href="/shop?category=fruit-trees" className="category-card">Fruit&nbsp;Trees</Link>
-          <Link href="/shop?category=houseplants" className="category-card">Houseplants</Link>
-          <Link href="/shop?category=orchids-tropicals" className="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</Link>
-          <Link href="/shop?category=seeds" className="category-card">Seeds</Link>
-          <Link href="/shop?category=exotics-rare" className="category-card">Exotics&nbsp;&amp;&nbsp;Rare</Link>
+          {showCategory('herbs-medicinal') && (
+            <Link href="/shop?category=herbs-medicinal" className="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</Link>
+          )}
+          {showCategory('fruit-trees') && (
+            <Link href="/shop?category=fruit-trees" className="category-card">Fruit&nbsp;Trees</Link>
+          )}
+          {showCategory('houseplants') && (
+            <Link href="/shop?category=houseplants" className="category-card">Houseplants</Link>
+          )}
+          {showCategory('orchids-tropicals') && (
+            <Link href="/shop?category=orchids-tropicals" className="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</Link>
+          )}
+          {showCategory('seeds') && (
+            <Link href="/shop?category=seeds" className="category-card">Seeds</Link>
+          )}
+          {showCategory('exotics-rare') && (
+            <Link href="/shop?category=exotics-rare" className="category-card">Exotics&nbsp;&amp;&nbsp;Rare</Link>
+          )}
           <Link href="/zones" className="category-card">Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone</Link>
           <Link href="/orchids-gallery" className="category-card">Collector's&nbsp;Gallery</Link>
         </div>
