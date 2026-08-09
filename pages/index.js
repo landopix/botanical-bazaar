@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useWishlist } from '../context/WishlistContext';
 import { isSanityConfigured, sanityClient } from '../lib/sanity';
@@ -150,6 +149,12 @@ export default function Index() {
           justify-content: center;
           position: relative;
           background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+        }
+        .hero-image img {
+          width: 100%;
+          height: auto;
+          box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+          border-radius: 12px;
         }
         .featured {
           padding: 2rem;
@@ -355,21 +360,12 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Hero image with animated GIF using Next.js Image component with unoptimized=true */}
+        {/* Hero image with animated GIF */}
         <div className="hero-image">
-          <Image
+          <img
             src="/assets/logo-animation-optimized.gif"
             alt="The Botanical Bazaar Animated Logo"
-            width={350}
-            height={350}
-            priority
-            unoptimized={true}
-            style={{
-              width: '100%',
-              height: 'auto',
-              boxShadow: '0 0 40px 20px rgba(1, 61, 36, 0.35)',
-              borderRadius: '12px'
-            }}
+            loading="lazy"
           />
         </div>
 
