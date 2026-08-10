@@ -44,7 +44,7 @@ export default function Cart() {
                 style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
               />
               <div>
-                <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Georgia, serif' }}>{item.name}</h3>
+                <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>{item.name}</h3>
                 <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>Size: {item.selectedSize || 'Default'}</p>
                 <p style={{ margin: '0', fontWeight: 'bold', color: '#F4F1E1' }}>${(item.price || 0).toFixed(2)}</p>
               </div>
@@ -103,7 +103,7 @@ export default function Cart() {
           textAlign: 'right'
         }}
       >
-        <h2 style={{ fontFamily: 'Georgia, serif', margin: '0 0 1rem 0' }}>Cart Summary</h2>
+        <h2 style={{ fontFamily: 'Cinzel, serif', margin: '0 0 1rem 0' }}>Cart Summary</h2>
         <p style={{ fontSize: '1.1rem', margin: '0 0 1.5rem 0' }}>
           Total Items: <strong>{cart.reduce((a, b) => a + b.quantity, 0)}</strong>
         </p>

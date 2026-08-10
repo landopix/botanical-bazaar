@@ -1,14 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --forest-green: #11402A;
   --matte-gold: #D4B06A;
   --text-light: #F4F1E1;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Crimson Text', serif;
+}
+
+body, p, span, li, a, button, input, select, textarea, table, label {
+  font-family: var(--font-body);
 }
 
 body {
   background: var(--forest-green);
   color: var(--text-light);
-  font-family: Georgia, serif;
+  font-family: var(--font-body);
   margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6, .brand-title {
+  font-family: var(--font-display);
 }
 
 .site-header {
