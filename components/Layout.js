@@ -374,7 +374,7 @@ export default function Layout({ children }) {
           display: showBackToTop ? 'block' : 'none',
           position: 'fixed',
           bottom: '20px',
-          right: '20px',
+          left: '20px',
           background: '#D4B06A',
           color: '#1C3D2E',
           border: 'none',

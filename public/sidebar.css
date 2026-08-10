@@ -180,6 +180,26 @@ body a:hover {
   color: #D4B06A;
 }
 
+/* Footer styling: ensure absolute center-alignment across all layouts */
+footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #E9DCBE;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 0.5rem auto;
+  text-align: center;
+  width: 100%;
+}
+
 /* Footer links: use the gold palette instead of default blue. */
 footer a {
   color: #D4B06A;
@@ -451,6 +471,12 @@ header .lantern-emblem {
   aspect-ratio: 1 / 1; /* Match the exact 1:1 ratio of the brand logo GIF */
   box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
   border-radius: 12px;
+}
+
+/* Globally reposition Back-to-Top to bottom-left to prevent collision with quick actions */
+#back-to-top {
+  right: auto !important;
+  left: 20px !important;
 }
 
 @media (max-width: 900px) {
