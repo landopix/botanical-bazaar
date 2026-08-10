@@ -96,10 +96,10 @@ export default function Cart() {
       <div
         style={{
           marginTop: '3rem',
-          background: '#F5E7C4',
+          background: '#E9DCBE',
           padding: '2rem',
           borderRadius: '12px',
-          color: '#1C3D2E',
+          color: '#00301E',
           textAlign: 'right'
         }}
       >
@@ -108,7 +108,7 @@ export default function Cart() {
           Total Items: <strong>{cart.reduce((a, b) => a + b.quantity, 0)}</strong>
         </p>
         <p style={{ fontSize: '1.5rem', margin: '0 0 2rem 0', fontWeight: 'bold' }}>
-          Estimated Total: <span style={{ color: '#11402A' }}>${cartTotal.toFixed(2)}</span>
+          Estimated Total: <span style={{ color: '#00301E' }}>${cartTotal.toFixed(2)}</span>
         </p>
 
         {/* Local Pickup Only Warning */}

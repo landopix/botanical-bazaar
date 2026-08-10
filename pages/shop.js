@@ -31,7 +31,7 @@ export default function Shop() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedZone, setSelectedZone] = useState('');
   const [sortOrder, setSortOrder] = useState('');
-  const [hideSoldOut, setHideSoldOut] = useState(true);
+  const [viewSoldOut, setViewSoldOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   // Fetch products from Sanity.io or local fallback
@@ -89,16 +89,16 @@ export default function Shop() {
   useEffect(() => {
     if (!router.isReady) return;
 
-    const { category, size, zone, sort, hide_sold_out, search } = router.query;
+    const { category, size, zone, sort, view_sold_out, search } = router.query;
 
     if (category !== undefined) setSelectedCategory(category || '');
     if (size !== undefined) setSelectedSize(size || '');
     if (zone !== undefined) setSelectedZone(zone || '');
     if (sort !== undefined) setSortOrder(sort || '');
-    if (hide_sold_out !== undefined) {
-      setHideSoldOut(hide_sold_out === 'true');
+    if (view_sold_out !== undefined) {
+      setViewSoldOut(view_sold_out === 'true');
     } else {
-      setHideSoldOut(true); // default to true on first load
+      setViewSoldOut(false); // default to false on first load
     }
     if (search !== undefined) setSearchQuery(search || '');
   }, [router.isReady, router.query]);
@@ -127,10 +127,10 @@ export default function Shop() {
       if (updates.sort) params.set('sort', updates.sort);
       else params.delete('sort');
     }
-    if (updates.hide_sold_out !== undefined) {
-      setHideSoldOut(updates.hide_sold_out);
-      if (updates.hide_sold_out) params.set('hide_sold_out', 'true');
-      else params.set('hide_sold_out', 'false');
+    if (updates.view_sold_out !== undefined) {
+      setViewSoldOut(updates.view_sold_out);
+      if (updates.view_sold_out) params.set('view_sold_out', 'true');
+      else params.delete('view_sold_out');
     }
     if (updates.search !== undefined) {
       setSearchQuery(updates.search);
@@ -181,8 +181,8 @@ export default function Shop() {
       });
     }
 
-    // 2. Hide Sold Out Filter (quantity < 3)
-    if (hideSoldOut) {
+    // 2. Hide Sold Out Filter by default (quantity < 3), unless viewSoldOut is true
+    if (!viewSoldOut) {
       result = result.filter(p => {
         const isSold = !p.quantity || p.quantity < 3;
         return !isSold;
@@ -224,8 +224,8 @@ export default function Shop() {
       result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
     }
 
-    // Always sort in-stock items to the top if hideSoldOut is false
-    if (!hideSoldOut) {
+    // Always sort in-stock items to the top if viewSoldOut is true
+    if (viewSoldOut) {
       result.sort((a, b) => {
         const aSold = !a.quantity || a.quantity < 3;
         const bSold = !b.quantity || b.quantity < 3;
@@ -236,7 +236,7 @@ export default function Shop() {
     }
 
     setFilteredProducts(result);
-  }, [products, selectedCategory, selectedSize, selectedZone, sortOrder, hideSoldOut, searchQuery]);
+  }, [products, selectedCategory, selectedSize, selectedZone, sortOrder, viewSoldOut, searchQuery]);
 
   // Dynamically extract unique available hardiness zones (excluding extremely cold 1 & 2)
   const availableZones = new Set();
@@ -320,12 +320,17 @@ export default function Shop() {
         <strong>Local Pickup Only</strong>&nbsp;–&nbsp;All purchases are available for pick&nbsp;up at our nursery in St.&nbsp;Petersburg, FL. We do not ship at this time.
       </div>
 
-      <p className="shop-intro">
-        Browse our curated selection of rare and resilient tropical plants grown in St.&nbsp;Petersburg. Use the filters to explore categories like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp; Unusual, Best Plants for Your Zone and more. All listings reflect live inventory—quantities are limited and updated daily.
-      </p>
-
       {/* Structured Comprehensive Filter Bar Panel */}
       <div className="filter-panel">
+
+        {/* Relocated Introductory Content */}
+        <p className="shop-intro">
+          Browse our curated selection of rare and resilient tropical plants grown in St.&nbsp;Petersburg. Use the filters to explore categories like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp; Unusual, Best Plants for Your Zone and more. All listings reflect live inventory—quantities are limited and updated daily.
+        </p>
+
+        <p className="shop-subtext">
+          Browse our curated selection of plants grown and sourced for our St.&nbsp;Petersburg and Tampa Bay community. We stock tropical houseplants, fruit trees and edibles, orchids, and hardy landscape plants. Inventory changes regularly, so check back often or drop us a note if you're looking for something special.
+        </p>
 
         {/* Category Pill Buttons */}
         <div className="category-section">
@@ -416,25 +421,20 @@ export default function Shop() {
 
         </div>
 
-        {/* Hide Sold Out Toggle Button */}
+        {/* View Sold Out Toggle Button */}
         <div className="toggle-section">
           <label className="toggle-label">
             <input
               type="checkbox"
-              checked={hideSoldOut}
-              onChange={(e) => updateFilters({ hide_sold_out: e.target.checked })}
+              checked={viewSoldOut}
+              onChange={(e) => updateFilters({ view_sold_out: e.target.checked })}
               className="toggle-checkbox"
             />
-            Hide Sold Out Plants
+            View Sold Out Plants
           </label>
         </div>
 
       </div>
-
-      {/* Intro Subtext description */}
-      <p className="shop-subtext">
-        Browse our curated selection of plants grown and sourced for our St.&nbsp;Petersburg and Tampa Bay community. We stock tropical houseplants, fruit trees and edibles, orchids, and hardy landscape plants. Inventory changes regularly, so check back often or drop us a note if you're looking for something special.
-      </p>
 
       {/* Results Count Summary */}
       <div className="results-count">
@@ -499,7 +499,7 @@ export default function Shop() {
                     height="22"
                     viewBox="0 0 24 24"
                     fill={isWishlisted ? '#ba2f2f' : 'none'}
-                    stroke={isWishlisted ? '#ba2f2f' : '#1C3D2E'}
+                    stroke={isWishlisted ? '#ba2f2f' : '#D4B06A'}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -595,8 +595,8 @@ export default function Shop() {
           font-size: 2.5rem;
           text-align: center;
           letter-spacing: 0.15em;
-          margin-top: 0.3em;
-          margin-bottom: 1.2em;
+          margin-top: 0.2em;
+          margin-bottom: 0.4em;
           font-family: 'Cinzel', serif;
           text-transform: uppercase;
         }
@@ -604,17 +604,17 @@ export default function Shop() {
         .pickup-banner {
           background: #D4B06A;
           color: #00301E;
-          padding: 0.8rem 1.2rem;
+          padding: 0.6rem 1rem;
           border-radius: 10px;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           text-align: center;
           font-size: 1.05rem;
           font-family: 'Crimson Text', serif;
         }
 
         .shop-intro {
-          max-width: 750px;
-          margin: 0 auto 2rem auto;
+          max-width: 850px;
+          margin: 0 auto 0.6rem auto;
           font-size: 1.15rem;
           line-height: 1.6;
           color: #E9DCBE;
@@ -739,13 +739,15 @@ export default function Shop() {
         }
 
         .shop-subtext {
-          max-width: 650px;
+          max-width: 850px;
           margin: 0 auto 1.5rem auto;
           font-size: 1.1rem;
           line-height: 1.5;
           text-align: center;
-          color: #E9DCBE;
+          color: #F5E7C4;
           font-family: 'Crimson Text', serif;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
+          padding-bottom: 1rem;
         }
 
         .results-count {
@@ -807,6 +809,7 @@ export default function Shop() {
           z-index: 10;
           padding: 4px;
           transition: transform 0.1s ease;
+          filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.5));
         }
 
         .wishlist-heart-btn:hover {
