@@ -83,7 +83,7 @@ export default function Checkout() {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3rem' }}>
         {/* Checkout Form */}
         <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4B06A', borderBottom: '1px solid #1C3D2E', paddingBottom: '0.5rem' }}>
+          <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', borderBottom: '1px solid #1C3D2E', paddingBottom: '0.5rem' }}>
             Pickup & Contact Details
           </h2>
           <form onSubmit={handleCheckoutSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
@@ -155,7 +155,7 @@ export default function Checkout() {
 
         {/* Order Summary */}
         <div style={{ flex: '1 1 350px', background: '#123826', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', height: 'fit-content' }}>
-          <h2 style={{ fontFamily: 'Georgia, serif', color: '#D4B06A', margin: '0 0 1.5rem 0' }}>Order Summary</h2>
+          <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 1.5rem 0' }}>Order Summary</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
             {cart.map(item => (
               <div key={`${item.slug}-${item.selectedSize}`} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #1C3D2E', paddingBottom: '0.6rem' }}>

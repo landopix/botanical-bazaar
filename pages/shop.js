@@ -454,7 +454,7 @@ export default function Shop() {
           textAlign: 'center',
           color: '#F5E7C4',
           boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-          fontFamily: "'Crimson Text', Georgia, serif",
+          fontFamily: "'Crimson Text', serif",
           boxSizing: 'border-box'
         }}>
           <h3 style={{
@@ -556,7 +556,7 @@ export default function Shop() {
                       style={{
                         width: '100%',
                         marginTop: '0.6rem',
-                        fontFamily: "'Crimson Text', Georgia, serif",
+                        fontFamily: "'Crimson Text', serif",
                         fontSize: '1rem',
                         padding: '0.5rem 1.4rem',
                         borderRadius: '18px',
@@ -580,7 +580,7 @@ export default function Shop() {
           margin: 32px auto;
           padding: 1.5rem;
           box-sizing: border-box;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
           color: #F5E7C4;
         }
 
@@ -609,7 +609,7 @@ export default function Shop() {
           margin-bottom: 1.5rem;
           text-align: center;
           font-size: 1.05rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .shop-intro {
@@ -619,7 +619,7 @@ export default function Shop() {
           line-height: 1.6;
           color: #E9DCBE;
           text-align: center;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .filter-panel {
@@ -637,7 +637,7 @@ export default function Shop() {
           color: #D4B06A;
           margin-bottom: 0.5rem;
           display: block;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .category-section {
@@ -656,7 +656,7 @@ export default function Shop() {
           border: 1px solid rgba(212, 176, 106, 0.4);
           border-radius: 20px;
           padding: 0.4rem 1rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
           font-size: 1rem;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -691,7 +691,7 @@ export default function Shop() {
           font-size: 0.95rem;
           color: #D4B06A;
           font-weight: bold;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .filter-control input,
@@ -701,7 +701,7 @@ export default function Shop() {
           border: 1px solid rgba(212, 176, 106, 0.4);
           background: #F5E7C4;
           color: #00301E;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
           font-size: 1rem;
           outline: none;
           box-sizing: border-box;
@@ -728,7 +728,7 @@ export default function Shop() {
           cursor: pointer;
           color: #F5E7C4;
           font-size: 1.05rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .toggle-checkbox {
@@ -745,7 +745,7 @@ export default function Shop() {
           line-height: 1.5;
           text-align: center;
           color: #E9DCBE;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .results-count {
@@ -754,7 +754,7 @@ export default function Shop() {
           font-size: 1.1rem;
           color: #D4B06A;
           font-weight: bold;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .products {
@@ -823,7 +823,7 @@ export default function Shop() {
           border-radius: 4px;
           font-size: 0.8rem;
           font-weight: bold;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
           z-index: 5;
         }
 
@@ -868,21 +868,21 @@ export default function Shop() {
           margin: 0.2rem 0;
           font-size: 1rem;
           color: #555;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .product-type {
           margin: 0.1rem 0;
           font-size: 1rem;
           color: #00301E;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .price {
           font-weight: bold;
           margin: 0.6rem 0 0.3rem 0;
           font-size: 1.15rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .price.available {
@@ -898,7 +898,7 @@ export default function Shop() {
           color: #3a604d;
           margin-top: 0.2rem;
           margin-bottom: 0.8rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
 
         .product-card-bottom {
@@ -917,7 +917,7 @@ export default function Shop() {
           box-sizing: border-box;
           font-size: 1rem;
           margin-top: 0.6rem;
-          font-family: 'Crimson Text', Georgia, serif;
+          font-family: 'Crimson Text', serif;
         }
       `}</style>
     </div>

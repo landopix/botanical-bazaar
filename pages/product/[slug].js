@@ -286,7 +286,7 @@ export default function ProductDetail() {
           flex-direction: row;
           gap: 2rem;
           align-items: flex-start;
-          font-family: Georgia, serif;
+          font-family: 'Crimson Text', serif;
           box-sizing: border-box;
         }
         .product-img {
@@ -311,7 +311,7 @@ export default function ProductDetail() {
           margin-top: 0;
           font-size: 2rem;
           color: #D4B06A;
-          font-family: Georgia, serif;
+          font-family: 'Cinzel', serif;
           line-height: 1.2;
         }
         .product-info p {
@@ -513,13 +513,13 @@ export default function ProductDetail() {
                     fontWeight: 'bold',
                     fontSize: '1.1rem',
                     textAlign: 'center',
-                    fontFamily: "'Crimson Text', Georgia, serif"
+                    fontFamily: "'Crimson Text', serif"
                   }}>
                     You're on the list! We'll email you the moment this specimen returns.
                   </div>
                 ) : (
                   <form onSubmit={handleNotifyMe} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-                    <label style={{ fontWeight: 'bold', fontSize: '1rem', color: '#D4B06A', fontFamily: "'Crimson Text', Georgia, serif" }}>
+                    <label style={{ fontWeight: 'bold', fontSize: '1rem', color: '#D4B06A', fontFamily: "'Crimson Text', serif" }}>
                       Email me when available:
                     </label>
                     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>

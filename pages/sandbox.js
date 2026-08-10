@@ -224,7 +224,7 @@ export default function Sandbox() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'system-ui, sans-serif', backgroundColor: '#1a1a1a', color: '#eaeaea' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: "'Crimson Text', serif", backgroundColor: '#1a1a1a', color: '#eaeaea' }}>
       <Head>
         <title>The Botanical Bazaar | Local Visual Sandbox Editor</title>
         <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" />
