@@ -361,7 +361,8 @@ body::before {
   display: block;
 }
 
-.sidebar-search-row {
+.sidebar-search-row,
+.sidebar-search-container {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -369,7 +370,14 @@ body::before {
   width: 100%;
 }
 
-.sidebar-lantern-submark {
+.sidebar-search-submark-link {
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.sidebar-lantern-submark,
+.sidebar-search-submark {
   width: 32px !important;
   height: 32px !important;
   max-width: 32px !important;
