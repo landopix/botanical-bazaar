@@ -361,6 +361,9 @@ export default function Layout({ children }) {
           |
           <Link href="/privacy" style={{ color: '#E9DCBE', textDecoration: 'underline', marginLeft: '0.6rem' }}>Privacy Policy</Link>
         </p>
+        <p style={{ margin: '0.5rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>
+          The Botanical Bazaar, P.O. Box 35353, St. Petersburg, FL 33705 | Contact: <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#E9DCBE', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a>
+        </p>
         &copy; {new Date().getFullYear()} The Botanical Bazaar. All rights reserved.
       </footer>
 
