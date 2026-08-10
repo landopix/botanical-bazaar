@@ -98,7 +98,7 @@ export default function Shop() {
     if (view_sold_out !== undefined) {
       setViewSoldOut(view_sold_out === 'true');
     } else {
-      setViewSoldOut(false); // default to false on first load
+      setViewSoldOut(false); // default to false (hides sold out plants)
     }
     if (search !== undefined) setSearchQuery(search || '');
   }, [router.isReady, router.query]);
@@ -181,7 +181,7 @@ export default function Shop() {
       });
     }
 
-    // 2. Hide Sold Out Filter by default (quantity < 3), unless viewSoldOut is true
+    // 2. Hide Sold Out Filter (quantity < 3) by default (unless viewSoldOut is true)
     if (!viewSoldOut) {
       result = result.filter(p => {
         const isSold = !p.quantity || p.quantity < 3;
@@ -322,12 +322,9 @@ export default function Shop() {
 
       {/* Structured Comprehensive Filter Bar Panel */}
       <div className="filter-panel">
-
-        {/* Relocated Introductory Content */}
         <p className="shop-intro">
           Browse our curated selection of rare and resilient tropical plants grown in St.&nbsp;Petersburg. Use the filters to explore categories like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp; Unusual, Best Plants for Your Zone and more. All listings reflect live inventory—quantities are limited and updated daily.
         </p>
-
         <p className="shop-subtext">
           Browse our curated selection of plants grown and sourced for our St.&nbsp;Petersburg and Tampa Bay community. We stock tropical houseplants, fruit trees and edibles, orchids, and hardy landscape plants. Inventory changes regularly, so check back often or drop us a note if you're looking for something special.
         </p>
@@ -595,8 +592,8 @@ export default function Shop() {
           font-size: 2.5rem;
           text-align: center;
           letter-spacing: 0.15em;
-          margin-top: 0.2em;
-          margin-bottom: 0.4em;
+          margin-top: 0.3em;
+          margin-bottom: 1.2em;
           font-family: 'Cinzel', serif;
           text-transform: uppercase;
         }
@@ -604,7 +601,7 @@ export default function Shop() {
         .pickup-banner {
           background: #D4B06A;
           color: #00301E;
-          padding: 0.6rem 1rem;
+          padding: 0.8rem 1.2rem;
           border-radius: 10px;
           margin-bottom: 1rem;
           text-align: center;
@@ -613,11 +610,11 @@ export default function Shop() {
         }
 
         .shop-intro {
-          max-width: 850px;
-          margin: 0 auto 0.6rem auto;
+          max-width: 750px;
+          margin: 0 auto 1rem auto;
           font-size: 1.15rem;
           line-height: 1.6;
-          color: #E9DCBE;
+          color: #F5E7C4;
           text-align: center;
           font-family: 'Crimson Text', serif;
         }
@@ -739,15 +736,15 @@ export default function Shop() {
         }
 
         .shop-subtext {
-          max-width: 850px;
+          max-width: 750px;
           margin: 0 auto 1.5rem auto;
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           line-height: 1.5;
           text-align: center;
-          color: #F5E7C4;
+          color: #E9DCBE;
           font-family: 'Crimson Text', serif;
-          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
-          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+          padding-bottom: 1.5rem;
         }
 
         .results-count {

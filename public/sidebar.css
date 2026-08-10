@@ -101,34 +101,9 @@ h1, h2, h3, h4, h5, h6 {
   padding: 6px;
 }
 
-/* Overrides to prevent clipping of absolute-positioned badges on quick action bubbles */
 .quick-actions a.cart-btn,
 .quick-actions a.wishlist-btn {
   overflow: visible !important;
-  position: relative !important;
-}
-
-/* Ensure the notification badge inside quick actions is a clean, perfect, distinct circle */
-.quick-actions .cart-btn span,
-.quick-actions .wishlist-btn span {
-  width: 18px !important;
-  height: 18px !important;
-  border-radius: 50% !important;
-  border: 1px solid #00301e !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background-color: #ba2f2f !important;
-  color: #ffffff !important;
-  font-size: 0.7rem !important;
-  font-weight: bold !important;
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  transform: translate(25%, -25%) !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
-  z-index: 10 !important;
-  box-sizing: border-box !important;
 }
 
 .quick-actions button svg,
@@ -361,30 +336,11 @@ body::before {
   display: block;
 }
 
-.sidebar-search-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.8rem;
-  width: 100%;
-}
-
-.sidebar-lantern-submark {
-  width: 32px !important;
-  height: 32px !important;
-  max-width: 32px !important;
-  max-height: 32px !important;
-  object-fit: contain !important;
-  flex-shrink: 0;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-}
-
 /* Search bar at top of sidebar */
 #sidebar-search {
-  flex: 1;
-  min-width: 0;
-  padding: 0.45rem 1rem;
+  width: 100%;
+  margin-bottom: 0.8rem;
+  padding: 0.45rem 0.6rem;
   border: 1px solid #1C3D2E;
   border-radius: 6px;
   background-color: #123826;

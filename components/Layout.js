@@ -14,7 +14,7 @@ export default function Layout({ children }) {
 
   // Keep track of group open/close states
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
-  const [isFaqOpen, setIsFaqOpen] = useState(false);
+  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
 
   const [showBackToTop, setShowBackToTop] = useState(false);
   const sidebarRef = useRef(null);
@@ -100,15 +100,15 @@ export default function Layout({ children }) {
       ]
     },
     {
-      label: 'FAQ',
+      label: 'Policies',
       isGroup: true,
-      id: 'faq-submenu',
+      id: 'policies-submenu',
       items: [
-        { label: 'FAQ Overview', href: '/faq' },
         { label: 'Shipping & Pickup', href: '/shipping-pickup' },
         { label: 'Live Plant Guarantee', href: '/returns' },
         { label: 'Terms & Conditions', href: '/terms' },
-        { label: 'Privacy Policy', href: '/privacy' }
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'FAQ', href: '/faq' }
       ]
     }
   ];
@@ -194,13 +194,16 @@ export default function Layout({ children }) {
               fontSize: '0.7rem',
               width: '18px',
               height: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              minWidth: '18px',
+              minHeight: '18px',
+              display: 'block',
+              textAlign: 'center',
+              lineHeight: '16px',
               fontWeight: 'bold',
               border: '1px solid #00301e',
               transform: 'translate(25%, -25%)',
-              zIndex: 10
+              zIndex: 10,
+              boxSizing: 'border-box'
             }}>
               {cartCount}
             </span>
@@ -223,13 +226,16 @@ export default function Layout({ children }) {
               fontSize: '0.7rem',
               width: '18px',
               height: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              minWidth: '18px',
+              minHeight: '18px',
+              display: 'block',
+              textAlign: 'center',
+              lineHeight: '16px',
               fontWeight: 'bold',
               border: '1px solid #00301e',
               transform: 'translate(25%, -25%)',
-              zIndex: 10
+              zIndex: 10,
+              boxSizing: 'border-box'
             }}>
               {wishlist.length}
             </span>
@@ -253,30 +259,27 @@ export default function Layout({ children }) {
         className={`sidebar ${isSidebarOpen ? 'open' : ''}`}
         role="navigation"
       >
-        {/* Navigation Live Filter Search Input with Lantern submark */}
-        <div className="sidebar-search-row">
-          <img src="/assets/lantern-submark.png" alt="Lantern Submark" className="sidebar-lantern-submark" />
-          <input
-            id="sidebar-search"
-            type="text"
-            placeholder="Search..."
-            aria-label="Search navigation"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+        {/* Navigation Live Filter Search Input */}
+        <input
+          id="sidebar-search"
+          type="text"
+          placeholder="Search..."
+          aria-label="Search navigation"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
 
         <ul>
           {filteredItems.map((item, idx) => {
             if (item.visible === false) return null;
 
             if (item.isGroup) {
-              const isOpen = item.forceOpen || (item.id === 'guides-submenu' ? isGuidesOpen : isFaqOpen);
+              const isOpen = item.forceOpen || (item.id === 'guides-submenu' ? isGuidesOpen : isPoliciesOpen);
               const toggleGroup = () => {
                 if (item.id === 'guides-submenu') {
                   setIsGuidesOpen(!isGuidesOpen);
                 } else {
-                  setIsFaqOpen(!isFaqOpen);
+                  setIsPoliciesOpen(!isPoliciesOpen);
                 }
               };
 

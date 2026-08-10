@@ -98,26 +98,33 @@ document.addEventListener('DOMContentLoaded', function () {
     console.warn('Failed to insert gallery link into navigation:', err);
   }
 
-  // Insert search input with Lantern submark logo for live menu search
+  // Insert search input for live menu search with Lantern Submark link
   if (sidebar) {
-    var searchRow = document.createElement('div');
-    searchRow.className = 'sidebar-search-row';
+    var searchContainer = document.createElement('div');
+    searchContainer.className = 'sidebar-search-container';
+
+    var submarkLink = document.createElement('a');
+    submarkLink.href = '/';
+    submarkLink.className = 'sidebar-search-submark-link';
+    submarkLink.setAttribute('aria-label', 'Home');
 
     var submarkImg = document.createElement('img');
     submarkImg.src = '/assets/lantern-submark.png';
-    submarkImg.alt = 'Lantern Submark';
-    submarkImg.className = 'sidebar-lantern-submark';
+    submarkImg.alt = 'Lantern submark';
+    submarkImg.className = 'sidebar-search-submark';
+
+    submarkLink.appendChild(submarkImg);
+    searchContainer.appendChild(submarkLink);
 
     var searchInput = document.createElement('input');
     searchInput.id = 'sidebar-search';
     searchInput.type = 'text';
+    // Use an ASCII ellipsis to avoid non-ASCII characters in the UI
     searchInput.placeholder = 'Search...';
     searchInput.setAttribute('aria-label', 'Search navigation');
+    searchContainer.appendChild(searchInput);
 
-    searchRow.appendChild(submarkImg);
-    searchRow.appendChild(searchInput);
-    sidebar.insertBefore(searchRow, sidebar.firstChild);
-
+    sidebar.insertBefore(searchContainer, sidebar.firstChild);
     searchInput.addEventListener('input', function () {
       var query = searchInput.value.trim().toLowerCase();
       var listItems = sidebar.querySelectorAll('li');

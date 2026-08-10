@@ -96,23 +96,23 @@ export default function Cart() {
       <div
         style={{
           marginTop: '3rem',
-          background: '#E9DCBE',
+          background: '#D4B06A',
           padding: '2rem',
           borderRadius: '12px',
           color: '#00301E',
           textAlign: 'right'
         }}
       >
-        <h2 style={{ fontFamily: 'Cinzel, serif', margin: '0 0 1rem 0' }}>Cart Summary</h2>
-        <p style={{ fontSize: '1.1rem', margin: '0 0 1.5rem 0' }}>
+        <h2 style={{ fontFamily: 'Cinzel, serif', margin: '0 0 1rem 0', color: '#00301E' }}>Cart Summary</h2>
+        <p style={{ fontSize: '1.1rem', margin: '0 0 1.5rem 0', color: '#00301E' }}>
           Total Items: <strong>{cart.reduce((a, b) => a + b.quantity, 0)}</strong>
         </p>
-        <p style={{ fontSize: '1.5rem', margin: '0 0 2rem 0', fontWeight: 'bold' }}>
+        <p style={{ fontSize: '1.5rem', margin: '0 0 2rem 0', fontWeight: 'bold', color: '#00301E' }}>
           Estimated Total: <span style={{ color: '#00301E' }}>${cartTotal.toFixed(2)}</span>
         </p>
 
         {/* Local Pickup Only Warning */}
-        <p style={{ fontSize: '0.9rem', color: '#ba2f2f', fontWeight: 'bold', textAlign: 'center', marginBottom: '1.5rem' }}>
+        <p style={{ fontSize: '0.95rem', color: '#00301E', border: '1px solid #00301E', padding: '0.5rem', borderRadius: '6px', fontWeight: 'bold', textAlign: 'center', marginBottom: '1.5rem' }}>
           ⚠️ Reminder: All sales are strictly LOCAL PICKUP at our St. Petersburg, FL nursery location.
         </p>
 
