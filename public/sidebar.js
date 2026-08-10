@@ -98,15 +98,26 @@ document.addEventListener('DOMContentLoaded', function () {
     console.warn('Failed to insert gallery link into navigation:', err);
   }
 
-  // Insert search input for live menu search
+  // Insert search input with Lantern submark logo for live menu search
   if (sidebar) {
+    var searchRow = document.createElement('div');
+    searchRow.className = 'sidebar-search-row';
+
+    var submarkImg = document.createElement('img');
+    submarkImg.src = '/assets/lantern-submark.png';
+    submarkImg.alt = 'Lantern Submark';
+    submarkImg.className = 'sidebar-lantern-submark';
+
     var searchInput = document.createElement('input');
     searchInput.id = 'sidebar-search';
     searchInput.type = 'text';
-    // Use an ASCII ellipsis to avoid non-ASCII characters in the UI
     searchInput.placeholder = 'Search...';
     searchInput.setAttribute('aria-label', 'Search navigation');
-    sidebar.insertBefore(searchInput, sidebar.firstChild);
+
+    searchRow.appendChild(submarkImg);
+    searchRow.appendChild(searchInput);
+    sidebar.insertBefore(searchRow, sidebar.firstChild);
+
     searchInput.addEventListener('input', function () {
       var query = searchInput.value.trim().toLowerCase();
       var listItems = sidebar.querySelectorAll('li');

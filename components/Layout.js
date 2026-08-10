@@ -14,7 +14,7 @@ export default function Layout({ children }) {
 
   // Keep track of group open/close states
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
-  const [isPoliciesOpen, setIsPoliciesOpen] = useState(false);
+  const [isFaqOpen, setIsFaqOpen] = useState(false);
 
   const [showBackToTop, setShowBackToTop] = useState(false);
   const sidebarRef = useRef(null);
@@ -100,15 +100,15 @@ export default function Layout({ children }) {
       ]
     },
     {
-      label: 'Policies',
+      label: 'FAQ',
       isGroup: true,
-      id: 'policies-submenu',
+      id: 'faq-submenu',
       items: [
+        { label: 'FAQ Overview', href: '/faq' },
         { label: 'Shipping & Pickup', href: '/shipping-pickup' },
         { label: 'Live Plant Guarantee', href: '/returns' },
         { label: 'Terms & Conditions', href: '/terms' },
-        { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'FAQ', href: '/faq' }
+        { label: 'Privacy Policy', href: '/privacy' }
       ]
     }
   ];
@@ -253,27 +253,30 @@ export default function Layout({ children }) {
         className={`sidebar ${isSidebarOpen ? 'open' : ''}`}
         role="navigation"
       >
-        {/* Navigation Live Filter Search Input */}
-        <input
-          id="sidebar-search"
-          type="text"
-          placeholder="Search..."
-          aria-label="Search navigation"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        {/* Navigation Live Filter Search Input with Lantern submark */}
+        <div className="sidebar-search-row">
+          <img src="/assets/lantern-submark.png" alt="Lantern Submark" className="sidebar-lantern-submark" />
+          <input
+            id="sidebar-search"
+            type="text"
+            placeholder="Search..."
+            aria-label="Search navigation"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
         <ul>
           {filteredItems.map((item, idx) => {
             if (item.visible === false) return null;
 
             if (item.isGroup) {
-              const isOpen = item.forceOpen || (item.id === 'guides-submenu' ? isGuidesOpen : isPoliciesOpen);
+              const isOpen = item.forceOpen || (item.id === 'guides-submenu' ? isGuidesOpen : isFaqOpen);
               const toggleGroup = () => {
                 if (item.id === 'guides-submenu') {
                   setIsGuidesOpen(!isGuidesOpen);
                 } else {
-                  setIsPoliciesOpen(!isPoliciesOpen);
+                  setIsFaqOpen(!isFaqOpen);
                 }
               };
 
