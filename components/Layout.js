@@ -102,7 +102,7 @@ export default function Layout({ children }) {
     {
       label: 'FAQ',
       isGroup: true,
-      id: 'faq-submenu',
+      id: 'policies-submenu',
       items: [
         { label: 'FAQ Overview', href: '/faq' },
         { label: 'Shipping & Pickup', href: '/shipping-pickup' },
@@ -200,7 +200,8 @@ export default function Layout({ children }) {
               fontWeight: 'bold',
               border: '1px solid #00301e',
               transform: 'translate(25%, -25%)',
-              zIndex: 10
+              zIndex: 10,
+              boxSizing: 'border-box'
             }}>
               {cartCount}
             </span>
@@ -229,7 +230,8 @@ export default function Layout({ children }) {
               fontWeight: 'bold',
               border: '1px solid #00301e',
               transform: 'translate(25%, -25%)',
-              zIndex: 10
+              zIndex: 10,
+              boxSizing: 'border-box'
             }}>
               {wishlist.length}
             </span>
@@ -253,9 +255,15 @@ export default function Layout({ children }) {
         className={`sidebar ${isSidebarOpen ? 'open' : ''}`}
         role="navigation"
       >
-        {/* Navigation Live Filter Search Input with Lantern submark */}
-        <div className="sidebar-search-row">
-          <img src="/assets/lantern-submark.png" alt="Lantern Submark" className="sidebar-lantern-submark" />
+        {/* Navigation Live Filter Search Input with clickable Lantern submark */}
+        <div className="sidebar-search-container">
+          <Link href="/" className="sidebar-search-submark-link" aria-label="Home">
+            <img
+              src="/assets/lantern-submark.png"
+              alt="Lantern submark"
+              className="sidebar-search-submark"
+            />
+          </Link>
           <input
             id="sidebar-search"
             type="text"
