@@ -175,7 +175,7 @@ export default function Checkout() {
           </div>
 
           <p style={{ fontSize: '0.85rem', color: '#E9DCBE', marginTop: '1.5rem', fontStyle: 'italic', textAlign: 'center' }}>
-            All sales are strictly local pickup in St. Petersburg, FL. The precise nursery location and appointment address will be provided upon inquiry or order confirmation. Full guarantee on live plant health at moment of collection.
+            Pickup at Nursery in St. Petersburg, FL. Full guarantee on live plant health at moment of collection.
           </p>
         </div>
       </div>
