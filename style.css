@@ -101,3 +101,12 @@ footer p {
   text-align: center;
   width: 100%;
 }
+
+/* Hide scrollbar utility class to prevent styled-jsx compiler panics */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.hide-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}

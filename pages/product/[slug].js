@@ -23,6 +23,134 @@ export default function ProductDetail() {
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [notifyError, setNotifyError] = useState('');
 
+  // Carousel hooks, states, and selection logic
+  const carouselRef = React.useRef(null);
+  const [isHovered, setIsHovered] = React.useState(false);
+  const [carouselProducts, setCarouselProducts] = React.useState([]);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const [startX, setStartX] = React.useState(0);
+  const [scrollLeftState, setScrollLeftState] = React.useState(0);
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const loadAll = () => {
+        setCarouselProducts(window.PRODUCTS || []);
+      };
+      if (window.PRODUCTS) {
+        loadAll();
+      } else {
+        const scr = document.createElement('script');
+        scr.src = '/products.js';
+        scr.onload = loadAll;
+        document.body.appendChild(scr);
+      }
+    }
+  }, []);
+
+  React.useEffect(() => {
+    const el = carouselRef.current;
+    if (!el || isHovered || isDragging) return;
+
+    const intervalId = setInterval(() => {
+      if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
+        el.scrollLeft = 0;
+      } else {
+        el.scrollLeft += 1;
+      }
+    }, 35); // smooth slow incremental crawl
+
+    return () => clearInterval(intervalId);
+  }, [isHovered, isDragging, carouselProducts]);
+
+  const handleMouseDown = (e) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    setIsDragging(true);
+    setStartX(e.pageX - el.offsetLeft);
+    setScrollLeftState(el.scrollLeft);
+  };
+
+  const handleMouseLeaveOrUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const el = carouselRef.current;
+    if (!el) return;
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    el.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleScrollLeft = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const handleScrollRight = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
+  const getRelatedProducts = () => {
+    if (carouselProducts.length === 0) return [];
+
+    // Exclude current displayed product
+    const otherPlants = carouselProducts.filter(p => p.slug !== product?.slug);
+    if (!product) return otherPlants.slice(0, 8);
+
+    const currentCategories = Array.isArray(product.categories) ? product.categories : [];
+    const currentTags = Array.isArray(product.tags) ? product.tags : [];
+    const lightTags = ['bright-indirect', 'full-sun', 'low-light'];
+    const currentLightTags = currentTags.filter(t => lightTags.includes(t));
+
+    const scored = otherPlants.map(p => {
+      let score = 0;
+
+      // Match category
+      const pCategories = Array.isArray(p.categories) ? p.categories : [];
+      pCategories.forEach(c => {
+        if (currentCategories.some(cc => cc.toLowerCase() === c.toLowerCase())) {
+          score += 10;
+        }
+      });
+
+      // Match type
+      if (p.type && product.type && p.type.toLowerCase() === product.type.toLowerCase()) {
+        score += 5;
+      }
+
+      // Match light requirements
+      const pTags = Array.isArray(p.tags) ? p.tags : [];
+      pTags.forEach(t => {
+        if (currentLightTags.includes(t)) {
+          score += 5;
+        }
+      });
+
+      return { product: p, score };
+    });
+
+    // Sort by descending score
+    scored.sort((a, b) => b.score - a.score);
+    let related = scored.map(s => s.product);
+
+    // General in-stock plants fallback if fewer than 4 category matches exist
+    const categoryMatches = scored.filter(s => s.score >= 10).map(s => s.product);
+    if (categoryMatches.length < 4) {
+      // Pull general in-stock items
+      const inStockOthers = otherPlants.filter(p => p.quantity >= 3 && !categoryMatches.some(r => r.slug === p.slug));
+      related = [...categoryMatches, ...inStockOthers];
+    }
+
+    // Keep top 8 matching/fallback products
+    return related.slice(0, 8);
+  };
+
   const handleNotifyMe = async (e) => {
     e.preventDefault();
     if (!notifyEmail || !notifyEmail.trim()) return;
@@ -611,6 +739,213 @@ export default function ProductDetail() {
           </div>
         </div>
       </main>
+
+      {/* Related Products Carousel */}
+      {getRelatedProducts().length > 0 && (
+        <section
+          style={{
+            marginTop: '4rem',
+            padding: '0 1rem',
+            width: '100%',
+            boxSizing: 'border-box'
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <h2 style={{
+            color: '#D4B06A',
+            fontFamily: "'Cinzel', serif",
+            fontSize: '1.8rem',
+            textAlign: 'center',
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            marginBottom: '2rem'
+          }}>
+            You Might Also Like
+          </h2>
+
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            {/* Left Scroll Arrow */}
+            <button
+              onClick={handleScrollLeft}
+              style={{
+                position: 'absolute',
+                left: '-20px',
+                zIndex: 10,
+                background: '#00301E',
+                border: '2px solid #D4B06A',
+                color: '#D4B06A',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                userSelect: 'none'
+              }}
+              aria-label="Scroll left"
+            >
+              ←
+            </button>
+
+            {/* Carousel Container */}
+            <div
+              ref={carouselRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeaveOrUp}
+              onMouseUp={handleMouseLeaveOrUp}
+              onMouseMove={handleMouseMove}
+              style={{
+                display: 'flex',
+                gap: '1.5rem',
+                overflowX: 'auto',
+                scrollBehavior: 'smooth',
+                cursor: isDragging ? 'grabbing' : 'grab',
+                padding: '1rem 0.5rem',
+                width: '100%',
+                boxSizing: 'border-box',
+                WebkitOverflowScrolling: 'touch'
+              }}
+              className="hide-scrollbar"
+            >
+              {getRelatedProducts().map(prod => {
+                const isProdSoldOut = !prod.quantity || prod.quantity < 3;
+                const prodImg = prod.image ? (prod.image.startsWith('http') || prod.image.startsWith('/') ? prod.image : '/' + prod.image) : '/assets/placeholder.png';
+
+                return (
+                  <div
+                    key={prod.slug}
+                    style={{
+                      flex: '0 0 240px',
+                      backgroundColor: '#E9DCBE',
+                      borderRadius: '12px',
+                      padding: '1.2rem',
+                      boxSizing: 'border-box',
+                      color: '#00301E',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                      position: 'relative'
+                    }}
+                  >
+                    {isProdSoldOut && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        background: '#ba2f2f',
+                        color: '#ffffff',
+                        padding: '0.2rem 0.5rem',
+                        borderRadius: '4px',
+                        fontSize: '0.8rem',
+                        fontWeight: 'bold',
+                        zIndex: 5
+                      }}>
+                        Sold Out
+                      </div>
+                    )}
+
+                    <Link href={`/product/${prod.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      <div style={{
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '4 / 5',
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                        marginBottom: '0.8rem'
+                      }}>
+                        <Image
+                          src={prodImg}
+                          alt={prod.name}
+                          fill
+                          sizes="240px"
+                          style={{ objectFit: 'cover' }}
+                          unoptimized={!prod.image || !prod.image.includes('cdn.sanity.io')}
+                        />
+                      </div>
+                      <strong style={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        fontSize: '1.15rem',
+                        fontFamily: "'Cinzel', serif",
+                        lineHeight: '1.2',
+                        minHeight: '2.8rem',
+                        color: '#00301E'
+                      }}>
+                        {prod.name}
+                      </strong>
+                    </Link>
+
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <p style={{ margin: '0.2rem 0', fontSize: '0.95rem', color: '#555' }}>
+                        {prod.sizes || "Standard Pot"}
+                      </p>
+                      <div style={{
+                        fontWeight: 'bold',
+                        fontSize: '1.1rem',
+                        color: isProdSoldOut ? '#ba2f2f' : '#11402a',
+                        margin: '0.4rem 0'
+                      }}>
+                        {isProdSoldOut ? "Sold Out" : `$${prod.price ? prod.price.toFixed(2) : '0.00'}`}
+                      </div>
+
+                      <Button
+                        variant={isProdSoldOut ? "outline" : "green-filled"}
+                        href={`/product/${prod.slug}`}
+                        style={{
+                          width: '100%',
+                          marginTop: '0.4rem',
+                          fontSize: '0.9rem',
+                          padding: '0.4rem 1rem',
+                          borderRadius: '18px',
+                          boxSizing: 'border-box'
+                        }}
+                      >
+                        {isProdSoldOut ? "Sold Out" : "View Plant"}
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Right Scroll Arrow */}
+            <button
+              onClick={handleScrollRight}
+              style={{
+                position: 'absolute',
+                right: '-20px',
+                zIndex: 10,
+                background: '#00301E',
+                border: '2px solid #D4B06A',
+                color: '#D4B06A',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                cursor: 'pointer',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                userSelect: 'none'
+              }}
+              aria-label="Scroll right"
+            >
+              →
+            </button>
+          </div>
+
+        </section>
+      )}
     </div>
   );
 }
