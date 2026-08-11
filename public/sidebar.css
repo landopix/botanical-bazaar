@@ -263,10 +263,12 @@ header nav {
 }
 
 @media (max-width: 900px) {
+  header {
+    justify-content: center !important;
+    padding: 1rem 1.5rem !important;
+  }
   header nav {
-    margin-right: 0;
-    width: 100%;
-    margin-top: 1rem;
+    display: none !important;
   }
 }
 
