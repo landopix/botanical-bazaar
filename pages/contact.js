@@ -91,15 +91,6 @@ export default function Contact() {
           </Button>
         </form>
       )}
-
-      <div style={{ marginTop: '3rem', background: '#1C3D2E', padding: '1.5rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }}>
-        <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, marginBottom: '0.5rem' }}>Official Mailing Address</h3>
-        <p style={{ margin: 0, color: '#F5E7C4', lineHeight: '1.6' }}>
-          <strong>The Botanical Bazaar</strong><br />
-          P.O. Box 35353<br />
-          St. Petersburg, FL 33705
-        </p>
-      </div>
     </div>
   );
 }
