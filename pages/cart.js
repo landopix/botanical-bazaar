@@ -38,7 +38,7 @@ export default function Cart() {
           >
             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <img
-                src={item.image}
+                src={item.image ? (item.image.startsWith('http') || item.image.startsWith('/') ? item.image : '/' + item.image) : '/assets/placeholder.png'}
                 alt={item.name}
                 className="cart-product-image"
                 onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
