@@ -275,31 +275,31 @@ export default function ProductDetail() {
 
       <style jsx global>{`
         .product-main-container {
-          max-width: 720px;
+          max-width: 1000px;
           margin: 2.5rem auto;
           background: #123826;
           border-radius: 16px;
           box-shadow: 0 3px 14px rgba(20,40,30,0.12);
-          padding: 2rem 1.5rem;
+          padding: 2.5rem;
           color: #F5E7C4;
           display: flex;
           flex-direction: row;
-          gap: 2rem;
+          gap: 3rem;
           align-items: flex-start;
           font-family: 'Crimson Text', serif;
           box-sizing: border-box;
         }
         .product-img {
-          flex: 1;
-          min-width: 200px;
-          max-width: 250px;
+          flex: 1 1 40%;
+          min-width: 280px;
+          max-width: 450px;
           box-sizing: border-box;
         }
         .product-img img {
           width: 100%;
           border-radius: 14px;
           background: #e9dcbe11;
-          object-fit: cover;
+          object-fit: contain !important;
           display: block;
         }
         .product-info {
@@ -401,13 +401,14 @@ export default function ProductDetail() {
 
       <main className="product-main-container">
         {/* Product Image */}
-        <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px' }}>
+        <div className="product-img" style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', minWidth: '280px', maxWidth: '450px' }}>
           <Image
             src={product.image || '/assets/placeholder.png'}
             alt={product.name}
             fill
-            sizes="(max-width: 800px) 100vw, 250px"
-            style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
+            sizes="(max-width: 800px) 100vw, 450px"
+            className="product-detail-image"
+            style={{ objectFit: 'contain', borderRadius: '14px', background: '#e9dcbe11' }}
             priority
             unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
           />
