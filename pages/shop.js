@@ -679,7 +679,7 @@ export default function Shop() {
                   >
                     <div className="product-image-container">
                       <Image
-                        src={product.image || "/assets/placeholder.png"}
+                        src={product.image ? (product.image.startsWith('http') || product.image.startsWith('/') ? product.image : '/' + product.image) : '/assets/placeholder.png'}
                         alt={product.name}
                         fill
                         sizes="220px"

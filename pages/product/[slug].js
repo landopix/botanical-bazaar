@@ -403,7 +403,7 @@ export default function ProductDetail() {
         {/* Product Image */}
         <div className="product-img" style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', minWidth: '280px', maxWidth: '450px' }}>
           <Image
-            src={product.image || '/assets/placeholder.png'}
+            src={product.image ? (product.image.startsWith('http') || product.image.startsWith('/') ? product.image : '/' + product.image) : '/assets/placeholder.png'}
             alt={product.name}
             fill
             sizes="(max-width: 800px) 100vw, 450px"
