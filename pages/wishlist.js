@@ -71,8 +71,9 @@ export default function Wishlist() {
                 <img
                   src={product.image}
                   alt={product.name}
+                  className="wishlist-product-image"
                   onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-                  style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
+                  style={{ width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
                 />
                 <h3 style={{ margin: '0 0 0.5rem 0', fontFamily: 'Cinzel, serif', minHeight: '3.2rem' }}>{product.name}</h3>
                 <p style={{ margin: '0 0 1rem 0', fontWeight: 'bold' }}>

@@ -60,11 +60,11 @@ section.banner,
 }
 
 /* --- Universal GrapesJS Oversized Banner & Emblem Override --- */
-main img, 
+main img:not(.product-image):not(.product-detail-image):not(.cart-product-image):not(.wishlist-product-image),
 main svg, 
 header img, 
 header svg,
-body > div img,
+body > div img:not(.product-image):not(.product-detail-image):not(.cart-product-image):not(.wishlist-product-image),
 body > div svg {
     max-width: 220px !important;
     max-height: 280px !important;
