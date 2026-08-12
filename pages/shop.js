@@ -993,6 +993,7 @@ export default function Shop() {
 
         .product-card {
           background-color: #f5e7c4;
+          border: 1px solid #d4b06a;
           border-radius: 10px;
           padding: 1.2rem;
           width: 250px;
