@@ -4,13 +4,13 @@
    serif reminiscent of the small caps seen in the logo, while Crimson Text
    continues to serve as a body font fallback. Including both weights allows
    headings and body copy to harmonize across the site. */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap");
 
 /* Define CSS variables for fonts so they can be referenced throughout the
    stylesheets. This makes it easy to update the typeface in one place. */
 :root {
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Crimson Text', serif;
+  --font-heading: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
 }
 
 /* Apply the body font to all text by default. Individual pages can override
@@ -20,12 +20,17 @@ body {
   /* Set a base dark green background matching the submark color.
      Individual pages should not override this. */
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
 }
 
 /* Headings inherit the Cinzel font to echo the logo styling. Adjust the
    line-height to ensure readability and avoid crowding. */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   line-height: 1.2;
 }
@@ -38,14 +43,14 @@ h1, h2, h3, h4, h5, h6 {
   width: 220px;
   height: 100vh;
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
   padding: 1rem;
   overflow-y: auto;
   /* Hidden by default on mobile */
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1000;
-  border-right: 2px solid #D4B06A;
+  border-right: 2px solid #d4b06a;
 }
 .sidebar.open {
   transform: translateX(0);
@@ -58,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
    Remove the fixed positioning here so it can be positioned by its parent. */
 .sidebar-toggle {
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
   border: none;
   padding: 0.4rem;
   font-size: 1.4rem;
@@ -93,7 +98,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #D4B06A;
+  color: #d4b06a;
   text-decoration: none;
   /* Prevent SVG icons from being clipped by hiding overflow */
   overflow: hidden;
@@ -126,7 +131,7 @@ h1, h2, h3, h4, h5, h6 {
   top: 0 !important;
   right: 0 !important;
   transform: translate(25%, -25%) !important;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
   z-index: 10 !important;
   box-sizing: border-box !important;
 }
@@ -140,7 +145,7 @@ h1, h2, h3, h4, h5, h6 {
 .quick-actions a svg {
   width: 24px;
   height: 24px;
-  stroke: #D4B06A;
+  stroke: #d4b06a;
   object-fit: contain;
 }
 
@@ -156,28 +161,28 @@ h1, h2, h3, h4, h5, h6 {
 /* Global link colors: make inline links gold for better readability on dark backgrounds.
    Product cards and specific components override this to inherit their own color if needed. */
 body a {
-  color: #D4B06A;
+  color: #d4b06a;
 }
 body a:hover {
-  color: #E9DCBE;
+  color: #e9dcbe;
 }
 .sidebar li {
   margin-bottom: 0.3rem;
 }
 .sidebar a {
-  color: #E9DCBE;
+  color: #e9dcbe;
   text-decoration: none;
   display: block;
   padding: 0.35rem 0.2rem;
   border-radius: 4px;
 }
 .sidebar a:hover {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
 }
 .sidebar a.active {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
 }
 
 /* Footer styling: ensure absolute center-alignment across all layouts */
@@ -189,7 +194,7 @@ footer {
   justify-content: center;
   padding: 2rem;
   font-size: 0.9rem;
-  color: #E9DCBE;
+  color: #e9dcbe;
   width: 100%;
   box-sizing: border-box;
 }
@@ -202,11 +207,11 @@ footer p {
 
 /* Footer links: use the gold palette instead of default blue. */
 footer a {
-  color: #D4B06A;
+  color: #d4b06a;
   text-decoration: underline;
 }
 footer a:hover {
-  color: #E9DCBE;
+  color: #e9dcbe;
 }
 
 /* When the sidebar is open, slide the page content to the right instead of overlaying it. */
@@ -239,7 +244,12 @@ header > a:first-of-type::before {
   border-radius: 50%;
   /* Softer radial gradient: start with a slightly lighter green and fade to transparent.
      This creates a subtle glow around the logo rather than a dark halo. */
-  background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 66, 38, 0.5) 0%,
+    rgba(0, 66, 38, 0.1) 60%,
+    transparent 90%
+  );
   z-index: -1;
   pointer-events: none;
 }
@@ -263,12 +273,10 @@ header nav {
 }
 
 @media (max-width: 900px) {
-  header {
-    justify-content: center !important;
-    padding: 1rem 1.5rem !important;
-  }
   header nav {
-    display: none !important;
+    margin-right: 0;
+    width: 100%;
+    margin-top: 1rem;
   }
 }
 
@@ -276,16 +284,16 @@ header nav {
 header nav a {
   margin: 0 1.2rem;
   text-decoration: none !important;
-  color: #E9DCBE !important;
+  color: #e9dcbe !important;
   font-weight: 400 !important;
-  font-family: var(--font-heading), 'Cinzel', serif !important;
+  font-family: var(--font-heading), "Cinzel", serif !important;
   font-size: 1rem;
   letter-spacing: 0.05em;
   transition: color 0.2s ease;
 }
 
 header nav a:hover {
-  color: #D4B06A !important;
+  color: #d4b06a !important;
 }
 
 /*
@@ -332,7 +340,7 @@ body::before {
   /* Use the lighter vine pattern with increased brightness so that
      the Art Nouveau botanical overlay remains visible across all
      pages. */
-  background-image: url('assets/vine-pattern-light.png');
+  background-image: url("assets/vine-pattern-light.png");
   background-repeat: repeat;
   /* Increase the size so the motifs are large and appear less frequently */
   /* Adjust pattern scale and opacity so the vines appear larger and less frequent.
@@ -363,7 +371,7 @@ body::before {
 .sidebar .group-toggle {
   background: none;
   border: none;
-  color: #E9DCBE;
+  color: #e9dcbe;
   padding: 0.35rem 0.2rem;
   width: 100%;
   text-align: left;
@@ -372,8 +380,8 @@ body::before {
   font-family: inherit;
 }
 .sidebar .group-toggle:hover {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
 }
 .sidebar .submenu {
   display: none;
@@ -400,10 +408,10 @@ body::before {
 
 .sidebar-lantern-submark,
 .sidebar-search-submark {
-  width: 60px !important;
-  height: 60px !important;
-  max-width: 60px !important;
-  max-height: 60px !important;
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
   object-fit: contain !important;
   flex-shrink: 0;
   box-shadow: none !important;
@@ -415,10 +423,10 @@ body::before {
   flex: 1;
   min-width: 0;
   padding: 0.45rem 1rem;
-  border: 1px solid #1C3D2E;
+  border: 1px solid #1c3d2e;
   border-radius: 6px;
   background-color: #123826;
-  color: #F5E7C4;
+  color: #f5e7c4;
   font-family: inherit;
   font-size: 1rem;
 }
@@ -487,18 +495,97 @@ header .lantern-emblem {
     margin-top: 1.5rem;
   }
 }
-/* Custom Scrollbars for Live Search Dropdown */
-.live-search-dropdown::-webkit-scrollbar {
-  width: 6px !important;
+
+/* Sidebar Product Search Results Dropdown Styling */
+.sidebar-search-results-drawer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.2rem;
+  overflow-x: hidden;
 }
-.live-search-dropdown::-webkit-scrollbar-track {
-  background: #002214 !important;
-  border-radius: 8px !important;
+.search-results-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  color: #d4b06a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.2);
+  padding-bottom: 0.3rem;
 }
-.live-search-dropdown::-webkit-scrollbar-thumb {
-  background: rgba(212, 176, 106, 0.4) !important;
-  border-radius: 8px !important;
+.no-matches-text {
+  font-size: 0.95rem;
+  color: #8da38b;
+  font-style: italic;
 }
-.live-search-dropdown::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 176, 106, 0.6) !important;
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.search-result-item-card {
+  display: flex;
+  flex-direction: column !important;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #123826;
+  border: 1px solid rgba(212, 176, 106, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem !important;
+  text-decoration: none;
+  color: #e9dcbe;
+  transition: all 0.2s ease;
+  overflow-x: hidden;
+}
+.search-result-item-card:hover {
+  background-color: #1c3d2e;
+  border-color: #d4b06a;
+  transform: translateY(-2px);
+}
+.result-img-wrapper {
+  width: 100%;
+  height: 110px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+}
+.result-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.result-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.result-name {
+  font-family: "Cinzel", serif;
+  font-size: 0.95rem;
+  color: #d4b06a;
+  line-height: 1.2;
+  white-space: normal !important;
+  word-break: break-word;
+}
+.result-type {
+  font-size: 0.8rem;
+  color: #8da38b;
+}
+.result-price-row {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+.result-price {
+  color: #f5e7c4;
+}
+.result-sold-out {
+  color: #ba2f2f;
+  font-weight: bold;
 }
