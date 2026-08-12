@@ -11,6 +11,35 @@ export default function Layout({ children }) {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const loadProducts = () => {
+      setProducts(window.PRODUCTS || []);
+    };
+    if (typeof window !== 'undefined') {
+      if (window.PRODUCTS) {
+        loadProducts();
+      } else {
+        const script = document.createElement('script');
+        script.src = '/products.js';
+        script.onload = loadProducts;
+        document.body.appendChild(script);
+      }
+    }
+  }, []);
+
+  const getLiveSearchResults = () => {
+    if (!searchQuery.trim()) return [];
+    const query = searchQuery.trim().toLowerCase();
+    return products.filter(prod => {
+      const nameMatch = prod.name && prod.name.toLowerCase().includes(query);
+      const typeMatch = prod.type && prod.type.toLowerCase().includes(query);
+      const descMatch = prod.description && prod.description.toLowerCase().includes(query);
+      const catMatch = Array.isArray(prod.categories) && prod.categories.some(c => c.toLowerCase().includes(query));
+      return nameMatch || typeMatch || descMatch || catMatch;
+    });
+  };
 
   // Keep track of group open/close states
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
@@ -256,7 +285,7 @@ export default function Layout({ children }) {
         role="navigation"
       >
         {/* Navigation Live Filter Search Input with clickable Lantern submark */}
-        <div className="sidebar-search-container">
+        <div className="sidebar-search-container" style={{ position: 'relative' }}>
           <Link href="/" className="sidebar-search-submark-link" aria-label="Home">
             <img
               src="/assets/lantern-submark.png"
@@ -264,14 +293,138 @@ export default function Layout({ children }) {
               className="sidebar-search-submark"
             />
           </Link>
-          <input
-            id="sidebar-search"
-            type="text"
-            placeholder="Search..."
-            aria-label="Search navigation"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div style={{ position: 'relative', flex: 1, display: 'flex', alignItems: 'center' }}>
+            <input
+              id="sidebar-search"
+              type="text"
+              placeholder="Search..."
+              aria-label="Search navigation"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+                }
+              }}
+              style={{ width: '100%', paddingRight: '2rem' }}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  document.getElementById('sidebar-search')?.focus();
+                }}
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  background: 'none',
+                  border: 'none',
+                  color: '#D4B06A',
+                  cursor: 'pointer',
+                  fontSize: '1.1rem',
+                  padding: '4px',
+                  lineHeight: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 10
+                }}
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          {/* Live Search Results Dropdown */}
+          {searchQuery.trim() && (
+            <div className="live-search-dropdown" style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              width: '100%',
+              backgroundColor: '#00301e',
+              border: '1px solid #D4B06A',
+              borderRadius: '8px',
+              marginTop: '6px',
+              maxHeight: '260px',
+              overflowY: 'auto',
+              zIndex: 1001,
+              boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
+              boxSizing: 'border-box',
+              padding: '0.5rem'
+            }}>
+              {getLiveSearchResults().length > 0 ? (
+                getLiveSearchResults().map(prod => {
+                  const isSoldOut = !prod.quantity || prod.quantity < 3;
+                  const itemImg = prod.image ? (prod.image.startsWith('http') || prod.image.startsWith('/') ? prod.image : '/' + prod.image) : '/assets/placeholder.png';
+                  return (
+                    <Link
+                      key={prod.slug}
+                      href={`/product/${prod.slug}`}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.8rem',
+                        padding: '0.5rem',
+                        textDecoration: 'none',
+                        color: '#E9DCBE',
+                        borderBottom: '1px solid rgba(212, 176, 106, 0.15)',
+                        transition: 'background 0.2s',
+                        borderRadius: '4px'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1C3D2E'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                    >
+                      <img
+                        src={itemImg}
+                        alt={prod.name}
+                        className="live-search-dropdown-img"
+                        style={{
+                          width: '40px !important',
+                          height: '40px !important',
+                          maxWidth: '40px !important',
+                          maxHeight: '40px !important',
+                          objectFit: 'cover !important',
+                          borderRadius: '4px',
+                          border: '1px solid rgba(212, 176, 106, 0.3)',
+                          display: 'block'
+                        }}
+                      />
+                      <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                        <div style={{
+                          fontSize: '0.95rem',
+                          fontWeight: 'bold',
+                          color: '#D4B06A',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          fontFamily: 'Cinzel, serif'
+                        }}>
+                          {prod.name}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: '#E9DCBE', opacity: 0.85, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {prod.type || 'Plant'}{prod.categories && prod.categories.length > 0 ? ` | ${prod.categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}` : ''}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: '#F5E7C4', marginTop: '2px' }}>
+                          {isSoldOut ? (
+                            <span style={{ color: '#ba2f2f' }}>Sold Out</span>
+                          ) : (
+                            `$${prod.price ? prod.price.toFixed(2) : '0.00'}`
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })
+              ) : (
+                <div style={{ padding: '0.8rem', color: '#ba2f2f', textAlign: 'center', fontSize: '0.95rem' }}>
+                  No plants found
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <ul>

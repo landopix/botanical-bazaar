@@ -96,18 +96,11 @@ export default function Wishlist() {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <img
-                  src={product.image}
+                  src={product.image ? (product.image.startsWith('http') || product.image.startsWith('/') ? product.image : '/' + product.image) : '/assets/placeholder.png'}
                   alt={product.name}
-                  onError={(e) => {
-                    e.target.src = "/assets/placeholder.png";
-                  }}
-                  style={{
-                    width: "100%",
-                    height: "180px",
-                    objectFit: "cover",
-                    borderRadius: "8px",
-                    marginBottom: "1rem",
-                  }}
+                  className="wishlist-product-image"
+                  onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
+                  style={{ width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }}
                 />
                 <h3
                   style={{

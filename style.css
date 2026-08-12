@@ -60,11 +60,11 @@ section.banner,
 }
 
 /* --- Universal GrapesJS Oversized Banner & Emblem Override --- */
-main img, 
+main img:not(.product-image):not(.product-detail-image):not(.cart-product-image):not(.wishlist-product-image):not(.sidebar-search-submark):not(.live-search-dropdown-img),
 main svg, 
-header img, 
+header img:not(.lantern-emblem),
 header svg,
-body > div img,
+body > div img:not(.product-image):not(.product-detail-image):not(.cart-product-image):not(.wishlist-product-image):not(.sidebar-search-submark):not(.live-search-dropdown-img),
 body > div svg {
     max-width: 220px !important;
     max-height: 280px !important;
@@ -100,4 +100,13 @@ footer p {
   margin: 0.5rem auto;
   text-align: center;
   width: 100%;
+}
+
+/* Hide scrollbar utility class to prevent styled-jsx compiler panics */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+.hide-scrollbar {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
