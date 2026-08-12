@@ -1152,17 +1152,25 @@ export default function Shop() {
         .product-image-container {
           position: relative;
           width: 100%;
+<<<<<<< HEAD
           height: 200px;
           max-height: 220px;
           overflow: hidden;
           border-radius: 8px;
+=======
+          height: 180px;
+>>>>>>> origin/main
           margin-bottom: 0.8rem;
         }
 
         .product-image {
+<<<<<<< HEAD
           width: 100% !important;
           height: 100% !important;
           object-fit: cover !important;
+=======
+          object-fit: cover;
+>>>>>>> origin/main
           border-radius: 8px;
           background: rgba(0, 0, 0, 0.05);
         }
