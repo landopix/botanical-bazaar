@@ -487,3 +487,18 @@ header .lantern-emblem {
     margin-top: 1.5rem;
   }
 }
+/* Custom Scrollbars for Live Search Dropdown */
+.live-search-dropdown::-webkit-scrollbar {
+  width: 6px !important;
+}
+.live-search-dropdown::-webkit-scrollbar-track {
+  background: #002214 !important;
+  border-radius: 8px !important;
+}
+.live-search-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(212, 176, 106, 0.4) !important;
+  border-radius: 8px !important;
+}
+.live-search-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 176, 106, 0.6) !important;
+}

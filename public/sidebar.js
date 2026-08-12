@@ -229,11 +229,8 @@ document.addEventListener('DOMContentLoaded', function () {
           var img = document.createElement('img');
           img.src = itemImg;
           img.alt = prod.name;
-          img.style.width = '40px';
-          img.style.height = '40px';
-          img.style.objectFit = 'cover';
-          img.style.borderRadius = '4px';
-          img.style.border = '1px solid rgba(212, 176, 106, 0.3)';
+          img.className = 'live-search-dropdown-img';
+          img.setAttribute('style', 'width: 40px !important; height: 40px !important; max-width: 40px !important; max-height: 40px !important; object-fit: cover !important; border-radius: 4px; border: 1px solid rgba(212, 176, 106, 0.3); display: block;');
           link.appendChild(img);
 
           var info = document.createElement('div');
@@ -252,9 +249,21 @@ document.addEventListener('DOMContentLoaded', function () {
           nameDiv.textContent = prod.name;
           info.appendChild(nameDiv);
 
+          var metaDiv = document.createElement('div');
+          metaDiv.style.fontSize = '0.8rem';
+          metaDiv.style.color = '#E9DCBE';
+          metaDiv.style.opacity = '0.85';
+          metaDiv.style.whiteSpace = 'nowrap';
+          metaDiv.style.overflow = 'hidden';
+          metaDiv.style.textOverflow = 'ellipsis';
+          var catsStr = Array.isArray(prod.categories) ? prod.categories.map(function(c) { return c.charAt(0).toUpperCase() + c.slice(1); }).join(', ') : '';
+          metaDiv.textContent = (prod.type || 'Plant') + (catsStr ? ' | ' + catsStr : '');
+          info.appendChild(metaDiv);
+
           var priceDiv = document.createElement('div');
           priceDiv.style.fontSize = '0.85rem';
           priceDiv.style.color = '#F5E7C4';
+          priceDiv.style.marginTop = '2px';
           if (isSoldOut) {
             priceDiv.style.color = '#ba2f2f';
             priceDiv.textContent = 'Sold Out';
