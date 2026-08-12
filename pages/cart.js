@@ -38,11 +38,10 @@ export default function Cart() {
           >
             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <img
-                src={item.image ? (item.image.startsWith('http') || item.image.startsWith('/') ? item.image : '/' + item.image) : '/assets/placeholder.png'}
+                src={item.image}
                 alt={item.name}
-                className="cart-product-image"
                 onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-                style={{ width: '80px', aspectRatio: '4 / 5', objectFit: 'cover', borderRadius: '8px' }}
+                style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
               />
               <div>
                 <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>{item.name}</h3>

@@ -14,6 +14,9 @@ const COLLECTIONS = [
   { id: "herbs-medicinal", name: "Herbs & Medicinal" },
   { id: "exotics-rare", name: "Exotics & Rare" },
   { id: "seeds", name: "Seeds" },
+  { id: "stickers-art", name: "Stickers & Art" },
+  { id: "tinctures-apothecary", name: "Tinctures & Apothecary" },
+  { id: "terrarium-vivarium", name: "Terrarium & Vivarium" },
 ];
 
 export default function Shop() {
@@ -223,6 +226,47 @@ export default function Shop() {
         if (catLower === "seeds") {
           return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
         }
+        if (catLower === "stickers-art" || catLower === "stickers & art") {
+          return (
+            hasCategory("stickers-art") ||
+            hasCategory("art") ||
+            hasTag("sticker") ||
+            hasTag("art") ||
+            textMatches("sticker") ||
+            textMatches("art")
+          );
+        }
+        if (
+          catLower === "tinctures-apothecary" ||
+          catLower === "tinctures & apothecary"
+        ) {
+          return (
+            hasCategory("tinctures-apothecary") ||
+            hasCategory("apothecary") ||
+            hasTag("tincture") ||
+            hasTag("apothecary") ||
+            textMatches("tincture") ||
+            textMatches("apothecary") ||
+            textMatches("drops")
+          );
+        }
+        if (
+          catLower === "terrarium-vivarium" ||
+          catLower === "terrarium & vivarium" ||
+          catLower === "terrarium & vivarium components"
+        ) {
+          return (
+            hasCategory("terrarium-vivarium") ||
+            hasCategory("habitat") ||
+            hasTag("leaf-litter") ||
+            hasTag("substrate") ||
+            textMatches("leaf litter") ||
+            textMatches("habitat") ||
+            textMatches("vivarium") ||
+            textMatches("shrimp") ||
+            textMatches("tank")
+          );
+        }
 
         // Exact fallback
         return hasCategory(selectedCategory);
@@ -403,6 +447,47 @@ export default function Shop() {
       }
       if (catLower === "seeds") {
         return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
+      }
+      if (catLower === "stickers-art" || catLower === "stickers & art") {
+        return (
+          hasCategory("stickers-art") ||
+          hasCategory("art") ||
+          hasTag("sticker") ||
+          hasTag("art") ||
+          textMatches("sticker") ||
+          textMatches("art")
+        );
+      }
+      if (
+        catLower === "tinctures-apothecary" ||
+        catLower === "tinctures & apothecary"
+      ) {
+        return (
+          hasCategory("tinctures-apothecary") ||
+          hasCategory("apothecary") ||
+          hasTag("tincture") ||
+          hasTag("apothecary") ||
+          textMatches("tincture") ||
+          textMatches("apothecary") ||
+          textMatches("drops")
+        );
+      }
+      if (
+        catLower === "terrarium-vivarium" ||
+        catLower === "terrarium & vivarium" ||
+        catLower === "terrarium & vivarium components"
+      ) {
+        return (
+          hasCategory("terrarium-vivarium") ||
+          hasCategory("habitat") ||
+          hasTag("leaf-litter") ||
+          hasTag("substrate") ||
+          textMatches("leaf litter") ||
+          textMatches("habitat") ||
+          textMatches("vivarium") ||
+          textMatches("shrimp") ||
+          textMatches("tank")
+        );
       }
 
       return hasCategory(categoryId);
@@ -679,7 +764,7 @@ export default function Shop() {
                   >
                     <div className="product-image-container">
                       <Image
-                        src={product.image ? (product.image.startsWith('http') || product.image.startsWith('/') ? product.image : '/' + product.image) : '/assets/placeholder.png'}
+                        src={product.image || "/assets/placeholder.png"}
                         alt={product.name}
                         fill
                         sizes="220px"
@@ -1067,14 +1152,12 @@ export default function Shop() {
         .product-image-container {
           position: relative;
           width: 100%;
-          aspect-ratio: 4 / 5;
+          height: 180px;
           margin-bottom: 0.8rem;
-          overflow: hidden;
-          border-radius: 8px;
         }
 
         .product-image {
-          object-fit: cover !important;
+          object-fit: cover;
           border-radius: 8px;
           background: rgba(0, 0, 0, 0.05);
         }

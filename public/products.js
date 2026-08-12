@@ -1315,5 +1315,65 @@ window.PRODUCTS = [
       "high-humidity",
       "pet-friendly"
     ]
+  },
+  {
+    "slug": "vintage-monstera-art-sticker",
+    "name": "Vintage Monstera Art Sticker",
+    "sku": "",
+    "image": "assets/placeholder.png",
+    "type": "Sticker",
+    "description": "An elegant, waterproof matte vinyl sticker featuring hand-drawn botanical Monstera illustrations. Beautiful old-school design for bottles, laptops, or journals.",
+    "price": 4.50,
+    "quantity": 15,
+    "zones": [],
+    "categories": [
+      "stickers-art"
+    ],
+    "sizes": "3\" x 3\" Die Cut",
+    "tags": [
+      "sticker",
+      "art"
+    ]
+  },
+  {
+    "slug": "elderberry-cold-flu-tincture",
+    "name": "Elderberry Cold & Flu Tincture",
+    "sku": "",
+    "image": "assets/placeholder.png",
+    "type": "Apothecary",
+    "description": "Hand-crafted Elderberry cold & flu defense tincture. Made with organic elderberries, raw honey, and apothecary herbs to boost your immune system.",
+    "price": 18.00,
+    "quantity": 8,
+    "zones": [],
+    "categories": [
+      "tinctures-apothecary"
+    ],
+    "sizes": "2 oz. Dropper Bottle",
+    "tags": [
+      "tincture",
+      "apothecary",
+      "medicinal"
+    ]
+  },
+  {
+    "slug": "tropical-mango-leaf-litter-habitat-pack",
+    "name": "Tropical Mango Leaf Litter Habitat Pack",
+    "sku": "",
+    "image": "assets/placeholder.png",
+    "type": "Habitat Component",
+    "description": "All-natural dried mango leaves. Perfect specialized habitat materials such as mango leaf litter, live oak leaf litter for dart frog tanks, and dried mulberry leaves for shrimp tanks.",
+    "price": 12.00,
+    "quantity": 10,
+    "zones": [],
+    "categories": [
+      "terrarium-vivarium"
+    ],
+    "sizes": "1 Medium Bag (~15 leaves)",
+    "tags": [
+      "leaf-litter",
+      "habitat",
+      "terrarium",
+      "vivarium"
+    ]
   }
 ];
