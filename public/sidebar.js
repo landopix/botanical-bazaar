@@ -264,9 +264,6 @@ document.addEventListener('DOMContentLoaded', function () {
           priceDiv.style.fontSize = '0.85rem';
           priceDiv.style.color = '#F5E7C4';
           priceDiv.style.marginTop = '2px';
-          var priceDiv = document.createElement('div');
-          priceDiv.style.fontSize = '0.85rem';
-          priceDiv.style.color = '#F5E7C4';
           if (isSoldOut) {
             priceDiv.style.color = '#ba2f2f';
             priceDiv.textContent = 'Sold Out';
