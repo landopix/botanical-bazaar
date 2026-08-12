@@ -408,6 +408,7 @@ export default function Layout({ children }) {
                           {prod.type || 'Plant'}{prod.categories && prod.categories.length > 0 ? ` | ${prod.categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}` : ''}
                         </div>
                         <div style={{ fontSize: '0.85rem', color: '#F5E7C4', marginTop: '2px' }}>
+                        <div style={{ fontSize: '0.85rem', color: '#F5E7C4' }}>
                           {isSoldOut ? (
                             <span style={{ color: '#ba2f2f' }}>Sold Out</span>
                           ) : (

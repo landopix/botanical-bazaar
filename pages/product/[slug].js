@@ -821,7 +821,7 @@ export default function ProductDetail() {
                     key={prod.slug}
                     style={{
                       flex: '0 0 240px',
-                      backgroundColor: '#F5E7C4',
+                      backgroundColor: '#E9DCBE',
                       borderRadius: '12px',
                       padding: '1.2rem',
                       boxSizing: 'border-box',
