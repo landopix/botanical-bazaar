@@ -380,12 +380,16 @@ export default function Layout({ children }) {
                       <img
                         src={itemImg}
                         alt={prod.name}
+                        className="live-search-dropdown-img"
                         style={{
-                          width: '40px',
-                          height: '40px',
-                          objectFit: 'cover',
+                          width: '40px !important',
+                          height: '40px !important',
+                          maxWidth: '40px !important',
+                          maxHeight: '40px !important',
+                          objectFit: 'cover !important',
                           borderRadius: '4px',
-                          border: '1px solid rgba(212, 176, 106, 0.3)'
+                          border: '1px solid rgba(212, 176, 106, 0.3)',
+                          display: 'block'
                         }}
                       />
                       <div style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
@@ -400,7 +404,10 @@ export default function Layout({ children }) {
                         }}>
                           {prod.name}
                         </div>
-                        <div style={{ fontSize: '0.85rem', color: '#F5E7C4' }}>
+                        <div style={{ fontSize: '0.8rem', color: '#E9DCBE', opacity: 0.85, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {prod.type || 'Plant'}{prod.categories && prod.categories.length > 0 ? ` | ${prod.categories.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ')}` : ''}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: '#F5E7C4', marginTop: '2px' }}>
                           {isSoldOut ? (
                             <span style={{ color: '#ba2f2f' }}>Sold Out</span>
                           ) : (
