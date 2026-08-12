@@ -608,10 +608,9 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>Contact Info</h3>
             <p className="contact-item">
-              📍 123 Bazaar Way, St. Petersburg, FL 33701
+              📬 P.O. Box 35353, St. Petersburg, FL 33705
             </p>
             <p className="contact-item">✉️ info@thebotanicalbazaar.com</p>
-            <p className="contact-item">📞 (727) 555-ROOTS</p>
             <p className="contact-item">🕒 Thurs - Sun: 10AM - 5PM</p>
           </div>
           <div className="footer-column">

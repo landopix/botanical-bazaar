@@ -50,7 +50,7 @@
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
   <!-- Sidebar styles -->
-  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="/sidebar.css">
   <style>
 body {
       margin: 0;
@@ -318,11 +318,11 @@ body {
     }
   </style>
   <!-- Site favicons and icons -->
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-  <link rel="shortcut icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/assets/favicon.ico">
   <!-- Global Analytics & Heatmap -->
   <!-- Google tag (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"></script>
@@ -442,7 +442,7 @@ body {
   <header>
   <a href="index.html" style="display:inline-block;">
     <!-- Use lantern sub mark for header branding -->
-    <img src="assets/lantern.png" alt="Lantern sub mark">
+    <img src="/assets/lantern.png" alt="Lantern sub mark">
   </a>
     <nav>
       <a href="shop.html">Shop</a>
@@ -472,7 +472,7 @@ body {
          improve loading on mobile and desktop. You can update
          assets/logo-animation-optimized.gif with a new version if needed. -->
     <div class="hero-image">
-      <img src="assets/logo-animation-optimized.gif" alt="The Botanical Bazaar Animated Logo" loading="lazy" />
+      <img src="/assets/logo-animation-optimized.gif" alt="The Botanical Bazaar Animated Logo" loading="lazy" />
     </div>
     <!-- Almanac links and signup have been elevated into the hero. This
          container holds quick links into the gardening guides and a
@@ -534,6 +534,7 @@ body {
        standalone Almanac and signup sections are no longer rendered
        here to keep the page concise and focused on the centred hero. -->
   <footer>
+    <p style="margin:0.5rem 0; font-size:0.85rem; color:#D4B06A; font-family:'Crimson Text', serif; text-align:center;">📬 Mailing Address: P.O. Box 35353, St. Petersburg, FL 33705 &nbsp;|&nbsp; ✉️ Email: info@thebotanicalbazaar.com</p>
     <p style="margin:0.5rem 0;">
       <a href="shipping-pickup.html" style="color:#E9DCBE;text-decoration:underline;margin-right:0.6rem;">Shipping &amp; Pickup</a>
       |
@@ -550,8 +551,8 @@ body {
   <button id="back-to-top" title="Back to Top" aria-label="Back to top" style="display:none;position:fixed;bottom:20px;left:20px;background:#D4B06A;color:#1C3D2E;border:none;border-radius:50%;width:48px;height:48px;font-size:1.5rem;cursor:pointer;z-index:999;box-shadow:0 2px 6px rgba(0,0,0,0.2);">↑</button>
 
   <!-- Dynamic Product Loader -->
-  <script src="products.js"></script>
-  <script src="sidebar.js"></script>
+  <script src="/products.js"></script>
+  <script src="/sidebar.js"></script>
   <script>
     function renderFeaturedProducts() {
       const featured = document.querySelector('.products');
@@ -564,7 +565,7 @@ body {
           return `
         <div class="product-card sold-out">
           <div>
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/placeholder.png'">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src="/assets/placeholder.png'">
           </div>
           <strong>${product.name}</strong>
           <p>${product.sizes}</p>
@@ -576,7 +577,7 @@ body {
         return `
         <div class="product-card">
           <a href="product.html?item=${encodeURIComponent(product.slug)}">
-            <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/placeholder.png'">
+            <img src="${product.image}" alt="${product.name}" onerror="this.src="/assets/placeholder.png'">
           </a>
           <strong>${product.name}</strong>
           <p>${product.sizes}</p>
