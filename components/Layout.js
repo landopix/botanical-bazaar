@@ -13,10 +13,6 @@ export default function Layout({ children }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [allProducts, setAllProducts] = useState([]);
 
-  // Hardiness Zone Detector state (defaults to Zone 10a)
-  const [hardinessZone, setHardinessZone] = useState("10a");
-  const [isChangingZone, setIsChangingZone] = useState(false);
-
   // Keep track of group open/close states in sidebar
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
   const [isFaqOpen, setIsFaqOpen] = useState(false);
@@ -32,12 +28,6 @@ export default function Layout({ children }) {
       setAllProducts(window.PRODUCTS || []);
     };
     if (typeof window !== "undefined") {
-      // Load saved hardiness zone if present
-      const savedZone = localStorage.getItem("user_hardiness_zone");
-      if (savedZone) {
-        setHardinessZone(savedZone);
-      }
-
       if (window.PRODUCTS) {
         loadProducts();
       } else {
@@ -48,13 +38,6 @@ export default function Layout({ children }) {
       }
     }
   }, []);
-
-  const handleZoneChange = (e) => {
-    const newZone = e.target.value;
-    setHardinessZone(newZone);
-    localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingZone(false);
-  };
 
   // Manage Esc key press to close sidebar
   useEffect(() => {
@@ -202,50 +185,6 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
-      {/* Top Seasonal Shipping Announcement & Zone Detector Banner */}
-      <div className="top-announcement-banner">
-        <div className="banner-content">
-          <span className="banner-badge">Seasonal Transit</span>
-          <span className="banner-text">
-            ❄️ <strong>Northern Transit Protection:</strong> We use heat packs &
-            insulated wraps to protect sensitive specimens from cold damage when
-            shipping to northern states. ☀️ <strong>Summer Guidelines:</strong>{" "}
-            Shade & rapid local pickup protect specimens from heat stress.
-          </span>
-        </div>
-        <div className="zone-detector">
-          <span className="zone-icon">📍</span>
-          {isChangingZone ? (
-            <select
-              value={hardinessZone}
-              onChange={handleZoneChange}
-              onBlur={() => setIsChangingZone(false)}
-              className="zone-select-dropdown"
-              autoFocus
-            >
-              {Array.from({ length: 13 }, (_, i) => i + 1)
-                .flatMap((z) => [`${z}a`, `${z}b`])
-                .map((zone) => (
-                  <option key={zone} value={zone}>
-                    Zone {zone}
-                  </option>
-                ))}
-            </select>
-          ) : (
-            <span className="zone-text-btn">
-              USDA Hardiness: <strong>Zone {hardinessZone}</strong>
-              <button
-                onClick={() => setIsChangingZone(true)}
-                className="zone-lookup-btn"
-                aria-label="Change USDA climate hardiness zone"
-              >
-                [Change]
-              </button>
-            </span>
-          )}
-        </div>
-      </div>
-
       {/* Sidebar backdrop overlay (Click outside to close) */}
       {isSidebarOpen && (
         <div
@@ -608,16 +547,17 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>Contact Info</h3>
             <p className="contact-item">
-              📍 123 Bazaar Way, St. Petersburg, FL 33701
+              📍 P.O. Box 35353, St. Petersburg, FL 33705
             </p>
             <p className="contact-item">✉️ info@thebotanicalbazaar.com</p>
-            <p className="contact-item">📞 (727) 555-ROOTS</p>
             <p className="contact-item">🕒 Thurs - Sun: 10AM - 5PM</p>
           </div>
           <div className="footer-column">
             <h3>Ordering Info</h3>
             <Link href="/faq">FAQ Overview</Link>
-            <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
+            <Link href="/shipping-pickup">
+              Shipping, Unpacking &amp; Seasonal guidelines
+            </Link>
             <Link href="/returns">Refunds &amp; Replacements</Link>
             <Link href="/terms">Sales Tax &amp; Terms</Link>
           </div>
@@ -631,7 +571,7 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
             <Link href="/shop">View All Flora &amp; Goods</Link>
-            <Link href="/zones">USDA Hardiness Zones</Link>
+            <Link href="/zones">USDA Hardiness Zones (Zone 10a local)</Link>
             <Link href="/garden-month">Monthly Plant Care Guides</Link>
           </div>
         </div>
@@ -669,76 +609,6 @@ export default function Layout({ children }) {
 
       {/* Styled JSX for Dropdowns, announcement banner, and responsive footer layout */}
       <style jsx global>{`
-        /* Top seasonal shipping banner & zone detector */
-        .top-announcement-banner {
-          background-color: #d4b06a;
-          color: #00301e;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem 2rem;
-          font-size: 0.9rem;
-          box-sizing: border-box;
-          border-bottom: 1px solid #1c3d2e;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-        .banner-content {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          flex: 1 1 auto;
-        }
-        .banner-badge {
-          background-color: #00301e;
-          color: #d4b06a;
-          font-weight: bold;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
-          letter-spacing: 0.05em;
-        }
-        .banner-text {
-          line-height: 1.3;
-        }
-        .zone-detector {
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
-          font-weight: bold;
-          flex-shrink: 0;
-        }
-        .zone-select-dropdown {
-          background: #00301e;
-          color: #f5e7c4;
-          border: 1px solid #00301e;
-          border-radius: 4px;
-          padding: 0.1rem 0.3rem;
-          font-family: inherit;
-          font-weight: bold;
-          outline: none;
-          cursor: pointer;
-        }
-        .zone-text-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-        }
-        .zone-lookup-btn {
-          background: none;
-          border: none;
-          color: #00301e;
-          cursor: pointer;
-          font-weight: bold;
-          padding: 0;
-          text-decoration: underline;
-          font-family: inherit;
-        }
-        .zone-lookup-btn:hover {
-          color: #123826;
-        }
-
         /* Collections Header Dropdown */
         .nav-dropdown-wrapper {
           position: relative;
@@ -817,7 +687,7 @@ export default function Layout({ children }) {
           text-decoration: underline !important;
         }
 
-        /* Sidebar Product Search Results Redesign */
+        /* Sidebar Product Search Results */
         .sidebar-search-results-drawer {
           width: 100%;
           box-sizing: border-box;
@@ -979,16 +849,6 @@ export default function Layout({ children }) {
         }
 
         @media (max-width: 767px) {
-          .top-announcement-banner {
-            padding: 0.5rem 1rem;
-            text-align: center;
-            justify-content: center;
-          }
-          .zone-detector {
-            width: 100%;
-            justify-content: center;
-            margin-top: 0.2rem;
-          }
           .footer-columns {
             grid-template-columns: 1fr;
             gap: 1.8rem;
