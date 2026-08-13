@@ -41,18 +41,27 @@ body {
     }
     h1 { font-size: 2.4rem; margin-bottom: 1rem; }
     p { font-size: 1.1rem; line-height: 1.6; }
-    a.btn {
+    .btn {
       display: inline-block;
       background: #1C3D2E;
-      color: #F5E7C4;
+      color: #D4B06A;
+      border: 2px solid #D4B06A;
       padding: 0.6rem 1.4rem;
       border-radius: 24px;
       text-decoration: none;
       font-family: 'Crimson Text', serif;
       font-size: 1.1rem;
       margin-top: 1.6rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out;
+      box-sizing: border-box;
     }
-    a.btn:hover { background: #D4B06A; color: #1C3D2E; }
+    .btn:hover {
+      background: #11402A;
+      color: #F4F1E1;
+      border-color: #F4F1E1;
+    }
   </style>
   <!-- Site favicons and icons -->
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">

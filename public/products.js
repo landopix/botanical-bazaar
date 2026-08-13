@@ -1012,26 +1012,6 @@ window.PRODUCTS = [
     "tags": []
   },
   {
-    "slug": "unknown-needs-id",
-    "name": "Unknown / Needs ID",
-    "sku": "",
-    "image": "assets/placeholder.png",
-    "type": "Plant",
-    "description": "",
-    "price": 22,
-    "quantity": 1,
-    "zones": [
-      "9",
-      "10",
-      "11"
-    ],
-    "categories": [
-      "plants"
-    ],
-    "sizes": "3 Gal. Plastic Pot",
-    "tags": []
-  },
-  {
     "slug": "wodyetia-bifurcata-foxtail-palm",
     "name": "Wodyetia Bifurcata 'Foxtail Palm'",
     "sku": "",
@@ -1335,26 +1315,6 @@ window.PRODUCTS = [
     "tags": [
       "sticker",
       "art"
-    ]
-  },
-  {
-    "slug": "elderberry-cold-flu-tincture",
-    "name": "Elderberry Cold & Flu Tincture",
-    "sku": "",
-    "image": "assets/placeholder.png",
-    "type": "Apothecary",
-    "description": "Hand-crafted Elderberry cold & flu defense tincture. Made with organic elderberries, raw honey, and apothecary herbs to boost your immune system.",
-    "price": 18,
-    "quantity": 8,
-    "zones": [],
-    "categories": [
-      "tinctures-apothecary"
-    ],
-    "sizes": "2 oz. Dropper Bottle",
-    "tags": [
-      "tincture",
-      "apothecary",
-      "medicinal"
     ]
   },
   {

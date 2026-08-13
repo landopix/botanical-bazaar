@@ -672,7 +672,7 @@ export default function Shop() {
       {/* Results Count Summary with Accessible Announcements */}
       <div className="results-count" role="status" aria-live="polite">
         Showing {filteredProducts.length}{" "}
-        {filteredProducts.length === 1 ? "plant" : "plants"}
+        {filteredProducts.length === 1 ? "product" : "products"}
       </div>
 
       {/* Products Grid */}
@@ -791,9 +791,11 @@ export default function Shop() {
                         : `$${product.price.toFixed(2)}`}
                   </div>
                   {/* Cold tolerance hardiness badge */}
-                  <div className="hardiness-badge">
-                    Hardy to: {product.temp_threshold || "50"}°F
-                  </div>
+                  {product.type === "Plant" && (
+                    <div className="hardiness-badge">
+                      Hardy to: {product.temp_threshold || "50"}°F
+                    </div>
+                  )}
                 </div>
 
                 {/* Bottom aligned button or Sold out text box */}
@@ -814,7 +816,7 @@ export default function Shop() {
                         boxSizing: "border-box",
                       }}
                     >
-                      View Plant
+                      View Product
                     </Button>
                   )}
                 </div>

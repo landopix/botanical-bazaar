@@ -293,10 +293,10 @@ export default function Index() {
         .cta {
           background-color: #D4B06A;
           padding: 3rem 2rem;
-          margin: 2rem auto;
-          max-width: 800px;
+          margin: 2rem calc(-50vw + 50%);
+          width: 100vw;
           text-align: center;
-          border-radius: 12px;
+          border-radius: 0;
           color: #1C3D2E;
           position: relative;
           overflow: hidden;

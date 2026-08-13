@@ -19,6 +19,9 @@ export function CartProvider({ children }) {
   const saveCart = (newCart) => {
     setCart(newCart);
     localStorage.setItem('botanical_cart', JSON.stringify(newCart));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('cart_updated'));
+    }
   };
 
   const addToCart = (product, quantity = 1, selectedSize = null) => {

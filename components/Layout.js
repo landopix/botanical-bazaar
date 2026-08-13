@@ -110,7 +110,6 @@ export default function Layout({ children }) {
 
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
-  const [isChangingSidebarZone, setIsChangingSidebarZone] = useState(false);
   const [isChangingFooterZone, setIsChangingFooterZone] = useState(false);
 
   // Keep track of group open/close states in sidebar
@@ -134,6 +133,15 @@ export default function Layout({ children }) {
         setHardinessZone(savedZone);
       }
 
+      const handleZoneUpdated = () => {
+        const updated = localStorage.getItem("user_hardiness_zone");
+        if (updated) {
+          setHardinessZone(updated);
+        }
+      };
+
+      window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+
       if (window.PRODUCTS) {
         loadProducts();
       } else {
@@ -142,6 +150,10 @@ export default function Layout({ children }) {
         script.onload = loadProducts;
         document.body.appendChild(script);
       }
+
+      return () => {
+        window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      };
     }
   }, []);
 
@@ -149,8 +161,8 @@ export default function Layout({ children }) {
     const newZone = e.target.value;
     setHardinessZone(newZone);
     localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingSidebarZone(false);
     setIsChangingFooterZone(false);
+    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
   };
 
   // Manage Esc key press to close sidebar
@@ -501,72 +513,6 @@ export default function Layout({ children }) {
           />
         </div>
 
-        {/* Sidebar Zone Selector */}
-        <div className="sidebar-zone-selector" style={{
-          padding: "0.5rem 0.8rem",
-          marginBottom: "1rem",
-          background: "#123826",
-          border: "1px solid rgba(212, 176, 106, 0.3)",
-          borderRadius: "8px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.3rem",
-          fontFamily: "'Crimson Text', serif",
-          fontSize: "0.95rem"
-        }}>
-          <span style={{ color: "#d4b06a", fontWeight: "bold", fontFamily: "'Cinzel', serif", fontSize: "0.85rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>My Climate Zone</span>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            {isChangingSidebarZone ? (
-              <select
-                value={hardinessZone}
-                onChange={handleZoneChange}
-                onBlur={() => setIsChangingSidebarZone(false)}
-                className="zone-select-dropdown"
-                autoFocus
-                style={{
-                  background: "#00301e",
-                  color: "#f5e7c4",
-                  border: "1px solid #d4b06a",
-                  borderRadius: "4px",
-                  padding: "0.15rem 0.4rem",
-                  fontFamily: "inherit",
-                  fontWeight: "bold",
-                  width: "100%",
-                  outline: "none"
-                }}
-              >
-                {Array.from({ length: 13 }, (_, i) => i + 1)
-                  .flatMap((z) => [`${z}a`, `${z}b`])
-                  .map((zone) => (
-                    <option key={zone} value={zone}>
-                      Zone {zone}
-                    </option>
-                  ))}
-              </select>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                <span style={{ color: "#e9dcbe" }}>Zone {hardinessZone}</span>
-                <button
-                  onClick={() => setIsChangingSidebarZone(true)}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "#d4b06a",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                    padding: 0,
-                    textDecoration: "underline",
-                    fontFamily: "inherit"
-                  }}
-                  aria-label="Change USDA climate hardiness zone"
-                >
-                  [Change]
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* Live Product Search Results Stack */}
         {searchQuery.trim() !== "" ? (
           <div className="sidebar-search-results-drawer">
@@ -805,7 +751,7 @@ export default function Layout({ children }) {
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
-            <Link href="/shop">View All Flora &amp; Goods</Link>
+            <Link href="/shop">View All Goods</Link>
             <Link href="/zones">USDA Hardiness Zones</Link>
             <Link href="/garden-month">Monthly Plant Care Guides</Link>
 

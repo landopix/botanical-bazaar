@@ -21,6 +21,14 @@ body {
      Individual pages should not override this. */
   background-color: #00301e;
   color: #e9dcbe;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+main, .site-main {
+  flex: 1 0 auto;
 }
 
 /* Headings inherit the Cinzel font to echo the logo styling. Adjust the
@@ -105,19 +113,25 @@ h6 {
   width: 44px;
   height: 44px;
   background-color: #00301e;
-  border: none;
+  border: 1.5px solid #d4b06a !important;
   border-radius: 50%;
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   color: #d4b06a;
   text-decoration: none;
-  /* Prevent SVG icons from being clipped by hiding overflow */
-  overflow: hidden;
-  /* Clear padding and margin to ensure perfect centering */
+  overflow: visible !important;
   padding: 0 !important;
   margin: 0 !important;
   box-sizing: border-box !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.quick-actions button:hover,
+.quick-actions a:hover {
+  background-color: #1c3d2e !important;
+  transform: scale(1.08) !important;
 }
 
 /* Overrides to prevent clipping of absolute-positioned badges on quick action bubbles */

@@ -15,6 +15,10 @@ export default function Account() {
   const [orders, setOrders] = useState([]);
   const [authChecking, setAuthChecking] = useState(true);
 
+  // Hardiness zone sync state
+  const [hardinessZone, setHardinessZone] = useState('10a');
+  const [isChangingZone, setIsChangingZone] = useState(false);
+
   useEffect(() => {
     // Check if user is already authenticated
     const savedEmail = localStorage.getItem('bb_user_email');
@@ -24,22 +28,50 @@ export default function Account() {
     }
     setAuthChecking(false);
 
-    // Dynamic dashboard copy
-    const fetchDashboardCopy = async () => {
-      try {
-        const res = await fetch('/api/account-copy');
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.title) {
-            setDashboardCopy(data);
-          }
-        }
-      } catch (e) {
-        console.log('Using default mock account dashboard copy');
+    if (typeof window !== "undefined") {
+      const savedZone = localStorage.getItem("user_hardiness_zone");
+      if (savedZone) {
+        setHardinessZone(savedZone);
       }
-    };
-    fetchDashboardCopy();
+
+      const handleZoneUpdated = () => {
+        const updated = localStorage.getItem("user_hardiness_zone");
+        if (updated) {
+          setHardinessZone(updated);
+        }
+      };
+
+      window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+
+      // Dynamic dashboard copy
+      const fetchDashboardCopy = async () => {
+        try {
+          const res = await fetch('/api/account-copy');
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.title) {
+              setDashboardCopy(data);
+            }
+          }
+        } catch (e) {
+          console.log('Using default mock account dashboard copy');
+        }
+      };
+      fetchDashboardCopy();
+
+      return () => {
+        window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      };
+    }
   }, []);
+
+  const handleZoneChange = (e) => {
+    const newZone = e.target.value;
+    setHardinessZone(newZone);
+    localStorage.setItem("user_hardiness_zone", newZone);
+    setIsChangingZone(false);
+    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+  };
 
   const fetchOrders = async (email) => {
     setLoadingOrders(true);
@@ -141,7 +173,7 @@ export default function Account() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto', boxSizing: 'border-box' }}>
       {/* Header section with Sign Out */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', gap: '1rem' }}>
         <div>
           <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.8rem', marginBottom: '0.5rem' }}>
             {dashboardCopy.title}
@@ -168,6 +200,74 @@ export default function Account() {
         >
           Sign Out
         </button>
+      </div>
+
+      {/* Climate Zone Selector directly under welcome heading/subtitle */}
+      <div style={{
+        marginBottom: '2.5rem',
+        padding: '0.8rem 1.2rem',
+        background: '#123826',
+        border: '1px solid #D4B06A',
+        borderRadius: '8px',
+        display: 'inline-flex',
+        flexDirection: 'column',
+        gap: '0.3rem',
+        minWidth: '220px',
+        textAlign: 'left'
+      }}>
+        <span style={{ color: '#D4B06A', fontWeight: 'bold', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          My Climate Zone
+        </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+          {isChangingZone ? (
+            <select
+              value={hardinessZone}
+              onChange={handleZoneChange}
+              onBlur={() => setIsChangingZone(false)}
+              autoFocus
+              style={{
+                background: '#00301e',
+                color: '#f5e7c4',
+                border: '1px solid #d4b06a',
+                borderRadius: '4px',
+                padding: '0.15rem 0.4rem',
+                fontFamily: 'inherit',
+                fontWeight: 'bold',
+                outline: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              {Array.from({ length: 13 }, (_, i) => i + 1)
+                .flatMap((z) => [`${z}a`, `${z}b`])
+                .map((zone) => (
+                  <option key={zone} value={zone}>
+                    Zone {zone}
+                  </option>
+                ))}
+            </select>
+          ) : (
+            <>
+              <span style={{ color: '#e9dcbe', fontWeight: 'bold' }}>Zone {hardinessZone}</span>
+              <button
+                onClick={() => setIsChangingZone(true)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#d4b06a',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  padding: 0,
+                  textDecoration: 'underline',
+                  fontFamily: 'inherit',
+                  fontSize: '0.9rem'
+                }}
+                aria-label="Change USDA climate hardiness zone"
+              >
+                [Change]
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem' }}>
