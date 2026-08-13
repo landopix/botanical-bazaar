@@ -114,7 +114,7 @@ export default async function formSubmitHandler(req, res) {
   }
 
   // Fallback Mock mode if no active key is found in environment variables
-  console.log('⚠️ No active SendGrid or Resend production keys configured.');
+  console.log('[Warning] No active SendGrid or Resend production keys configured.');
   console.log('Dispached Mock Submission successfully:');
   console.log(emailBody);
 

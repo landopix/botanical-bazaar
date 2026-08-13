@@ -403,7 +403,7 @@ export default function ProductDetail() {
         {/* Product Image */}
         <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px' }}>
           <Image
-            src={product.image || '/assets/placeholder.png'}
+            src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
             alt={product.name}
             fill
             sizes="(max-width: 800px) 100vw, 250px"
@@ -578,7 +578,7 @@ export default function ProductDetail() {
           {/* Secondary Actions: Wishlist and Back buttons */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem', justifyContent: 'center' }}>
             <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: '1 1 auto' }}>
-              {isWishlisted ? '♥ In Wishlist' : '♡ Add to Wishlist'}
+              {isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
             </Button>
             <Button variant="outline" href="/shop" style={{ flex: '1 1 auto' }}>
               Back to Shop

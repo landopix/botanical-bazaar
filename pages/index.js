@@ -654,7 +654,7 @@ export default function Index() {
                 <div key={product.slug} className="product-card sold-out">
                   <div>
                     <img
-                      src={product.image}
+                      src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
                       alt={product.name}
                       onError={(e) => {
                         e.target.src = "/assets/placeholder.png";
@@ -676,7 +676,7 @@ export default function Index() {
                 className="product-card"
               >
                 <img
-                  src={product.image}
+                  src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
                   alt={product.name}
                   onError={(e) => {
                     e.target.src = "/assets/placeholder.png";

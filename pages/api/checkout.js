@@ -73,7 +73,7 @@ export default async function checkoutHandler(req, res) {
 
     if (!stripeSecretKey || stripeSecretKey === 'mock-stripe-secret') {
       // Mock-Fallback mode for sandbox environment without Stripe secret setup
-      console.log('⚠️ Stripe Secret Key is missing or set to mock. Emulating secure Stripe Checkout Redirect...');
+      console.log('[Warning] Stripe Secret Key is missing or set to mock. Emulating secure Stripe Checkout Redirect...');
       console.log('Customer info:', { customer_name, customer_email, customer_phone, pickup_date, notes });
       console.log('Line Items:', line_items);
 

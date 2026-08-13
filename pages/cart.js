@@ -38,7 +38,7 @@ export default function Cart() {
           >
             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <img
-                src={item.image}
+                src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
                 alt={item.name}
                 onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
                 style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
@@ -113,7 +113,7 @@ export default function Cart() {
 
         {/* Local Pickup Only Warning */}
         <p style={{ fontSize: '0.95rem', color: '#00301E', border: '1px solid #00301E', padding: '0.5rem', borderRadius: '6px', fontWeight: 'bold', textAlign: 'center', marginBottom: '1.5rem' }}>
-          ⚠️ Reminder: All sales are strictly LOCAL PICKUP at our St. Petersburg, FL nursery location.
+          Reminder: All sales are strictly LOCAL PICKUP at our St. Petersburg, FL nursery location.
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>

@@ -20,7 +20,7 @@ const LOCAL_TEMPLATES = {
           At The Botanical Bazaar LLC, our mission is to make resilient, rare tropical plants accessible and understandable for the local St. Petersburg, Florida community.
         </p>
         <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 1.5rem;">
-          We lovingly propagate and grow a major catalog of highly-desired species—including spectacular Aroids, hard-to-find fruit trees, robust medicinal herbs, and award-winning collector orchids.
+          We lovingly propagate and grow a major catalog of highly-desired species, including spectacular Aroids, hard-to-find fruit trees, robust medicinal herbs, and award-winning collector orchids.
         </p>
         <p style="font-size: 1.2rem; line-height: 1.6;">
           Whether you are a beginner or an advanced collector, our nursery guides are dedicated to supporting your unique botanical journey. All orders are local pickup at our nursery.
