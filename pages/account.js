@@ -6,7 +6,6 @@ export default function Account() {
     title: 'Your Garden Sanctuary',
     subtitle: 'Welcome back to your Botanical Bazaar sanctuary',
     announcement: 'Special Offer: Bring your soil samples for free analysis during our upcoming weekend events!',
-    phoneSupport: 'Questions? Reach out to our guides at (727) 555-0199',
     emailSupport: 'guides@thebotanicalbazaar.com'
   });
 
@@ -255,10 +254,6 @@ export default function Account() {
             Our St. Petersburg horticulturists are standing by to help with compatibility, potting instructions, or scheduling your specific local collection window.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '0.9rem' }}>
-            <div>
-              <strong>Call/Text:</strong>
-              <div>{dashboardCopy.phoneSupport}</div>
-            </div>
             <div>
               <strong>Email Support:</strong>
               <div><a href={`mailto:${dashboardCopy.emailSupport}`} style={{ color: '#D4B06A' }}>{dashboardCopy.emailSupport}</a></div>

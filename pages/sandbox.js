@@ -119,6 +119,58 @@ export default function Sandbox() {
               label: '<b>Paragraph</b>',
               category: 'Basic',
               content: `<p style="line-height: 1.6; font-size: 1.1rem; color: #E9DCBE;">This is a paragraph. Double click to edit text and styling.</p>`
+            },
+            {
+              id: 'global-footer',
+              label: '<b>Global Footer</b>',
+              category: 'Layout',
+              content: `<footer style="background-color: #00301E; color: #E9DCBE; padding: 3rem 1.5rem; font-family: \x27Crimson Text\x27, serif; border-top: 1px solid #D4B06A;">
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; max-width: 1200px; margin: 0 auto; text-align: left;">
+    <div style="flex: 1; min-width: 220px;">
+      <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Contact Info</h3>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">📬 P.O. Box 35353, St. Petersburg, FL 33705</p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">✉️ info@thebotanicalbazaar.com</p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">🕒 Thurs - Sun: 10AM - 5PM</p>
+    </div>
+    <div style="flex: 1; min-width: 180px;">
+      <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Ordering Info</h3>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/faq" style="color: #E9DCBE; text-decoration: none;">FAQ Overview</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/shipping-pickup" style="color: #E9DCBE; text-decoration: none;">Shipping &amp; Unpacking</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/returns" style="color: #E9DCBE; text-decoration: none;">Refunds &amp; Replacements</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/terms" style="color: #E9DCBE; text-decoration: none;">Sales Tax &amp; Terms</a></p>
+    </div>
+    <div style="flex: 1; min-width: 180px;">
+      <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">About Us</h3>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/about" style="color: #E9DCBE; text-decoration: none;">Our Mercantile History</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/consultations" style="color: #E9DCBE; text-decoration: none;">Store Visit &amp; Location</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/privacy" style="color: #E9DCBE; text-decoration: none;">Privacy Policy</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/terms" style="color: #E9DCBE; text-decoration: none;">Terms of Service</a></p>
+    </div>
+    <div style="flex: 1; min-width: 180px;">
+      <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Find Plants</h3>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/shop" style="color: #E9DCBE; text-decoration: none;">View All Flora</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/zones" style="color: #E9DCBE; text-decoration: none;">USDA Hardiness Zones</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/garden-month" style="color: #E9DCBE; text-decoration: none;">Monthly Care Guides</a></p>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(212, 176, 106, 0.2); font-size: 0.85rem; color: #E9DCBE;">
+    &copy; 2025 The Botanical Bazaar LLC. All rights reserved.
+  </div>
+</footer>`
+            },
+            {
+              id: 'hardiness-guidance',
+              label: '<b>Hardiness Guidance</b>',
+              category: 'Layout',
+              content: `<div style="padding: 2rem; margin: 1.5rem auto; background-color: #123826; border-radius: 12px; border: 1px solid #D4B06A; max-width: 800px; color: #F5E7C4; font-family: \x27Crimson Text\x27, serif; text-align: left;">
+  <h3 style="color: #D4B06A; margin-top: 0; font-family: \x27Cinzel\x27, serif; font-size: 1.4rem; text-transform: uppercase; text-align: center; letter-spacing: 1px;">USDA Climate Hardiness Guidance</h3>
+  <p style="line-height: 1.6; font-size: 1.05rem; text-align: center; margin-bottom: 1.5rem;">
+    Our nursery curates rare and resilient tropical species categorized by USDA Hardiness Zones (Zones 3 through 13). Aligning your selections with your specific local climate guarantees long-term garden health and seasonal vitality.
+  </p>
+  <div style="text-align: center;">
+    <a href="/zones" style="display: inline-block; background-color: #D4B06A; color: #1C3D2E; font-weight: bold; padding: 0.6rem 1.4rem; border-radius: 24px; text-decoration: none; text-align: center;">Explore Hardiness Zones</a>
+  </div>
+</div>`
             }
           ],
         },
