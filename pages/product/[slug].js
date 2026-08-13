@@ -665,10 +665,6 @@ export default function ProductDetail() {
               {/* Climate Zone Indicator and Selector */}
               <div style={{
                 marginBottom: '1.2rem',
-                padding: '0.6rem 0.8rem',
-                background: 'rgba(28, 61, 46, 0.08)',
-                borderRadius: '6px',
-                border: '1px dashed rgba(28, 61, 46, 0.25)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '0.4rem'

@@ -113,7 +113,7 @@ h6 {
   width: 44px;
   height: 44px;
   background-color: #00301e;
-  border: 1.5px solid #d4b06a !important;
+  border: none !important;
   border-radius: 50%;
   display: flex !important;
   justify-content: center !important;
@@ -131,6 +131,7 @@ h6 {
 .quick-actions button:hover,
 .quick-actions a:hover {
   background-color: #1c3d2e !important;
+  border: none !important;
   transform: scale(1.08) !important;
 }
 
