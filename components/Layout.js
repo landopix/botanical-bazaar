@@ -110,7 +110,8 @@ export default function Layout({ children }) {
 
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
-  const [isChangingZone, setIsChangingZone] = useState(false);
+  const [isChangingSidebarZone, setIsChangingSidebarZone] = useState(false);
+  const [isChangingFooterZone, setIsChangingFooterZone] = useState(false);
 
   // Keep track of group open/close states in sidebar
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
@@ -148,7 +149,8 @@ export default function Layout({ children }) {
     const newZone = e.target.value;
     setHardinessZone(newZone);
     localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingZone(false);
+    setIsChangingSidebarZone(false);
+    setIsChangingFooterZone(false);
   };
 
   // Manage Esc key press to close sidebar
@@ -310,50 +312,6 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
-      {/* Top Seasonal Shipping Announcement & Zone Detector Banner */}
-      <div className="top-announcement-banner">
-        <div className="banner-content">
-          <span className="banner-badge">Seasonal Transit</span>
-          <span className="banner-text">
-             <strong>Northern Transit Protection:</strong> We use heat packs &
-            insulated wraps to protect sensitive specimens from cold damage when
-            shipping to northern states.  <strong>Summer Guidelines:</strong>{" "}
-            Shade & rapid local pickup protect specimens from heat stress.
-          </span>
-        </div>
-        <div className="zone-detector">
-          <span className="zone-icon">Zone:</span>
-          {isChangingZone ? (
-            <select
-              value={hardinessZone}
-              onChange={handleZoneChange}
-              onBlur={() => setIsChangingZone(false)}
-              className="zone-select-dropdown"
-              autoFocus
-            >
-              {Array.from({ length: 13 }, (_, i) => i + 1)
-                .flatMap((z) => [`${z}a`, `${z}b`])
-                .map((zone) => (
-                  <option key={zone} value={zone}>
-                    Zone {zone}
-                  </option>
-                ))}
-            </select>
-          ) : (
-            <span className="zone-text-btn">
-              USDA Hardiness: <strong>Zone {hardinessZone}</strong>
-              <button
-                onClick={() => setIsChangingZone(true)}
-                className="zone-lookup-btn"
-                aria-label="Change USDA climate hardiness zone"
-              >
-                [Change]
-              </button>
-            </span>
-          )}
-        </div>
-      </div>
-
       {/* Sidebar backdrop overlay (Click outside to close) */}
       {isSidebarOpen && (
         <div
@@ -541,6 +499,72 @@ export default function Layout({ children }) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+        </div>
+
+        {/* Sidebar Zone Selector */}
+        <div className="sidebar-zone-selector" style={{
+          padding: "0.5rem 0.8rem",
+          marginBottom: "1rem",
+          background: "#123826",
+          border: "1px solid rgba(212, 176, 106, 0.3)",
+          borderRadius: "8px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.3rem",
+          fontFamily: "'Crimson Text', serif",
+          fontSize: "0.95rem"
+        }}>
+          <span style={{ color: "#d4b06a", fontWeight: "bold", fontFamily: "'Cinzel', serif", fontSize: "0.85rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>My Climate Zone</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            {isChangingSidebarZone ? (
+              <select
+                value={hardinessZone}
+                onChange={handleZoneChange}
+                onBlur={() => setIsChangingSidebarZone(false)}
+                className="zone-select-dropdown"
+                autoFocus
+                style={{
+                  background: "#00301e",
+                  color: "#f5e7c4",
+                  border: "1px solid #d4b06a",
+                  borderRadius: "4px",
+                  padding: "0.15rem 0.4rem",
+                  fontFamily: "inherit",
+                  fontWeight: "bold",
+                  width: "100%",
+                  outline: "none"
+                }}
+              >
+                {Array.from({ length: 13 }, (_, i) => i + 1)
+                  .flatMap((z) => [`${z}a`, `${z}b`])
+                  .map((zone) => (
+                    <option key={zone} value={zone}>
+                      Zone {zone}
+                    </option>
+                  ))}
+              </select>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <span style={{ color: "#e9dcbe" }}>Zone {hardinessZone}</span>
+                <button
+                  onClick={() => setIsChangingSidebarZone(true)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#d4b06a",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    padding: 0,
+                    textDecoration: "underline",
+                    fontFamily: "inherit"
+                  }}
+                  aria-label="Change USDA climate hardiness zone"
+                >
+                  [Change]
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Live Product Search Results Stack */}
@@ -784,6 +808,71 @@ export default function Layout({ children }) {
             <Link href="/shop">View All Flora &amp; Goods</Link>
             <Link href="/zones">USDA Hardiness Zones</Link>
             <Link href="/garden-month">Monthly Plant Care Guides</Link>
+
+            <div className="footer-zone-selector" style={{
+              marginTop: "0.8rem",
+              paddingTop: "0.8rem",
+              borderTop: "1px solid rgba(212, 176, 106, 0.15)",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.2rem",
+              fontFamily: "'Crimson Text', serif",
+              fontSize: "0.95rem"
+            }}>
+              <span style={{ color: "#d4b06a", fontWeight: "bold", fontFamily: "'Cinzel', serif", fontSize: "0.85rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>My Hardiness Zone</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                {isChangingFooterZone ? (
+                  <select
+                    value={hardinessZone}
+                    onChange={handleZoneChange}
+                    onBlur={() => setIsChangingFooterZone(false)}
+                    className="zone-select-dropdown"
+                    autoFocus
+                    style={{
+                      background: "#001f14",
+                      color: "#f5e7c4",
+                      border: "1px solid #d4b06a",
+                      borderRadius: "4px",
+                      padding: "0.15rem 0.4rem",
+                      fontFamily: "inherit",
+                      fontWeight: "bold",
+                      outline: "none",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {Array.from({ length: 13 }, (_, i) => i + 1)
+                      .flatMap((z) => [`${z}a`, `${z}b`])
+                      .map((zone) => (
+                        <option key={zone} value={zone}>
+                          Zone {zone}
+                        </option>
+                      ))}
+                  </select>
+                ) : (
+                  <span style={{ color: "#e9dcbe", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
+                    Zone {hardinessZone}
+                    <button
+                      onClick={() => setIsChangingFooterZone(true)}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#d4b06a",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                        padding: 0,
+                        textDecoration: "underline",
+                        fontFamily: "inherit",
+                        fontSize: "0.9rem"
+                      }}
+                      aria-label="Change USDA climate hardiness zone"
+                    >
+                      [Change]
+                    </button>
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
         <div className="footer-bottom">
@@ -820,76 +909,6 @@ export default function Layout({ children }) {
 
       {/* Styled JSX for Dropdowns, announcement banner, and responsive footer layout */}
       <style jsx global>{`
-        /* Top seasonal shipping banner & zone detector */
-        .top-announcement-banner {
-          background-color: #d4b06a;
-          color: #00301e;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 0.5rem 2rem;
-          font-size: 0.9rem;
-          box-sizing: border-box;
-          border-bottom: 1px solid #1c3d2e;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-        }
-        .banner-content {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          flex: 1 1 auto;
-        }
-        .banner-badge {
-          background-color: #00301e;
-          color: #d4b06a;
-          font-weight: bold;
-          font-size: 0.75rem;
-          text-transform: uppercase;
-          padding: 0.15rem 0.5rem;
-          border-radius: 4px;
-          letter-spacing: 0.05em;
-        }
-        .banner-text {
-          line-height: 1.3;
-        }
-        .zone-detector {
-          display: flex;
-          align-items: center;
-          gap: 0.4rem;
-          font-weight: bold;
-          flex-shrink: 0;
-        }
-        .zone-select-dropdown {
-          background: #00301e;
-          color: #f5e7c4;
-          border: 1px solid #00301e;
-          border-radius: 4px;
-          padding: 0.1rem 0.3rem;
-          font-family: inherit;
-          font-weight: bold;
-          outline: none;
-          cursor: pointer;
-        }
-        .zone-text-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-        }
-        .zone-lookup-btn {
-          background: none;
-          border: none;
-          color: #00301e;
-          cursor: pointer;
-          font-weight: bold;
-          padding: 0;
-          text-decoration: underline;
-          font-family: inherit;
-        }
-        .zone-lookup-btn:hover {
-          color: #123826;
-        }
-
         /* Collections Header Dropdown */
         .nav-dropdown-wrapper {
           position: relative;
@@ -1124,7 +1143,7 @@ export default function Layout({ children }) {
           text-align: center;
           margin-top: 3rem;
           padding-top: 1.5rem;
-          border-top: 1px solid rgba(212, 176, 106, 0.1);
+          border-top: 1px solid rgba(212, 176, 106, 0.15);
           font-size: 0.85rem;
           color: #8da38b;
           max-width: 1100px;
@@ -1133,16 +1152,6 @@ export default function Layout({ children }) {
         }
 
         @media (max-width: 767px) {
-          .top-announcement-banner {
-            padding: 0.5rem 1rem;
-            text-align: center;
-            justify-content: center;
-          }
-          .zone-detector {
-            width: 100%;
-            justify-content: center;
-            margin-top: 0.2rem;
-          }
           .footer-columns {
             grid-template-columns: 1fr;
             gap: 1.8rem;
