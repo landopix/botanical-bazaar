@@ -357,8 +357,9 @@ export default function Layout({ children }) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             stroke="#D4B06A"
             strokeWidth="2"
@@ -366,7 +367,7 @@ export default function Layout({ children }) {
             strokeLinejoin="round"
           >
             <circle cx="11" cy="11" r="8"></circle>
-            <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
 
@@ -379,8 +380,9 @@ export default function Layout({ children }) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             stroke="#D4B06A"
             strokeWidth="2"
@@ -427,8 +429,9 @@ export default function Layout({ children }) {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             stroke="#D4B06A"
             strokeWidth="2"
@@ -468,8 +471,9 @@ export default function Layout({ children }) {
         <Link href="/account" className="account-btn" aria-label="My account">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             fill="none"
             stroke="#D4B06A"
             strokeWidth="2"
