@@ -112,6 +112,18 @@ export default {
       description: 'USDA Hardiness Zones (e.g. 9, 10, 11)'
     },
     {
+      name: 'minTempInGround',
+      title: 'Lowest Survivable Temp In-Ground',
+      type: 'string',
+      description: 'e.g. 28°F or 28°F - 30°F'
+    },
+    {
+      name: 'minTempInPot',
+      title: 'Lowest Survivable Temp In-Pot',
+      type: 'string',
+      description: 'e.g. 35°F or 32°F - 35°F'
+    },
+    {
       name: 'tags',
       title: 'Tags',
       type: 'array',
