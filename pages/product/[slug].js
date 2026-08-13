@@ -603,6 +603,76 @@ export default function ProductDetail() {
           {/* Collapsible Plant specifications details panels */}
           {renderSpecs(product)}
 
+          {/* Cold Hardiness & Thermal Guidance Card */}
+          {(product.minTempInGround || product.minTempInPot) && (
+            <div style={{
+              background: '#E9DCBE',
+              color: '#00301E',
+              border: '1px solid #D4B06A',
+              borderRadius: '8px',
+              padding: '1.25rem',
+              marginTop: '1.5rem',
+              textAlign: 'left',
+              fontFamily: "'Crimson Text', serif",
+              boxSizing: 'border-box'
+            }}>
+              <h3 style={{
+                fontFamily: "'Cinzel', serif",
+                fontSize: '1.25rem',
+                margin: '0 0 1rem 0',
+                color: '#00301E',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                borderBottom: '1px solid rgba(212, 176, 106, 0.5)',
+                paddingBottom: '0.5rem'
+              }}>
+                Cold Hardiness &amp; Thermal Guidance
+              </h3>
+
+              {product.minTempInGround && (
+                <div style={{ marginBottom: product.minTempInPot ? '1.1rem' : '0' }}>
+                  <h4 style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
+                    margin: '0 0 0.3rem 0',
+                    color: '#00301E'
+                  }}>
+                    In-Ground Hardiness ({product.minTempInGround})
+                  </h4>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '0.95rem',
+                    lineHeight: '1.4'
+                  }}>
+                    In-Ground Soil: The thermal mass of the Earth buffers extreme cold and heat swings, maintaining stable, moderate root zone temperatures.
+                  </p>
+                </div>
+              )}
+
+              {product.minTempInPot && (
+                <div>
+                  <h4 style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontWeight: 'bold',
+                    fontSize: '1rem',
+                    margin: '0 0 0.3rem 0',
+                    color: '#00301E'
+                  }}>
+                    In-Pot / Container Hardiness ({product.minTempInPot})
+                  </h4>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '0.95rem',
+                    lineHeight: '1.4'
+                  }}>
+                    In Pots (Containers): Containers cool down and freeze much faster because cold air surrounds all sides, exposing root systems to chilling risks at higher ambient temperatures.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Policy notes (Local Pickup only and Live Plant Guarantee) */}
           <div className="policy-note" style={{ marginTop: '1.5rem', fontSize: '0.95rem', lineHeight: '1.45', color: '#d9cba9', textAlign: 'left', borderTop: '1px solid rgba(212,176,106,0.2)', paddingTop: '1.2rem' }}>
             <strong>Local Pickup Only:</strong> All purchases are available for pickup at our nursery in St.&nbsp;Petersburg, Florida. We do not ship at this time. <br />

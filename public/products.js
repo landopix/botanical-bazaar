@@ -6,7 +6,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 6,
     "zones": [
       "9",
@@ -31,7 +31,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 1,
     "zones": [
       "9",
@@ -56,7 +56,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 1,
     "zones": [
       "9",
@@ -81,7 +81,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 75.0,
+    "price": 75,
     "quantity": 4,
     "zones": [
       "9",
@@ -107,7 +107,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 55.0,
+    "price": 55,
     "quantity": 2,
     "zones": [
       "9",
@@ -133,7 +133,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 1,
     "zones": [
       "9",
@@ -159,7 +159,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 1,
     "zones": [
       "9",
@@ -185,7 +185,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 1,
     "zones": [
       "9",
@@ -211,7 +211,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 60.0,
+    "price": 60,
     "quantity": 1,
     "zones": [
       "9",
@@ -237,7 +237,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 2,
     "zones": [
       "9",
@@ -247,7 +247,7 @@ window.PRODUCTS = [
     "categories": [
       "houseplants"
     ],
-    "sizes": "\u2248 3 Gal. Plastic Pot | 6\" Plastic Pot",
+    "sizes": "≈ 3 Gal. Plastic Pot | 6\" Plastic Pot",
     "tags": [
       "aroid",
       "bright-indirect",
@@ -263,7 +263,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 1,
     "zones": [
       "9",
@@ -288,7 +288,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 40.0,
+    "price": 40,
     "quantity": 1,
     "zones": [
       "9",
@@ -312,7 +312,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 85.0,
+    "price": 85,
     "quantity": 2,
     "zones": [
       "9",
@@ -337,7 +337,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 2,
     "zones": [
       "9",
@@ -364,7 +364,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 16,
     "zones": [
       "9",
@@ -389,7 +389,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 18.0,
+    "price": 18,
     "quantity": 1,
     "zones": [
       "9",
@@ -414,7 +414,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 15.0,
+    "price": 15,
     "quantity": 6,
     "zones": [
       "9",
@@ -439,7 +439,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 25.0,
+    "price": 25,
     "quantity": 1,
     "zones": [
       "9",
@@ -464,7 +464,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 2,
     "zones": [
       "9",
@@ -490,7 +490,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 1,
     "zones": [
       "9",
@@ -515,7 +515,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 22.0,
+    "price": 22,
     "quantity": 1,
     "zones": [
       "9",
@@ -540,7 +540,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 60.0,
+    "price": 60,
     "quantity": 16,
     "zones": [
       "9",
@@ -565,7 +565,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 10.0,
+    "price": 10,
     "quantity": 1,
     "zones": [
       "9",
@@ -590,7 +590,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 1,
     "zones": [
       "9",
@@ -615,7 +615,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 12.0,
+    "price": 12,
     "quantity": 1,
     "zones": [
       "9",
@@ -640,7 +640,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 18.0,
+    "price": 18,
     "quantity": 1,
     "zones": [
       "9",
@@ -665,7 +665,7 @@ window.PRODUCTS = [
     "image": "assets/peanut-butter-fruit.jpg",
     "type": "Plant",
     "description": "",
-    "price": 85.0,
+    "price": 85,
     "quantity": 4,
     "zones": [
       "9",
@@ -689,7 +689,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 45.0,
+    "price": 45,
     "quantity": 1,
     "zones": [
       "9",
@@ -713,7 +713,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 180.0,
+    "price": 180,
     "quantity": 25,
     "zones": [
       "9",
@@ -738,7 +738,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 130.0,
+    "price": 130,
     "quantity": 1,
     "zones": [
       "9",
@@ -762,7 +762,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 65.0,
+    "price": 65,
     "quantity": 1,
     "zones": [
       "9",
@@ -777,7 +777,9 @@ window.PRODUCTS = [
       "fruit-tree",
       "full-sun",
       "protect-below-50"
-    ]
+    ],
+    "minTempInGround": "28°F",
+    "minTempInPot": "35°F"
   },
   {
     "slug": "stachytarpheta-cayennensis-blue-porterweed",
@@ -786,7 +788,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 8.0,
+    "price": 8,
     "quantity": 2,
     "zones": [
       "9",
@@ -812,7 +814,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 220.0,
+    "price": 220,
     "quantity": 8,
     "zones": [
       "9",
@@ -832,7 +834,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 115.0,
+    "price": 115,
     "quantity": 3,
     "zones": [
       "9",
@@ -852,7 +854,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 2,
     "zones": [
       "9",
@@ -872,7 +874,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 95.0,
+    "price": 95,
     "quantity": 2,
     "zones": [
       "9",
@@ -896,7 +898,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 1,
     "zones": [
       "9",
@@ -916,7 +918,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 22.0,
+    "price": 22,
     "quantity": 1,
     "zones": [
       "9",
@@ -936,7 +938,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 3,
     "zones": [
       "9",
@@ -956,7 +958,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 75.0,
+    "price": 75,
     "quantity": 8,
     "zones": [
       "9",
@@ -976,7 +978,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 30.0,
+    "price": 30,
     "quantity": 2,
     "zones": [
       "9",
@@ -996,7 +998,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 35.0,
+    "price": 35,
     "quantity": 1,
     "zones": [
       "9",
@@ -1016,7 +1018,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 22.0,
+    "price": 22,
     "quantity": 1,
     "zones": [
       "9",
@@ -1036,7 +1038,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 1,
     "zones": [
       "9",
@@ -1056,7 +1058,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 4,
     "zones": [
       "9",
@@ -1076,7 +1078,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 65.0,
+    "price": 65,
     "quantity": 5,
     "zones": [
       "9",
@@ -1096,7 +1098,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 65.0,
+    "price": 65,
     "quantity": 1,
     "zones": [
       "9",
@@ -1116,7 +1118,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 55.0,
+    "price": 55,
     "quantity": 9,
     "zones": [
       "9",
@@ -1136,7 +1138,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 18.0,
+    "price": 18,
     "quantity": 1,
     "zones": [
       "9",
@@ -1161,7 +1163,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 2,
     "zones": [
       "9",
@@ -1186,7 +1188,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 45.0,
+    "price": 45,
     "quantity": 2,
     "zones": [
       "9",
@@ -1206,7 +1208,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 50.0,
+    "price": 50,
     "quantity": 1,
     "zones": [
       "9",
@@ -1226,7 +1228,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 65.0,
+    "price": 65,
     "quantity": 2,
     "zones": [
       "9",
@@ -1246,7 +1248,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "",
-    "price": 65.0,
+    "price": 65,
     "quantity": 20,
     "zones": [
       "9",
@@ -1296,7 +1298,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Plant",
     "description": "Spanish Moss is an epiphytic bromeliad with silvery-grey strands. It thrives in bright, indirect light and high humidity, making it perfect for hanging displays or draping over tree branches.",
-    "price": 20.0,
+    "price": 20,
     "quantity": 5,
     "zones": [
       "9",
@@ -1323,7 +1325,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Sticker",
     "description": "An elegant, waterproof matte vinyl sticker featuring hand-drawn botanical Monstera illustrations. Beautiful old-school design for bottles, laptops, or journals.",
-    "price": 4.50,
+    "price": 4.5,
     "quantity": 15,
     "zones": [],
     "categories": [
@@ -1342,7 +1344,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Apothecary",
     "description": "Hand-crafted Elderberry cold & flu defense tincture. Made with organic elderberries, raw honey, and apothecary herbs to boost your immune system.",
-    "price": 18.00,
+    "price": 18,
     "quantity": 8,
     "zones": [],
     "categories": [
@@ -1362,7 +1364,7 @@ window.PRODUCTS = [
     "image": "assets/placeholder.png",
     "type": "Habitat Component",
     "description": "All-natural dried mango leaves. Perfect specialized habitat materials such as mango leaf litter, live oak leaf litter for dart frog tanks, and dried mulberry leaves for shrimp tanks.",
-    "price": 12.00,
+    "price": 12,
     "quantity": 10,
     "zones": [],
     "categories": [
