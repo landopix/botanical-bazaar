@@ -56,6 +56,18 @@ h6 {
   transform: translateX(0);
 }
 
+/* Custom branded Warm Gold (#D4B06A) scrollbar styling on the sidebar menu */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #00301e;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #d4b06a;
+  border-radius: 4px;
+}
+
 /* Toggle button to open/close sidebar.
    Position it in the lower right corner of the screen so it never overlaps navigation links or logos.
    Using bottom placement also makes it easily reachable on mobile. */
@@ -96,14 +108,15 @@ h6 {
   border: none;
   border-radius: 50%;
   display: flex !important;
-  align-items: center !important;
   justify-content: center !important;
+  align-items: center !important;
   color: #d4b06a;
   text-decoration: none;
   /* Prevent SVG icons from being clipped by hiding overflow */
   overflow: hidden;
-  /* Clear padding to ensure perfect centering */
+  /* Clear padding and margin to ensure perfect centering */
   padding: 0 !important;
+  margin: 0 !important;
   box-sizing: border-box !important;
 }
 
@@ -148,6 +161,9 @@ h6 {
   height: 24px;
   stroke: #d4b06a;
   object-fit: contain;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
 }
 
 /* On larger screens keep the toggle visible and sidebar hidden by default. The menu will open via the toggle. */
@@ -575,7 +591,8 @@ header .lantern-emblem {
   color: #d4b06a;
   line-height: 1.2;
   white-space: normal !important;
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .result-type {
   font-size: 0.8rem;

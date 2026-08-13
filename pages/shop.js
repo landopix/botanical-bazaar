@@ -1150,15 +1150,17 @@ export default function Shop() {
         }
 
         .product-image-container {
-          position: relative;
-          width: 100%;
-          aspect-ratio: 4 / 3;
-          overflow: hidden;
+          position: relative !important;
+          overflow: hidden !important;
+          width: 100% !important;
+          aspect-ratio: 4 / 3 !important;
           margin-bottom: 0.8rem;
         }
 
         .product-image {
           object-fit: cover !important;
+          width: 100% !important;
+          height: 100% !important;
           border-radius: 8px;
           background: rgba(0, 0, 0, 0.05);
         }

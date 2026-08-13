@@ -494,7 +494,7 @@ export default function Layout({ children }) {
           <input
             id="sidebar-search"
             type="text"
-            placeholder="Search our botanical goods..."
+            placeholder="Search"
             aria-label="Search navigation and products"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -728,15 +728,15 @@ export default function Layout({ children }) {
           {/* Collections Rich Dropdown Menu */}
           <div className="nav-dropdown-wrapper">
             <Link href="/shop" className="nav-dropdown-trigger">
-              Collections ▾
+              SHOP ALL ▾
             </Link>
             <div className="nav-dropdown-menu">
               <Link href="/shop" className="dropdown-title">
-                Shop All Collections
+                SHOP ALL
               </Link>
               <div className="dropdown-grid">
                 <div className="dropdown-col">
-                  <h4>Living Flora</h4>
+                  <h4>LIVE PLANTS</h4>
                   <Link href="/shop?category=houseplants">Houseplants</Link>
                   <Link href="/shop?category=orchids-tropicals">
                     Orchids &amp; Tropicals
@@ -909,6 +909,18 @@ export default function Layout({ children }) {
 
       {/* Styled JSX for Dropdowns, announcement banner, and responsive footer layout */}
       <style jsx global>{`
+        /* Custom branded Warm Gold (#D4B06A) scrollbar styling on the sidebar menu */
+        .sidebar::-webkit-scrollbar {
+          width: 8px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+          background: #00301e;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+          background-color: #d4b06a;
+          border-radius: 4px;
+        }
+
         /* Collections Header Dropdown */
         .nav-dropdown-wrapper {
           position: relative;
@@ -940,6 +952,15 @@ export default function Layout({ children }) {
           z-index: 1000;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
           margin-top: 0.5rem;
+        }
+        .nav-dropdown-menu::before {
+          content: "";
+          position: absolute;
+          top: -20px;
+          left: 0;
+          right: 0;
+          height: 20px;
+          background: transparent;
         }
         .nav-dropdown-wrapper:hover .nav-dropdown-menu {
           display: block;
@@ -1065,7 +1086,8 @@ export default function Layout({ children }) {
           color: #d4b06a;
           line-height: 1.2;
           white-space: normal !important;
-          word-break: break-word;
+          word-break: normal;
+          overflow-wrap: break-word;
         }
         .result-type {
           font-size: 0.8rem;
