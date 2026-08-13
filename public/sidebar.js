@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.id = "sidebar-search";
     searchInput.type = "text";
     // Use an ASCII ellipsis to avoid non-ASCII characters in the UI
-    searchInput.placeholder = "Search our botanical goods...";
+    searchInput.placeholder = "Search";
     searchInput.setAttribute("aria-label", "Search navigation and products");
     searchContainer.appendChild(searchInput);
 
