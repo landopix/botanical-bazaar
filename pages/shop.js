@@ -519,7 +519,7 @@ export default function Shop() {
           grown in St.&nbsp;Petersburg. Use the filters to explore categories
           like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp;
           Unusual, Best Plants for Your Zone and more. All listings reflect live
-          inventory—quantities are limited and updated daily.
+          inventory; quantities are limited and updated daily.
         </p>
 
         <p className="shop-subtext">
@@ -716,7 +716,7 @@ export default function Shop() {
             }}
           >
             This batch is currently out of stock as we grow our next
-            generation—check back soon or browse our available inventory above.
+            generation. Check back soon or browse our available inventory above.
           </p>
         </div>
       ) : (
@@ -764,7 +764,7 @@ export default function Shop() {
                   >
                     <div className="product-image-container">
                       <Image
-                        src={product.image || "/assets/placeholder.png"}
+                        src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
                         alt={product.name}
                         fill
                         sizes="220px"
@@ -1152,12 +1152,13 @@ export default function Shop() {
         .product-image-container {
           position: relative;
           width: 100%;
-          height: 180px;
+          aspect-ratio: 4 / 3;
+          overflow: hidden;
           margin-bottom: 0.8rem;
         }
 
         .product-image {
-          object-fit: cover;
+          object-fit: cover !important;
           border-radius: 8px;
           background: rgba(0, 0, 0, 0.05);
         }

@@ -141,6 +141,100 @@ document.addEventListener("DOMContentLoaded", function () {
     productResultsContainer.style.display = "none";
     sidebar.insertBefore(productResultsContainer, sidebar.children[1]);
 
+    var staticPages = [
+      {
+        title: "Shipping & Unpacking",
+        href: "/shipping-pickup",
+        category: "Information",
+        description: "Shipping rates, live plant packaging, local pickup options, and transit details.",
+        content: "shipping pickup transit local heat packs courier boxes winter delivery packing unpacked safe arrival"
+      },
+      {
+        title: "FAQ Overview",
+        href: "/faq",
+        category: "Help & FAQ",
+        description: "Frequently asked questions regarding plant care, ordering, payments, and collections.",
+        content: "faq frequently asked questions care guides payment help orders issues support account"
+      },
+      {
+        title: "Refunds & Replacements",
+        href: "/returns",
+        category: "Policies",
+        description: "Our return policy, plant satisfaction guarantees, and claim procedures.",
+        content: "refunds replacements returns return policy refund claim issues damaged plants satisfaction guarantee"
+      },
+      {
+        title: "About The Botanical Bazaar",
+        href: "/about",
+        category: "Information",
+        description: "Our story, rare tropical plant philosophy, and our local nursery background.",
+        content: "about nursery botanical bazaar story team rare plants greenhouse collectors history tropical background"
+      },
+      {
+        title: "Consultations",
+        href: "/consultations",
+        category: "Services",
+        description: "Book an on-site or virtual landscape and plant design consultation.",
+        content: "consultations consulting landscape design design garden layout indoor plants expert advice booking"
+      },
+      {
+        title: "The Almanac",
+        href: "/almanac",
+        category: "Guides",
+        description: "Historical botanical data, plant care tips, and rare species highlights.",
+        content: "almanac garden guides history botanical facts care profiles taxonomy seasonal tips"
+      },
+      {
+        title: "Events",
+        href: "/events",
+        category: "Information",
+        description: "Upcoming plant sales, workshops, and botanical community meetups.",
+        content: "events plant sale workshop classes meetups nursery schedule activities botanical show calendar"
+      },
+      {
+        title: "Contact Us",
+        href: "/contact",
+        category: "Services",
+        description: "Get in touch with our plant nursery, customer support, or custom orders.",
+        content: "contact email phone location hours support message customer service custom inquiries"
+      },
+      {
+        title: "Orchids Gallery",
+        href: "/orchids-gallery",
+        category: "Gallery",
+        description: "High-resolution photos of our rare orchid varieties and custom arrangements.",
+        content: "gallery orchids flowers visual photos greenhouse orchid display designs"
+      },
+      {
+        title: "This Month in the Garden",
+        href: "/garden-month",
+        category: "Guides",
+        description: "What to plant, fertilize, and prune this month for tropical microclimates.",
+        content: "garden month seasonal planting gardening tips pruning fertilizer schedule tasks weather"
+      },
+      {
+        title: "Best Plants for Your Zone",
+        href: "/zones",
+        category: "Guides",
+        description: "Understand USDA cold hardiness zones and select matching tropical plants.",
+        content: "zones usda cold hardiness zone map winter survival temperature protection guide"
+      },
+      {
+        title: "Terms & Conditions",
+        href: "/terms",
+        category: "Policies",
+        description: "Terms of service, website usage agreements, and purchase conditions.",
+        content: "terms conditions service usage agreement legal disclaimer contract billing"
+      },
+      {
+        title: "Privacy Policy",
+        href: "/privacy",
+        category: "Policies",
+        description: "How we collect, protect, and handle your personal customer data.",
+        content: "privacy policy data collection personal info cookies security tracking"
+      }
+    ];
+
     searchInput.addEventListener("input", function () {
       var query = searchInput.value.trim().toLowerCase();
       var navMenuUl = sidebar.querySelector("ul");
@@ -171,25 +265,57 @@ document.addEventListener("DOMContentLoaded", function () {
           })
           .slice(0, 10);
 
-        var html =
-          '<div class="search-results-title">Product Matches (' +
-          matchingProds.length +
-          ")</div>";
+        var matchingPages = staticPages.filter(function (p) {
+          return (
+            p.title.toLowerCase().indexOf(query) > -1 ||
+            p.category.toLowerCase().indexOf(query) > -1 ||
+            p.description.toLowerCase().indexOf(query) > -1 ||
+            p.content.toLowerCase().indexOf(query) > -1
+          );
+        });
+
+        var html = "";
+
+        if (matchingPages.length > 0) {
+          html += '<div class="search-results-title">Page Matches (' + matchingPages.length + ')</div>';
+          html += '<div class="search-results-list" style="margin-bottom: 1.5rem;">';
+          matchingPages.forEach(function (page) {
+            html += '<a href="' + page.href + '" class="search-result-item-card page-result-card">';
+            html += '  <div class="result-info-wrapper" style="padding: 0.2rem;">';
+            html += '    <strong class="result-name">' + page.title + '</strong>';
+            html += '    <span class="result-type">' + page.category + '</span>';
+            html += '    <p class="no-matches-text" style="font-size: 0.8rem; margin-top: 0.2rem; color: #8da38b; font-style: normal;">' + page.description + '</p>';
+            html += '  </div>';
+            html += '</a>';
+          });
+          html += '</div>';
+        }
+
+        html += '<div class="search-results-title">Product Matches (' + matchingProds.length + ')</div>';
         if (matchingProds.length === 0) {
-          html +=
-            '<p class="no-matches-text">No botanical goods match your search.</p>';
+          if (matchingPages.length === 0) {
+            html += '<p class="no-matches-text">No botanical goods match your search.</p>';
+          } else {
+            html += '<p class="no-matches-text">No matching products found.</p>';
+          }
         } else {
           html += '<div class="search-results-list">';
           matchingProds.forEach(function (prod) {
             var isSold = !prod.quantity || prod.quantity < 3;
             var priceDisplay = isSold
-              ? '<span class="result-sold-out">Sold Out</span>'
+              ? '<span class="result-sold-out">Sold Out</span>';
               : '<span class="result-price">$' +
                 (prod.price ? prod.price.toFixed(2) : "0.00") +
                 "</span>";
             if (!prod.price && !isSold)
               priceDisplay =
                 '<span class="result-price">Price on Request</span>';
+
+            var resolvedImageSrc = prod.image
+              ? (prod.image.indexOf("http") === 0 || prod.image.indexOf("/") === 0
+                  ? prod.image
+                  : "/" + prod.image)
+              : "/assets/placeholder.png";
 
             html +=
               '<a href="/product/' +
@@ -198,7 +324,7 @@ document.addEventListener("DOMContentLoaded", function () {
             html += '  <div class="result-img-wrapper">';
             html +=
               '    <img src="' +
-              (prod.image || "/assets/placeholder.png") +
+              resolvedImageSrc +
               '" alt="' +
               prod.name +
               '" class="result-img" />';

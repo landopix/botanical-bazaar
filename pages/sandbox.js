@@ -128,9 +128,9 @@ export default function Sandbox() {
   <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; max-width: 1200px; margin: 0 auto; text-align: left;">
     <div style="flex: 1; min-width: 220px;">
       <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Contact Info</h3>
-      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">📬 P.O. Box 35353, St. Petersburg, FL 33705</p>
-      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">✉️ info@thebotanicalbazaar.com</p>
-      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">🕒 Thurs - Sun: 10AM - 5PM</p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">Address: P.O. Box 35353, St. Petersburg, FL 33705</p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">Email: info@thebotanicalbazaar.com</p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem; line-height: 1.6;">Hours: Thurs - Sun: 10AM - 5PM</p>
     </div>
     <div style="flex: 1; min-width: 180px;">
       <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Ordering Info</h3>
@@ -142,7 +142,7 @@ export default function Sandbox() {
     <div style="flex: 1; min-width: 180px;">
       <h3 style="color: #D4B06A; font-family: \x27Cinzel\x27, serif; margin-bottom: 1rem; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">About Us</h3>
       <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/about" style="color: #E9DCBE; text-decoration: none;">Our Mercantile History</a></p>
-      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/consultations" style="color: #E9DCBE; text-decoration: none;">Store Visit &amp; Location</a></p>
+      <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/contact" style="color: #E9DCBE; text-decoration: none;">Store Visit &amp; Location</a></p>
       <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/privacy" style="color: #E9DCBE; text-decoration: none;">Privacy Policy</a></p>
       <p style="margin: 0.5rem 0; font-size: 0.95rem;"><a href="/terms" style="color: #E9DCBE; text-decoration: none;">Terms of Service</a></p>
     </div>

@@ -4,6 +4,101 @@ import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
+
+const staticPages = [
+  {
+    title: "Shipping & Unpacking",
+    href: "/shipping-pickup",
+    category: "Information",
+    description: "Shipping rates, live plant packaging, local pickup options, and transit details.",
+    content: "shipping pickup transit local heat packs courier boxes winter delivery packing unpacked safe arrival"
+  },
+  {
+    title: "FAQ Overview",
+    href: "/faq",
+    category: "Help & FAQ",
+    description: "Frequently asked questions regarding plant care, ordering, payments, and collections.",
+    content: "faq frequently asked questions care guides payment help orders issues support account"
+  },
+  {
+    title: "Refunds & Replacements",
+    href: "/returns",
+    category: "Policies",
+    description: "Our return policy, plant satisfaction guarantees, and claim procedures.",
+    content: "refunds replacements returns return policy refund claim issues damaged plants satisfaction guarantee"
+  },
+  {
+    title: "About The Botanical Bazaar",
+    href: "/about",
+    category: "Information",
+    description: "Our story, rare tropical plant philosophy, and our local nursery background.",
+    content: "about nursery botanical bazaar story team rare plants greenhouse collectors history tropical background"
+  },
+  {
+    title: "Consultations",
+    href: "/consultations",
+    category: "Services",
+    description: "Book an on-site or virtual landscape and plant design consultation.",
+    content: "consultations consulting landscape design design garden layout indoor plants expert advice booking"
+  },
+  {
+    title: "The Almanac",
+    href: "/almanac",
+    category: "Guides",
+    description: "Historical botanical data, plant care tips, and rare species highlights.",
+    content: "almanac garden guides history botanical facts care profiles taxonomy seasonal tips"
+  },
+  {
+    title: "Events",
+    href: "/events",
+    category: "Information",
+    description: "Upcoming plant sales, workshops, and botanical community meetups.",
+    content: "events plant sale workshop classes meetups nursery schedule activities botanical show calendar"
+  },
+  {
+    title: "Contact Us",
+    href: "/contact",
+    category: "Services",
+    description: "Get in touch with our plant nursery, customer support, or custom orders.",
+    content: "contact email phone location hours support message customer service custom inquiries"
+  },
+  {
+    title: "Orchids Gallery",
+    href: "/orchids-gallery",
+    category: "Gallery",
+    description: "High-resolution photos of our rare orchid varieties and custom arrangements.",
+    content: "gallery orchids flowers visual photos greenhouse orchid display designs"
+  },
+  {
+    title: "This Month in the Garden",
+    href: "/garden-month",
+    category: "Guides",
+    description: "What to plant, fertilize, and prune this month for tropical microclimates.",
+    content: "garden month seasonal planting gardening tips pruning fertilizer schedule tasks weather"
+  },
+  {
+    title: "Best Plants for Your Zone",
+    href: "/zones",
+    category: "Guides",
+    description: "Understand USDA cold hardiness zones and select matching tropical plants.",
+    content: "zones usda cold hardiness zone map winter survival temperature protection guide"
+  },
+  {
+    title: "Terms & Conditions",
+    href: "/terms",
+    category: "Policies",
+    description: "Terms of service, website usage agreements, and purchase conditions.",
+    content: "terms conditions service usage agreement legal disclaimer contract billing"
+  },
+  {
+    title: "Privacy Policy",
+    href: "/privacy",
+    category: "Policies",
+    description: "How we collect, protect, and handle your personal customer data.",
+    content: "privacy policy data collection personal info cookies security tracking"
+  }
+];
+
 export default function Layout({ children }) {
   const router = useRouter();
   const { cartCount } = useCart();
@@ -200,6 +295,19 @@ export default function Layout({ children }) {
           .slice(0, 10)
       : [];
 
+  const matchingPages =
+    query !== ""
+      ? staticPages
+          .filter((p) => {
+            return (
+              p.title.toLowerCase().includes(query) ||
+              p.category.toLowerCase().includes(query) ||
+              p.description.toLowerCase().includes(query) ||
+              p.content.toLowerCase().includes(query)
+            );
+          })
+      : [];
+
   return (
     <div className="site-wrapper">
       {/* Top Seasonal Shipping Announcement & Zone Detector Banner */}
@@ -207,14 +315,14 @@ export default function Layout({ children }) {
         <div className="banner-content">
           <span className="banner-badge">Seasonal Transit</span>
           <span className="banner-text">
-            ❄️ <strong>Northern Transit Protection:</strong> We use heat packs &
+             <strong>Northern Transit Protection:</strong> We use heat packs &
             insulated wraps to protect sensitive specimens from cold damage when
-            shipping to northern states. ☀️ <strong>Summer Guidelines:</strong>{" "}
+            shipping to northern states.  <strong>Summer Guidelines:</strong>{" "}
             Shade & rapid local pickup protect specimens from heat stress.
           </span>
         </div>
         <div className="zone-detector">
-          <span className="zone-icon">📍</span>
+          <span className="zone-icon">Zone:</span>
           {isChangingZone ? (
             <select
               value={hardinessZone}
@@ -438,17 +546,61 @@ export default function Layout({ children }) {
         {/* Live Product Search Results Stack */}
         {searchQuery.trim() !== "" ? (
           <div className="sidebar-search-results-drawer">
+            {matchingPages.length > 0 && (
+              <div style={{ marginBottom: "1.5rem" }}>
+                <div className="search-results-title">
+                  Page Matches ({matchingPages.length})
+                </div>
+                <div className="search-results-list">
+                  {matchingPages.map((page) => (
+                    <Link
+                      href={page.href}
+                      key={page.href}
+                      className="search-result-item-card page-result-card"
+                    >
+                      <div className="result-info-wrapper" style={{ padding: "0.2rem" }}>
+                        <strong className="result-name">{page.title}</strong>
+                        <span className="result-type">{page.category}</span>
+                        <p
+                          className="no-matches-text"
+                          style={{
+                            fontSize: "0.8rem",
+                            marginTop: "0.2rem",
+                            color: "#8da38b",
+                            fontStyle: "normal",
+                          }}
+                        >
+                          {page.description}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="search-results-title">
               Product Matches ({matchingProducts.length})
             </div>
             {matchingProducts.length === 0 ? (
-              <p className="no-matches-text">
-                No botanical goods match your search.
-              </p>
+              matchingPages.length === 0 ? (
+                <p className="no-matches-text">
+                  No botanical goods match your search.
+                </p>
+              ) : (
+                <p className="no-matches-text">
+                  No matching products found.
+                </p>
+              )
             ) : (
               <div className="search-results-list">
                 {matchingProducts.map((prod) => {
                   const isSold = !prod.quantity || prod.quantity < 3;
+                  const resolvedImageSrc = prod.image
+                    ? (prod.image.startsWith("http") || prod.image.startsWith("/")
+                        ? prod.image
+                        : "/" + prod.image)
+                    : "/assets/placeholder.png";
                   return (
                     <Link
                       href={`/product/${prod.slug}`}
@@ -457,7 +609,7 @@ export default function Layout({ children }) {
                     >
                       <div className="result-img-wrapper">
                         <img
-                          src={prod.image || "/assets/placeholder.png"}
+                          src={resolvedImageSrc}
                           alt={prod.name}
                           className="result-img"
                         />
@@ -472,7 +624,7 @@ export default function Layout({ children }) {
                             <span className="result-price">
                               {isNaN(prod.price) || !prod.price
                                 ? "Price on Request"
-                                : `$${prod.price.toFixed(2)}`}
+                                : `${prod.price.toFixed(2)}`}
                             </span>
                           )}
                         </div>
@@ -608,10 +760,10 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>Contact Info</h3>
             <p className="contact-item">
-              📬 P.O. Box 35353, St. Petersburg, FL 33705
+              Address: P.O. Box 35353, St. Petersburg, FL 33705
             </p>
-            <p className="contact-item">✉️ info@thebotanicalbazaar.com</p>
-            <p className="contact-item">🕒 Thurs - Sun: 10AM - 5PM</p>
+            <p className="contact-item">Email: info@thebotanicalbazaar.com</p>
+            <p className="contact-item">Hours: Thurs - Sun: 10AM - 5PM</p>
           </div>
           <div className="footer-column">
             <h3>Ordering Info</h3>
@@ -623,7 +775,7 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>About Us</h3>
             <Link href="/about">Our Mercantile History</Link>
-            <Link href="/consultations">Store Visit &amp; Location</Link>
+            <Link href="/contact">Store Visit &amp; Location</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
           </div>
@@ -847,8 +999,10 @@ export default function Layout({ children }) {
           overflow-x: hidden;
         }
         .search-result-item-card {
-          display: flex;
-          flex-direction: column !important;
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 0.75rem !important;
           width: 100%;
           box-sizing: border-box;
           background-color: #123826;
@@ -858,7 +1012,7 @@ export default function Layout({ children }) {
           text-decoration: none;
           color: #e9dcbe;
           transition: all 0.2s ease;
-          overflow-x: hidden;
+          overflow: hidden;
         }
         .search-result-item-card:hover {
           background-color: #1c3d2e;
@@ -866,17 +1020,18 @@ export default function Layout({ children }) {
           transform: translateY(-2px);
         }
         .result-img-wrapper {
-          width: 100%;
-          height: 110px;
+          width: 50px !important;
+          height: 50px !important;
+          flex-shrink: 0 !important;
           border-radius: 6px;
           overflow: hidden;
           background: rgba(0, 0, 0, 0.1);
-          margin-bottom: 0.5rem;
+          margin-bottom: 0 !important;
         }
         .result-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover !important;
         }
         .result-info-wrapper {
           display: flex;

@@ -175,7 +175,7 @@ export default function Account() {
         <div style={{ flex: '1 1 600px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Announcement Alert */}
           <div style={{ background: '#123826', padding: '1.5rem', borderRadius: '12px', borderLeft: '4px solid #D4B06A' }}>
-            <h3 style={{ margin: '0 0 0.5rem 0', color: '#D4B06A' }}>🌱 Fresh Almanac Notice</h3>
+            <h3 style={{ margin: '0 0 0.5rem 0', color: '#D4B06A' }}>Fresh Almanac Notice</h3>
             <p style={{ margin: '0', lineHeight: '1.5' }}>{dashboardCopy.announcement}</p>
           </div>
 

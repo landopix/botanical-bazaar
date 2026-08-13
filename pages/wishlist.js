@@ -96,7 +96,7 @@ export default function Wishlist() {
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <img
-                  src={product.image}
+                  src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
                   alt={product.name}
                   onError={(e) => {
                     e.target.src = "/assets/placeholder.png";
