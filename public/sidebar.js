@@ -344,4 +344,53 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   }
+
+  // Update floating Cart and Wishlist badges
+  function updateFloatingBadges() {
+    var cartBtn = document.querySelector(".quick-actions .cart-btn");
+    if (cartBtn) {
+      var cartKey = "botanical_cart";
+      var cartRaw = localStorage.getItem(cartKey) || localStorage.getItem("cart");
+      var cart = [];
+      try { cart = cartRaw ? JSON.parse(cartRaw) : []; } catch (e) { cart = []; }
+      var cartCount = cart.reduce(function(acc, item) { return acc + (item.quantity || 1); }, 0);
+
+      var existingSpan = cartBtn.querySelector("span");
+      if (cartCount > 0) {
+        if (!existingSpan) {
+          existingSpan = document.createElement("span");
+          cartBtn.appendChild(existingSpan);
+        }
+        existingSpan.textContent = cartCount;
+        existingSpan.style.display = "flex";
+      } else if (existingSpan) {
+        existingSpan.remove();
+      }
+    }
+
+    var wishlistBtn = document.querySelector(".quick-actions .wishlist-btn");
+    if (wishlistBtn) {
+      var wishlistKey = "botanical_wishlist";
+      var wishlistRaw = localStorage.getItem(wishlistKey) || localStorage.getItem("wishlist");
+      var wishlist = [];
+      try { wishlist = wishlistRaw ? JSON.parse(wishlistRaw) : []; } catch (e) { wishlist = []; }
+      var wishlistCount = wishlist.length;
+
+      var existingSpan = wishlistBtn.querySelector("span");
+      if (wishlistCount > 0) {
+        if (!existingSpan) {
+          existingSpan = document.createElement("span");
+          wishlistBtn.appendChild(existingSpan);
+        }
+        existingSpan.textContent = wishlistCount;
+        existingSpan.style.display = "flex";
+      } else if (existingSpan) {
+        existingSpan.remove();
+      }
+    }
+  }
+
+  updateFloatingBadges();
+  window.addEventListener("cart_updated", updateFloatingBadges);
+  window.addEventListener("wishlist_updated", updateFloatingBadges);
 });

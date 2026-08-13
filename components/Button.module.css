@@ -26,11 +26,14 @@
 
 .greenFilled {
   background-color: #1C3D2E;
-  color: #F4F1E1;
+  color: #D4B06A;
+  border: 2px solid #D4B06A;
 }
 
 .greenFilled:hover {
   background-color: #11402A;
+  color: #F4F1E1;
+  border-color: #F4F1E1;
   transform: translateY(-2px);
 }
 

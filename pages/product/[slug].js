@@ -23,6 +23,39 @@ export default function ProductDetail() {
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [notifyError, setNotifyError] = useState('');
 
+  // Hardiness zone sync state
+  const [hardinessZone, setHardinessZone] = useState('10a');
+  const [isChangingZone, setIsChangingZone] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedZone = localStorage.getItem("user_hardiness_zone");
+      if (savedZone) {
+        setHardinessZone(savedZone);
+      }
+
+      const handleZoneUpdated = () => {
+        const updated = localStorage.getItem("user_hardiness_zone");
+        if (updated) {
+          setHardinessZone(updated);
+        }
+      };
+
+      window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      return () => {
+        window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      };
+    }
+  }, []);
+
+  const handleZoneChange = (e) => {
+    const newZone = e.target.value;
+    setHardinessZone(newZone);
+    localStorage.setItem("user_hardiness_zone", newZone);
+    setIsChangingZone(false);
+    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+  };
+
   const handleNotifyMe = async (e) => {
     e.preventDefault();
     if (!notifyEmail || !notifyEmail.trim()) return;
@@ -604,7 +637,7 @@ export default function ProductDetail() {
           {renderSpecs(product)}
 
           {/* Cold Hardiness & Thermal Guidance Card */}
-          {(product.minTempInGround || product.minTempInPot) && (
+          {product.type === "Plant" && (
             <div style={{
               background: '#E9DCBE',
               color: '#00301E',
@@ -628,6 +661,72 @@ export default function ProductDetail() {
               }}>
                 Cold Hardiness &amp; Thermal Guidance
               </h3>
+
+              {/* Climate Zone Indicator and Selector */}
+              <div style={{
+                marginBottom: '1.2rem',
+                padding: '0.6rem 0.8rem',
+                background: 'rgba(28, 61, 46, 0.08)',
+                borderRadius: '6px',
+                border: '1px dashed rgba(28, 61, 46, 0.25)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem'
+              }}>
+                <span style={{ color: '#00301E', fontWeight: 'bold', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                  My Climate Zone
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                  {isChangingZone ? (
+                    <select
+                      value={hardinessZone}
+                      onChange={handleZoneChange}
+                      onBlur={() => setIsChangingZone(false)}
+                      autoFocus
+                      style={{
+                        background: '#00301e',
+                        color: '#f5e7c4',
+                        border: '1px solid #d4b06a',
+                        borderRadius: '4px',
+                        padding: '0.2rem 0.4rem',
+                        fontFamily: 'inherit',
+                        fontWeight: 'bold',
+                        outline: 'none',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {Array.from({ length: 13 }, (_, i) => i + 1)
+                        .flatMap((z) => [`${z}a`, `${z}b`])
+                        .map((zone) => (
+                          <option key={zone} value={zone}>
+                            Zone {zone}
+                          </option>
+                        ))}
+                    </select>
+                  ) : (
+                    <>
+                      <span style={{ color: '#00301E', fontWeight: 'bold', fontSize: '1rem' }}>Zone {hardinessZone}</span>
+                      <button
+                        onClick={() => setIsChangingZone(true)}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#1C3D2E',
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          padding: 0,
+                          textDecoration: 'underline',
+                          fontFamily: 'inherit',
+                          fontSize: '0.9rem'
+                        }}
+                        aria-label="Change USDA climate hardiness zone"
+                      >
+                        [Change]
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
 
               {product.minTempInGround && (
                 <div style={{ marginBottom: product.minTempInPot ? '1.1rem' : '0' }}>

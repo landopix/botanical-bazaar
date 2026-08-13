@@ -19,6 +19,9 @@ export function WishlistProvider({ children }) {
   const saveWishlist = (newWishlist) => {
     setWishlist(newWishlist);
     localStorage.setItem('botanical_wishlist', JSON.stringify(newWishlist));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('wishlist_updated'));
+    }
   };
 
   const addToWishlist = (product) => {
