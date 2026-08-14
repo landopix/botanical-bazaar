@@ -308,8 +308,8 @@ export default function Index() {
           justify-content: center;
         }
         .category-card {
-          background-color: #F5E7C4;
-          color: #1C3D2E;
+          background-color: #D4B06A;
+          color: #00301E;
           padding: 1.2rem 1.6rem;
           border-radius: 12px;
           text-decoration: none;
