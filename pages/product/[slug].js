@@ -469,10 +469,17 @@ export default function ProductDetail({ initialProduct }) {
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
-            padding: 1.2rem 0.5rem;
+            padding: 1.5rem 1rem;
+            margin: 1rem auto;
+          }
+          .product-img {
+            max-width: 320px !important;
+            width: 100% !important;
+            height: 280px !important;
           }
           .product-info {
             text-align: center;
+            width: 100%;
           }
         }
       `}</style>

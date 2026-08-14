@@ -74,12 +74,12 @@ section.banner,
 }
 
 /* --- Universal GrapesJS Oversized Banner & Emblem Override --- */
-main img,
-main svg, 
-header img,
-header svg,
-body > div img,
-body > div svg {
+[data-gjs-type] img,
+[data-gjs-type] svg,
+.gjs-row img,
+.gjs-row svg,
+.gjs-cell img,
+.gjs-cell svg {
     max-width: 220px !important;
     max-height: 280px !important;
     width: 100% !important;
