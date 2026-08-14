@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
 import { useWishlist } from "../context/WishlistContext";
-import { isSanityConfigured, sanityClient } from "../lib/sanity";
+import { getAllProducts } from "../lib/shopify";
 
 // Static list of requested category collections
 const COLLECTIONS = [
@@ -19,15 +19,35 @@ const COLLECTIONS = [
   { id: "terrarium-vivarium", name: "Terrarium & Vivarium" },
 ];
 
-export default function Shop() {
+export async function getStaticProps() {
+  try {
+    const products = await getAllProducts();
+    return {
+      props: {
+        initialProducts: products || [],
+      },
+      revalidate: 60, // ISR revalidate every 60 seconds
+    };
+  } catch (error) {
+    console.error("Error fetching shop products in getStaticProps:", error);
+    return {
+      props: {
+        initialProducts: [],
+      },
+      revalidate: 60,
+    };
+  }
+}
+
+export default function Shop({ initialProducts = [] }) {
   const router = useRouter();
   const { toggleWishlist, wishlist } = useWishlist();
 
-  // Raw fetched products list
-  const [products, setProducts] = useState([]);
+  // Products list provided via Next.js SSG/ISR
+  const [products, setProducts] = useState(initialProducts);
 
   // Real-time filtered & sorted products list
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState(initialProducts);
 
   // Active Filter & Sort States
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -37,59 +57,11 @@ export default function Shop() {
   const [viewSoldOut, setViewSoldOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch products from Sanity.io or local fallback
   useEffect(() => {
-    const fetchProducts = async () => {
-      if (isSanityConfigured()) {
-        try {
-          const sanityData = await sanityClient.fetch(`*[_type == "product"]{
-            "slug": slug.current,
-            name,
-            sku,
-            "image": image.asset->url,
-            type,
-            description,
-            price,
-            quantity,
-            zones,
-            categories,
-            sizes,
-            tags,
-            temp_threshold
-          }`);
-          if (sanityData && sanityData.length > 0) {
-            setProducts(sanityData);
-            setFilteredProducts(sanityData);
-            return;
-          }
-        } catch (err) {
-          console.error(
-            "Failed to fetch from Sanity.io. Falling back to local catalog.",
-            err,
-          );
-        }
-      }
-
-      // Local offline fallback
-      if (typeof window !== "undefined") {
-        const loadProducts = () => {
-          const raw = window.PRODUCTS || [];
-          setProducts(raw);
-          setFilteredProducts(raw);
-        };
-        if (window.PRODUCTS) {
-          loadProducts();
-        } else {
-          const script = document.createElement("script");
-          script.src = "/products.js";
-          script.onload = loadProducts;
-          document.body.appendChild(script);
-        }
-      }
-    };
-
-    fetchProducts();
-  }, []);
+    if (initialProducts && initialProducts.length > 0) {
+      setProducts(initialProducts);
+    }
+  }, [initialProducts]);
 
   // Initialize and synchronize states from URL query parameters
   useEffect(() => {

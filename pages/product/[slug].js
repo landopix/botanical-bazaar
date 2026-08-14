@@ -6,14 +6,61 @@ import { useRouter } from 'next/router';
 import Button from '../../components/Button';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import { getProductByHandle, getAllProductHandles } from '../../lib/shopify';
 
-export default function ProductDetail() {
+export async function getStaticPaths() {
+  try {
+    const handles = await getAllProductHandles();
+    const paths = (handles || []).map(handle => ({
+      params: { slug: handle }
+    }));
+    return {
+      paths,
+      fallback: 'blocking'
+    };
+  } catch (error) {
+    console.error('Error in getStaticPaths:', error);
+    return {
+      paths: [],
+      fallback: 'blocking'
+    };
+  }
+}
+
+export async function getStaticProps({ params }) {
+  try {
+    const product = await getProductByHandle(params.slug);
+    if (!product) {
+      return {
+        notFound: true,
+        revalidate: 60
+      };
+    }
+    return {
+      props: {
+        initialProduct: product
+      },
+      revalidate: 60
+    };
+  } catch (error) {
+    console.error(`Error fetching product handle ${params.slug}:`, error);
+    return {
+      notFound: true,
+      revalidate: 60
+    };
+  }
+}
+
+export default function ProductDetail({ initialProduct }) {
   const router = useRouter();
-  const { slug } = router.query;
 
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState('');
+  const [product, setProduct] = useState(initialProduct);
+  const [selectedVariant, setSelectedVariant] = useState(
+    initialProduct?.variants?.[0] || null
+  );
+  const [selectedSize, setSelectedSize] = useState(
+    initialProduct?.variants?.[0]?.title || ''
+  );
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { toggleWishlist, wishlist } = useWishlist();
@@ -26,6 +73,15 @@ export default function ProductDetail() {
   // Hardiness zone sync state
   const [hardinessZone, setHardinessZone] = useState('10a');
   const [isChangingZone, setIsChangingZone] = useState(false);
+
+  useEffect(() => {
+    if (initialProduct) {
+      setProduct(initialProduct);
+      const defaultVariant = initialProduct.variants?.[0] || null;
+      setSelectedVariant(defaultVariant);
+      setSelectedSize(defaultVariant?.title || '');
+    }
+  }, [initialProduct]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -58,7 +114,7 @@ export default function ProductDetail() {
 
   const handleNotifyMe = async (e) => {
     e.preventDefault();
-    if (!notifyEmail || !notifyEmail.trim()) return;
+    if (!notifyEmail || !notifyEmail.trim() || !product) return;
 
     setNotifyLoading(true);
     setNotifyError('');
@@ -90,37 +146,14 @@ export default function ProductDetail() {
     }
   };
 
+  // Dynamic redirect for non-existent product pages straight back to /shop
   useEffect(() => {
-    if (!slug) return;
-
-    const findProduct = () => {
-      const all = window.PRODUCTS || [];
-      const item = all.find(p => p.slug === slug);
-      setProduct(item);
-      if (item && item.sizes) {
-        setSelectedSize(item.sizes.split('|')[0].trim());
-      }
-      setLoading(false);
-    };
-
-    if (window.PRODUCTS) {
-      findProduct();
-    } else {
-      const script = document.createElement('script');
-      script.src = '/products.js';
-      script.onload = findProduct;
-      document.body.appendChild(script);
-    }
-  }, [slug]);
-
-  // Dynamic redirect for inactive/non-existent product pages straight back to /shop
-  useEffect(() => {
-    if (!loading && !product) {
+    if (!product && !router.isFallback) {
       router.replace('/shop');
     }
-  }, [loading, product, router]);
+  }, [product, router]);
 
-  if (loading) {
+  if (router.isFallback) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading plant details...</div>;
   }
 
@@ -134,13 +167,29 @@ export default function ProductDetail() {
     );
   }
 
-  // Treat any quantity below three as sold out to match legacy stock policy
-  const isSoldOut = !product.quantity || product.quantity < 3;
+  // Handle variant size changes
+  const handleSizeChange = (sizeTitle) => {
+    setSelectedSize(sizeTitle);
+    const matchingVariant = product.variants?.find(v => v.title === sizeTitle);
+    if (matchingVariant) {
+      setSelectedVariant(matchingVariant);
+    }
+  };
+
+  // Active price and sold-out status derived from selected variant or product overall
+  const activePrice = selectedVariant ? selectedVariant.price : product.price;
+  const isVariantAvailable = selectedVariant ? selectedVariant.availableForSale : product.availableForSale;
+  const isSoldOut = !isVariantAvailable || !product.quantity || product.quantity < 3;
   const isWishlisted = wishlist.some(item => item.slug === product.slug);
-  const sizesArray = product.sizes ? product.sizes.split('|').map(s => s.trim()) : [];
+  const variantsArray = product.variants && product.variants.length > 0 ? product.variants : [];
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize);
+    const itemToAdd = {
+      ...product,
+      price: activePrice,
+      variantId: selectedVariant?.id || null
+    };
+    addToCart(itemToAdd, quantity, selectedSize);
     router.push('/cart');
   };
 
@@ -239,7 +288,7 @@ export default function ProductDetail() {
     'offers': {
       '@type': 'Offer',
       'priceCurrency': 'USD',
-      'price': product.price,
+      'price': activePrice,
       'availability': isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       'url': pageUrl,
       'hasMerchantReturnPolicy': {
@@ -459,17 +508,17 @@ export default function ProductDetail() {
             {isSoldOut ? (
               <span style={{ color: '#ba2f2f', fontWeight: 'bold' }}>Sold Out</span>
             ) : (
-              isNaN(product.price) || !product.price ? 'Price on Request' : `$${product.price.toFixed(2)}`
+              isNaN(activePrice) || !activePrice ? 'Price on Request' : `$${activePrice.toFixed(2)}`
             )}
           </div>
 
-          {/* Size dropdown selection */}
-          {sizesArray.length > 0 && (
+          {/* Size / Variant dropdown selection */}
+          {variantsArray.length > 0 && variantsArray.some(v => v.title && v.title !== 'Default Title') && (
             <div style={{ marginBottom: '1.2rem', textAlign: 'left' }}>
               <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem', color: '#F5E7C4' }}>Select Size:</label>
               <select
                 value={selectedSize}
-                onChange={(e) => setSelectedSize(e.target.value)}
+                onChange={(e) => handleSizeChange(e.target.value)}
                 style={{
                   width: '100%',
                   padding: '0.6rem 1rem',
@@ -482,8 +531,10 @@ export default function ProductDetail() {
                   outline: 'none'
                 }}
               >
-                {sizesArray.map(size => (
-                  <option key={size} value={size}>{size}</option>
+                {variantsArray.map(variant => (
+                  <option key={variant.id || variant.title} value={variant.title}>
+                    {variant.title} - ${variant.price?.toFixed(2)}
+                  </option>
                 ))}
               </select>
             </div>
