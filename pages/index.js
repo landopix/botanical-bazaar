@@ -48,20 +48,9 @@ export default function Index() {
         }
       }
 
-      // Local offline fallback
-      if (typeof window !== "undefined") {
-        const loadProducts = () => {
-          const raw = window.PRODUCTS || [];
-          setProducts(raw);
-        };
-        if (window.PRODUCTS) {
-          loadProducts();
-        } else {
-          const script = document.createElement("script");
-          script.src = "/products.js";
-          script.onload = loadProducts;
-          document.body.appendChild(script);
-        }
+      // Local offline fallback if window.PRODUCTS is set
+      if (typeof window !== "undefined" && window.PRODUCTS) {
+        setProducts(window.PRODUCTS);
       }
     };
 

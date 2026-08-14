@@ -144,11 +144,6 @@ export default function Layout({ children }) {
 
       if (window.PRODUCTS) {
         loadProducts();
-      } else {
-        const script = document.createElement("script");
-        script.src = "/products.js";
-        script.onload = loadProducts;
-        document.body.appendChild(script);
       }
 
       return () => {

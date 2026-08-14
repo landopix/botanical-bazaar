@@ -127,3 +127,56 @@ footer p {
   text-align: center;
   width: 100%;
 }
+
+/* Structural Layout Blueprint Enforcement Rules */
+
+.product-image-container {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 4 / 3 !important;
+    overflow: hidden !important;
+    border-radius: 6px 6px 0 0 !important;
+    background-color: #1C3D2E !important;
+}
+
+.product-image-container img,
+.product-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.product-card {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+    background-color: #F5E7C4 !important;
+    border: 1px solid #D4B06A !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.quick-actions {
+    position: fixed !important;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    right: 20px !important;
+    z-index: 999 !important;
+}
+
+.quick-actions button,
+.quick-actions a {
+    overflow: visible !important;
+}
+
+#back-to-top {
+    position: fixed !important;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 20px !important;
+    right: auto !important;
+    z-index: 998 !important;
+}

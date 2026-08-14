@@ -1,0 +1,77 @@
+# Structural Layout Blueprint & Design System Constraints
+
+## Overview
+This architectural blueprint governs layout structures, component boundaries, strict aspect ratios, floating element stacks, and design token constraints across The Botanical Bazaar storefront. The goal is to ensure visual consistency and prevent layout drift or distortion.
+
+---
+
+## 1. Product Card Layout Blueprint
+
+All product cards in shop grids, featured homepage sections, tag collection pages, and wishlist displays MUST adhere to strict structural constraints:
+
+### Visual Structure & Aspect Ratio
+- **Card Background & Border**:
+  - Background: Light Cream (`#F5E7C4`)
+  - Border: 1px solid Warm Gold (`#D4B06A`)
+  - Border Radius: 8px (0.5rem)
+  - Box Shadow: Smooth subtle elevation (`0 4px 12px rgba(0, 0, 0, 0.15)`)
+- **Image Container Bounding Box**:
+  - Aspect Ratio: **Strict 4:3 aspect ratio** (`aspect-ratio: 4 / 3`)
+  - Overflow: `hidden`
+  - Position: `relative`
+  - Child Image: Enforce `object-fit: cover !important`, `width: 100% !important`, `height: 100% !important` to eliminate layout bleeding and image stretching.
+- **Card Layout & Heights**:
+  - Layout: Flexbox Column (`display: flex; flex-direction: column; justify-content: space-between;`)
+  - Card Height: Cards within a grid row MUST stretch to uniform height (`height: 100%`).
+  - Content Wrapper: `display: flex; flex-direction: column; flex-grow: 1; justify-content: space-between; padding: 1.25rem;`
+  - Primary Action Button: Anchored firmly at the horizontal bottom of each card container.
+
+---
+
+## 2. Floating Quick Actions & Controls Stack
+
+The floating action UI consists of circular quick action buttons and the Back-to-Top scroll trigger:
+
+### Quick Actions Stack (`.quick-actions`)
+- **Positioning**: Fixed bottom-right corner (`position: fixed; bottom: 20px; right: 20px; z-index: 999;`)
+- **Button Styling**:
+  - Circular dimensions: `48px x 48px`
+  - Background: Solid Deep Forest Green (`#00301E`)
+  - Border: No border/outline (`border: none; outline: none;`)
+  - SVGs: Dimensioned at `24px x 24px` with `viewBox="0 0 24 24"`, perfectly centered via flexbox.
+- **Notification Badges**:
+  - Badges render with absolute positioning on the top-right of the circular button.
+  - Container MUST enforce `overflow: visible !important` on parent buttons so count badges are never visually clipped.
+
+### Back-to-Top Button (`#back-to-top`)
+- **Positioning**: Fixed bottom-left corner (`position: fixed; bottom: 20px; left: 20px; right: auto; z-index: 998;`)
+- **Collision Protection**: Kept strictly separated from `.quick-actions` on the bottom-right to prevent UI overlap on mobile and desktop.
+
+---
+
+## 3. Design Token Specifications & Constraints
+
+### Typography Rules
+- **Serf / Body Font**: `Crimson Text`, serif
+- **Display / Heading Font**: `Cinzel`, serif
+- **Strict Prohibition**: No system fallbacks or Georgia permitted in production typography rules.
+- **Header Navigation**: `Cinzel` serif, font-weight 400 (normal/regular), no text underlines, centered layout spacing.
+- **Hero / Main Section Headings**: Uppercase with elevated letter-spacing (`letter-spacing: 0.15em`).
+
+### Color Palette Tokens
+| Token Name | Hex Code | Purpose |
+| :--- | :--- | :--- |
+| **Obsidian / Deep Forest Green** | `#00301E` | Core layout background, primary text on light containers |
+| **Brunswick Green** | `#1C3D2E` | Secondary containers, sidebar background, collapsible specs (`#123826`) |
+| **Warm Gold** | `#D4B06A` | Primary CTA buttons, accent borders, summary headers, scrollbar thumbs |
+| **Pastel Apricot / Light Cream** | `#F5E7C4` | Product card background, body description text on dark green |
+| **Pastel Tan** | `#E9DCBE` | High-contrast summary boxes (Cart/Checkout), fallback text |
+
+---
+
+## 4. Responsive Mobile Boundaries
+
+- **Grid Systems**:
+  - Desktop: Multi-column grid (`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`)
+  - Mobile (< 768px): Single column fluid grid or centered flexbox column.
+- **Safe Area Insets**: Floating stacks must respect `env(safe-area-inset-bottom)` on iOS devices (`bottom: calc(20px + env(safe-area-inset-bottom))`).
