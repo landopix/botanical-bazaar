@@ -703,7 +703,7 @@ export default function ProductDetail({ initialProduct }) {
                 fontFamily: "'Cinzel', serif",
                 fontSize: '1.25rem',
                 margin: '0 0 1rem 0',
-                color: '#00301E',
+                color: '#D4B06A',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
                 borderBottom: '1px solid rgba(0, 48, 30, 0.25)',
@@ -719,7 +719,7 @@ export default function ProductDetail({ initialProduct }) {
                 flexDirection: 'column',
                 gap: '0.4rem'
               }}>
-                <span style={{ color: '#00301E', fontWeight: 'bold', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                <span style={{ color: '#D4B06A', fontWeight: 'bold', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                   My Climate Zone
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
@@ -751,7 +751,7 @@ export default function ProductDetail({ initialProduct }) {
                     </select>
                   ) : (
                     <>
-                      <span style={{ color: '#00301E', fontWeight: 'bold', fontSize: '1rem' }}>Zone {hardinessZone}</span>
+                      <span style={{ color: '#F5E7C4', fontWeight: 'bold', fontSize: '1rem' }}>Zone {hardinessZone}</span>
                       <button
                         onClick={() => setIsChangingZone(true)}
                         style={{
@@ -781,7 +781,7 @@ export default function ProductDetail({ initialProduct }) {
                     fontWeight: 'bold',
                     fontSize: '1rem',
                     margin: '0 0 0.3rem 0',
-                    color: '#00301E'
+                    color: '#D4B06A'
                   }}>
                     In-Ground Hardiness ({product.minTempInGround})
                   </h4>
@@ -789,7 +789,7 @@ export default function ProductDetail({ initialProduct }) {
                     margin: 0,
                     fontSize: '0.95rem',
                     lineHeight: '1.4',
-                    color: '#00301E'
+                    color: '#F5E7C4'
                   }}>
                     In-Ground Soil: The thermal mass of the Earth buffers extreme cold and heat swings, maintaining stable, moderate root zone temperatures.
                   </p>
@@ -803,7 +803,7 @@ export default function ProductDetail({ initialProduct }) {
                     fontWeight: 'bold',
                     fontSize: '1rem',
                     margin: '0 0 0.3rem 0',
-                    color: '#00301E'
+                    color: '#D4B06A'
                   }}>
                     In-Pot / Container Hardiness ({product.minTempInPot})
                   </h4>
@@ -811,7 +811,7 @@ export default function ProductDetail({ initialProduct }) {
                     margin: 0,
                     fontSize: '0.95rem',
                     lineHeight: '1.4',
-                    color: '#00301E'
+                    color: '#F5E7C4'
                   }}>
                     In Pots (Containers): Containers cool down and freeze much faster because cold air surrounds all sides, exposing root systems to chilling risks at higher ambient temperatures.
                   </p>
