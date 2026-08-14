@@ -98,8 +98,8 @@ h6 {
 /* Quick actions container holds the search toggle, cart, wishlist and account icons. */
 .quick-actions {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1rem + env(safe-area-inset-right, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -518,7 +518,36 @@ header .lantern-emblem {
 /* Globally reposition Back-to-Top to bottom-left to prevent collision with quick actions */
 #back-to-top {
   right: auto !important;
-  left: 20px !important;
+  left: calc(20px + env(safe-area-inset-left, 0px)) !important;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (max-width: 600px) {
+  .quick-actions {
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    right: calc(0.75rem + env(safe-area-inset-right, 0px));
+    gap: 0.5rem;
+  }
+
+  .quick-actions button,
+  .quick-actions a {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .quick-actions button svg,
+  .quick-actions a svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  #back-to-top {
+    left: calc(12px + env(safe-area-inset-left, 0px)) !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.25rem !important;
+  }
 }
 
 @media (max-width: 900px) {
