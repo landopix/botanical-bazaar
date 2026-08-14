@@ -180,3 +180,19 @@ footer p {
     right: auto !important;
     z-index: 998 !important;
 }
+
+/* Explicit Category Button / Pill Style Lock */
+.category-card {
+    background-color: #D4B06A !important;
+    color: #00301E !important;
+    border: 1px solid #D4B06A !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+}
+
+.category-card:hover,
+.category-card:focus-visible {
+    background-color: #E9DCBE !important;
+    color: #00301E !important;
+    border-color: #00301E !important;
+}

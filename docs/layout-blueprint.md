@@ -75,3 +75,29 @@ The floating action UI consists of circular quick action buttons and the Back-to
   - Desktop: Multi-column grid (`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`)
   - Mobile (< 768px): Single column fluid grid or centered flexbox column.
 - **Safe Area Insets**: Floating stacks must respect `env(safe-area-inset-bottom)` on iOS devices (`bottom: calc(20px + env(safe-area-inset-bottom))`).
+
+---
+
+## 5. Button & Pill Color Tokens & Component States
+
+To prevent color regressions, button styles across the application are locked to standard design system tokens:
+
+### Primary Call-to-Action Buttons (e.g., "Add to Cart", "Proceed to Checkout", "View Plant")
+- **Background**: Solid Deep Forest Green (`#00301E`) or Solid Warm Gold (`#D4B06A`) depending on variant.
+- **Text Color**:
+  - Dark Green background: Warm Gold (`#D4B06A`) text.
+  - Warm Gold background: Obsidian / Deep Forest Green (`#00301E`) text.
+- **Border**: 1px solid Warm Gold (`#D4B06A`).
+
+### Category Cards & Browse Pills (`.category-card`, `.tag-pill`)
+- **Default State**:
+  - **Background**: Solid Warm Gold (`#D4B06A`)
+  - **Text Color**: Obsidian / Deep Forest Green (`#00301E`)
+  - **Border**: 1px solid Warm Gold (`#D4B06A`)
+  - **Font Weight**: Bold (`font-weight: 700`)
+- **Hover / Focus-Visible State**:
+  - **Background**: Pastel Tan (`#E9DCBE`)
+  - **Text Color**: Obsidian / Deep Forest Green (`#00301E`)
+  - **Border**: 1px solid Deep Forest Green (`#00301E`)
+  - **Transform**: Elevation scaling (`transform: translateY(-3px) scale(1.02)`)
+- **Prohibition**: Off-white, pale light green, or plain system gray backgrounds are strictly prohibited on interactive category buttons.
