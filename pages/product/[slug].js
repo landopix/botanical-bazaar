@@ -690,9 +690,8 @@ export default function ProductDetail({ initialProduct }) {
           {/* Cold Hardiness & Thermal Guidance Card */}
           {product.type === "Plant" && (
             <div style={{
-              background: '#1C3D2E',
-              color: '#F5E7C4',
-              border: '1px solid #D4B06A',
+              background: '#F5E7C4',
+              color: '#00301E',
               borderRadius: '8px',
               padding: '1.25rem',
               marginTop: '1.5rem',
@@ -707,7 +706,7 @@ export default function ProductDetail({ initialProduct }) {
                 color: '#D4B06A',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                borderBottom: '1px solid rgba(212, 176, 106, 0.5)',
+                borderBottom: '1px solid rgba(0, 48, 30, 0.25)',
                 paddingBottom: '0.5rem'
               }}>
                 Cold Hardiness &amp; Thermal Guidance
@@ -733,7 +732,7 @@ export default function ProductDetail({ initialProduct }) {
                       style={{
                         background: '#00301e',
                         color: '#f5e7c4',
-                        border: '1px solid #d4b06a',
+                        border: '1px solid #00301e',
                         borderRadius: '4px',
                         padding: '0.2rem 0.4rem',
                         fontFamily: 'inherit',
@@ -758,7 +757,7 @@ export default function ProductDetail({ initialProduct }) {
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#D4B06A',
+                          color: '#00301E',
                           cursor: 'pointer',
                           fontWeight: 'bold',
                           padding: 0,
