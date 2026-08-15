@@ -262,12 +262,18 @@ body {
       </li>
     </ul>
   </nav>
-  <header>
-  <a href="index.html" style="display:inline-block;">
-    <!-- Use lantern sub mark for header branding -->
+    <header>
+  <a href="/" style="display:inline-block;">
     <img src="/assets/lantern.png" alt="Lantern sub mark">
   </a>
-  <nav>
+  <button className="header-mobile-toggle" class="header-mobile-toggle" aria-label="Toggle mobile menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+    <nav>
       <a href="shop.html">Shop</a>
       <a href="consultations.html">Consultations</a>
       <a href="almanac.html">The Almanac</a>
@@ -553,5 +559,29 @@ body {
   </script>
   <!-- Sidebar script -->
   <script src="/sidebar.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var sidebar = document.getElementById('site-sidebar');
+      var headerToggle = document.querySelector('.header-mobile-toggle');
+      var quickToggle = document.querySelector('.sidebar-toggle');
+
+      function toggleSidebar(e) {
+        if (e) e.preventDefault();
+        if (sidebar) {
+          sidebar.classList.toggle('open');
+          document.body.classList.toggle('sidebar-open');
+        }
+      }
+
+      if (headerToggle) {
+        headerToggle.addEventListener('click', toggleSidebar);
+      }
+      if (quickToggle) {
+        quickToggle.addEventListener('click', toggleSidebar);
+      }
+    });
+  </script>
+
 </body>
 </html>

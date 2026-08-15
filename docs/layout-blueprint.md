@@ -34,11 +34,12 @@ The floating action UI consists of circular quick action buttons and the Back-to
 
 ### Quick Actions Stack (`.quick-actions`)
 - **Positioning**: Fixed bottom-right corner (`position: fixed; bottom: 20px; right: 20px; z-index: 999;`)
-- **Button Styling**:
+- **Button Styling & Icon Centering**:
   - Circular dimensions: `48px x 48px`
   - Background: Solid Deep Forest Green (`#00301E`)
   - Border: No border/outline (`border: none; outline: none;`)
-  - SVGs: Dimensioned at `24px x 24px` with `viewBox="0 0 24 24"`, perfectly centered via flexbox.
+  - Flexbox Centering: Enforce `display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; margin: 0 !important;` across all circular quick action buttons (`.quick-actions button`, `.quick-actions a`).
+  - SVGs: Dimensioned at `24px x 24px` with `viewBox="0 0 24 24"`, enforcing `display: block !important; margin: auto !important; flex-shrink: 0 !important;` to ensure perfect off-center-proof icon alignment across desktop and mobile views.
 - **Notification Badges**:
   - Badges render with absolute positioning on the top-right of the circular button.
   - Container MUST enforce `overflow: visible !important` on parent buttons so count badges are never visually clipped.
@@ -74,7 +75,7 @@ The floating action UI consists of circular quick action buttons and the Back-to
 - **Mobile Header Navigation**:
   - Threshold: Screens with viewport width `<= 900px`.
   - Behavior: Desktop inline header text navigation (`header nav`) is hidden (`display: none !important`) to eliminate horizontal overflow and link clipping.
-  - Controls: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo, allowing users to cleanly open the slide-out navigation sidebar drawer (`#site-sidebar`).
+  - Controls & Event Bindings: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo across React components and static HTML templates (`content/pages/*.html`). Clicking `.header-mobile-toggle` MUST trigger interactive state handlers that toggle the `.open` class on `#site-sidebar` and `.sidebar-open` class on `document.body` without touch event blocking (`z-index: 1001; touch-action: manipulation`).
 
 - **Mobile Footer Alignment**:
   - Threshold: Screens with viewport width `<= 900px`.
