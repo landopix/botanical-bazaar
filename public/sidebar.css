@@ -105,6 +105,7 @@ h6 {
   align-items: center;
   gap: 0.6rem;
   z-index: 1100;
+  pointer-events: auto;
 }
 
 /* Style for each quick action button or link. These share the same circle shape and colors. */
@@ -789,9 +790,10 @@ header .lantern-emblem {
   padding: 0.5rem !important;
   align-items: center !important;
   justify-content: center !important;
-  z-index: 1001 !important;
+  z-index: 1100 !important;
   position: relative !important;
   touch-action: manipulation !important;
+  pointer-events: auto !important;
 }
 
 .header-mobile-toggle svg {

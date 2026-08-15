@@ -174,6 +174,7 @@ export default function Layout({ children }) {
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
     const handleDocumentClick = (e) => {
+      console.log('[Mobile Nav] Click detected on:', e.target);
       const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
       if (toggleBtn) {
         e.preventDefault();
@@ -190,8 +191,8 @@ export default function Layout({ children }) {
       }
     };
 
-    document.addEventListener("click", handleDocumentClick);
-    return () => document.removeEventListener("click", handleDocumentClick);
+    document.addEventListener("click", handleDocumentClick, true);
+    return () => document.removeEventListener("click", handleDocumentClick, true);
   }, [isSidebarOpen]);
 
   // Handle scroll trigger for Back to Top and body class toggle
@@ -354,7 +355,6 @@ export default function Layout({ children }) {
           aria-label="Toggle navigation"
           aria-controls="site-sidebar"
           aria-expanded={isSidebarOpen}
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -678,7 +678,6 @@ export default function Layout({ children }) {
         <button
           className="header-mobile-toggle"
           aria-label="Toggle mobile menu"
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
