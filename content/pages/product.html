@@ -190,42 +190,47 @@ body {
   <!-- Clarity page context for product pages. Sets the page type and names once
        the product is loaded. Additionally tracks add‑to‑cart attempts. -->
   <script>
-    (function() {
-    function initSidebar() {
-      var sidebar = document.getElementById('site-sidebar');
-
-      function toggleSidebar() {
-        if (sidebar) {
-          sidebar.classList.toggle('open');
-          document.body.classList.toggle('sidebar-open');
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for the product data to be loaded before setting tags.
+      function setClarityTags() {
+        try {
+          // Grab the slug from the URL and look up the product in window.PRODUCTS
+          var params = new URLSearchParams(window.location.search);
+          var slug = params.get('item');
+          var prod = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(function(p){ return p.slug === slug; }) : null;
+          if (typeof clarity === 'function') {
+            clarity('set', 'page_type', 'product');
+            if (prod) {
+              clarity('set', 'product_name', prod.name);
+              var state = (!prod.quantity || prod.quantity < 3) ? 'sold_out' : 'active';
+              clarity('set', 'product_stock_state', state);
+            }
+          }
+        } catch (e) {
+          // ignore errors
         }
       }
-
-      document.addEventListener('click', function(e) {
-        var mobileToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
-        if (mobileToggle) {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleSidebar();
-          return;
-        }
-
-        if (sidebar && sidebar.classList.contains('open')) {
-          if (!sidebar.contains(e.target)) {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-open');
-          }
+      setClarityTags();
+      // Attach handler for Add to Cart button after renderProduct runs. Use
+      // a MutationObserver to wait until the button exists in the DOM.
+      var observer = new MutationObserver(function(mutations, obs) {
+        var btn = document.querySelector('.add-cart-btn');
+        if (btn) {
+          btn.addEventListener('click', function() {
+            if (typeof clarity === 'function') {
+              try {
+                var slug = new URLSearchParams(window.location.search).get('item');
+                var prod = Array.isArray(window.PRODUCTS) ? window.PRODUCTS.find(function(p){ return p.slug === slug; }) : null;
+                clarity('track', 'add_to_cart_attempt', { product_name: prod ? prod.name : slug });
+              } catch(e) {}
+            }
+          });
+          obs.disconnect();
         }
       });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSidebar);
-    } else {
-      initSidebar();
-    }
-  })();
-</script>
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+  </script>
 </head>
 <body>
   <!-- Quick actions: search toggle, cart, wishlist and account icons -->

@@ -98,42 +98,12 @@ body {
   </script>
   <!-- Set cart page context for Clarity so sessions can be filtered by page type. -->
   <script>
-    (function() {
-    function initSidebar() {
-      var sidebar = document.getElementById('site-sidebar');
-
-      function toggleSidebar() {
-        if (sidebar) {
-          sidebar.classList.toggle('open');
-          document.body.classList.toggle('sidebar-open');
-        }
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof clarity === 'function') {
+        clarity('set', 'page_type', 'cart');
       }
-
-      document.addEventListener('click', function(e) {
-        var mobileToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
-        if (mobileToggle) {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleSidebar();
-          return;
-        }
-
-        if (sidebar && sidebar.classList.contains('open')) {
-          if (!sidebar.contains(e.target)) {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-open');
-          }
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSidebar);
-    } else {
-      initSidebar();
-    }
-  })();
-</script>
+    });
+  </script>
 </head>
 <body>
   <!-- Quick actions: search toggle, cart, wishlist and account icons -->

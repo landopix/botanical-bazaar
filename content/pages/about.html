@@ -239,42 +239,27 @@
   <script src="/sidebar.js"></script>
 
   <script>
-    (function() {
-    function initSidebar() {
+    document.addEventListener('DOMContentLoaded', function() {
       var sidebar = document.getElementById('site-sidebar');
+      var headerToggle = document.querySelector('.header-mobile-toggle');
+      var quickToggle = document.querySelector('.sidebar-toggle');
 
-      function toggleSidebar() {
+      function toggleSidebar(e) {
+        if (e) e.preventDefault();
         if (sidebar) {
           sidebar.classList.toggle('open');
           document.body.classList.toggle('sidebar-open');
         }
       }
 
-      document.addEventListener('click', function(e) {
-        var mobileToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
-        if (mobileToggle) {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleSidebar();
-          return;
-        }
-
-        if (sidebar && sidebar.classList.contains('open')) {
-          if (!sidebar.contains(e.target)) {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('sidebar-open');
-          }
-        }
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initSidebar);
-    } else {
-      initSidebar();
-    }
-  })();
-</script>
+      if (headerToggle) {
+        headerToggle.addEventListener('click', toggleSidebar);
+      }
+      if (quickToggle) {
+        quickToggle.addEventListener('click', toggleSidebar);
+      }
+    });
+  </script>
 
 </body>
 </html>
