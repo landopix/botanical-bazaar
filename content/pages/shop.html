@@ -182,27 +182,42 @@ body {
        products and sold‑out items loaded on first render. Additional events can
        be sent from JavaScript when users interact with filters or search. -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof clarity === 'function') {
-        clarity('set', 'page_type', 'shop');
-        // Provide counts so sessions can be filtered later by product availability. Compute
-        // counts directly from the PRODUCTS array if available.
-        try {
-          var total = 0, soldOut = 0;
-          if (Array.isArray(window.PRODUCTS)) {
-            total = window.PRODUCTS.length;
-            window.PRODUCTS.forEach(function(p) {
-              if (!p.quantity || p.quantity < 3) soldOut++;
-            });
-          }
-          clarity('set', 'product_count', total);
-          clarity('set', 'sold_out_count', soldOut);
-        } catch (e) {
-          // silently ignore counting errors
+    (function() {
+    function initSidebar() {
+      var sidebar = document.getElementById('site-sidebar');
+
+      function toggleSidebar() {
+        if (sidebar) {
+          sidebar.classList.toggle('open');
+          document.body.classList.toggle('sidebar-open');
         }
       }
-    });
-  </script>
+
+      document.addEventListener('click', function(e) {
+        var mobileToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
+        if (mobileToggle) {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleSidebar();
+          return;
+        }
+
+        if (sidebar && sidebar.classList.contains('open')) {
+          if (!sidebar.contains(e.target)) {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
+          }
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSidebar);
+    } else {
+      initSidebar();
+    }
+  })();
+</script>
 </head>
 <body>
   <!-- Quick actions: search toggle, cart, wishlist and account icons -->

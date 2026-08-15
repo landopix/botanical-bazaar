@@ -344,40 +344,42 @@ body {
        waits for the DOM to load before registering event handlers so it works on static pages
        without any extra dependencies. -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Set the page type to 'home' and note that the Almanac is visible at page load.
-      if (typeof clarity === 'function') {
-        clarity('set', 'page_type', 'home');
-        clarity('set', 'almanac_visible', true);
+    (function() {
+    function initSidebar() {
+      var sidebar = document.getElementById('site-sidebar');
+
+      function toggleSidebar() {
+        if (sidebar) {
+          sidebar.classList.toggle('open');
+          document.body.classList.toggle('sidebar-open');
+        }
       }
-      // Track consultation CTA clicks. There may be multiple consultation links on the page,
-      // so iterate through them. GA tracking already exists; this complements it for Clarity.
-      document.querySelectorAll('a[href="consultations.html"]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          if (typeof clarity === 'function') {
-            clarity('track', 'consultation_click');
+
+      document.addEventListener('click', function(e) {
+        var mobileToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
+        if (mobileToggle) {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleSidebar();
+          return;
+        }
+
+        if (sidebar && sidebar.classList.contains('open')) {
+          if (!sidebar.contains(e.target)) {
+            sidebar.classList.remove('open');
+            document.body.classList.remove('sidebar-open');
           }
-        });
+        }
       });
-      // Track Almanac link clicks within the hero. Include the destination in the metadata.
-      document.querySelectorAll('.almanac-hero a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          if (typeof clarity === 'function') {
-            clarity('track', 'almanac_link_click', { link: link.getAttribute('href') });
-          }
-        });
-      });
-      // Track newsletter signup submissions.
-      var almanacForm = document.querySelector('.almanac-hero form');
-      if (almanacForm) {
-        almanacForm.addEventListener('submit', function() {
-          if (typeof clarity === 'function') {
-            clarity('track', 'almanac_signup_submit');
-          }
-        });
-      }
-    });
-  </script>
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSidebar);
+    } else {
+      initSidebar();
+    }
+  })();
+</script>
 </head>
 <body>
   <!-- Quick actions: search toggle, cart, wishlist and account icons -->

@@ -75,7 +75,7 @@ The floating action UI consists of circular quick action buttons and the Back-to
 - **Mobile Header Navigation**:
   - Threshold: Screens with viewport width `<= 900px`.
   - Behavior: Desktop inline header text navigation (`header nav`) is hidden (`display: none !important`) to eliminate horizontal overflow and link clipping.
-  - Controls & Event Bindings: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo across React components and static HTML templates (`content/pages/*.html`). Clicking `.header-mobile-toggle` MUST trigger interactive state handlers that toggle the `.open` class on `#site-sidebar` and `.sidebar-open` class on `document.body` without touch event blocking (`z-index: 1001; touch-action: manipulation`).
+  - Controls & Event Bindings: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo across React components and static HTML templates (`content/pages/*.html`). Interactive header toggles MUST rely on React state / global delegated click handlers (`e.target.closest('.header-mobile-toggle, .sidebar-toggle')`) on `document` rather than one-off `DOMContentLoaded` listeners, ensuring reliable initialization on initial load and client-side page transitions on every page (including the homepage). Clicking `.header-mobile-toggle` MUST toggle the `.open` class on `#site-sidebar` and `.sidebar-open` class on `document.body` without touch event blocking (`z-index: 1001; touch-action: manipulation`).
 
 - **Mobile Footer Alignment**:
   - Threshold: Screens with viewport width `<= 900px`.
