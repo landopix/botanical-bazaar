@@ -69,11 +69,20 @@ The floating action UI consists of circular quick action buttons and the Back-to
 
 ---
 
-## 4. Responsive Mobile Boundaries
+## 4. Responsive Mobile Boundaries & Navigation Standards (< 900px)
+
+- **Mobile Header Navigation**:
+  - Threshold: Screens with viewport width `<= 900px`.
+  - Behavior: Desktop inline header text navigation (`header nav`) is hidden (`display: none !important`) to eliminate horizontal overflow and link clipping.
+  - Controls: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo, allowing users to cleanly open the slide-out navigation sidebar drawer (`#site-sidebar`).
+
+- **Mobile Footer Alignment**:
+  - Threshold: Screens with viewport width `<= 900px`.
+  - Alignment: All footer columns (`.footer-column`), section titles (`.footer-column h3`), body copy (`.footer-column p`), navigation links (`.footer-column a`), climate zone selector (`.footer-zone-selector`), and copyright text (`.footer-bottom`) MUST be centered (`text-align: center !important; align-items: center !important; width: 100%`).
 
 - **Grid Systems**:
   - Desktop: Multi-column grid (`grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`)
-  - Mobile (< 768px): Single column fluid grid or centered flexbox column.
+  - Mobile (< 900px): Single column fluid grid or centered flexbox column.
 - **Safe Area Insets**: Floating stacks must respect `env(safe-area-inset-bottom)` on iOS devices (`bottom: calc(20px + env(safe-area-inset-bottom))`).
 
 ---

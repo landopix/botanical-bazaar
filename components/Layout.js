@@ -669,6 +669,27 @@ export default function Layout({ children }) {
             style={{ height: "60px" }}
           />
         </Link>
+        <button
+          className="header-mobile-toggle"
+          aria-label="Toggle mobile menu"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#D4B06A"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
         <nav>
           {/* Collections Rich Dropdown Menu */}
           <div className="nav-dropdown-wrapper">
@@ -1118,21 +1139,55 @@ export default function Layout({ children }) {
           margin-right: auto;
         }
 
-        @media (max-width: 767px) {
+        .header-mobile-toggle {
+          display: none;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0.5rem;
+          align-items: center;
+          justify-content: center;
+        }
+
+        @media (max-width: 900px) {
+          header nav {
+            display: none !important;
+          }
+          .header-mobile-toggle {
+            display: flex !important;
+          }
           .footer-columns {
-            grid-template-columns: 1fr;
-            gap: 1.8rem;
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
             text-align: center !important;
           }
           .footer-column {
             text-align: center !important;
-            align-items: center;
+            align-items: center !important;
           }
           .footer-column h3 {
-            width: 100%;
+            width: 100% !important;
             text-align: center !important;
           }
           .footer-column p {
+            text-align: center !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+          }
+          .footer-column a {
+            text-align: center !important;
+            width: auto !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+          }
+          .footer-zone-selector {
+            align-items: center !important;
+            text-align: center !important;
+          }
+          .footer-zone-selector > div {
+            justify-content: center !important;
+          }
+          .footer-bottom {
             text-align: center !important;
           }
         }

@@ -196,3 +196,60 @@ footer p {
     color: #00301E !important;
     border-color: #00301E !important;
 }
+
+/* Header Mobile Hamburger Toggle & Mobile Layout Rules */
+.header-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  header nav {
+    display: none !important;
+  }
+  .header-mobile-toggle {
+    display: flex !important;
+  }
+  footer, .footer-container {
+    text-align: center !important;
+  }
+  .footer-columns {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center !important;
+  }
+  .footer-column {
+    text-align: center !important;
+    align-items: center !important;
+  }
+  .footer-column h3 {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .footer-column p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .footer-column a {
+    text-align: center !important;
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .footer-zone-selector {
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .footer-zone-selector > div {
+    justify-content: center !important;
+  }
+  .footer-bottom {
+    text-align: center !important;
+  }
+}
