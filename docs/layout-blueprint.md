@@ -33,7 +33,7 @@ All product cards in shop grids, featured homepage sections, tag collection page
 The floating action UI consists of circular quick action buttons and the Back-to-Top scroll trigger:
 
 ### Quick Actions Stack (`.quick-actions`)
-- **Positioning**: Fixed bottom-right corner (`position: fixed; bottom: 20px; right: 20px; z-index: 999;`)
+- **Positioning**: Fixed bottom-right corner (`position: fixed; bottom: 20px; right: 20px; z-index: 1100; pointer-events: auto;`)
 - **Button Styling & Icon Centering**:
   - Circular dimensions: `48px x 48px`
   - Background: Solid Deep Forest Green (`#00301E`)
@@ -75,7 +75,7 @@ The floating action UI consists of circular quick action buttons and the Back-to
 - **Mobile Header Navigation**:
   - Threshold: Screens with viewport width `<= 900px`.
   - Behavior: Desktop inline header text navigation (`header nav`) is hidden (`display: none !important`) to eliminate horizontal overflow and link clipping.
-  - Controls & Event Bindings: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo across React components and static HTML templates (`content/pages/*.html`). Interactive header toggles MUST rely on React state / global delegated click handlers (`e.target.closest('.header-mobile-toggle, .sidebar-toggle')`) on `document` rather than one-off `DOMContentLoaded` listeners, ensuring reliable initialization on initial load and client-side page transitions on every page (including the homepage). Clicking `.header-mobile-toggle` MUST toggle the `.open` class on `#site-sidebar` and `.sidebar-open` class on `document.body` without touch event blocking (`z-index: 1001; touch-action: manipulation`).
+  - Controls & Event Bindings: A dedicated mobile hamburger menu toggle button (`.header-mobile-toggle`) renders in the header bar adjacent to the lantern logo across React components and static HTML templates (`content/pages/*.html`). Interactive header toggles MUST rely on React state / global delegated click handlers (`e.target.closest('.header-mobile-toggle, .sidebar-toggle')`) on `document` rather than one-off `DOMContentLoaded` listeners, ensuring reliable initialization on initial load and client-side page transitions on every page (including the homepage). Clicking `.header-mobile-toggle` MUST toggle the `.open` class on `#site-sidebar` and `.sidebar-open` class on `document.body` without touch event blocking (`z-index: 1100; pointer-events: auto; touch-action: manipulation`).
 
 - **Mobile Footer Alignment**:
   - Threshold: Screens with viewport width `<= 900px`.
@@ -111,3 +111,7 @@ To prevent color regressions, button styles across the application are locked to
   - **Border**: 1px solid Deep Forest Green (`#00301E`)
   - **Transform**: Elevation scaling (`transform: translateY(-3px) scale(1.02)`)
 - **Prohibition**: Off-white, pale light green, or plain system gray backgrounds are strictly prohibited on interactive category buttons.
+
+- **Event Delegation & Pointer Event Safety**:
+  - Global event delegation on `document` MUST capture click events during the capture phase (`addEventListener('click', handler, true)`) in root components (`Layout.js`) to guarantee priority over page-specific or dynamic element tree handlers.
+  - Interactive navigation controls (`.header-mobile-toggle`, `.quick-actions`, `.sidebar-toggle`) MUST maintain an elevated `z-index` (1100+) and explicit `pointer-events: auto !important` to prevent physical event blocking by full-bleed page overlays (`.cta::before`, `body::before`) or hero banner elements.
