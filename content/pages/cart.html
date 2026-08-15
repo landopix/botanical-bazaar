@@ -188,6 +188,29 @@ body {
     <h1 style="color:#D4B06A;">Your Cart</h1>
     <!-- Container for cart items -->
     <div id="cart-items" style="margin-bottom:1.4rem;"></div>
+        <!-- Shipping & Pickup Information Card -->
+    <div id="shipping-notice" style="display:none;background:#00301E;border:1px solid #1C3D2E;border-radius:8px;padding:1.25rem;margin:1.5rem auto;max-width:600px;text-align:left;color:#E9DCBE;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+      <div style="font-family:'Cinzel', serif;font-size:1rem;font-weight:bold;color:#D4B06A;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
+        Shipping &amp; Pickup Information
+      </div>
+      <p style="margin:0 0 0.5rem 0;font-size:0.95rem;line-height:1.4;color:#E9DCBE;">
+        <strong>Live Plant Shipping:</strong> Shipped with care from St. Petersburg, FL. Weather-dependent holding and secure packaging applied.
+      </p>
+      <p style="margin:0 0 0.75rem 0;font-size:0.95rem;line-height:1.4;color:#E9DCBE;">
+        <strong>Local Nursery Pickup:</strong> St. Petersburg, FL nursery location pickup is also available at checkout.
+      </p>
+      <div style="text-align:right;">
+        <a href="shipping-pickup.html" style="color:#D4B06A;font-weight:bold;font-size:0.9rem;text-decoration:underline;font-family:'Crimson Text', serif;">
+          View Shipping &amp; Unpacking Policy &rarr;
+        </a>
+      </div>
+    </div>
     <!-- Subtotal and actions -->
     <div id="cart-summary" style="color:#E9DCBE;font-size:1.2rem;margin-bottom:1.2rem;"></div>
     <p id="empty-message" style="font-size:1.1rem;line-height:1.5;margin-top:1rem;">Your cart is currently empty.</p>
@@ -229,10 +252,12 @@ body {
         summaryElem.textContent = '';
         emptyMessage.style.display = 'block';
         checkoutBtn.style.display = 'none';
+        const noticeElem = document.getElementById('shipping-notice'); if (noticeElem) noticeElem.style.display = 'none';
         return;
       }
       emptyMessage.style.display = 'none';
       checkoutBtn.style.display = 'inline-block';
+      const noticeElem = document.getElementById('shipping-notice'); if (noticeElem) noticeElem.style.display = 'block';
       let subtotal = 0;
 
       // Build list of items
