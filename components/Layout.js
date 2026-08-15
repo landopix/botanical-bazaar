@@ -171,21 +171,27 @@ export default function Layout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSidebarOpen]);
 
-  // Manage click outside to close sidebar
+  // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
-    const handleOutsideClick = (e) => {
+    const handleDocumentClick = (e) => {
+      const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
+      if (toggleBtn) {
+        e.preventDefault();
+        setIsSidebarOpen((prev) => !prev);
+        return;
+      }
+
       if (
         isSidebarOpen &&
         sidebarRef.current &&
-        !sidebarRef.current.contains(e.target) &&
-        toggleBtnRef.current &&
-        !toggleBtnRef.current.contains(e.target)
+        !sidebarRef.current.contains(e.target)
       ) {
         setIsSidebarOpen(false);
       }
     };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
+
+    document.addEventListener("click", handleDocumentClick);
+    return () => document.removeEventListener("click", handleDocumentClick);
   }, [isSidebarOpen]);
 
   // Handle scroll trigger for Back to Top and body class toggle
