@@ -111,10 +111,60 @@ export default function Cart() {
           Estimated Total: <span style={{ color: '#00301E' }}>${cartTotal.toFixed(2)}</span>
         </p>
 
-        {/* Local Pickup Only Warning */}
-        <p style={{ fontSize: '0.95rem', color: '#00301E', border: '1px solid #00301E', padding: '0.5rem', borderRadius: '6px', fontWeight: 'bold', textAlign: 'center', marginBottom: '1.5rem' }}>
-          Reminder: All sales are strictly LOCAL PICKUP at our St. Petersburg, FL nursery location.
-        </p>
+        {/* Shipping & Pickup Information Card */}
+        <div
+          style={{
+            background: "#00301E",
+            border: "1px solid #1C3D2E",
+            borderRadius: "8px",
+            padding: "1.25rem",
+            marginBottom: "1.5rem",
+            textAlign: "left",
+            color: "#E9DCBE",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)"
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Cinzel, serif",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              color: "#D4B06A",
+              marginBottom: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem"
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+            Shipping &amp; Pickup Information
+          </div>
+          <p style={{ margin: "0 0 0.5rem 0", fontSize: "0.95rem", lineHeight: "1.4", color: "#E9DCBE" }}>
+            <strong>Live Plant Shipping:</strong> Shipped with care from St. Petersburg, FL. Weather-dependent holding and secure packaging applied.
+          </p>
+          <p style={{ margin: "0 0 0.75rem 0", fontSize: "0.95rem", lineHeight: "1.4", color: "#E9DCBE" }}>
+            <strong>Local Nursery Pickup:</strong> St. Petersburg, FL nursery location pickup is also available at checkout.
+          </p>
+          <div style={{ textAlign: "right" }}>
+            <Link
+              href="/shipping-pickup"
+              style={{
+                color: "#D4B06A",
+                fontWeight: "bold",
+                fontSize: "0.9rem",
+                textDecoration: "underline",
+                fontFamily: "Crimson Text, serif"
+              }}
+            >
+              View Shipping &amp; Unpacking Policy &rarr;
+            </Link>
+          </div>
+        </div>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           <Button variant="outline" href="/shop">Continue Shopping</Button>
