@@ -13,6 +13,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed. Please use POST.' });
   }
 
+  // Check authorization token
+  const expectedSecret = process.env.ALMANAC_SEND_SECRET || process.env.SANITY_API_TOKEN;
+  const authHeader = req.headers.authorization;
+  const apiKeyHeader = req.headers['x-api-key'];
+  const providedToken = apiKeyHeader || (authHeader && authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null);
+
+  if (expectedSecret && providedToken !== expectedSecret) {
+    return res.status(401).json({ error: 'Unauthorized. Invalid or missing API key.' });
+  }
+
   const { subject, html, recipient, recipients } = req.body || {};
 
   // Build target recipient list
@@ -73,7 +83,7 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('Error dispatching email via Resend:', err);
     return res.status(500).json({
-      error: err.message || 'Failed to send email newsletter update.'
+      error: 'An internal server error occurred.'
     });
   }
 }
