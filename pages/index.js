@@ -708,12 +708,14 @@ export default function Index() {
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <div className="product-image-container">
-                      <img
+                      <Image
                         src={imageSrc}
                         alt={product.name}
-                        onError={(e) => {
-                          e.target.src = "/assets/placeholder.png";
-                        }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="product-image"
+                        style={{ objectFit: "cover", borderRadius: "8px" }}
+                        unoptimized={!imageSrc.includes("cdn.sanity.io")}
                       />
                     </div>
                     <strong className="product-card-title">
