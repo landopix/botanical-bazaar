@@ -939,3 +939,136 @@ header .lantern-emblem {
   color: #D4B06A !important;
   text-decoration: underline !important;
 }
+
+/* Custom Branded USDA Hardiness Zone Selector Modal & Pill Button */
+.zone-pill-btn {
+  background: #001f14;
+  color: #D4B06A;
+  border: 1px solid #D4B06A;
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.zone-pill-btn:hover,
+.zone-pill-btn:focus {
+  background: #11402A;
+  color: #F5E7C4;
+  border-color: #F5E7C4;
+  box-shadow: 0 2px 8px rgba(212, 176, 106, 0.25);
+}
+
+.zone-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(3px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.zone-modal-container {
+  background: #00301E;
+  border: 2px solid #D4B06A;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+.zone-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+  padding-bottom: 0.8rem;
+}
+
+.zone-modal-title {
+  color: #D4B06A;
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.zone-modal-close {
+  background: none;
+  border: none;
+  color: #D4B06A;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.zone-modal-close:hover {
+  color: #F5E7C4;
+}
+
+.zone-modal-grid {
+  overflow-y: auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  padding-right: 0.3rem;
+}
+
+@media (max-width: 480px) {
+  .zone-modal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.zone-modal-pill {
+  background: #1C3D2E;
+  border: 1px solid #D4B06A;
+  color: #E9DCBE;
+  border-radius: 20px;
+  padding: 0.5rem 0.2rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+}
+
+.zone-modal-pill:hover,
+.zone-modal-pill:focus {
+  background: #11402A;
+  color: #F5E7C4;
+  border-color: #F5E7C4;
+}
+
+.zone-modal-pill.active {
+  background: #D4B06A;
+  color: #00301E;
+  border-color: #F5E7C4;
+  font-weight: bold;
+}
