@@ -161,16 +161,20 @@ export default function Layout({ children }) {
     window.dispatchEvent(new Event("user_hardiness_zone_updated"));
   };
 
-  // Manage Esc key press to close sidebar
+  // Manage Esc key press to close sidebar or USDA Zone modal
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && isSidebarOpen) {
-        setIsSidebarOpen(false);
+      if (e.key === "Escape") {
+        if (isZoneModalOpen) {
+          setIsZoneModalOpen(false);
+        } else if (isSidebarOpen) {
+          setIsSidebarOpen(false);
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, isZoneModalOpen]);
 
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
@@ -327,6 +331,9 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <Head>
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
         <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
@@ -806,7 +813,7 @@ export default function Layout({ children }) {
       </header>
 
       {/* Main Page Content Wrapper */}
-      <main className="site-main">{children}</main>
+      <main id="main-content" className="site-main">{children}</main>
 
       {/* High-Fidelity Footer - Logee's Inspired Multi-column Layout */}
       <footer className="footer-container">
@@ -1216,9 +1223,15 @@ export default function Layout({ children }) {
       `}</style>
       {isZoneModalOpen && (
         <div className="zone-modal-overlay" onClick={() => setIsZoneModalOpen(false)}>
-          <div className="zone-modal-container" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="zone-modal-container"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="zone-modal-title"
+          >
             <div className="zone-modal-header">
-              <h3 className="zone-modal-title">Select Your USDA Zone</h3>
+              <h3 id="zone-modal-title" className="zone-modal-title">Select Your USDA Zone</h3>
               <button
                 className="zone-modal-close"
                 onClick={() => setIsZoneModalOpen(false)}
