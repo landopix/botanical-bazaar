@@ -303,3 +303,114 @@ footer p {
   padding: 0 !important;
   flex-shrink: 0 !important;
 }
+
+/* Zone Change button styling */
+.zone-change-btn {
+  background: none;
+  border: none;
+  color: #D4B06A !important;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0;
+  text-decoration: none !important;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+}
+
+.zone-change-btn:hover,
+.zone-change-btn:focus {
+  color: #F5E7C4 !important;
+  text-decoration: underline !important;
+}
+
+/* Unified Navigation Dropdown Menu Styling */
+.nav-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.nav-dropdown-trigger {
+  cursor: pointer;
+  color: #E9DCBE !important;
+  font-weight: 700;
+  font-family: 'Crimson Text', serif;
+  text-decoration: none !important;
+  padding: 0.5rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.nav-dropdown-wrapper:hover .nav-dropdown-trigger {
+  color: #D4B06A !important;
+}
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1C3D2E;
+  border: 1px solid #D4B06A;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  min-width: 380px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 1000;
+  text-align: left;
+}
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #1C3D2E;
+  border-top: 1px solid #D4B06A;
+  border-left: 1px solid #D4B06A;
+}
+.nav-dropdown-wrapper:hover .nav-dropdown-menu {
+  display: block;
+}
+.dropdown-title {
+  display: block;
+  color: #D4B06A !important;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  text-decoration: none !important;
+}
+.dropdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.dropdown-col h4 {
+  color: #D4B06A;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+.dropdown-col a {
+  display: block;
+  color: #E9DCBE !important;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  margin: 0.3rem 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+  font-weight: normal !important;
+}
+.dropdown-col a:hover {
+  color: #D4B06A !important;
+  text-decoration: underline !important;
+}

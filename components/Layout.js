@@ -884,14 +884,15 @@ export default function Layout({ children }) {
                     Zone {hardinessZone}
                     <button
                       onClick={() => setIsChangingFooterZone(true)}
+                      className="zone-change-btn"
                       style={{
                         background: "none",
                         border: "none",
-                        color: "#d4b06a",
+                        color: "#D4B06A",
                         cursor: "pointer",
                         fontWeight: "bold",
                         padding: 0,
-                        textDecoration: "underline",
+                        textDecoration: "none",
                         fontFamily: "inherit",
                         fontSize: "0.9rem"
                       }}

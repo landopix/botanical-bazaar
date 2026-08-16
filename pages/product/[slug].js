@@ -761,14 +761,15 @@ export default function ProductDetail({ initialProduct }) {
                       <span style={{ color: '#00301E', fontWeight: 'bold', fontSize: '1rem' }}>Zone {hardinessZone}</span>
                       <button
                         onClick={() => setIsChangingZone(true)}
+                        className="zone-change-btn"
                         style={{
                           background: 'none',
                           border: 'none',
-                          color: '#00301E',
+                          color: '#D4B06A',
                           cursor: 'pointer',
                           fontWeight: 'bold',
                           padding: 0,
-                          textDecoration: 'underline',
+                          textDecoration: 'none',
                           fontFamily: 'inherit',
                           fontSize: '0.9rem'
                         }}
