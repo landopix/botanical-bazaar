@@ -111,7 +111,7 @@ export default function Layout({ children }) {
 
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
-  const [isChangingFooterZone, setIsChangingFooterZone] = useState(false);
+  const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
 
   // Keep track of group open/close states in sidebar
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
@@ -852,56 +852,13 @@ export default function Layout({ children }) {
             }}>
               <span style={{ color: "#d4b06a", fontWeight: "bold", fontFamily: "'Cinzel', serif", fontSize: "0.85rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>My Hardiness Zone</span>
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                {isChangingFooterZone ? (
-                  <select
-                    value={hardinessZone}
-                    onChange={handleZoneChange}
-                    onBlur={() => setIsChangingFooterZone(false)}
-                    className="zone-select-dropdown"
-                    autoFocus
-                    style={{
-                      background: "#001f14",
-                      color: "#f5e7c4",
-                      border: "1px solid #d4b06a",
-                      borderRadius: "4px",
-                      padding: "0.15rem 0.4rem",
-                      fontFamily: "inherit",
-                      fontWeight: "bold",
-                      outline: "none",
-                      cursor: "pointer"
-                    }}
-                  >
-                    {Array.from({ length: 13 }, (_, i) => i + 1)
-                      .flatMap((z) => [`${z}a`, `${z}b`])
-                      .map((zone) => (
-                        <option key={zone} value={zone}>
-                          Zone {zone}
-                        </option>
-                      ))}
-                  </select>
-                ) : (
-                  <span style={{ color: "#e9dcbe", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}>
-                    Zone {hardinessZone}
-                    <button
-                      onClick={() => setIsChangingFooterZone(true)}
-                      className="zone-change-btn"
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#D4B06A",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                        padding: 0,
-                        textDecoration: "none",
-                        fontFamily: "inherit",
-                        fontSize: "0.9rem"
-                      }}
-                      aria-label="Change USDA climate hardiness zone"
-                    >
-                      [Change]
-                    </button>
-                  </span>
-                )}
+                <button
+                  onClick={() => setIsZoneModalOpen(true)}
+                  className="zone-pill-btn"
+                  aria-label="Select USDA climate hardiness zone"
+                >
+                  Zone {hardinessZone} ▾
+                </button>
               </div>
             </div>
           </div>
@@ -1257,6 +1214,35 @@ export default function Layout({ children }) {
           }
         }
       `}</style>
+      {isZoneModalOpen && (
+        <div className="zone-modal-overlay" onClick={() => setIsZoneModalOpen(false)}>
+          <div className="zone-modal-container" onClick={(e) => e.stopPropagation()}>
+            <div className="zone-modal-header">
+              <h3 className="zone-modal-title">Select Your USDA Zone</h3>
+              <button
+                className="zone-modal-close"
+                onClick={() => setIsZoneModalOpen(false)}
+                aria-label="Close climate zone modal"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="zone-modal-grid">
+              {Array.from({ length: 13 }, (_, i) => i + 1)
+                .flatMap((z) => [`${z}a`, `${z}b`])
+                .map((zone) => (
+                  <button
+                    key={zone}
+                    className={`zone-modal-pill ${hardinessZone === zone ? 'active' : ''}`}
+                    onClick={() => handleSelectZone(zone)}
+                  >
+                    Zone {zone}
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

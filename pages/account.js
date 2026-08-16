@@ -218,55 +218,13 @@ export default function Account() {
           My Climate Zone
         </span>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-          {isChangingZone ? (
-            <select
-              value={hardinessZone}
-              onChange={handleZoneChange}
-              onBlur={() => setIsChangingZone(false)}
-              autoFocus
-              style={{
-                background: '#00301e',
-                color: '#f5e7c4',
-                border: '1px solid #d4b06a',
-                borderRadius: '4px',
-                padding: '0.15rem 0.4rem',
-                fontFamily: 'inherit',
-                fontWeight: 'bold',
-                outline: 'none',
-                cursor: 'pointer'
-              }}
-            >
-              {Array.from({ length: 13 }, (_, i) => i + 1)
-                .flatMap((z) => [`${z}a`, `${z}b`])
-                .map((zone) => (
-                  <option key={zone} value={zone}>
-                    Zone {zone}
-                  </option>
-                ))}
-            </select>
-          ) : (
-            <>
-              <span style={{ color: '#e9dcbe', fontWeight: 'bold' }}>Zone {hardinessZone}</span>
-              <button
-                onClick={() => setIsChangingZone(true)}
-                className="zone-change-btn"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#D4B06A',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  padding: 0,
-                  textDecoration: 'none',
-                  fontFamily: 'inherit',
-                  fontSize: '0.9rem'
-                }}
-                aria-label="Change USDA climate hardiness zone"
-              >
-                [Change]
-              </button>
-            </>
-          )}
+          <button
+            onClick={() => window.dispatchEvent(new Event("open_zone_modal"))}
+            className="zone-pill-btn"
+            aria-label="Select USDA climate hardiness zone"
+          >
+            Zone {hardinessZone} ▾
+          </button>
         </div>
       </div>
 
