@@ -83,6 +83,6 @@ export default async function handler(req, res) {
     }
   } catch (error) {
     console.error('API Checkout Error:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    return res.status(500).json({ error: 'An internal server error occurred.' });
   }
 }
