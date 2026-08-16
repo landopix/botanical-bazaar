@@ -85,6 +85,13 @@ const staticPages = [
     content: "zones usda cold hardiness zone map winter survival temperature protection guide"
   },
   {
+    title: "Plant Sourcing & Inquiries",
+    href: "/sourcing",
+    category: "Services",
+    description: "Custom plant sourcing for rare collector species and exotic cultivars.",
+    content: "sourcing custom requests rare plants collector specimen inquiry search nursery network"
+  },
+  {
     title: "Terms & Conditions",
     href: "/terms",
     category: "Policies",
@@ -239,6 +246,7 @@ export default function Layout({ children }) {
     { label: "About", href: "/about" },
     { label: "Shop All", href: "/shop" },
     { label: "Consultations", href: "/consultations" },
+    { label: "Plant Sourcing", href: "/sourcing" },
     { label: "The Almanac", href: "/almanac" },
     { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
@@ -843,6 +851,7 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
             <Link href="/shop">View All Goods</Link>
+            <Link href="/sourcing">Plant Sourcing / Custom Requests</Link>
             <Link href="/zones">USDA Hardiness Zones</Link>
             <Link href="/garden-month">Monthly Plant Care Guides</Link>
 
