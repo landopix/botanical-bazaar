@@ -60,7 +60,7 @@ export default async function formSubmitHandler(req, res) {
         },
         body: JSON.stringify({
           from: 'Botanical Bazaar <onboarding@resend.dev>',
-          to: 'guides@thebotanicalbazaar.com',
+          to: 'info@thebotanicalbazaar.com',
           subject: emailSubject,
           text: emailBody
         })
@@ -88,10 +88,10 @@ export default async function formSubmitHandler(req, res) {
         body: JSON.stringify({
           personalizations: [
             {
-              to: [{ email: 'guides@thebotanicalbazaar.com' }]
+              to: [{ email: 'info@thebotanicalbazaar.com' }]
             }
           ],
-          from: { email: 'guides@thebotanicalbazaar.com', name: 'The Botanical Bazaar' },
+          from: { email: 'info@thebotanicalbazaar.com', name: 'The Botanical Bazaar' },
           subject: emailSubject,
           content: [
             {

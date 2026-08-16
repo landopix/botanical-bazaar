@@ -5,8 +5,7 @@ export default function Account() {
   const [dashboardCopy, setDashboardCopy] = useState({
     title: 'Your Garden Sanctuary',
     subtitle: 'Welcome back to your Botanical Bazaar sanctuary',
-    announcement: 'Special Offer: Bring your soil samples for free analysis during our upcoming weekend events!',
-    emailSupport: 'guides@thebotanicalbazaar.com'
+    emailSupport: 'info@thebotanicalbazaar.com'
   });
 
   const [userEmail, setUserEmail] = useState('');
@@ -250,14 +249,15 @@ export default function Account() {
               <span style={{ color: '#e9dcbe', fontWeight: 'bold' }}>Zone {hardinessZone}</span>
               <button
                 onClick={() => setIsChangingZone(true)}
+                className="zone-change-btn"
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#d4b06a',
+                  color: '#D4B06A',
                   cursor: 'pointer',
                   fontWeight: 'bold',
                   padding: 0,
-                  textDecoration: 'underline',
+                  textDecoration: 'none',
                   fontFamily: 'inherit',
                   fontSize: '0.9rem'
                 }}
@@ -273,11 +273,7 @@ export default function Account() {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2.5rem' }}>
         {/* Main Dashboard Section */}
         <div style={{ flex: '1 1 600px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          {/* Announcement Alert */}
-          <div style={{ background: '#123826', padding: '1.5rem', borderRadius: '12px', borderLeft: '4px solid #D4B06A' }}>
-            <h3 style={{ margin: '0 0 0.5rem 0', color: '#D4B06A' }}>Fresh Almanac Notice</h3>
-            <p style={{ margin: '0', lineHeight: '1.5' }}>{dashboardCopy.announcement}</p>
-          </div>
+
 
           {/* Orders History */}
           <div>
