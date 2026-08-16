@@ -827,10 +827,10 @@ export default function ProductDetail({ initialProduct }) {
             </div>
           )}
 
-          {/* Policy notes (Local Pickup only and Live Plant Guarantee) */}
+          {/* Policy notes (Standard Shipping & Nursery Pickup) */}
           <div className="policy-note" style={{ marginTop: '1.5rem', fontSize: '0.95rem', lineHeight: '1.45', color: '#d9cba9', textAlign: 'left', borderTop: '1px solid rgba(212,176,106,0.2)', paddingTop: '1.2rem' }}>
-            <strong>Local Pickup Only:</strong> All purchases are available for pickup at our nursery in St.&nbsp;Petersburg, Florida. We do not ship at this time. <br />
-            <strong>Live Plant Guarantee:</strong> Please inspect your plant at pickup. If any hidden issues arise within 7&nbsp;days, we'll exchange it or issue store credit. Beyond this window, returns are not accepted.
+            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup (-bash.00 / Free) at checkout. <br />
+            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 7 days for full exchange or store credit. <a href="/shipping-pickup" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
           </div>
         </div>
       </main>

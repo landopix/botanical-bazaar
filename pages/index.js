@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -142,6 +143,20 @@ export default function Index() {
 
   return (
     <div className="home-container">
+      <Head>
+        <title>The Botanical Bazaar | Rare Tropical Plants & Orchids St. Petersburg FL</title>
+        <meta name="description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/" />
+        <meta property="og:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
+        <meta property="og:description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL." />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:url" content="https://thebotanicalbazaar.com/" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
+        <meta name="twitter:description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL." />
+        <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+      </Head>
       {/* Homepage specific styles injected cleanly */}
       <style
         dangerouslySetInnerHTML={{
@@ -604,9 +619,9 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Local Pickup Only Warning */}
+      {/* Fulfillment Options Banner */}
       <div
-        className="pickup-banner"
+        className="fulfillment-banner"
         style={{
           background: "#D4B06A",
           color: "#1C3D2E",
@@ -618,9 +633,7 @@ export default function Index() {
           textAlign: "center",
         }}
       >
-        <strong>Local Pickup Only</strong>&nbsp;–&nbsp;Our plants are available
-        for pick&nbsp;up in St.&nbsp;Petersburg, FL. We do not ship live plants
-        at this time.
+        <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Now offering Standard Shipping from St. Petersburg, FL with secure live-plant packaging and weather holds, alongside Free Local Nursery Pickup (-bash.00). <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.5rem' }}>View Shipping Details &rarr;</Link>
       </div>
 
       {/* Browse by Category Grid */}

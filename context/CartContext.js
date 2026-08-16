@@ -4,6 +4,7 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [fulfillmentMethod, setFulfillmentMethodState] = useState('shipping');
 
   useEffect(() => {
     const storedCart = localStorage.getItem('botanical_cart');
@@ -14,6 +15,11 @@ export function CartProvider({ children }) {
         console.error('Failed to parse cart', e);
       }
     }
+
+    const storedFulfillment = localStorage.getItem('botanical_fulfillmentMethod');
+    if (storedFulfillment && (storedFulfillment === 'shipping' || storedFulfillment === 'pickup')) {
+      setFulfillmentMethodState(storedFulfillment);
+    }
   }, []);
 
   const saveCart = (newCart) => {
@@ -21,6 +27,16 @@ export function CartProvider({ children }) {
     localStorage.setItem('botanical_cart', JSON.stringify(newCart));
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event('cart_updated'));
+    }
+  };
+
+  const setFulfillmentMethod = (method) => {
+    if (method === 'shipping' || method === 'pickup') {
+      setFulfillmentMethodState(method);
+      localStorage.setItem('botanical_fulfillmentMethod', method);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('fulfillment_updated', { detail: method }));
+      }
     }
   };
 
@@ -64,7 +80,19 @@ export function CartProvider({ children }) {
   const cartTotal = cart.reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, cartTotal }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartCount,
+        cartTotal,
+        fulfillmentMethod,
+        setFulfillmentMethod
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

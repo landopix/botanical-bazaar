@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
@@ -11,6 +12,16 @@ export default function Gallery() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto' }}>
+      <Head>
+        <title>Collector Orchid & Specimen Gallery | The Botanical Bazaar St. Petersburg FL</title>
+        <meta name="description" content="Explore our visual gallery of rare tropical specimens, collector orchids, and mature aroids cultivated at The Botanical Bazaar in St. Petersburg, FL." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/gallery" />
+        <meta property="og:title" content="Collector Orchid & Specimen Gallery | The Botanical Bazaar St. Petersburg FL" />
+        <meta property="og:description" content="Explore our visual gallery of rare tropical specimens, collector orchids, and mature aroids." />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:url" content="https://thebotanicalbazaar.com/gallery" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Collector's Gallery</h1>
       <p style={{ textAlign: 'center', fontSize: '1.2rem', marginBottom: '3rem', fontStyle: 'italic', color: '#E9DCBE' }}>
         Highlighting some of our absolute finest rare and resilient tropical varieties grown in St. Petersburg, FL.

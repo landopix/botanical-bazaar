@@ -1,9 +1,20 @@
+import Head from 'next/head';
 import React from 'react';
 import Button from '../components/Button';
 
 export default function Zones() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
+      <Head>
+        <title>USDA Hardiness Zone Guide & Cold Tolerance | The Botanical Bazaar</title>
+        <meta name="description" content="Determine cold hardiness guidance and temperature thresholds for rare tropical plants, orchids, and aroids in USDA Zones 9b, 10a, and 10b." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/zones" />
+        <meta property="og:title" content="USDA Hardiness Zone Guide & Cold Tolerance | The Botanical Bazaar" />
+        <meta property="og:description" content="Determine cold hardiness guidance and temperature thresholds for rare tropical plants, orchids, and aroids." />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:url" content="https://thebotanicalbazaar.com/zones" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem' }}>Best Plants for Your Zone</h1>
       <p style={{ fontSize: '1.2rem', lineHeight: '1.6', textAlign: 'center', marginBottom: '3rem', color: '#E9DCBE' }}>
         Learn about local Florida microclimates and choose highly resilient species fully compatible with USDA Zones 9b, 10a, and 11.

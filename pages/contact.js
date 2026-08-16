@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState } from 'react';
 import Button from '../components/Button';
 
@@ -40,6 +41,16 @@ export default function Contact() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '700px', margin: '0 auto' }}>
+      <Head>
+        <title>Contact Our Nursery Guides | The Botanical Bazaar St. Petersburg FL</title>
+        <meta name="description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL for plant availability, care guides, and nursery pickup details." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/contact" />
+        <meta property="og:title" content="Contact Our Nursery Guides | The Botanical Bazaar St. Petersburg FL" />
+        <meta property="og:description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL." />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:url" content="https://thebotanicalbazaar.com/contact" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Contact Our Nursery Guides</h1>
       <p style={{ textAlign: 'center', fontSize: '1.1rem', marginBottom: '3rem', color: '#E9DCBE' }}>
         Have questions about stock, local pickup schedules, or plant care compatibility? Fill out the secure form below.
