@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -326,6 +327,64 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
+      <Head>
+        <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
+        <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+              })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID || 'vxxgho3991'}");
+            `
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "GardenStore",
+              "@id": "https://thebotanicalbazaar.com/#nursery",
+              "name": "The Botanical Bazaar",
+              "alternateName": "The Botanical Bazaar LLC",
+              "url": "https://thebotanicalbazaar.com",
+              "logo": "https://thebotanicalbazaar.com/assets/lantern.png",
+              "image": "https://thebotanicalbazaar.com/assets/brand-banner.png",
+              "description": "Premier tropical plant nursery in St. Petersburg, Florida. Rare collector aroids, orchids, tropical fruit trees, medicinal herbs, and bespoke landscape consults.",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "P.O. Box 35353",
+                "addressLocality": "St. Petersburg",
+                "addressRegion": "FL",
+                "postalCode": "33705",
+                "addressCountry": "US"
+              },
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": 27.7731,
+                "longitude": -82.6400
+              },
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["Thursday", "Friday", "Saturday", "Sunday"],
+                  "opens": "10:00",
+                  "closes": "17:00"
+                }
+              ],
+              "priceRange": "$$",
+              "telephone": "+1-727-555-0199",
+              "sameAs": [
+                "https://www.instagram.com/thebotanicalbazaar",
+                "https://www.facebook.com/thebotanicalbazaar"
+              ]
+            })
+          }}
+        />
+      </Head>
       {/* Sidebar backdrop overlay (Click outside to close) */}
       {isSidebarOpen && (
         <div

@@ -1,10 +1,29 @@
-# The Botanical Bazaar AI crawler guidance
-# Public pages may be crawled for discovery and indexing.
-# User-specific, checkout, and transient pages should not be relied on as canonical public content.
+# The Botanical Bazaar LLC
 
-User-agent: *
-Allow: /
+> Premier Rare Tropical Plant Nursery in St. Petersburg, Florida.
 
-Public-site: https://thebotanicalbazaar.com/
-Sitemap: https://thebotanicalbazaar.com/sitemap.xml
-Preferred-canonical-host: https://thebotanicalbazaar.com
+## Overview
+The Botanical Bazaar LLC is a specialized botanical nursery located in St. Petersburg, Florida (USDA Zone 9b/10a transition). We cultivate and curate high-end rare tropical foliage, collector aroids (Philodendron, Monstera, Anthurium, Alocasia), specimen orchids, tropical fruit trees, medicinal plants, and native Florida flora.
+
+## Core Services & Offerings
+- **Botanical Catalog & Online Shop**: https://thebotanicalbazaar.com/shop
+- **Horticultural Consultations**: One-on-one landscape planning, plant diagnostics, soil analysis, and lighting optimization in St. Petersburg, FL (https://thebotanicalbazaar.com/consultations).
+- **The Botanical Almanac & Guides**: Seasonal monthly care guides, climate zone hardiness guidance, and species taxonomy (https://thebotanicalbazaar.com/almanac and https://thebotanicalbazaar.com/zones).
+
+## Fulfillment Policies
+- **Standard Live Plant Shipping**: Shipped directly from St. Petersburg, FL with insulated boxing, moisture barriers, heat packs for cold regions, and proactive weather holds.
+- **Local Nursery Pickup**: Free pickup ($0.00) available by appointment at our nursery in St. Petersburg, FL.
+
+## Location & Contact Information
+- **Nursery Location**: P.O. Box 35353, St. Petersburg, FL 33705
+- **Official Website**: https://thebotanicalbazaar.com
+- **Email Contact**: info@thebotanicalbazaar.com
+- **Hours of Operation**: Thursday - Sunday: 10:00 AM - 5:00 PM EST
+
+## Core Pages & Sitemap
+- Shop Catalog: https://thebotanicalbazaar.com/shop
+- Shipping & Pickup Policy: https://thebotanicalbazaar.com/shipping-pickup
+- Live Plant Guarantee: https://thebotanicalbazaar.com/returns
+- Frequently Asked Questions: https://thebotanicalbazaar.com/faq
+- Hardiness Zone Guide: https://thebotanicalbazaar.com/zones
+- Sitemap XML: https://thebotanicalbazaar.com/sitemap.xml

@@ -1,20 +1,47 @@
+# Robots.txt for The Botanical Bazaar LLC
+# https://thebotanicalbazaar.com
+
 User-agent: *
 Allow: /
+Disallow: /account
+Disallow: /cart
+Disallow: /checkout
+Disallow: /cancel
+Disallow: /success
+Disallow: /wishlist
 Disallow: /account.html
 Disallow: /cart.html
 Disallow: /checkout.html
 Disallow: /cancel.html
 Disallow: /success.html
-# Allow product.html route for dynamic products to be indexed
-# The previous Disallow prevented Google from crawling product detail pages.
-# Removing this rule ensures our dynamic product pages are discoverable.
-# Other transactional pages remain disallowed.
-# See crawlability notes for context.
-#
-# Removed: Disallow: /product.html
 Disallow: /wishlist.html
 
+# Explicitly Allow AI Scrapers, SearchBots, and LLM Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://thebotanicalbazaar.com/sitemap.xml

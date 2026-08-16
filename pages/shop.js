@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -473,14 +474,26 @@ export default function Shop({ initialProducts = [] }) {
 
   return (
     <div className="shop-container">
+      <Head>
+        <title>Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL</title>
+        <meta name="description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/shop" />
+        <meta property="og:title" content="Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL" />
+        <meta property="og:description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL." />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:url" content="https://thebotanicalbazaar.com/shop" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Shop Rare Tropical Plants & Orchids | The Botanical Bazaar" />
+        <meta name="twitter:description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids." />
+        <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+      </Head>
       {/* Page Heading styled strictly using Cinzel serif with uppercase spacing */}
       <h1 className="shop-title">Shop All Plants</h1>
 
-      {/* Local Pickup Banner */}
-      <div className="pickup-banner">
-        <strong>Local Pickup Only</strong>&nbsp;–&nbsp;All purchases are
-        available for pick&nbsp;up at our nursery in St.&nbsp;Petersburg, FL. We
-        do not ship at this time.
+      {/* Fulfillment Options Banner */}
+      <div className="fulfillment-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.8rem 1.2rem', borderRadius: '10px', marginBottom: '1.2rem', textAlign: 'center', fontSize: '1rem' }}>
+        <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Now offering Standard Shipping from St. Petersburg, FL with secure live-plant packaging and weather holds, alongside Free Local Nursery Pickup (-bash.00). <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.5rem' }}>View Shipping Details &rarr;</Link>
       </div>
 
       {/* Structured Comprehensive Filter Bar Panel */}

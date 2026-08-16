@@ -115,3 +115,31 @@ To prevent color regressions, button styles across the application are locked to
 - **Event Delegation & Pointer Event Safety**:
   - Global event delegation on `document` MUST capture click events during the capture phase (`addEventListener('click', handler, true)`) in root components (`Layout.js`) to guarantee priority over page-specific or dynamic element tree handlers.
   - Interactive navigation controls (`.header-mobile-toggle`, `.quick-actions`, `.sidebar-toggle`) MUST maintain an elevated `z-index` (1100+) and explicit `pointer-events: auto !important` to prevent physical event blocking by full-bleed page overlays (`.cta::before`, `body::before`) or hero banner elements.
+
+---
+
+## 6. Fulfillment Toggle UI Specs, Analytics & AI Indexing Standards
+
+### Fulfillment Toggle UI Specifications
+- **Fulfillment Method State**: Managed globally via `CartContext` and persisted in `localStorage` under key `'botanical_fulfillmentMethod'`.
+- **Default Selection**: Default selection is `'shipping'` (**Standard Shipping**).
+- **Options & Rates**:
+  - **Standard Shipping**: Displays rate status as "Calculated at checkout" (or flat/calculated transit info). Subtitle notes: *"Shipped with care from St. Petersburg, FL with secure packaging, insulated boxing & weather holds."*
+  - **Local Nursery Pickup**: Displays rate status as **"$0.00 / Free Pickup"**. Subtitle notes: *"Pick up at our nursery in St. Petersburg, FL. Flexible scheduled appointment slots available."*
+- **Card Styling Tokens**:
+  - Selected Card: Brunswick Green (`#1C3D2E`) background with 2px solid Warm Gold (`#D4B06A`) border and subtle gold drop-shadow (`0 0 10px rgba(212, 176, 106, 0.25)`).
+  - Unselected Card: Deep Forest Green (`#00301E`) background with 1px solid Brunswick Green (`#1C3D2E`) border.
+- **Stripe API Checkout Integration**: Selected `fulfillmentMethod` is transmitted to the backend checkout endpoint (`/api/checkout`) and logged in Stripe checkout metadata (`fulfillment_method`).
+
+### Analytics & Search Console Integration Points
+- **Microsoft Clarity**: Tracking snippet embedded globally in `<Head>` of `components/Layout.js` and static templates (`content/pages/global-head-template.html` and `.html` files) using environment variable `NEXT_PUBLIC_CLARITY_ID` (fallback project ID `"vxxgho3991"`).
+- **Google & Bing Search Console Verification**: Meta verification tags (`google-site-verification` and `msvalidate.01`) embedded in root `<Head>` headers via environment variables `NEXT_PUBLIC_GOOGLE_VERIFICATION` (fallback `"c0O7LzW_8R4Z-X1"`) and `NEXT_PUBLIC_BING_VERIFICATION` (fallback `"43E15CEF6A1D8E6E25A3178CD99FE182"`). `public/BingSiteAuth.xml` is strictly preserved.
+
+### SEO, Open Graph & Structured Data (JSON-LD)
+- **Base Canonical Domain**: `https://thebotanicalbazaar.com/...`
+- **Default Open Graph / Social Asset**: `/assets/brand-banner.png` (absolute URL `https://thebotanicalbazaar.com/assets/brand-banner.png`).
+- **Global Structured Data**: JSON-LD `GardenStore` / `LocalBusiness` Nursery Schema rendered globally in `<Head>` tags to establish local authority in St. Petersburg, FL.
+
+### AI Crawl Abilities & LLM Indexing
+- **`public/llms.txt`**: Detailed manifest file outlining nursery overview, inventory specialties (rare tropicals, collector aroids, orchids, medicinal herbs), St. Petersburg location, fulfillment options, and core site links.
+- **`public/robots.txt`**: Directives configured to explicitly grant access to AI scrapers and LLM crawlers (`GPTBot`, `ClaudeBot`, `Google-Extended`, `PerplexityBot`, `OAI-SearchBot`, `Amazonbot`, `Applebot-Extended`).
