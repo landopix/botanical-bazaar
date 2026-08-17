@@ -229,23 +229,7 @@ export default function Account() {
             }}
           >
             <div>
-              <div
-                style={{
-                  display: 'inline-block',
-                  background: '#123826',
-                  color: '#D4B06A',
-                  padding: '0.3rem 0.8rem',
-                  borderRadius: '20px',
-                  fontSize: '0.75rem',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  marginBottom: '1rem',
-                  border: '1px solid rgba(212, 176, 106, 0.4)'
-                }}
-              >
-                Option 1 &bull; Shopify Account
-              </div>
+
               <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.6rem', marginTop: 0, marginBottom: '0.8rem' }}>
                 Sign In / Register
               </h2>
@@ -273,23 +257,7 @@ export default function Account() {
               boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
             }}
           >
-            <div
-              style={{
-                display: 'inline-block',
-                background: '#123826',
-                color: '#D4B06A',
-                padding: '0.3rem 0.8rem',
-                borderRadius: '20px',
-                fontSize: '0.75rem',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                marginBottom: '1rem',
-                border: '1px solid rgba(212, 176, 106, 0.4)'
-              }}
-            >
-              Option 2 &bull; Guest Lookup
-            </div>
+
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.6rem', marginTop: 0, marginBottom: '0.8rem' }}>
               Track Guest Order
             </h2>
