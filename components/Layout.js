@@ -800,7 +800,25 @@ export default function Layout({ children }) {
           <Link href="/events">Events</Link>
           <Link href="/orchids-gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
-          <Link href="/faq">FAQ</Link>
+
+          {/* FAQ Rich Dropdown Menu */}
+          <div className="nav-dropdown-wrapper">
+            <Link href="/faq" className="nav-dropdown-trigger">
+              FAQ ▾
+            </Link>
+            <div className="nav-dropdown-menu" style={{ minWidth: "260px" }}>
+              <Link href="/faq" className="dropdown-title">
+                CUSTOMER HELP & FAQ
+              </Link>
+              <div className="dropdown-col" style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <Link href="/faq">FAQ Overview</Link>
+                <Link href="/shipping-pickup">Shipping &amp; Local Pickup</Link>
+                <Link href="/returns">Plant Care Guarantee</Link>
+                <Link href="/terms">Terms &amp; Conditions</Link>
+                <Link href="/privacy">Privacy Policy</Link>
+              </div>
+            </div>
+          </div>
           <Link href="/about">About</Link>
         </nav>
       </header>
@@ -835,7 +853,7 @@ export default function Layout({ children }) {
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
-            <Link href="/shop">View All Goods</Link>
+            <Link href="/shop">Shop All</Link>
             <Link href="/zones">USDA Hardiness Zones</Link>
             <Link href="/garden-month">Monthly Plant Care Guides</Link>
 
@@ -944,10 +962,10 @@ export default function Layout({ children }) {
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
-          top: -20px;
-          left: 0;
-          right: 0;
-          height: 20px;
+          top: -30px;
+          left: -20px;
+          right: -20px;
+          height: 35px;
           background: transparent;
         }
         .nav-dropdown-wrapper:hover .nav-dropdown-menu {
