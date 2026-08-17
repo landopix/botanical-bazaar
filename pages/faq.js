@@ -5,8 +5,8 @@ import Button from '../components/Button';
 export default function FAQ() {
   const faqs = [
     { q: 'Where are you located?', a: 'We are situated in beautiful St. Petersburg, Florida. Our nursery address and pickup coordination instructions are sent once your order checkout completes successfully.' },
-    { q: 'Do you ship live plants?', a: 'No. At this time we focus strictly on local pick up in St. Petersburg to ensure the absolute health, hydration, and highest visual quality of your delicate rare specimens.' },
-    { q: 'What is your live plant guarantee?', a: 'We guarantee our plants are perfectly healthy, robust, and correctly identified at the time of pickup. Guides are happy to review care guidelines with you before you leave!' }
+    { q: 'Do you ship live plants?', a: 'Yes! We ship robust live plants nationwide with specialized thermal heat/ice insulation tailored to destination weather.' },
+    { q: 'What is your live plant guarantee?', a: 'We guarantee 100% healthy live arrival. If a specimen arrives damaged, notify us within 48 hours with photos for a free replacement or refund.' }
   ];
 
   return (
