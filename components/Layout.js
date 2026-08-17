@@ -235,11 +235,29 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen]);
 
-  // Close sidebar on page change
+  // Listen for open_zone_modal event from page components
   useEffect(() => {
-    setIsSidebarOpen(false);
-    setSearchQuery("");
-  }, [router.asPath]);
+    const handleOpenZoneModal = () => setIsZoneModalOpen(true);
+    window.addEventListener("open_zone_modal", handleOpenZoneModal);
+    return () => window.removeEventListener("open_zone_modal", handleOpenZoneModal);
+  }, []);
+
+  // Route Change State Cleanup (Fixes Layout Stickiness on Back/Forward Button)
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsSidebarOpen(false);
+      setIsGuidesOpen(false);
+      setIsFaqOpen(false);
+      setIsCollectionsOpen(false);
+      setIsZoneModalOpen(false);
+      setSearchQuery("");
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -414,11 +432,12 @@ export default function Layout({ children }) {
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.45)",
-            backdropFilter: "blur(3px)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
             zIndex: 999,
             cursor: "pointer",
-            transition: "opacity 0.2s ease-in-out",
+            transition: "opacity 200ms ease-in-out",
           }}
         />
       )}
@@ -449,54 +468,56 @@ export default function Layout({ children }) {
           </svg>
         </button>
 
-        {/* Cart Action Link with Badge */}
-        <Link
-          href="/cart"
-          className="cart-btn"
-          aria-label="View cart"
-          style={{ position: "relative" }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#D4B06A"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {/* Cart Action Link with Badge (suppressed on /checkout for streamlined flow) */}
+        {router.pathname !== '/checkout' && (
+          <Link
+            href="/cart"
+            className="cart-btn"
+            aria-label="View cart"
+            style={{ position: "relative" }}
           >
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-          {cartCount > 0 && (
-            <span
-              style={{
-                position: "absolute",
-                top: "0",
-                right: "0",
-                backgroundColor: "#ba2f2f",
-                color: "#ffffff",
-                borderRadius: "50%",
-                fontSize: "0.7rem",
-                width: "18px",
-                height: "18px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: "bold",
-                border: "1px solid #00301e",
-                transform: "translate(25%, -25%)",
-                zIndex: 10,
-                boxSizing: "border-box",
-              }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#D4B06A"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {cartCount}
-            </span>
-          )}
-        </Link>
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            {cartCount > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "0",
+                  right: "0",
+                  backgroundColor: "#ba2f2f",
+                  color: "#ffffff",
+                  borderRadius: "50%",
+                  fontSize: "0.7rem",
+                  width: "18px",
+                  height: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  border: "1px solid #00301e",
+                  transform: "translate(25%, -25%)",
+                  zIndex: 10,
+                  boxSizing: "border-box",
+                }}
+              >
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        )}
 
         {/* Wishlist Action Link with Badge */}
         <Link
@@ -751,7 +772,7 @@ export default function Layout({ children }) {
           />
         </Link>
         <button
-          className="header-mobile-toggle"
+          className="header-mobile-toggle block md:hidden"
           aria-label="Toggle mobile menu"
         >
           <svg
@@ -1182,7 +1203,13 @@ export default function Layout({ children }) {
           justify-content: center;
         }
 
-        @media (max-width: 900px) {
+        @media (min-width: 769px) {
+          .header-mobile-toggle {
+            display: none !important;
+          }
+        }
+
+        @media (max-width: 768px) {
           header nav {
             display: none !important;
           }
