@@ -8,7 +8,7 @@ export default function Privacy() {
         <title>Privacy Policy | The Botanical Bazaar LLC</title>
         <meta
           name="description"
-          content="Read the official Privacy Policy of The Botanical Bazaar LLC in St. Petersburg, Florida. Learn how we collect, store, and safeguard your data across Shopify, Resend, Netlify, and Sanity CMS."
+          content="Read the official Privacy Policy of The Botanical Bazaar LLC in St. Petersburg, Florida. Learn how we collect, store, and safeguard your data across our secure infrastructure and essential service providers."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/privacy" />
       </Head>
@@ -81,43 +81,25 @@ export default function Privacy() {
             </ul>
           </section>
 
-          {/* Section 3: Tech Stack & Third-Party Service Providers */}
+          {/* Section 3: Service Providers & Infrastructure */}
           <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
               3. Service Providers &amp; Infrastructure
             </h2>
-            <p>
-              We prioritize data protection and never sell, lease, or trade your personal information to third-party marketers. We share minimal required customer data strictly with our trusted technical infrastructure partners to run our store:
+            <p style={{ marginTop: 0 }}>
+              We share minimal customer data strictly with essential service providers necessary to operate our store, process orders, and communicate with you:
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.2rem', marginTop: '1.2rem' }}>
-              <div style={{ background: '#1C3D2E', padding: '1rem', borderRadius: '8px', border: '1px solid #D4B06A' }}>
-                <h4 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 0.4rem 0' }}>Shopify</h4>
-                <p style={{ fontSize: '0.9rem', margin: 0, color: '#E9DCBE' }}>
-                  Powers secure e-commerce payment processing, customer accounts, order fulfillment tracking, and checkout security.
-                </p>
-              </div>
-
-              <div style={{ background: '#1C3D2E', padding: '1rem', borderRadius: '8px', border: '1px solid #D4B06A' }}>
-                <h4 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 0.4rem 0' }}>Resend</h4>
-                <p style={{ fontSize: '0.9rem', margin: 0, color: '#E9DCBE' }}>
-                  Handles transaction email dispatches, order confirmations, restock alerts, and customer support correspondence.
-                </p>
-              </div>
-
-              <div style={{ background: '#1C3D2E', padding: '1rem', borderRadius: '8px', border: '1px solid #D4B06A' }}>
-                <h4 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 0.4rem 0' }}>Netlify</h4>
-                <p style={{ fontSize: '0.9rem', margin: 0, color: '#E9DCBE' }}>
-                  Provides high-availability, encrypted web hosting infrastructure, edge network routing, and continuous integration security.
-                </p>
-              </div>
-
-              <div style={{ background: '#1C3D2E', padding: '1rem', borderRadius: '8px', border: '1px solid #D4B06A' }}>
-                <h4 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 0.4rem 0' }}>Sanity CMS</h4>
-                <p style={{ fontSize: '0.9rem', margin: 0, color: '#E9DCBE' }}>
-                  Manages structured content for our plant encyclopedia, care sheets, events calendar, and nursery history records.
-                </p>
-              </div>
-            </div>
+            <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0 0 0' }}>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong>Payment &amp; Order Processing:</strong> Secure handling of transaction details and account fulfillment.
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong>Communication Services:</strong> Dispatching order confirmations, restock notices, and care guides.
+              </li>
+              <li style={{ marginBottom: 0 }}>
+                <strong>Hosting &amp; Security:</strong> Safe storage and encryption of store data and web infrastructure.
+              </li>
+            </ul>
           </section>
 
           {/* Section 4: Consumer Rights & Florida Resident Disclosures */}
