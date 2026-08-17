@@ -1,48 +1,26 @@
-# Layout Laws & Global Styling Standards
+# 📜 Layout Laws & Responsive UI Architecture
 
-## Core UI Principles
-1. **Typography & Brand Identity:**
-   - Display/Heading font: `Cinzel`, serif.
-   - Body font: `Crimson Text`, serif.
-   - Brand Palette:
-     - Obsidian / Deep Forest Green: `#00301E`
-     - Brunswick / Mid Green: `#1C3D2E`
-     - Matte / Warm Gold: `#D4B06A`
-     - Pastel Apricot / Cream: `#F5E7C4`
-     - Pastel Tan / Secondary Light: `#E9DCBE`
+### 📜 LAW 1: Mobile Navigation & Layout Standards (<= 900px)
+- **Mobile Header & Footer Alignment**: On screens <= 900px, desktop inline header text navigation (`header nav`) is hidden in favor of the touch-friendly mobile/tablet hamburger toggle (`.header-mobile-toggle`), which triggers the slide-out sidebar drawer (`#site-sidebar`).
+- **Mobile Footer Centering**: All footer columns, headings, links, widgets, and copyright copy must be strictly centered (`text-align: center`, `align-items: center`) on mobile displays.
 
-2. **Global Custom Scrollbars:**
-   - Default browser gray scrollbars MUST NEVER render in modals, dropdowns, sidebars, or page containers.
-   - Webkit Scrollbar Track: `#00301E`
-   - Webkit Scrollbar Thumb: `#D4B06A` (rounded border-radius)
-   - Firefox / Standard Scrollbar: `scrollbar-color: #D4B06A #00301E; scrollbar-width: thin;`
+---
 
-3. **Dropdown Hover Bridges:**
-   - All navigation dropdown triggers MUST feature an invisible `::after` pseudo-element bridge padding (or top-positioned invisible area) extending between trigger links and dropdown menus to prevent cursor drops/flicker over dead space.
+### 📜 LAW 2: Product Card & Grid Specifications
+- **Uniform Card Row Heights**: Cards in product grids must stretch to uniform height in each row (`display: flex; flex-direction: column; justify-content: space-between`).
+- **Bottom CTA Alignment**: Primary action buttons ("View Plant" / "Add to Cart" / Sold Out status) must align uniformly at the horizontal bottom of each card container.
+- **Card Background & Border**: Product card containers must use the light cream background (`#F5E7C4`) with a high-contrast Warm Gold border (`1px solid #D4B06A`) against dark layout backdrops.
+- **Image Boundaries**: Product image wrappers must use relative positioning with `overflow: hidden`, and child images must enforce `object-fit: cover` to eliminate visual distortion or layout bleeding.
 
-4. **Product Card Layout:**
-   - Product cards must use uniform flexbox column layout (`display: flex; flex-direction: column; justify-content: space-between;`) with `#F5E7C4` background and `#D4B06A` border. Primary CTA buttons must align at the horizontal bottom.
+---
 
-5. **Quick Actions & Floating Controls:**
-   - `.quick-actions` floating stack sits in the bottom-right corner (`bottom: 20px; right: 20px; z-index: 1100`).
-   - `#back-to-top` trigger floats in the bottom-left corner (`bottom: 20px; left: 20px; right: auto; z-index: 998`).
+### 📜 LAW 3: Floating Quick Actions & Controls Stack
+- **Floating Action Stack (`.quick-actions`)**: Positioned fixed in the bottom-right corner (`bottom: 20px; right: 20px; z-index: 1100`). Buttons are 48x48px solid forest green (`#00301E`) circles with no borders/outlines and 24x24px centered SVG icons.
+- **Back-to-Top Button (`#back-to-top`)**: Positioned fixed in the bottom-left corner (`bottom: 20px; left: 20px; right: auto; z-index: 998`) to prevent collision or overlap with `.quick-actions`.
+- **Badge Clipping Prevention**: Parent containers for notification badges must enforce `overflow: visible !important`.
 
-6. **Mobile Alignment:**
-   - Breakpoint threshold: `max-width: 900px`. Desktop header navigation (`header nav`) hides in favor of `.header-mobile-toggle`, and footer text/columns center-align.
+---
 
-## Strict Architecture & Layout Laws
-
-### 📜 LAW 1: Single Header/Footer & Universal Layout Ownership
-- **Exclusive Layout Control:** All global navigation elements—including `<Header />`, `<Footer />`, `<MobileNav />`, and Floating Action Buttons (FABs)—are strictly owned and rendered by `components/Layout.js`.
-- **Forbidden Page-Level Chrome:** Individual page files (`pages/*.js`) MUST NEVER import or render their own `<Header />` or `<Footer />` components.
-- **Page Responsibility:** Every route component is responsible ONLY for rendering its specific main content body inside `<Layout>`.
-
-### 📜 LAW 2: Route Hygiene & State Clean-up
-- **Automatic Reset:** Every drawer, mega menu, search overlay, and modal MUST listen for `router.events.on('routeChangeComplete')` and automatically collapse (`false` / `""`) on route transition.
-- **Backdrop & Outside Click:** All open panels must render a full-viewport overlay backdrop (`z-index: 999`) with an `onClick` close handler and `Escape` key listener.
-
-### 📜 LAW 3: Z-Index & UI Hierarchy Stack
-- **Z-Index 1100:** Floating Action Buttons (FABs) / Quick Actions
-- **Z-Index 1000:** Slide-out Drawers & Modals
-- **Z-Index 999:** Backdrop Blur Overlay
-- **Z-Index 500:** Sticky Navigation Header
+### 📜 LAW 4: Tablet Viewport Standards (768px - 1024px)
+- **Header Navigation**: Full horizontal nav links are restricted to desktop viewports (≥ 1024px). All viewports < 1024px MUST collapse into the touch-friendly mobile/tablet hamburger drawer navigation (`lg:hidden` / `@media (max-width: 1023px)`).
+- **Layout & Typography**: Header link text must never stack vertically or clip outside viewport boundaries. All page routes must adapt grid columns (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3` / `@media`) and typography smoothly for tablet screens.

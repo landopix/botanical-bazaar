@@ -834,7 +834,7 @@ export default function Layout({ children }) {
           />
         </Link>
         <button
-          className="header-mobile-toggle block md:hidden"
+          className="header-mobile-toggle block lg:hidden"
           aria-label="Toggle mobile menu"
         >
           <svg
@@ -929,6 +929,8 @@ export default function Layout({ children }) {
             <Link href="/contact">Store Visit</Link>
             <Link href="/sourcing">Plant Sourcing</Link>
             <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/accessibility">Accessibility</Link>
+            <Link href="/terms">Terms of Service</Link>
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
@@ -1264,13 +1266,13 @@ export default function Layout({ children }) {
           justify-content: center;
         }
 
-        @media (min-width: 769px) {
+        @media (min-width: 1024px) {
           .header-mobile-toggle {
             display: none !important;
           }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
           header nav {
             display: none !important;
           }
