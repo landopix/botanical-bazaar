@@ -209,18 +209,30 @@ export default function Index() {
           font-size: 2rem;
         }
         .products {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 1.5rem;
           justify-content: center;
           align-items: stretch;
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+        @media (max-width: 1023px) and (min-width: 640px) {
+          .products {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+        @media (max-width: 639px) {
+          .products {
+            grid-template-columns: 1fr;
+          }
         }
         .product-card {
           background-color: #F5E7C4;
           border: 1px solid #D4B06A;
           border-radius: 10px;
           padding: 1.2rem;
-          width: 240px;
+          width: 100%;
           box-sizing: border-box;
           color: #00301E;
           display: flex;
@@ -385,11 +397,7 @@ export default function Index() {
           font-size: 1.1rem;
           font-weight: bold;
         }
-        @media (max-width: 900px) {
-          .products {
-            flex-direction: column;
-            align-items: center;
-          }
+        @media (max-width: 1023px) {
           .hero {
             flex-direction: column;
             text-align: center;

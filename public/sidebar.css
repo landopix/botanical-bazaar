@@ -305,7 +305,7 @@ header nav {
   margin-right: 60px; /* Balance the left-aligned lantern logo for perfect screen centering */
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   header nav {
     margin-right: 0;
     width: 100%;
@@ -475,7 +475,7 @@ body::before {
  * toggles improves legibility and reduces the perception of left‑aligned
  * clutter. This rule applies only on screens 900px wide or smaller.
  */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   #site-sidebar a,
   #site-sidebar .group-toggle {
     text-align: center;
@@ -551,7 +551,7 @@ header .lantern-emblem {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .hero-image {
     width: 80% !important;
     margin-top: 1.5rem;
@@ -737,13 +737,13 @@ header .lantern-emblem {
   justify-content: center;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
   .header-mobile-toggle {
     display: none !important;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   header nav {
     display: none !important;
   }

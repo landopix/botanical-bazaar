@@ -209,13 +209,13 @@ footer p {
   justify-content: center;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1024px) {
   .header-mobile-toggle {
     display: none !important;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   header nav {
     display: none !important;
   }

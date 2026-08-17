@@ -1049,17 +1049,24 @@ export default function Shop({ initialProducts = [] }) {
         }
 
         .products {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
           gap: 1.5rem;
           justify-content: center;
           align-items: stretch;
+          max-width: 1100px;
+          margin: 0 auto;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1023px) and (min-width: 640px) {
           .products {
-            flex-direction: column;
-            align-items: center;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 639px) {
+          .products {
+            grid-template-columns: 1fr;
           }
         }
 
@@ -1068,7 +1075,7 @@ export default function Shop({ initialProducts = [] }) {
           border: 1px solid #d4b06a;
           border-radius: 10px;
           padding: 1.2rem;
-          width: 250px;
+          width: 100%;
           box-sizing: border-box;
           color: #00301e;
           display: flex;
