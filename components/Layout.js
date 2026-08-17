@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
-
 const staticPages = [
   {
     title: "Shipping & Unpacking",
@@ -135,7 +134,6 @@ export default function Layout({ children }) {
       setAllProducts(window.PRODUCTS || []);
     };
     if (typeof window !== "undefined") {
-      // Load saved hardiness zone if present
       const savedZone = localStorage.getItem("user_hardiness_zone");
       if (savedZone) {
         setHardinessZone(savedZone);
@@ -148,7 +146,12 @@ export default function Layout({ children }) {
         }
       };
 
+      const handleOpenZoneModal = () => {
+        setIsZoneModalOpen(true);
+      };
+
       window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      window.addEventListener("open_zone_modal", handleOpenZoneModal);
 
       if (window.PRODUCTS) {
         loadProducts();
@@ -156,16 +159,18 @@ export default function Layout({ children }) {
 
       return () => {
         window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+        window.removeEventListener("open_zone_modal", handleOpenZoneModal);
       };
     }
   }, []);
 
-  const handleZoneChange = (e) => {
-    const newZone = e.target.value;
+  const handleSelectZone = (newZone) => {
     setHardinessZone(newZone);
-    localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingFooterZone(false);
-    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user_hardiness_zone", newZone);
+      window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+    }
+    setIsZoneModalOpen(false);
   };
 
   // Manage Esc key press to close sidebar or USDA Zone modal
@@ -186,7 +191,6 @@ export default function Layout({ children }) {
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
     const handleDocumentClick = (e) => {
-      console.log('[Mobile Nav] Click detected on:', e.target);
       const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
       if (toggleBtn) {
         e.preventDefault();
@@ -306,7 +310,6 @@ export default function Layout({ children }) {
 
   const query = searchQuery.trim().toLowerCase();
 
-  // Filter products for live product search results
   const matchingProducts =
     query !== ""
       ? allProducts
@@ -569,7 +572,6 @@ export default function Layout({ children }) {
         className={`sidebar ${isSidebarOpen ? "open" : ""}`}
         role="navigation"
       >
-        {/* Navigation Live Filter Search Input with clickable Lantern submark */}
         <div className="sidebar-search-container">
           <Link
             href="/"
@@ -592,7 +594,6 @@ export default function Layout({ children }) {
           />
         </div>
 
-        {/* Live Product Search Results Stack */}
         {searchQuery.trim() !== "" ? (
           <div className="sidebar-search-results-drawer">
             {matchingPages.length > 0 && (
@@ -770,7 +771,6 @@ export default function Layout({ children }) {
           </svg>
         </button>
         <nav>
-          {/* Collections Rich Dropdown Menu */}
           <div className="nav-dropdown-wrapper">
             <Link href="/shop" className="nav-dropdown-trigger">
               SHOP ALL ▾
@@ -823,7 +823,7 @@ export default function Layout({ children }) {
       {/* Main Page Content Wrapper */}
       <main id="main-content" className="site-main">{children}</main>
 
-      {/* High-Fidelity Footer - Logee's Inspired Multi-column Layout */}
+      {/* High-Fidelity Footer */}
       <footer className="footer-container">
         <div className="footer-columns">
           <div className="footer-column">
@@ -911,9 +911,7 @@ export default function Layout({ children }) {
         ↑
       </button>
 
-      {/* Styled JSX for Dropdowns, announcement banner, and responsive footer layout */}
       <style jsx global>{`
-        /* Custom branded Warm Gold (#D4B06A) scrollbar styling on the sidebar menu */
         .sidebar::-webkit-scrollbar {
           width: 8px;
         }
@@ -925,7 +923,6 @@ export default function Layout({ children }) {
           border-radius: 4px;
         }
 
-        /* Collections Header Dropdown */
         .nav-dropdown-wrapper {
           position: relative;
           display: inline-block;
@@ -1012,7 +1009,6 @@ export default function Layout({ children }) {
           text-decoration: underline !important;
         }
 
-        /* Sidebar Product Search Results Redesign */
         .sidebar-search-results-drawer {
           width: 100%;
           box-sizing: border-box;
@@ -1110,7 +1106,6 @@ export default function Layout({ children }) {
           font-weight: bold;
         }
 
-        /* Footer Column Redesign styles */
         .footer-container {
           background-color: #001f14;
           border-top: 1px solid rgba(212, 176, 106, 0.3);
