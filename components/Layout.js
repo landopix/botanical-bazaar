@@ -1,3 +1,39 @@
+export function getZoneFromZip(zipInput) {
+  const cleanZip = String(zipInput || '').trim().replace(/\D/g, '').slice(0, 5);
+  if (cleanZip.length < 5) return null;
+  const num = parseInt(cleanZip, 10);
+
+  if (num >= 33000 && num <= 33499) return '10b';
+  if (num >= 33500 && num <= 33999) return '10a';
+  if (num >= 34000 && num <= 34999) return '9b';
+  if (num >= 32000 && num <= 32999) return '9a';
+  if (num >= 600 && num <= 999) return '11a';
+  if (num >= 96700 && num <= 96899) return '11a';
+  if (num >= 99500 && num <= 99999) return '4b';
+  if (num >= 90000 && num <= 92899) return '10a';
+  if (num >= 93000 && num <= 95999) return '9a';
+  if (num >= 97000 && num <= 99499) return '8b';
+  if (num >= 70000 && num <= 79999) return '8b';
+  if (num >= 30000 && num <= 31999) return '8a';
+  if (num >= 39000 && num <= 39999) return '8a';
+  if (num >= 27000 && num <= 28999) return '7b';
+  if (num >= 20000 && num <= 24699) return '7a';
+  if (num >= 37000 && num <= 38599) return '7a';
+  if (num >= 40000 && num <= 42799) return '6b';
+  if (num >= 15000 && num <= 19699) return '6b';
+  if (num >= 10000 && num <= 14999) return '6b';
+  if (num >= 43000 && num <= 47999) return '6a';
+  if (num >= 60000 && num <= 62999) return '5b';
+  if (num >= 63000 && num <= 65999) return '6a';
+  if (num >= 50000 && num <= 58999) return '4b';
+  if (num >= 48000 && num <= 49999) return '5b';
+  if (num >= 3000 && num <= 5999) return '5a';
+  if (num >= 80000 && num <= 89999) return '6a';
+
+  return '7a';
+}
+
+
 import Head from 'next/head';
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -118,6 +154,32 @@ export default function Layout({ children }) {
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
+  const [zipInput, setZipInput] = useState("");
+  const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
+  const [zipError, setZipError] = useState("");
+
+  useEffect(() => {
+    if (hardinessZone) {
+      setSelectedDropdownZone(hardinessZone);
+    }
+  }, [hardinessZone]);
+
+  const handleZipSubmit = (e) => {
+    e.preventDefault();
+    setZipError("");
+    const zone = getZoneFromZip(zipInput);
+    if (zone) {
+      handleSelectZone(zone);
+      setZipInput("");
+    } else {
+      setZipError("Please enter a valid 5-digit US ZIP Code.");
+    }
+  };
+
+  const handleDropdownSubmit = (e) => {
+    e.preventDefault();
+    handleSelectZone(selectedDropdownZone);
+  };
 
   // Keep track of group open/close states in sidebar
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
@@ -849,33 +911,33 @@ export default function Layout({ children }) {
         <div className="footer-columns">
           <div className="footer-column">
             <h3>Contact Info</h3>
-            <p className="contact-item">
-              Address: P.O. Box 35353, St. Petersburg, FL 33705
-            </p>
+            <p className="contact-item">St. Petersburg, FL</p>
             <p className="contact-item">Email: info@thebotanicalbazaar.com</p>
             <p className="contact-item">Hours: Thurs - Sun: 10AM - 5PM</p>
           </div>
           <div className="footer-column">
             <h3>Ordering Info</h3>
-            <Link href="/faq">FAQ Overview</Link>
+            <Link href="/faq">FAQ</Link>
             <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
-            <Link href="/returns">Refunds &amp; Replacements</Link>
-            <Link href="/terms">Sales Tax &amp; Terms</Link>
+            <Link href="/returns">Refunds &amp; Guarantee</Link>
+            <Link href="/account">Track Order</Link>
+            <Link href="/terms">Terms</Link>
           </div>
           <div className="footer-column">
             <h3>About Us</h3>
-            <Link href="/about">Our Mercantile History</Link>
-            <Link href="/contact">Store Visit &amp; Location</Link>
+            <Link href="/about">Our History</Link>
+            <Link href="/contact">Store Visit</Link>
+            <Link href="/sourcing">Plant Sourcing</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/accessibility">Accessibility</Link>
             <Link href="/terms">Terms of Service</Link>
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
-            <Link href="/shop">View All Goods</Link>
-            <Link href="/sourcing">Plant Sourcing / Custom Requests</Link>
-            <Link href="/zones">USDA Hardiness Zones</Link>
-            <Link href="/garden-month">Monthly Plant Care Guides</Link>
+            <Link href="/shop">View All Flora</Link>
+            <Link href="/sales">On Sale</Link>
+            <Link href="/zones">USDA Zones</Link>
+            <Link href="/almanac">Plant Care Almanac</Link>
 
             <div className="footer-zone-selector" style={{
               marginTop: "0.8rem",
@@ -1261,9 +1323,10 @@ export default function Layout({ children }) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="zone-modal-title"
+            style={{ maxWidth: '440px' }}
           >
             <div className="zone-modal-header">
-              <h3 id="zone-modal-title" className="zone-modal-title">Select Your USDA Zone</h3>
+              <h3 id="zone-modal-title" className="zone-modal-title">Select Your Hardiness Zone</h3>
               <button
                 className="zone-modal-close"
                 onClick={() => setIsZoneModalOpen(false)}
@@ -1272,18 +1335,88 @@ export default function Layout({ children }) {
                 ✕
               </button>
             </div>
-            <div className="zone-modal-grid">
-              {Array.from({ length: 13 }, (_, i) => i + 1)
-                .flatMap((z) => [`${z}a`, `${z}b`])
-                .map((zone) => (
+
+            <p style={{ color: '#E9DCBE', fontSize: '0.95rem', margin: '0 0 1.2rem 0', lineHeight: '1.5' }}>
+              Calculate your USDA Hardiness Zone via 5-digit ZIP code or manually select your zone below.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* ZIP Code Lookup */}
+              <form onSubmit={handleZipSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
+                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  ZIP Code Lookup
+                </label>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <input
+                    type="text"
+                    placeholder="e.g. 33705"
+                    maxLength={5}
+                    value={zipInput}
+                    onChange={(e) => { setZipInput(e.target.value); setZipError(''); }}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.8rem',
+                      borderRadius: '6px',
+                      border: '1px solid #D4B06A',
+                      backgroundColor: '#1C3D2E',
+                      color: '#F5E7C4',
+                      fontSize: '0.95rem',
+                      outline: 'none'
+                    }}
+                  />
                   <button
-                    key={zone}
-                    className={`zone-modal-pill ${hardinessZone === zone ? 'active' : ''}`}
-                    onClick={() => handleSelectZone(zone)}
+                    type="submit"
+                    className="zone-pill-btn"
+                    style={{ background: '#D4B06A', color: '#00301E', fontWeight: 'bold', border: 'none', padding: '0.6rem 1rem', cursor: 'pointer' }}
                   >
-                    Zone {zone}
+                    Use ZIP
                   </button>
-                ))}
+                </div>
+                {zipError && (
+                  <div style={{ color: '#ff8a8a', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                    {zipError}
+                  </div>
+                )}
+              </form>
+
+              {/* Zone Dropdown */}
+              <form onSubmit={handleDropdownSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
+                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Zone Dropdown
+                </label>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <select
+                    value={selectedDropdownZone}
+                    onChange={(e) => setSelectedDropdownZone(e.target.value)}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.8rem',
+                      borderRadius: '6px',
+                      border: '1px solid #D4B06A',
+                      backgroundColor: '#1C3D2E',
+                      color: '#F5E7C4',
+                      fontSize: '0.95rem',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {Array.from({ length: 9 }, (_, i) => i + 3)
+                      .flatMap((z) => [`${z}a`, `${z}b`])
+                      .map((z) => (
+                        <option key={z} value={z}>
+                          Zone {z}
+                        </option>
+                      ))}
+                  </select>
+                  <button
+                    type="submit"
+                    className="zone-pill-btn"
+                    style={{ background: '#D4B06A', color: '#00301E', fontWeight: 'bold', border: 'none', padding: '0.6rem 1rem', cursor: 'pointer' }}
+                  >
+                    Use Zone
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

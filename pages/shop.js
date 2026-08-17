@@ -57,6 +57,9 @@ export default function Shop({ initialProducts = [] }) {
   const [sortOrder, setSortOrder] = useState("");
   const [viewSoldOut, setViewSoldOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
+  const [selectedLight, setSelectedLight] = useState("");
+  const [selectedBloom, setSelectedBloom] = useState("");
 
   useEffect(() => {
     if (initialProducts && initialProducts.length > 0) {
@@ -68,7 +71,7 @@ export default function Shop({ initialProducts = [] }) {
   useEffect(() => {
     if (!router.isReady) return;
 
-    const { category, size, zone, sort, view_sold_out, search } = router.query;
+    const { category, size, zone, sort, view_sold_out, search, tag, light, bloom } = router.query;
 
     if (category !== undefined) setSelectedCategory(category || "");
     if (size !== undefined) setSelectedSize(size || "");
@@ -77,9 +80,12 @@ export default function Shop({ initialProducts = [] }) {
     if (view_sold_out !== undefined) {
       setViewSoldOut(view_sold_out === "true");
     } else {
-      setViewSoldOut(false); // default to false on first load
+      setViewSoldOut(false);
     }
     if (search !== undefined) setSearchQuery(search || "");
+    if (tag !== undefined) setSelectedTag(tag || "");
+    if (light !== undefined) setSelectedLight(light || "");
+    if (bloom !== undefined) setSelectedBloom(bloom || "");
   }, [router.isReady, router.query]);
 
   // Helper to update both local state and router query parameters synchronously (two-way sync)
@@ -115,6 +121,21 @@ export default function Shop({ initialProducts = [] }) {
       setSearchQuery(updates.search);
       if (updates.search) params.set("search", updates.search);
       else params.delete("search");
+    }
+    if (updates.tag !== undefined) {
+      setSelectedTag(updates.tag);
+      if (updates.tag) params.set("tag", updates.tag);
+      else params.delete("tag");
+    }
+    if (updates.light !== undefined) {
+      setSelectedLight(updates.light);
+      if (updates.light) params.set("light", updates.light);
+      else params.delete("light");
+    }
+    if (updates.bloom !== undefined) {
+      setSelectedBloom(updates.bloom);
+      if (updates.bloom) params.set("bloom", updates.bloom);
+      else params.delete("bloom");
     }
 
     const newQuery = params.toString();
@@ -254,6 +275,41 @@ export default function Shop({ initialProducts = [] }) {
       });
     }
 
+    // Tag Filter
+    if (selectedTag) {
+      const tLower = selectedTag.toLowerCase().replace(/-/g, ' ');
+      result = result.filter((product) => {
+        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(tLower));
+        const nameMatch = (product.name || '').toLowerCase().includes(tLower);
+        const descMatch = (product.description || '').toLowerCase().includes(tLower);
+        if (tLower === 'pet safe' || tLower === 'petsafe') {
+          return product.petSafe || hasTag || nameMatch || descMatch;
+        }
+        return hasTag || nameMatch || descMatch;
+      });
+    }
+
+    // Light Requirements Filter
+    if (selectedLight) {
+      const lLower = selectedLight.toLowerCase().replace(/-/g, ' ');
+      result = result.filter((product) => {
+        const lightText = (product.lightLevels || '').toLowerCase();
+        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(lLower));
+        const descMatch = (product.description || '').toLowerCase().includes(lLower);
+        return lightText.includes(lLower) || hasTag || descMatch;
+      });
+    }
+
+    // Bloom Season Filter
+    if (selectedBloom) {
+      const bLower = selectedBloom.toLowerCase().replace(/-/g, ' ');
+      result = result.filter((product) => {
+        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(bLower));
+        const descMatch = (product.description || '').toLowerCase().includes(bLower);
+        return hasTag || descMatch;
+      });
+    }
+
     // 3. Pot Size / Container Filter
     if (selectedSize) {
       result = result.filter((product) => {
@@ -319,6 +375,9 @@ export default function Shop({ initialProducts = [] }) {
     sortOrder,
     viewSoldOut,
     searchQuery,
+    selectedTag,
+    selectedLight,
+    selectedBloom,
   ]);
 
   // Dynamically extract unique available hardiness zones (excluding extremely cold 1 & 2)
@@ -697,12 +756,20 @@ export default function Shop({ initialProducts = [] }) {
               fontSize: "1.25rem",
               lineHeight: "1.6",
               maxWidth: "650px",
-              margin: "0 auto",
+              margin: "0 auto 1.5rem auto",
             }}
           >
             This batch is currently out of stock as we grow our next
-            generation. Check back soon or browse our available inventory above.
+            generation. Check back soon or submit a plant sourcing request for custom collector orders.
           </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button variant="gold-filled" href="/sourcing">
+              Request Specimen &rarr;
+            </Button>
+            <Button variant="outline" onClick={() => updateFilters({ category: "", size: "", zone: "", tag: "", light: "", bloom: "", search: "" })}>
+              View All Available Flora
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="products">
