@@ -4,6 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Button from '../../components/Button';
+import FulfillmentCard from '../../components/FulfillmentCard';
+import WhatYouWillReceiveCard from '../../components/WhatYouWillReceiveCard';
+import LiveArrivalGuarantee from '../../components/LiveArrivalGuarantee';
+import ZoneCompatibilityBadges from '../../components/ZoneCompatibilityBadges';
+import CareSpine from '../../components/CareSpine';
+import OwnerBenchNotes from '../../components/OwnerBenchNotes';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles } from '../../lib/shopify';
@@ -72,7 +78,6 @@ export default function ProductDetail({ initialProduct }) {
 
   // Hardiness zone sync state
   const [hardinessZone, setHardinessZone] = useState('10a');
-  const [isChangingZone, setIsChangingZone] = useState(false);
 
   useEffect(() => {
     if (initialProduct) {
@@ -104,14 +109,6 @@ export default function ProductDetail({ initialProduct }) {
     }
   }, []);
 
-  const handleZoneChange = (e) => {
-    const newZone = e.target.value;
-    setHardinessZone(newZone);
-    localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingZone(false);
-    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
-  };
-
   const handleNotifyMe = async (e) => {
     e.preventDefault();
     if (!notifyEmail || !notifyEmail.trim() || !product) return;
@@ -128,7 +125,8 @@ export default function ProductDetail({ initialProduct }) {
         body: JSON.stringify({
           email: notifyEmail.trim(),
           slug: product.slug,
-          name: product.name
+          name: product.name,
+          type: 'item_waitlist'
         })
       });
 
@@ -357,7 +355,7 @@ export default function ProductDetail({ initialProduct }) {
 
       <style jsx global>{`
         .product-main-container {
-          max-width: 720px;
+          max-width: 820px;
           margin: 2.5rem auto;
           background: #123826;
           border-radius: 16px;
@@ -373,8 +371,8 @@ export default function ProductDetail({ initialProduct }) {
         }
         .product-img {
           flex: 1;
-          min-width: 200px;
-          max-width: 250px;
+          min-width: 220px;
+          max-width: 280px;
           box-sizing: border-box;
         }
         .product-img img {
@@ -490,12 +488,12 @@ export default function ProductDetail({ initialProduct }) {
 
       <main className="product-main-container">
         {/* Product Image */}
-        <div className="product-img" style={{ position: 'relative', width: '100%', height: '250px', minWidth: '200px', maxWidth: '250px' }}>
+        <div className="product-img" style={{ position: 'relative', width: '100%', height: '280px', minWidth: '220px', maxWidth: '280px' }}>
           <Image
             src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
             alt={product.name}
             fill
-            sizes="(max-width: 800px) 100vw, 250px"
+            sizes="(max-width: 800px) 100vw, 280px"
             style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
             priority
             unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
@@ -606,7 +604,7 @@ export default function ProductDetail({ initialProduct }) {
                     textAlign: 'center',
                     fontFamily: "'Crimson Text', serif"
                   }}>
-                    You're on the list! We'll email you the moment this specimen returns.
+                    You&apos;re on the list! We&apos;ll email you the moment this specimen returns.
                   </div>
                 ) : (
                   <form onSubmit={handleNotifyMe} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
@@ -691,6 +689,24 @@ export default function ProductDetail({ initialProduct }) {
             </div>
           )}
 
+          {/* Care Spine Quick Guide */}
+          <CareSpine product={product} />
+
+          {/* Owner Bench Notes */}
+          <OwnerBenchNotes notes={product.ownerNotes} />
+
+          {/* USDA Zone Compatibility Badges & Microclimate Tip */}
+          <ZoneCompatibilityBadges product={product} userZone={hardinessZone} />
+
+          {/* Unified Fulfillment & Ag Restrictions Card */}
+          <FulfillmentCard product={product} />
+
+          {/* What You Will Receive Card */}
+          <WhatYouWillReceiveCard product={product} />
+
+          {/* Live-Arrival & Establishment Guarantee Card */}
+          <LiveArrivalGuarantee />
+
           {/* Collapsible Plant specifications details panels */}
           {renderSpecs(product)}
 
@@ -731,12 +747,12 @@ export default function ProductDetail({ initialProduct }) {
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
                   <button
-                        onClick={() => window.dispatchEvent(new Event("open_zone_modal"))}
-                        className="zone-pill-btn"
-                        aria-label="Select USDA climate hardiness zone"
-                      >
-                        Zone {hardinessZone} ▾
-                      </button>
+                    onClick={() => window.dispatchEvent(new Event("open_zone_modal"))}
+                    className="zone-pill-btn"
+                    aria-label="Select USDA climate hardiness zone"
+                  >
+                    Zone {hardinessZone} ▾
+                  </button>
                 </div>
               </div>
 
@@ -788,8 +804,8 @@ export default function ProductDetail({ initialProduct }) {
 
           {/* Policy notes (Standard Shipping & Nursery Pickup) */}
           <div className="policy-note" style={{ marginTop: '1.5rem', fontSize: '0.95rem', lineHeight: '1.45', color: '#d9cba9', textAlign: 'left', borderTop: '1px solid rgba(212,176,106,0.2)', paddingTop: '1.2rem' }}>
-            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup (-bash.00 / Free) at checkout. <br />
-            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 7 days for full exchange or store credit. <a href="/shipping-pickup" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
+            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup ($0.00 / Free) at checkout. <br />
+            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 48 hours for claim submission or exchange. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
           </div>
         </div>
       </main>

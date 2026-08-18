@@ -7,7 +7,7 @@ export default async function notifyMeHandler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { email, slug, name } = req.body;
+  const { email, slug, name, type } = req.body;
 
   if (!email || !email.trim()) {
     return res.status(400).json({ error: 'Email is required.' });
@@ -39,6 +39,7 @@ export default async function notifyMeHandler(req, res) {
       email: email.trim(),
       slug,
       name,
+      type: type || 'restock_notification',
       timestamp: new Date().toISOString()
     };
 
@@ -46,7 +47,7 @@ export default async function notifyMeHandler(req, res) {
 
     fs.writeFileSync(filePath, JSON.stringify(requests, null, 2), 'utf8');
 
-    console.log(`[Notify Me Capture] Registered restock request successfully for ${email.trim()} on plant ${name} (${slug})`);
+    console.log(`[Notify Me Capture] Registered request successfully for ${email.trim()} on ${name} (${slug}) [type: ${newRequest.type}]`);
 
     return res.status(200).json({
       success: true,

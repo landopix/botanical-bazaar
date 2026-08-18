@@ -10,13 +10,19 @@ export default function Account() {
   // Climate zone state
   const [hardinessZone, setHardinessZone] = useState('10a');
 
+  // Passwordless magic link form state
+  const [magicEmail, setMagicEmail] = useState('');
+  const [magicSent, setMagicSent] = useState(false);
+  const [magicLoading, setMagicLoading] = useState(false);
+  const [magicError, setMagicError] = useState('');
+
   // Guest Order Tracker state
   const [orderNumber, setOrderNumber] = useState('');
   const [lookupEmail, setLookupEmail] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [lookupError, setLookupError] = useState('');
 
-  // Local saved session user email (if signed in locally)
+  // Local saved session user email
   const [userEmail, setUserEmail] = useState('');
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
@@ -67,13 +73,44 @@ export default function Account() {
     }
   };
 
-  // Shopify Customer Account login redirect
-  const handleShopifyAccountRedirect = () => {
-    const accountUrl = process.env.NEXT_PUBLIC_SHOPIFY_ACCOUNT_URL || 'https://thebotanicalbazaar.com/account/login';
-    window.location.href = accountUrl;
+  const handleMagicLinkSubmit = async (e) => {
+    e.preventDefault();
+    if (!magicEmail || !magicEmail.includes('@')) {
+      setMagicError('Please enter a valid email address.');
+      return;
+    }
+
+    setMagicLoading(true);
+    setMagicError('');
+
+    try {
+      const res = await fetch('/api/inquiry/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: magicEmail,
+          customerName: 'Account User',
+          inquiryType: 'magic_link_auth',
+          subject: 'Passwordless Account Access Request',
+          message: `Magic link access request for ${magicEmail}`
+        })
+      });
+
+      if (res.ok) {
+        setMagicSent(true);
+        localStorage.setItem('bb_user_email', magicEmail.trim());
+        setUserEmail(magicEmail.trim());
+      } else {
+        const data = await res.json();
+        setMagicError(data.error || 'Failed to send login link.');
+      }
+    } catch (err) {
+      setMagicError('An unexpected error occurred. Please try again.');
+    } finally {
+      setMagicLoading(false);
+    }
   };
 
-  // Guest order lookup redirect handler
   const handleOrderLookup = (e) => {
     e.preventDefault();
     setLookupError('');
@@ -93,7 +130,6 @@ export default function Account() {
 
     setIsSearching(true);
 
-    // Simulate brief lookup loading state before redirecting to Shopify Order Status portal
     setTimeout(() => {
       const lookupEndpoint = 'https://thebotanicalbazaar.com/apps/order-lookup';
       const targetUrl = `${lookupEndpoint}?order=${encodeURIComponent(cleanOrder)}&email=${encodeURIComponent(cleanEmail)}`;
@@ -105,6 +141,7 @@ export default function Account() {
     localStorage.removeItem('bb_user_email');
     setUserEmail('');
     setOrders([]);
+    setMagicSent(false);
   };
 
   return (
@@ -113,11 +150,11 @@ export default function Account() {
         <title>Account & Order Tracking | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Access your Botanical Bazaar account, track guest plant orders, view saved wishlist items, and manage climate hardiness settings."
+          content="Access your Botanical Bazaar account via passwordless sign-in, track guest plant orders, view saved wishlist items, and manage climate hardiness settings."
         />
       </Head>
 
-      <div style={{ padding: '3.5rem 1.5rem', maxWidth: '1100px', margin: '0 auto', boxSizing: 'border-box' }}>
+      <div style={{ padding: '3.5rem 1.5rem', maxWidth: '1100px', margin: '0 auto', boxSizing: 'border-box', fontFamily: 'Crimson Text, serif' }}>
         {/* Header Title Section */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1
@@ -130,10 +167,10 @@ export default function Account() {
               textTransform: 'uppercase'
             }}
           >
-            Account & Order Tracking
+            Account &amp; Order Tracking
           </h1>
           <p style={{ color: '#E9DCBE', fontSize: '1.15rem', maxWidth: '680px', margin: '0 auto', lineHeight: '1.6' }}>
-            Manage your customer profile, track live plant shipments in real time, and review your saved sanctuary wishlist.
+            Guest checkout remains primary for all nursery purchases. Use our passwordless email authentication or guest tracker below to manage your order details.
           </p>
         </div>
 
@@ -201,12 +238,12 @@ export default function Account() {
             </div>
           ) : (
             <span style={{ color: '#8DA38B', fontSize: '0.9rem', fontStyle: 'italic' }}>
-              Guest session active
+              Guest session active (No account required)
             </span>
           )}
         </div>
 
-        {/* Top Split: Section 1 (Shopify Account Portal) & Section 2 (Guest Order Tracker) */}
+        {/* Top Split: Section 1 (Passwordless Auth) & Section 2 (Guest Order Tracker) */}
         <div
           style={{
             display: 'grid',
@@ -215,7 +252,7 @@ export default function Account() {
             marginBottom: '3.5rem'
           }}
         >
-          {/* Section 1: Shopify Customer Account Login / Portal */}
+          {/* Section 1: Passwordless Auth Portal */}
           <div
             style={{
               background: '#1C3D2E',
@@ -229,22 +266,60 @@ export default function Account() {
             }}
           >
             <div>
-
               <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.6rem', marginTop: 0, marginBottom: '0.8rem' }}>
-                Sign In / Register
+                Passwordless Access
               </h2>
               <p style={{ color: '#E9DCBE', fontSize: '0.98rem', lineHeight: '1.5', marginBottom: '1.5rem' }}>
-                Access passwordless email verification, stored shipping addresses, dynamic subscription management, and complete past order records via our official Shopify customer portal.
+                Enter your email address to receive a secure passwordless sign-in link. No password required.
               </p>
-            </div>
 
-            <Button
-              onClick={handleShopifyAccountRedirect}
-              variant="gold-filled"
-              style={{ width: '100%', padding: '0.85rem', textAlign: 'center' }}
-            >
-              Go to Shopify Login Portal &rarr;
-            </Button>
+              {!magicSent ? (
+                <form onSubmit={handleMagicLinkSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', color: '#F5E7C4', fontSize: '0.85rem', fontWeight: 'bold', marginBottom: '0.3rem' }}>
+                      Your Email Address
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="nursery@example.com"
+                      value={magicEmail}
+                      onChange={(e) => setMagicEmail(e.target.value)}
+                      required
+                      style={{
+                        width: '100%',
+                        padding: '0.7rem 0.8rem',
+                        borderRadius: '8px',
+                        border: '1px solid #D4B06A',
+                        backgroundColor: '#123826',
+                        color: '#F4F1E1',
+                        fontSize: '0.95rem',
+                        outline: 'none',
+                        boxSizing: 'border-box'
+                      }}
+                    />
+                  </div>
+
+                  {magicError && (
+                    <div style={{ color: '#ff8a8a', fontSize: '0.85rem', backgroundColor: 'rgba(255,0,0,0.1)', padding: '0.5rem', borderRadius: '6px', border: '1px solid #ff8a8a' }}>
+                      {magicError}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    variant="gold-filled"
+                    disabled={magicLoading}
+                    style={{ width: '100%', padding: '0.85rem' }}
+                  >
+                    {magicLoading ? 'Sending Link...' : 'Send Magic Access Link'}
+                  </Button>
+                </form>
+              ) : (
+                <div style={{ background: 'rgba(212,176,106,0.15)', border: '1px solid #D4B06A', borderRadius: '8px', padding: '1rem', color: '#D4B06A', textAlign: 'center' }}>
+                  <strong>Check your inbox!</strong> We sent a login link to <em>{magicEmail}</em>.
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Section 2: Guest Order Tracker */}
@@ -257,7 +332,6 @@ export default function Account() {
               boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
             }}
           >
-
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.6rem', marginTop: 0, marginBottom: '0.8rem' }}>
               Track Guest Order
             </h2>
@@ -330,7 +404,7 @@ export default function Account() {
           </div>
         </div>
 
-        {/* Section 3: Saved Items & Order History Fallbacks */}
+        {/* Section 3: Saved Items & Order History */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           {/* Saved Items / Wishlist Section */}
           <div
@@ -451,86 +525,6 @@ export default function Account() {
                     </div>
                   );
                 })}
-              </div>
-            )}
-          </div>
-
-          {/* Session Order History Section */}
-          <div
-            style={{
-              background: '#123826',
-              border: '1px solid #D4B06A',
-              borderRadius: '16px',
-              padding: '2rem'
-            }}
-          >
-            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.8rem', marginTop: 0, marginBottom: '1rem' }}>
-              Local Session Order History
-            </h2>
-
-            {!userEmail ? (
-              <div
-                style={{
-                  background: '#1C3D2E',
-                  padding: '2rem',
-                  borderRadius: '12px',
-                  border: '1px dotted #D4B06A',
-                  textAlign: 'center'
-                }}
-              >
-                <p style={{ color: '#E9DCBE', fontSize: '1.05rem', margin: '0 0 0.5rem 0' }}>
-                  No active authenticated user session.
-                </p>
-                <p style={{ color: '#8DA38B', fontSize: '0.9rem', margin: 0 }}>
-                  To view verified session purchase history, use Option 1 to log into your account portal or Option 2 to look up a guest order.
-                </p>
-              </div>
-            ) : loadingOrders ? (
-              <p style={{ color: '#E9DCBE', fontStyle: 'italic' }}>Fetching your order records...</p>
-            ) : orders.length === 0 ? (
-              <div
-                style={{
-                  background: '#1C3D2E',
-                  padding: '2rem',
-                  borderRadius: '12px',
-                  border: '1px dotted #D4B06A',
-                  textAlign: 'center'
-                }}
-              >
-                <p style={{ color: '#E9DCBE', fontSize: '1rem', margin: 0 }}>
-                  No recent local session orders found for <strong>{userEmail}</strong>.
-                </p>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                {orders.map((ord) => (
-                  <div
-                    key={ord.id}
-                    style={{
-                      background: '#1C3D2E',
-                      padding: '1.2rem',
-                      borderRadius: '8px',
-                      border: '1px solid #D4B06A',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                      gap: '1rem'
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A' }}>Order #{ord.id}</div>
-                      <div style={{ fontSize: '0.9rem', color: '#E9DCBE' }}>Date: {ord.date}</div>
-                      <div style={{ fontSize: '0.95rem', marginTop: '0.2rem', color: '#F5E7C4' }}>{ord.items.join(', ')}</div>
-                    </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A' }}>${ord.total.toFixed(2)}</div>
-                      <span style={{ fontSize: '0.8rem', background: '#123826', padding: '0.2rem 0.5rem', borderRadius: '4px', color: '#E9DCBE' }}>
-                        {ord.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>

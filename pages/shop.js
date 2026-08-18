@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
+import NurseryUpdateFallback from "../components/NurseryUpdateFallback";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
 
@@ -60,6 +61,21 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedTag, setSelectedTag] = useState("");
   const [selectedLight, setSelectedLight] = useState("");
   const [selectedBloom, setSelectedBloom] = useState("");
+
+  // Verification Gate for Catalog Launch (OPP-001, TBB-001)
+  const hasOverallInventory = products.some((p) => p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1));
+  const hasShippingInventory = products.some((p) => {
+    const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1);
+    const isPickupOnly = Array.isArray(p.tags) && p.tags.some((t) => t.toLowerCase() === 'pickup-only' || t.toLowerCase() === 'local-pickup-only');
+    return isAvailable && !isPickupOnly;
+  });
+  const hasPickupInventory = products.some((p) => {
+    const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1);
+    const isNoPickup = Array.isArray(p.tags) && p.tags.some((t) => t.toLowerCase() === 'no-pickup' || t.toLowerCase() === 'shipping-only');
+    return isAvailable && !isNoPickup;
+  });
+
+  const launchGatePassed = hasOverallInventory && hasShippingInventory && hasPickupInventory;
 
   useEffect(() => {
     if (initialProducts && initialProducts.length > 0) {
@@ -522,327 +538,341 @@ export default function Shop({ initialProducts = [] }) {
         <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Now offering Standard Shipping from St. Petersburg, FL with secure live-plant packaging and weather holds, alongside Free Local Nursery Pickup $0.00. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.5rem' }}>View Shipping Details &rarr;</Link>
       </div>
 
-      {/* Structured Comprehensive Filter Bar Panel */}
-      <div className="filter-panel">
-        {/* Relocated Introductory Content */}
-        <p className="shop-intro">
-          Browse our curated selection of rare and resilient tropical plants
-          grown in St.&nbsp;Petersburg. Use the filters to explore categories
-          like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp;
-          Unusual, Best Plants for Your Zone and more. All listings reflect live
-          inventory; quantities are limited and updated daily.
-        </p>
-
-        <p className="shop-subtext">
-          Browse our curated selection of plants grown and sourced for our
-          St.&nbsp;Petersburg and Tampa Bay community. We stock tropical
-          houseplants, fruit trees and edibles, orchids, and hardy landscape
-          plants. Inventory changes regularly, so check back often or drop us a
-          note if you're looking for something special.
-        </p>
-
-        {/* Category Pill Buttons */}
-        <div className="category-section">
-          <label className="filter-group-label">Collections:</label>
-          <div className="category-pills">
-            <button
-              onClick={() => updateFilters({ category: "" })}
-              className={selectedCategory === "" ? "active" : ""}
-            >
-              Shop All
-            </button>
-            {visibleCollections.map((collection) => (
-              <button
-                key={collection.id}
-                onClick={() => updateFilters({ category: collection.id })}
-                className={selectedCategory === collection.id ? "active" : ""}
-              >
-                {collection.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Dynamic Select Filters and Inputs Grid */}
-        <div className="filters-grid">
-          {/* Search Filter Input with Sleek Clear Button */}
-          <div className="filter-control">
-            <label htmlFor="search-input">Search Plants</label>
-            <div className="search-input-wrapper">
-              <input
-                id="search-input"
-                type="text"
-                placeholder="Search by name, type..."
-                value={searchQuery}
-                onChange={(e) => updateFilters({ search: e.target.value })}
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") {
-                    updateFilters({ search: "" });
-                  }
-                }}
-                aria-label="Search plants"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => updateFilters({ search: "" })}
-                  className="search-clear-btn"
-                  aria-label="Clear search query"
-                  onKeyDown={(e) => {
-                    if (e.key === "Escape") {
-                      updateFilters({ search: "" });
-                      document.getElementById("search-input")?.focus();
-                    }
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Pot Size / Container Filter Dropdown */}
-          <div className="filter-control">
-            <label htmlFor="size-select">Pot Size / Container</label>
-            <select
-              id="size-select"
-              value={selectedSize}
-              onChange={(e) => updateFilters({ size: e.target.value })}
-            >
-              <option value="">All Sizes</option>
-              {sortedSizes.map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Hardiness Zone Filter Dropdown */}
-          <div className="filter-control">
-            <label htmlFor="zone-select">Hardiness Zone</label>
-            <select
-              id="zone-select"
-              value={selectedZone}
-              onChange={(e) => updateFilters({ zone: e.target.value })}
-            >
-              <option value="">All Zones</option>
-              {sortedZones.map((zone) => (
-                <option key={zone} value={zone}>
-                  Zone {zone}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Sort Options Dropdown */}
-          <div className="filter-control">
-            <label htmlFor="sort-select">Sort By</label>
-            <select
-              id="sort-select"
-              value={sortOrder}
-              onChange={(e) => updateFilters({ sort: e.target.value })}
-            >
-              <option value="">Featured / Newest</option>
-              <option value="price-low-to-high">Price: Low to High</option>
-              <option value="price-high-to-low">Price: High to Low</option>
-              <option value="alphabetical">Alphabetical (A-Z)</option>
-            </select>
-          </div>
-        </div>
-
-        {/* View Sold Out Toggle Button */}
-        <div className="toggle-section">
-          <label className="toggle-label">
-            <input
-              type="checkbox"
-              checked={viewSoldOut}
-              onChange={(e) =>
-                updateFilters({ view_sold_out: e.target.checked })
-              }
-              className="toggle-checkbox"
-            />
-            View Sold Out Plants
-          </label>
-        </div>
-      </div>
-
-      {/* Results Count Summary with Accessible Announcements */}
-      <div className="results-count" role="status" aria-live="polite">
-        Showing {filteredProducts.length}{" "}
-        {filteredProducts.length === 1 ? "product" : "products"}
-      </div>
-
-      {/* Products Grid */}
-      {selectedCategory &&
-      products.length > 0 &&
-      getActiveInStockCountForCategory(selectedCategory) === 0 ? (
-        <div
-          style={{
-            width: "100%",
-            maxWidth: "800px",
-            margin: "2rem auto",
-            background: "#00301E",
-            border: "1px solid #D4B06A",
-            padding: "3rem 2rem",
-            borderRadius: "12px",
-            textAlign: "center",
-            color: "#F5E7C4",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-            fontFamily: "'Crimson Text', serif",
-            boxSizing: "border-box",
-          }}
-        >
-          <h3
-            style={{
-              color: "#D4B06A",
-              fontFamily: "'Cinzel', serif",
-              fontSize: "1.8rem",
-              margin: "0 0 1rem 0",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-            }}
-          >
-            Upcoming Batch / Gathering Inventory
-          </h3>
-          <p
-            style={{
-              fontSize: "1.25rem",
-              lineHeight: "1.6",
-              maxWidth: "650px",
-              margin: "0 auto 1.5rem auto",
-            }}
-          >
-            This batch is currently out of stock as we grow our next
-            generation. Check back soon or submit a plant sourcing request for custom collector orders.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button variant="gold-filled" href="/sourcing">
-              Request Specimen &rarr;
-            </Button>
-            <Button variant="outline" onClick={() => updateFilters({ category: "", size: "", zone: "", tag: "", light: "", bloom: "", search: "" })}>
-              View All Available Flora
-            </Button>
-          </div>
-        </div>
+      {!launchGatePassed ? (
+        <NurseryUpdateFallback
+          reason={
+            !hasOverallInventory
+              ? "All specimens in this drop have been claimed. Our nursery benches in St. Petersburg are preparing the next cohort."
+              : !hasShippingInventory
+              ? "Standard shipping is temporarily paused while we update weather-hold packaging for live plant transit."
+              : "Local nursery pickup is currently being updated with new collection slots."
+          }
+        />
       ) : (
-        <div className="products">
-          {filteredProducts.map((product) => {
-            const isSoldOut = !product.quantity || product.quantity < 3;
-            const isWishlisted = wishlist.some(
-              (item) => item.slug === product.slug,
-            );
+        <>
+          {/* Structured Comprehensive Filter Bar Panel */}
+          <div className="filter-panel">
+            {/* Relocated Introductory Content */}
+            <p className="shop-intro">
+              Browse our curated selection of rare and resilient tropical plants
+              grown in St.&nbsp;Petersburg. Use the filters to explore categories
+              like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp;
+              Unusual, Best Plants for Your Zone and more. All listings reflect live
+              inventory; quantities are limited and updated daily.
+            </p>
 
-            return (
-              <div
-                key={product.slug}
-                className={`product-card ${isSoldOut ? "sold-out" : ""}`}
-              >
-                {/* Wishlist Heart Icon */}
+            <p className="shop-subtext">
+              Browse our curated selection of plants grown and sourced for our
+              St.&nbsp;Petersburg and Tampa Bay community. We stock tropical
+              houseplants, fruit trees and edibles, orchids, and hardy landscape
+              plants. Inventory changes regularly, so check back often or drop us a
+              note if you're looking for something special.
+            </p>
+
+            {/* Category Pill Buttons */}
+            <div className="category-section">
+              <label className="filter-group-label">Collections:</label>
+              <div className="category-pills">
                 <button
-                  onClick={() => toggleWishlist(product)}
-                  className="wishlist-heart-btn"
-                  aria-label="Add to wishlist"
+                  onClick={() => updateFilters({ category: "" })}
+                  className={selectedCategory === "" ? "active" : ""}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 24 24"
-                    fill={isWishlisted ? "#ba2f2f" : "none"}
-                    stroke={isWishlisted ? "#ba2f2f" : "#D4B06A"}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                  </svg>
+                  Shop All
                 </button>
-
-                {/* Absolute sold-out-badge in upper right if sold out */}
-                {isSoldOut && <div className="sold-out-badge">Sold Out</div>}
-
-                {/* Top content wrapper keeps image, title, properties together */}
-                <div className="product-card-top">
-                  <Link
-                    href={`/product/${product.slug}`}
-                    className="product-link"
+                {visibleCollections.map((collection) => (
+                  <button
+                    key={collection.id}
+                    onClick={() => updateFilters({ category: collection.id })}
+                    className={selectedCategory === collection.id ? "active" : ""}
                   >
-                    <div className="product-image-container">
-                      <Image
-                        src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
-                        alt={product.name}
-                        fill
-                        sizes="220px"
-                        className="product-image"
-                        unoptimized={
-                          !product.image ||
-                          !product.image.includes("cdn.sanity.io")
-                        }
-                      />
-                    </div>
-                    <strong className="product-card-title">
-                      {product.name}
-                    </strong>
-                  </Link>
-                  <p className="product-sizes">
-                    {product.sizes || "Standard Pot"}
-                  </p>
-                  <p className="product-type">{product.type}</p>
-                  <div className={`price ${isSoldOut ? "sold" : "available"}`}>
-                    {isSoldOut
-                      ? "Sold Out"
-                      : isNaN(product.price) || !product.price
-                        ? "Price on Request"
-                        : `$${product.price.toFixed(2)}`}
-                  </div>
-                  {/* Cold tolerance hardiness badge */}
-                  {product.type === "Plant" && (
-                    <div className="hardiness-badge">
-                      Hardy to: {product.temp_threshold || "50"}°F
-                    </div>
-                  )}
-                </div>
+                    {collection.name}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-                {/* Bottom aligned button or Sold out text box */}
-                <div className="product-card-bottom">
-                  {isSoldOut ? (
-                    <div className="sold-out-btn">Sold Out</div>
-                  ) : (
-                    <Button
-                      variant="green-filled"
-                      href={`/product/${product.slug}`}
-                      style={{
-                        width: "100%",
-                        marginTop: "0.6rem",
-                        fontFamily: "'Crimson Text', serif",
-                        fontSize: "1rem",
-                        padding: "0.5rem 1.4rem",
-                        borderRadius: "18px",
-                        boxSizing: "border-box",
+            {/* Dynamic Select Filters and Inputs Grid */}
+            <div className="filters-grid">
+              {/* Search Filter Input with Sleek Clear Button */}
+              <div className="filter-control">
+                <label htmlFor="search-input">Search Plants</label>
+                <div className="search-input-wrapper">
+                  <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search by name, type..."
+                    value={searchQuery}
+                    onChange={(e) => updateFilters({ search: e.target.value })}
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") {
+                        updateFilters({ search: "" });
+                      }
+                    }}
+                    aria-label="Search plants"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => updateFilters({ search: "" })}
+                      className="search-clear-btn"
+                      aria-label="Clear search query"
+                      onKeyDown={(e) => {
+                        if (e.key === "Escape") {
+                          updateFilters({ search: "" });
+                          document.getElementById("search-input")?.focus();
+                        }
                       }}
                     >
-                      View Product
-                    </Button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                      </svg>
+                    </button>
                   )}
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Pot Size / Container Filter Dropdown */}
+              <div className="filter-control">
+                <label htmlFor="size-select">Pot Size / Container</label>
+                <select
+                  id="size-select"
+                  value={selectedSize}
+                  onChange={(e) => updateFilters({ size: e.target.value })}
+                >
+                  <option value="">All Sizes</option>
+                  {sortedSizes.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Hardiness Zone Filter Dropdown */}
+              <div className="filter-control">
+                <label htmlFor="zone-select">Hardiness Zone</label>
+                <select
+                  id="zone-select"
+                  value={selectedZone}
+                  onChange={(e) => updateFilters({ zone: e.target.value })}
+                >
+                  <option value="">All Zones</option>
+                  {sortedZones.map((zone) => (
+                    <option key={zone} value={zone}>
+                      Zone {zone}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sort Options Dropdown */}
+              <div className="filter-control">
+                <label htmlFor="sort-select">Sort By</label>
+                <select
+                  id="sort-select"
+                  value={sortOrder}
+                  onChange={(e) => updateFilters({ sort: e.target.value })}
+                >
+                  <option value="">Featured / Newest</option>
+                  <option value="price-low-to-high">Price: Low to High</option>
+                  <option value="price-high-to-low">Price: High to Low</option>
+                  <option value="alphabetical">Alphabetical (A-Z)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* View Sold Out Toggle Button */}
+            <div className="toggle-section">
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={viewSoldOut}
+                  onChange={(e) =>
+                    updateFilters({ view_sold_out: e.target.checked })
+                  }
+                  className="toggle-checkbox"
+                />
+                View Sold Out Plants
+              </label>
+            </div>
+          </div>
+
+          {/* Results Count Summary with Accessible Announcements */}
+          <div className="results-count" role="status" aria-live="polite">
+            Showing {filteredProducts.length}{" "}
+            {filteredProducts.length === 1 ? "product" : "products"}
+          </div>
+
+          {/* Products Grid */}
+          {selectedCategory &&
+          products.length > 0 &&
+          getActiveInStockCountForCategory(selectedCategory) === 0 ? (
+            <div
+              style={{
+                width: "100%",
+                maxWidth: "800px",
+                margin: "2rem auto",
+                background: "#00301E",
+                border: "1px solid #D4B06A",
+                padding: "3rem 2rem",
+                borderRadius: "12px",
+                textAlign: "center",
+                color: "#F5E7C4",
+                boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                fontFamily: "'Crimson Text', serif",
+                boxSizing: "border-box",
+              }}
+            >
+              <h3
+                style={{
+                  color: "#D4B06A",
+                  fontFamily: "'Cinzel', serif",
+                  fontSize: "1.8rem",
+                  margin: "0 0 1rem 0",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Upcoming Batch / Gathering Inventory
+              </h3>
+              <p
+                style={{
+                  fontSize: "1.25rem",
+                  lineHeight: "1.6",
+                  maxWidth: "650px",
+                  margin: "0 auto 1.5rem auto",
+                }}
+              >
+                This batch is currently out of stock as we grow our next
+                generation. Check back soon or submit a plant sourcing request for custom collector orders.
+              </p>
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <Button variant="gold-filled" href="/sourcing">
+                  Request Specimen &rarr;
+                </Button>
+                <Button variant="outline" onClick={() => updateFilters({ category: "", size: "", zone: "", tag: "", light: "", bloom: "", search: "" })}>
+                  View All Available Flora
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="products">
+              {filteredProducts.map((product) => {
+                const isSoldOut = !product.quantity || product.quantity < 3;
+                const isWishlisted = wishlist.some(
+                  (item) => item.slug === product.slug,
+                );
+
+                return (
+                  <div
+                    key={product.slug}
+                    className={`product-card ${isSoldOut ? "sold-out" : ""}`}
+                  >
+                    {/* Wishlist Heart Icon */}
+                    <button
+                      onClick={() => toggleWishlist(product)}
+                      className="wishlist-heart-btn"
+                      aria-label="Add to wishlist"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill={isWishlisted ? "#ba2f2f" : "none"}
+                        stroke={isWishlisted ? "#ba2f2f" : "#D4B06A"}
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+                      </svg>
+                    </button>
+
+                    {/* Absolute sold-out-badge in upper right if sold out */}
+                    {isSoldOut && <div className="sold-out-badge">Sold Out</div>}
+
+                    {/* Top content wrapper keeps image, title, properties together */}
+                    <div className="product-card-top">
+                      <Link
+                        href={`/product/${product.slug}`}
+                        className="product-link"
+                      >
+                        <div className="product-image-container">
+                          <Image
+                            src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
+                            alt={product.name}
+                            fill
+                            sizes="220px"
+                            className="product-image"
+                            unoptimized={
+                              !product.image ||
+                              !product.image.includes("cdn.sanity.io")
+                            }
+                          />
+                        </div>
+                        <strong className="product-card-title">
+                          {product.name}
+                        </strong>
+                      </Link>
+                      <p className="product-sizes">
+                        {product.sizes || "Standard Pot"}
+                      </p>
+                      <p className="product-type">{product.type}</p>
+                      <div className={`price ${isSoldOut ? "sold" : "available"}`}>
+                        {isSoldOut
+                          ? "Sold Out"
+                          : isNaN(product.price) || !product.price
+                            ? "Price on Request"
+                            : `$${product.price.toFixed(2)}`}
+                      </div>
+                      {/* Cold tolerance hardiness badge */}
+                      {product.type === "Plant" && (
+                        <div className="hardiness-badge">
+                          Hardy to: {product.temp_threshold || "50"}°F
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Bottom aligned button or Sold out text box */}
+                    <div className="product-card-bottom">
+                      {isSoldOut ? (
+                        <div className="sold-out-btn">Sold Out</div>
+                      ) : (
+                        <Button
+                          variant="green-filled"
+                          href={`/product/${product.slug}`}
+                          style={{
+                            width: "100%",
+                            marginTop: "0.6rem",
+                            fontFamily: "'Crimson Text', serif",
+                            fontSize: "1rem",
+                            padding: "0.5rem 1.4rem",
+                            borderRadius: "18px",
+                            boxSizing: "border-box",
+                          }}
+                        >
+                          View Product
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
       )}
 
       {/* Styled JSX strictly using Cinzel and Crimson Text font tokens and our verified color design tokens */}
@@ -1242,7 +1272,7 @@ export default function Shop({ initialProducts = [] }) {
 
         .product-card-bottom {
           width: 100%;
-          margintop: auto;
+          margin-top: auto;
         }
 
         .sold-out-btn {
