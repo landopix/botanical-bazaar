@@ -1,10 +1,45 @@
+export function getZoneFromZip(zipInput) {
+  const cleanZip = String(zipInput || '').trim().replace(/\D/g, '').slice(0, 5);
+  if (cleanZip.length < 5) return null;
+  const num = parseInt(cleanZip, 10);
+
+  if (num >= 33000 && num <= 33499) return '10b';
+  if (num >= 33500 && num <= 33999) return '10a';
+  if (num >= 34000 && num <= 34999) return '9b';
+  if (num >= 32000 && num <= 32999) return '9a';
+  if (num >= 600 && num <= 999) return '11a';
+  if (num >= 96700 && num <= 96899) return '11a';
+  if (num >= 99500 && num <= 99999) return '4b';
+  if (num >= 90000 && num <= 92899) return '10a';
+  if (num >= 93000 && num <= 95999) return '9a';
+  if (num >= 97000 && num <= 99499) return '8b';
+  if (num >= 70000 && num <= 79999) return '8b';
+  if (num >= 30000 && num <= 31999) return '8a';
+  if (num >= 39000 && num <= 39999) return '8a';
+  if (num >= 27000 && num <= 28999) return '7b';
+  if (num >= 20000 && num <= 24699) return '7a';
+  if (num >= 37000 && num <= 38599) return '7a';
+  if (num >= 40000 && num <= 42799) return '6b';
+  if (num >= 15000 && num <= 19699) return '6b';
+  if (num >= 10000 && num <= 14999) return '6b';
+  if (num >= 43000 && num <= 47999) return '6a';
+  if (num >= 60000 && num <= 62999) return '5b';
+  if (num >= 63000 && num <= 65999) return '6a';
+  if (num >= 50000 && num <= 58999) return '4b';
+  if (num >= 48000 && num <= 49999) return '5b';
+  if (num >= 3000 && num <= 5999) return '5a';
+  if (num >= 80000 && num <= 89999) return '6a';
+
+  return '7a';
+}
+
+
 import Head from 'next/head';
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
-
 
 const staticPages = [
   {
@@ -85,6 +120,13 @@ const staticPages = [
     content: "zones usda cold hardiness zone map winter survival temperature protection guide"
   },
   {
+    title: "Plant Sourcing & Inquiries",
+    href: "/sourcing",
+    category: "Services",
+    description: "Custom plant sourcing for rare collector species and exotic cultivars.",
+    content: "sourcing custom requests rare plants collector specimen inquiry search nursery network"
+  },
+  {
     title: "Terms & Conditions",
     href: "/terms",
     category: "Policies",
@@ -112,6 +154,32 @@ export default function Layout({ children }) {
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
+  const [zipInput, setZipInput] = useState("");
+  const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
+  const [zipError, setZipError] = useState("");
+
+  useEffect(() => {
+    if (hardinessZone) {
+      setSelectedDropdownZone(hardinessZone);
+    }
+  }, [hardinessZone]);
+
+  const handleZipSubmit = (e) => {
+    e.preventDefault();
+    setZipError("");
+    const zone = getZoneFromZip(zipInput);
+    if (zone) {
+      handleSelectZone(zone);
+      setZipInput("");
+    } else {
+      setZipError("Please enter a valid 5-digit US ZIP Code.");
+    }
+  };
+
+  const handleDropdownSubmit = (e) => {
+    e.preventDefault();
+    handleSelectZone(selectedDropdownZone);
+  };
 
   // Keep track of group open/close states in sidebar
   const [isGuidesOpen, setIsGuidesOpen] = useState(false);
@@ -128,7 +196,6 @@ export default function Layout({ children }) {
       setAllProducts(window.PRODUCTS || []);
     };
     if (typeof window !== "undefined") {
-      // Load saved hardiness zone if present
       const savedZone = localStorage.getItem("user_hardiness_zone");
       if (savedZone) {
         setHardinessZone(savedZone);
@@ -141,7 +208,12 @@ export default function Layout({ children }) {
         }
       };
 
+      const handleOpenZoneModal = () => {
+        setIsZoneModalOpen(true);
+      };
+
       window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      window.addEventListener("open_zone_modal", handleOpenZoneModal);
 
       if (window.PRODUCTS) {
         loadProducts();
@@ -149,33 +221,38 @@ export default function Layout({ children }) {
 
       return () => {
         window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+        window.removeEventListener("open_zone_modal", handleOpenZoneModal);
       };
     }
   }, []);
 
-  const handleZoneChange = (e) => {
-    const newZone = e.target.value;
+  const handleSelectZone = (newZone) => {
     setHardinessZone(newZone);
-    localStorage.setItem("user_hardiness_zone", newZone);
-    setIsChangingFooterZone(false);
-    window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("user_hardiness_zone", newZone);
+      window.dispatchEvent(new Event("user_hardiness_zone_updated"));
+    }
+    setIsZoneModalOpen(false);
   };
 
-  // Manage Esc key press to close sidebar
+  // Manage Esc key press to close sidebar or USDA Zone modal
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && isSidebarOpen) {
-        setIsSidebarOpen(false);
+      if (e.key === "Escape") {
+        if (isZoneModalOpen) {
+          setIsZoneModalOpen(false);
+        } else if (isSidebarOpen) {
+          setIsSidebarOpen(false);
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSidebarOpen]);
+  }, [isSidebarOpen, isZoneModalOpen]);
 
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
     const handleDocumentClick = (e) => {
-      console.log('[Mobile Nav] Click detected on:', e.target);
       const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
       if (toggleBtn) {
         e.preventDefault();
@@ -220,11 +297,29 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen]);
 
-  // Close sidebar on page change
+  // Listen for open_zone_modal event from page components
   useEffect(() => {
-    setIsSidebarOpen(false);
-    setSearchQuery("");
-  }, [router.asPath]);
+    const handleOpenZoneModal = () => setIsZoneModalOpen(true);
+    window.addEventListener("open_zone_modal", handleOpenZoneModal);
+    return () => window.removeEventListener("open_zone_modal", handleOpenZoneModal);
+  }, []);
+
+  // Route Change State Cleanup (Fixes Layout Stickiness on Back/Forward Button)
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsSidebarOpen(false);
+      setIsGuidesOpen(false);
+      setIsFaqOpen(false);
+      setIsCollectionsOpen(false);
+      setIsZoneModalOpen(false);
+      setSearchQuery("");
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -235,6 +330,7 @@ export default function Layout({ children }) {
     { label: "About", href: "/about" },
     { label: "Shop All", href: "/shop" },
     { label: "Consultations", href: "/consultations" },
+    { label: "Plant Sourcing", href: "/sourcing" },
     { label: "The Almanac", href: "/almanac" },
     { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
@@ -284,8 +380,8 @@ export default function Layout({ children }) {
       setOpenState: setIsFaqOpen,
       items: [
         { label: "FAQ Overview", href: "/faq" },
-        { label: "Shipping & Unpacking", href: "/shipping-pickup" },
-        { label: "Refunds & Replacements", href: "/returns" },
+        { label: "Shipping & Local Pickup", href: "/shipping-pickup" },
+        { label: "Plant Care Guarantee", href: "/returns" },
         { label: "Terms & Conditions", href: "/terms" },
         { label: "Privacy Policy", href: "/privacy" },
       ],
@@ -294,7 +390,6 @@ export default function Layout({ children }) {
 
   const query = searchQuery.trim().toLowerCase();
 
-  // Filter products for live product search results
   const matchingProducts =
     query !== ""
       ? allProducts
@@ -327,6 +422,9 @@ export default function Layout({ children }) {
 
   return (
     <div className="site-wrapper">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <Head>
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
         <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
@@ -396,11 +494,12 @@ export default function Layout({ children }) {
             left: 0,
             width: "100vw",
             height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.45)",
-            backdropFilter: "blur(3px)",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
             zIndex: 999,
             cursor: "pointer",
-            transition: "opacity 0.2s ease-in-out",
+            transition: "opacity 200ms ease-in-out",
           }}
         />
       )}
@@ -431,54 +530,56 @@ export default function Layout({ children }) {
           </svg>
         </button>
 
-        {/* Cart Action Link with Badge */}
-        <Link
-          href="/cart"
-          className="cart-btn"
-          aria-label="View cart"
-          style={{ position: "relative" }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#D4B06A"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {/* Cart Action Link with Badge (suppressed on /checkout for streamlined flow) */}
+        {router.pathname !== '/checkout' && (
+          <Link
+            href="/cart"
+            className="cart-btn"
+            aria-label="View cart"
+            style={{ position: "relative" }}
           >
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-          {cartCount > 0 && (
-            <span
-              style={{
-                position: "absolute",
-                top: "0",
-                right: "0",
-                backgroundColor: "#ba2f2f",
-                color: "#ffffff",
-                borderRadius: "50%",
-                fontSize: "0.7rem",
-                width: "18px",
-                height: "18px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: "bold",
-                border: "1px solid #00301e",
-                transform: "translate(25%, -25%)",
-                zIndex: 10,
-                boxSizing: "border-box",
-              }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#D4B06A"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              {cartCount}
-            </span>
-          )}
-        </Link>
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            {cartCount > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: "0",
+                  right: "0",
+                  backgroundColor: "#ba2f2f",
+                  color: "#ffffff",
+                  borderRadius: "50%",
+                  fontSize: "0.7rem",
+                  width: "18px",
+                  height: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: "bold",
+                  border: "1px solid #00301e",
+                  transform: "translate(25%, -25%)",
+                  zIndex: 10,
+                  boxSizing: "border-box",
+                }}
+              >
+                {cartCount}
+              </span>
+            )}
+          </Link>
+        )}
 
         {/* Wishlist Action Link with Badge */}
         <Link
@@ -554,7 +655,6 @@ export default function Layout({ children }) {
         className={`sidebar ${isSidebarOpen ? "open" : ""}`}
         role="navigation"
       >
-        {/* Navigation Live Filter Search Input with clickable Lantern submark */}
         <div className="sidebar-search-container">
           <Link
             href="/"
@@ -577,7 +677,6 @@ export default function Layout({ children }) {
           />
         </div>
 
-        {/* Live Product Search Results Stack */}
         {searchQuery.trim() !== "" ? (
           <div className="sidebar-search-results-drawer">
             {matchingPages.length > 0 && (
@@ -735,7 +834,7 @@ export default function Layout({ children }) {
           />
         </Link>
         <button
-          className="header-mobile-toggle"
+          className="header-mobile-toggle block lg:hidden"
           aria-label="Toggle mobile menu"
         >
           <svg
@@ -755,7 +854,6 @@ export default function Layout({ children }) {
           </svg>
         </button>
         <nav>
-          {/* Collections Rich Dropdown Menu */}
           <div className="nav-dropdown-wrapper">
             <Link href="/shop" className="nav-dropdown-trigger">
               SHOP ALL ▾
@@ -824,9 +922,9 @@ export default function Layout({ children }) {
       </header>
 
       {/* Main Page Content Wrapper */}
-      <main className="site-main">{children}</main>
+      <main id="main-content" className="site-main">{children}</main>
 
-      {/* High-Fidelity Footer - Logee's Inspired Multi-column Layout */}
+      {/* High-Fidelity Footer */}
       <footer className="footer-container">
         <div className="footer-columns">
           <div className="footer-column">
@@ -840,23 +938,27 @@ export default function Layout({ children }) {
           </div>
           <div className="footer-column">
             <h3>Ordering Info</h3>
-            <Link href="/faq">FAQ Overview</Link>
+            <Link href="/faq">FAQ</Link>
             <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
-            <Link href="/returns">Refunds &amp; Replacements</Link>
-            <Link href="/terms">Sales Tax &amp; Terms</Link>
+            <Link href="/returns">Refunds &amp; Guarantee</Link>
+            <Link href="/account">Track Order</Link>
+            <Link href="/terms">Terms</Link>
           </div>
           <div className="footer-column">
             <h3>About Us</h3>
-            <Link href="/about">Our Mercantile History</Link>
-            <Link href="/contact">Store Visit &amp; Location</Link>
+            <Link href="/about">Our History</Link>
+            <Link href="/contact">Store Visit</Link>
+            <Link href="/sourcing">Plant Sourcing</Link>
             <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/accessibility">Accessibility</Link>
             <Link href="/terms">Terms of Service</Link>
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
             <Link href="/shop">Shop All</Link>
-            <Link href="/zones">USDA Hardiness Zones</Link>
-            <Link href="/garden-month">Monthly Plant Care Guides</Link>
+            <Link href="/sales">On Sale</Link>
+            <Link href="/zones">USDA Zones</Link>
+            <Link href="/almanac">Plant Care Almanac</Link>
 
             <div className="footer-zone-selector" style={{
               marginTop: "0.8rem",
@@ -914,9 +1016,7 @@ export default function Layout({ children }) {
         ↑
       </button>
 
-      {/* Styled JSX for Dropdowns, announcement banner, and responsive footer layout */}
       <style jsx global>{`
-        /* Custom branded Warm Gold (#D4B06A) scrollbar styling on the sidebar menu */
         .sidebar::-webkit-scrollbar {
           width: 8px;
         }
@@ -928,10 +1028,11 @@ export default function Layout({ children }) {
           border-radius: 4px;
         }
 
-        /* Collections Header Dropdown */
         .nav-dropdown-wrapper {
           position: relative;
           display: inline-block;
+          padding-bottom: 0.5rem;
+          margin-bottom: -0.5rem;
         }
         .nav-dropdown-trigger {
           cursor: pointer;
@@ -958,16 +1059,17 @@ export default function Layout({ children }) {
           min-width: 380px;
           z-index: 1000;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-          margin-top: 0.5rem;
+          margin-top: 0;
         }
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
-          top: -30px;
-          left: -20px;
-          right: -20px;
-          height: 35px;
+          top: -25px;
+          left: 0;
+          right: 0;
+          height: 25px;
           background: transparent;
+          display: block;
         }
         .nav-dropdown-wrapper:hover .nav-dropdown-menu {
           display: block;
@@ -1015,7 +1117,6 @@ export default function Layout({ children }) {
           text-decoration: underline !important;
         }
 
-        /* Sidebar Product Search Results Redesign */
         .sidebar-search-results-drawer {
           width: 100%;
           box-sizing: border-box;
@@ -1113,7 +1214,6 @@ export default function Layout({ children }) {
           font-weight: bold;
         }
 
-        /* Footer Column Redesign styles */
         .footer-container {
           background-color: #001f14;
           border-top: 1px solid rgba(212, 176, 106, 0.3);
@@ -1190,7 +1290,13 @@ export default function Layout({ children }) {
           justify-content: center;
         }
 
-        @media (max-width: 900px) {
+        @media (min-width: 1024px) {
+          .header-mobile-toggle {
+            display: none !important;
+          }
+        }
+
+        @media (max-width: 1023px) {
           header nav {
             display: none !important;
           }
@@ -1235,9 +1341,16 @@ export default function Layout({ children }) {
       `}</style>
       {isZoneModalOpen && (
         <div className="zone-modal-overlay" onClick={() => setIsZoneModalOpen(false)}>
-          <div className="zone-modal-container" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="zone-modal-container"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="zone-modal-title"
+            style={{ maxWidth: '440px' }}
+          >
             <div className="zone-modal-header">
-              <h3 className="zone-modal-title">Select Your USDA Zone</h3>
+              <h3 id="zone-modal-title" className="zone-modal-title">Select Your Hardiness Zone</h3>
               <button
                 className="zone-modal-close"
                 onClick={() => setIsZoneModalOpen(false)}
@@ -1246,18 +1359,88 @@ export default function Layout({ children }) {
                 ✕
               </button>
             </div>
-            <div className="zone-modal-grid">
-              {Array.from({ length: 13 }, (_, i) => i + 1)
-                .flatMap((z) => [`${z}a`, `${z}b`])
-                .map((zone) => (
+
+            <p style={{ color: '#E9DCBE', fontSize: '0.95rem', margin: '0 0 1.2rem 0', lineHeight: '1.5' }}>
+              Calculate your USDA Hardiness Zone via 5-digit ZIP code or manually select your zone below.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {/* ZIP Code Lookup */}
+              <form onSubmit={handleZipSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
+                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  ZIP Code Lookup
+                </label>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <input
+                    type="text"
+                    placeholder="e.g. 33705"
+                    maxLength={5}
+                    value={zipInput}
+                    onChange={(e) => { setZipInput(e.target.value); setZipError(''); }}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.8rem',
+                      borderRadius: '6px',
+                      border: '1px solid #D4B06A',
+                      backgroundColor: '#1C3D2E',
+                      color: '#F5E7C4',
+                      fontSize: '0.95rem',
+                      outline: 'none'
+                    }}
+                  />
                   <button
-                    key={zone}
-                    className={`zone-modal-pill ${hardinessZone === zone ? 'active' : ''}`}
-                    onClick={() => handleSelectZone(zone)}
+                    type="submit"
+                    className="zone-pill-btn"
+                    style={{ background: '#D4B06A', color: '#00301E', fontWeight: 'bold', border: 'none', padding: '0.6rem 1rem', cursor: 'pointer' }}
                   >
-                    Zone {zone}
+                    Use ZIP
                   </button>
-                ))}
+                </div>
+                {zipError && (
+                  <div style={{ color: '#ff8a8a', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                    {zipError}
+                  </div>
+                )}
+              </form>
+
+              {/* Zone Dropdown */}
+              <form onSubmit={handleDropdownSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
+                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Zone Dropdown
+                </label>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <select
+                    value={selectedDropdownZone}
+                    onChange={(e) => setSelectedDropdownZone(e.target.value)}
+                    style={{
+                      flex: 1,
+                      padding: '0.6rem 0.8rem',
+                      borderRadius: '6px',
+                      border: '1px solid #D4B06A',
+                      backgroundColor: '#1C3D2E',
+                      color: '#F5E7C4',
+                      fontSize: '0.95rem',
+                      outline: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {Array.from({ length: 9 }, (_, i) => i + 3)
+                      .flatMap((z) => [`${z}a`, `${z}b`])
+                      .map((z) => (
+                        <option key={z} value={z}>
+                          Zone {z}
+                        </option>
+                      ))}
+                  </select>
+                  <button
+                    type="submit"
+                    className="zone-pill-btn"
+                    style={{ background: '#D4B06A', color: '#00301E', fontWeight: 'bold', border: 'none', padding: '0.6rem 1rem', cursor: 'pointer' }}
+                  >
+                    Use Zone
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

@@ -209,7 +209,13 @@ footer p {
   justify-content: center;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 1024px) {
+  .header-mobile-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
   header nav {
     display: none !important;
   }
@@ -543,4 +549,64 @@ footer p {
   color: #00301E;
   border-color: #F5E7C4;
   font-weight: bold;
+}
+
+/* Accessibility Skip-to-Content Link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 10px;
+  background: #00301E;
+  color: #D4B06A;
+  padding: 12px 20px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 700;
+  border: 2px solid #D4B06A;
+  border-radius: 4px;
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  top: 10px;
+  outline: 3px solid #D4B06A;
+  outline-offset: 2px;
+}
+
+/* Custom Global Branded Scrollbars (Firefox & Chrome/Safari/Edge) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D4B06A #00301E;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #00301E;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #D4B06A;
+  border-radius: 4px;
+  border: 1px solid #00301E;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #E9DCBE;
+}
+
+/* Invisible Hover Bridge for Header Dropdown Triggers */
+.nav-dropdown-trigger::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background: transparent;
+  pointer-events: auto;
 }
