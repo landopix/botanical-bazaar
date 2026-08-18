@@ -474,7 +474,7 @@ export default function Layout({ children }) {
                 }
               ],
               "priceRange": "$$",
-              "telephone": "+1-727-555-0199",
+              "telephone": "+1-727-350-7876",
               "sameAs": [
                 "https://www.instagram.com/thebotanicalbazaar",
                 "https://www.facebook.com/thebotanicalbazaar"
@@ -898,15 +898,17 @@ export default function Layout({ children }) {
           <Link href="/events">Events</Link>
           <Link href="/orchids-gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
+
+          {/* FAQ Rich Dropdown Menu */}
           <div className="nav-dropdown-wrapper">
             <Link href="/faq" className="nav-dropdown-trigger">
               FAQ ▾
             </Link>
-            <div className="nav-dropdown-menu nav-dropdown-menu-faq" style={{ minWidth: '240px' }}>
+            <div className="nav-dropdown-menu" style={{ minWidth: "260px" }}>
               <Link href="/faq" className="dropdown-title">
-                HELP &amp; POLICIES
+                CUSTOMER HELP & FAQ
               </Link>
-              <div className="dropdown-col" style={{ width: '100%' }}>
+              <div className="dropdown-col" style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
                 <Link href="/faq">FAQ Overview</Link>
                 <Link href="/shipping-pickup">Shipping &amp; Local Pickup</Link>
                 <Link href="/returns">Plant Care Guarantee</Link>
@@ -927,7 +929,10 @@ export default function Layout({ children }) {
         <div className="footer-columns">
           <div className="footer-column">
             <h3>Contact Info</h3>
-            <p className="contact-item">St. Petersburg, FL</p>
+            <p className="contact-item">
+              Address: P.O. Box 35353, St. Petersburg, FL 33705
+            </p>
+            <p className="contact-item">Phone: <a href="tel:7273507876" style={{ color: "inherit", textDecoration: "underline" }}>(727) 350-7876</a></p>
             <p className="contact-item">Email: info@thebotanicalbazaar.com</p>
             <p className="contact-item">Hours: Thurs - Sun: 10AM - 5PM</p>
           </div>

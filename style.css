@@ -365,16 +365,13 @@ footer p {
   text-align: left;
 }
 .nav-dropdown-menu::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background: #1C3D2E;
-  border-top: 1px solid #D4B06A;
-  border-left: 1px solid #D4B06A;
+  top: -30px;
+  left: -20px;
+  right: -20px;
+  height: 35px;
+  background: transparent;
 }
 .nav-dropdown-wrapper:hover .nav-dropdown-menu {
   display: block;

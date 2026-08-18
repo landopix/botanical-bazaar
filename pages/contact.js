@@ -53,7 +53,7 @@ export default function Contact() {
       </Head>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Contact Our Nursery Guides</h1>
       <p style={{ textAlign: 'center', fontSize: '1.1rem', marginBottom: '3rem', color: '#E9DCBE' }}>
-        Have questions about stock, local pickup schedules, or plant care compatibility? Fill out the secure form below.
+        Have questions about stock, local pickup schedules, or plant care compatibility? Call or text us at <a href="tel:7273507876" style={{ color: "#D4B06A", textDecoration: "underline" }}>(727) 350-7876</a> or fill out the secure form below.
       </p>
 
       {submitted ? (
