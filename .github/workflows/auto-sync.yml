@@ -1,0 +1,21 @@
+name: Auto Sync Backup
+
+on:
+  push:
+
+jobs:
+  sync-backup:
+    runs-on: ubuntu-latest
+   permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to Backup Branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git push origin main:backup-main --force
