@@ -376,7 +376,7 @@ export default function Layout({ children }) {
                 }
               ],
               "priceRange": "$$",
-              "telephone": "+1-727-555-0199",
+              "telephone": "+1-727-350-7876",
               "sameAs": [
                 "https://www.instagram.com/thebotanicalbazaar",
                 "https://www.facebook.com/thebotanicalbazaar"
@@ -834,6 +834,7 @@ export default function Layout({ children }) {
             <p className="contact-item">
               Address: P.O. Box 35353, St. Petersburg, FL 33705
             </p>
+            <p className="contact-item">Phone: <a href="tel:7273507876" style={{ color: "inherit", textDecoration: "underline" }}>(727) 350-7876</a></p>
             <p className="contact-item">Email: info@thebotanicalbazaar.com</p>
             <p className="contact-item">Hours: Thurs - Sun: 10AM - 5PM</p>
           </div>

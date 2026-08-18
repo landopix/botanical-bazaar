@@ -129,184 +129,145 @@ export default function Shop({ initialProducts = [] }) {
   useEffect(() => {
     let result = [...products];
 
-    // 1. Category Filter Logic with flexible mapping for collections
+    // 1. Collection Handle / Category Filter Logic
     if (selectedCategory) {
       const catLower = selectedCategory.toLowerCase();
       result = result.filter((product) => {
-        const hasCategory = (c) =>
+        const matchesCollectionHandle =
+          Array.isArray(product.collectionHandles) &&
+          product.collectionHandles.some((h) => h.toLowerCase() === catLower);
+        const matchesCategory =
           Array.isArray(product.categories) &&
-          product.categories.some((pc) => pc.toLowerCase() === c.toLowerCase());
-        const hasTag = (t) =>
+          product.categories.some((pc) => pc.toLowerCase() === catLower);
+        const matchesTag =
           Array.isArray(product.tags) &&
-          product.tags.some((pt) => pt.toLowerCase() === t.toLowerCase());
-        const textMatches = (keyword) => {
-          const text =
-            `${product.name} ${product.description || ""}`.toLowerCase();
-          return text.includes(keyword);
-        };
+          product.tags.some((pt) => pt.toLowerCase() === catLower);
+        const textMatches = (keyword) =>
+          `${product.name || ""} ${product.description || ""}`
+            .toLowerCase()
+            .includes(keyword);
+
+        if (matchesCollectionHandle || matchesCategory || matchesTag) return true;
 
         if (catLower === "houseplants") {
-          return (
-            hasCategory("houseplants") ||
-            hasTag("houseplant") ||
-            textMatches("houseplant")
-          );
+          return matchesTag("houseplant") || textMatches("houseplant");
         }
-        if (
-          catLower === "orchids-tropicals" ||
-          catLower === "orchids & tropicals"
-        ) {
+        if (catLower === "orchids-tropicals" || catLower === "orchids & tropicals") {
           return (
-            hasCategory("orchids-tropicals") ||
-            hasCategory("plants") ||
-            hasTag("tropical") ||
-            hasTag("orchid") ||
+            matchesCategory("plants") ||
+            matchesTag("tropical") ||
+            matchesTag("orchid") ||
             textMatches("orchid") ||
             textMatches("tropical")
           );
         }
         if (catLower === "fruit-trees" || catLower === "fruit trees") {
-          return (
-            hasCategory("fruit-trees") ||
-            hasTag("fruit-tree") ||
-            textMatches("fruit tree") ||
-            textMatches("fruit")
-          );
+          return matchesTag("fruit-tree") || textMatches("fruit tree") || textMatches("fruit");
         }
-        if (
-          catLower === "herbs-medicinal" ||
-          catLower === "herbs & medicinal"
-        ) {
-          return (
-            hasCategory("herbs-medicinal") ||
-            hasTag("herb") ||
-            hasTag("medicinal") ||
-            textMatches("herb") ||
-            textMatches("medicinal") ||
-            textMatches("aromatic")
-          );
+        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
+          return matchesTag("herb") || matchesTag("medicinal") || textMatches("herb") || textMatches("medicinal");
         }
         if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-          return (
-            hasCategory("exotics-rare") ||
-            hasTag("rare") ||
-            hasTag("exotic") ||
-            textMatches("rare") ||
-            textMatches("exotic") ||
-            textMatches("unusual")
-          );
+          return matchesTag("rare") || matchesTag("exotic") || textMatches("rare") || textMatches("exotic");
         }
         if (catLower === "seeds") {
-          return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
+          return matchesTag("seed") || textMatches("seed");
         }
         if (catLower === "stickers-art" || catLower === "stickers & art") {
-          return (
-            hasCategory("stickers-art") ||
-            hasCategory("art") ||
-            hasTag("sticker") ||
-            hasTag("art") ||
-            textMatches("sticker") ||
-            textMatches("art")
-          );
+          return matchesCategory("art") || matchesTag("sticker") || matchesTag("art") || textMatches("sticker") || textMatches("art");
         }
-        if (
-          catLower === "tinctures-apothecary" ||
-          catLower === "tinctures & apothecary"
-        ) {
-          return (
-            hasCategory("tinctures-apothecary") ||
-            hasCategory("apothecary") ||
-            hasTag("tincture") ||
-            hasTag("apothecary") ||
-            textMatches("tincture") ||
-            textMatches("apothecary") ||
-            textMatches("drops")
-          );
+        if (catLower === "tinctures-apothecary" || catLower === "tinctures & apothecary") {
+          return matchesCategory("apothecary") || matchesTag("tincture") || matchesTag("apothecary") || textMatches("tincture");
         }
-        if (
-          catLower === "terrarium-vivarium" ||
-          catLower === "terrarium & vivarium" ||
-          catLower === "terrarium & vivarium components"
-        ) {
-          return (
-            hasCategory("terrarium-vivarium") ||
-            hasCategory("habitat") ||
-            hasTag("leaf-litter") ||
-            hasTag("substrate") ||
-            textMatches("leaf litter") ||
-            textMatches("habitat") ||
-            textMatches("vivarium") ||
-            textMatches("shrimp") ||
-            textMatches("tank")
-          );
+        if (catLower === "terrarium-vivarium" || catLower === "terrarium & vivarium") {
+          return matchesCategory("habitat") || matchesTag("leaf-litter") || matchesTag("substrate") || textMatches("vivarium") || textMatches("terrarium");
         }
 
-        // Exact fallback
-        return hasCategory(selectedCategory);
+        return false;
       });
     }
 
-    // 2. Hide Sold Out Filter by default (quantity < 3), unless viewSoldOut is true
+    // 2. Availability Filter (filter out availableForSale === false or quantity < 3 by default)
     if (!viewSoldOut) {
       result = result.filter((p) => {
-        const isSold = !p.quantity || p.quantity < 3;
-        return !isSold;
+        const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 3);
+        return isAvailable;
       });
     }
 
-    // 3. Pot Size / Container Filter
+    // 3. Pot Size Filter (custom.pot_size or sizes fallback)
     if (selectedSize) {
+      const sizeLower = selectedSize.toLowerCase();
       result = result.filter((product) => {
-        if (!product.sizes || typeof product.sizes !== "string") return false;
-        const parts = product.sizes
-          .split("|")
-          .map((p) => p.trim().toLowerCase());
-        return parts.includes(selectedSize.toLowerCase());
+        if (product.custom?.pot_size) {
+          if (product.custom.pot_size.toLowerCase().includes(sizeLower)) return true;
+        }
+        if (product.sizes && typeof product.sizes === "string") {
+          const parts = product.sizes.split("|").map((p) => p.trim().toLowerCase());
+          return parts.some((p) => p.includes(sizeLower));
+        }
+        return false;
       });
     }
 
-    // 4. Hardiness Zone Filter
+    // 4. Hardiness Zone Filter (custom.hardiness_zone or zones fallback)
     if (selectedZone) {
-      result = result.filter(
-        (product) => product.zones && product.zones.includes(selectedZone),
-      );
+      const zoneTarget = selectedZone.toLowerCase();
+      result = result.filter((product) => {
+        if (product.custom?.hardiness_zone) {
+          if (product.custom.hardiness_zone.toLowerCase().includes(zoneTarget)) return true;
+        }
+        return Array.isArray(product.zones) && product.zones.some((z) => z.toLowerCase() === zoneTarget);
+      });
     }
 
     // 5. Search Text Query
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter((p) => {
-        let haystack = [p.name, p.type, p.description, p.sku]
+        let haystack = [p.name, p.type, p.description, p.sku, p.custom?.pot_size, p.custom?.hardiness_zone]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
-        if (Array.isArray(p.categories))
-          haystack += " " + p.categories.join(" ").toLowerCase();
-        if (Array.isArray(p.zones))
-          haystack += " " + p.zones.join(" ").toLowerCase();
-        if (Array.isArray(p.tags))
-          haystack += " " + p.tags.join(" ").toLowerCase();
+        if (Array.isArray(p.categories)) haystack += " " + p.categories.join(" ").toLowerCase();
+        if (Array.isArray(p.zones)) haystack += " " + p.zones.join(" ").toLowerCase();
+        if (Array.isArray(p.tags)) haystack += " " + p.tags.join(" ").toLowerCase();
         return haystack.includes(q);
       });
     }
 
-    // 6. Sort Logic
+    // 6. Client-Side Array Sorting
     if (sortOrder === "price-low-to-high") {
-      result.sort((a, b) => (a.price || 0) - (b.price || 0));
+      result.sort((a, b) => {
+        const priceA = a.minVariantPrice !== undefined ? a.minVariantPrice : (a.price || 0);
+        const priceB = b.minVariantPrice !== undefined ? b.minVariantPrice : (b.price || 0);
+        return priceA - priceB;
+      });
     } else if (sortOrder === "price-high-to-low") {
-      result.sort((a, b) => (b.price || 0) - (a.price || 0));
+      result.sort((a, b) => {
+        const priceA = a.minVariantPrice !== undefined ? a.minVariantPrice : (a.price || 0);
+        const priceB = b.minVariantPrice !== undefined ? b.minVariantPrice : (b.price || 0);
+        return priceB - priceA;
+      });
     } else if (sortOrder === "alphabetical") {
       result.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    } else {
+      // Default: "Featured / Newest" -> Sort descending by createdAt date
+      result.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      });
     }
 
-    // Always sort in-stock items to the top if viewSoldOut is true
+    // Push sold out items to bottom if viewSoldOut is true
     if (viewSoldOut) {
       result.sort((a, b) => {
-        const aSold = !a.quantity || a.quantity < 3;
-        const bSold = !b.quantity || b.quantity < 3;
+        const aSold = a.availableForSale === false || (!a.quantity || a.quantity < 3);
+        const bSold = b.availableForSale === false || (!b.quantity || b.quantity < 3);
         if (aSold && !bSold) return 1;
         if (!aSold && bSold) return -1;
-        return 0; // maintain relative sorted order
+        return 0;
       });
     }
 
@@ -321,9 +282,12 @@ export default function Shop({ initialProducts = [] }) {
     searchQuery,
   ]);
 
-  // Dynamically extract unique available hardiness zones (excluding extremely cold 1 & 2)
+  // Dynamically extract unique available hardiness zones
   const availableZones = new Set();
   products.forEach((prod) => {
+    if (prod.custom?.hardiness_zone) {
+      availableZones.add(prod.custom.hardiness_zone.trim());
+    }
     if (Array.isArray(prod.zones)) {
       prod.zones.forEach((zone) => {
         if (zone !== "1" && zone !== "2") {
@@ -333,12 +297,15 @@ export default function Shop({ initialProducts = [] }) {
     }
   });
   const sortedZones = Array.from(availableZones).sort(
-    (a, b) => parseFloat(a) - parseFloat(b),
+    (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
   );
 
-  // Dynamically extract unique container options by splitting sizes by " | "
+  // Dynamically extract unique pot size container options
   const availableSizes = new Set();
   products.forEach((prod) => {
+    if (prod.custom?.pot_size) {
+      availableSizes.add(prod.custom.pot_size.trim());
+    }
     if (prod.sizes && typeof prod.sizes === "string") {
       const parts = prod.sizes.split("|");
       parts.forEach((part) => {
