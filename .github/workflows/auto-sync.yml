@@ -2,11 +2,13 @@ name: Auto Sync Backup
 
 on:
   push:
+    branches:
+      - main
 
 jobs:
   sync-backup:
     runs-on: ubuntu-latest
-   permissions:
+    permissions:
       contents: write
     steps:
       - name: Checkout Repository
