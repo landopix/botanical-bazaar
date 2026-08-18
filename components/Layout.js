@@ -380,8 +380,8 @@ export default function Layout({ children }) {
       setOpenState: setIsFaqOpen,
       items: [
         { label: "FAQ Overview", href: "/faq" },
-        { label: "Shipping & Unpacking", href: "/shipping-pickup" },
-        { label: "Refunds & Replacements", href: "/returns" },
+        { label: "Shipping & Local Pickup", href: "/shipping-pickup" },
+        { label: "Plant Care Guarantee", href: "/returns" },
         { label: "Terms & Conditions", href: "/terms" },
         { label: "Privacy Policy", href: "/privacy" },
       ],
@@ -898,7 +898,23 @@ export default function Layout({ children }) {
           <Link href="/events">Events</Link>
           <Link href="/orchids-gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
-          <Link href="/faq">FAQ</Link>
+          <div className="nav-dropdown-wrapper">
+            <Link href="/faq" className="nav-dropdown-trigger">
+              FAQ ▾
+            </Link>
+            <div className="nav-dropdown-menu nav-dropdown-menu-faq" style={{ minWidth: '240px' }}>
+              <Link href="/faq" className="dropdown-title">
+                HELP &amp; POLICIES
+              </Link>
+              <div className="dropdown-col" style={{ width: '100%' }}>
+                <Link href="/faq">FAQ Overview</Link>
+                <Link href="/shipping-pickup">Shipping &amp; Local Pickup</Link>
+                <Link href="/returns">Plant Care Guarantee</Link>
+                <Link href="/terms">Terms &amp; Conditions</Link>
+                <Link href="/privacy">Privacy Policy</Link>
+              </div>
+            </div>
+          </div>
           <Link href="/about">About</Link>
         </nav>
       </header>
@@ -934,7 +950,7 @@ export default function Layout({ children }) {
           </div>
           <div className="footer-column">
             <h3>Find Plants &amp; Care</h3>
-            <Link href="/shop">View All Flora</Link>
+            <Link href="/shop">Shop All</Link>
             <Link href="/sales">On Sale</Link>
             <Link href="/zones">USDA Zones</Link>
             <Link href="/almanac">Plant Care Almanac</Link>
@@ -1010,6 +1026,8 @@ export default function Layout({ children }) {
         .nav-dropdown-wrapper {
           position: relative;
           display: inline-block;
+          padding-bottom: 0.5rem;
+          margin-bottom: -0.5rem;
         }
         .nav-dropdown-trigger {
           cursor: pointer;
@@ -1036,16 +1054,17 @@ export default function Layout({ children }) {
           min-width: 380px;
           z-index: 1000;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-          margin-top: 0.5rem;
+          margin-top: 0;
         }
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
-          top: -20px;
+          top: -25px;
           left: 0;
           right: 0;
-          height: 20px;
+          height: 25px;
           background: transparent;
+          display: block;
         }
         .nav-dropdown-wrapper:hover .nav-dropdown-menu {
           display: block;

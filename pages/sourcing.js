@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
-import Layout from '../components/Layout';
 
 const BUDGET_OPTIONS = [
   'Under $50',
@@ -114,7 +113,7 @@ export default function Sourcing() {
   };
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Plant Sourcing & Inquiry | The Botanical Bazaar</title>
         <meta
@@ -532,6 +531,6 @@ export default function Sourcing() {
           }
         }
       `}</style>
-    </Layout>
+    </>
   );
 }

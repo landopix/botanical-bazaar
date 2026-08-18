@@ -1,11 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Layout from '../components/Layout';
 
 export default function Accessibility() {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Accessibility Statement | The Botanical Bazaar</title>
         <meta
@@ -83,6 +82,6 @@ export default function Accessibility() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }

@@ -24,3 +24,8 @@
 ### 📜 LAW 4: Tablet Viewport Standards (768px - 1024px)
 - **Header Navigation**: Full horizontal nav links are restricted to desktop viewports (≥ 1024px). All viewports < 1024px MUST collapse into the touch-friendly mobile/tablet hamburger drawer navigation (`lg:hidden` / `@media (max-width: 1023px)`).
 - **Layout & Typography**: Header link text must never stack vertically or clip outside viewport boundaries. All page routes must adapt grid columns (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3` / `@media`) and typography smoothly for tablet screens.
+
+---
+
+### 📜 LAW 5: Single Header & Footer Component Ownership
+- **Strict Single Ownership**: The Footer and Header must ONLY be defined and rendered by `components/Layout.js`. Individual page routes and `_app.js` must never render their own footer or header components to ensure 100% uniformity.
