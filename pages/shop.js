@@ -1049,9 +1049,10 @@ export default function Shop({ initialProducts = [] }) {
         }
 
         .category-pills button {
-          background: transparent;
-          color: #f5e7c4;
-          border: 1px solid rgba(212, 176, 106, 0.4);
+          background: #D4B06A;
+          color: #00301E;
+          border: 1px solid #D4B06A;
+          font-weight: 700;
           border-radius: 20px;
           padding: 0.4rem 1rem;
           font-family: "Crimson Text", serif;
@@ -1061,15 +1062,18 @@ export default function Shop({ initialProducts = [] }) {
         }
 
         .category-pills button:hover {
-          border-color: #d4b06a;
-          background: rgba(212, 176, 106, 0.1);
+          background: #E9DCBE;
+          color: #00301E;
+          border-color: #00301E;
+          transform: translateY(-2px) scale(1.02);
         }
 
         .category-pills button.active {
-          background: #d4b06a;
-          color: #00301e;
-          border-color: #d4b06a;
-          font-weight: bold;
+          background: #00301E;
+          color: #D4B06A;
+          border: 2px solid #D4B06A;
+          font-weight: 700;
+          box-shadow: 0 0 10px rgba(212, 176, 106, 0.35);
         }
 
         .category-pills button:focus-visible {
