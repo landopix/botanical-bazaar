@@ -157,6 +157,7 @@ export default function Layout({ children }) {
   const [zipInput, setZipInput] = useState("");
   const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
   const [zipError, setZipError] = useState("");
+  const [zoneStatusMessage, setZoneStatusMessage] = useState("");
 
   const sidebarRef = useRef(null);
   const toggleBtnRef = useRef(null);
@@ -233,11 +234,15 @@ export default function Layout({ children }) {
 
   const handleSelectZone = (newZone) => {
     setHardinessZone(newZone);
+    const msg = `USDA Hardiness Zone updated to Zone ${newZone}.`;
+    setZoneStatusMessage(msg);
     if (typeof window !== "undefined") {
       localStorage.setItem("user_hardiness_zone", newZone);
       window.dispatchEvent(new Event("user_hardiness_zone_updated"));
     }
-    setIsZoneModalOpen(false);
+    setTimeout(() => {
+      setIsZoneModalOpen(false);
+    }, 300);
   };
 
   // Manage Esc key press to close sidebar or USDA Zone modal & restore focus
@@ -278,6 +283,40 @@ export default function Layout({ children }) {
       }
     }
   }, [isSidebarOpen]);
+
+
+  // Focus trapping within Zone Selector Modal
+  useEffect(() => {
+    if (!isZoneModalOpen || !zoneModalRef.current) return;
+
+    const modal = zoneModalRef.current;
+    const focusableElements = modal.querySelectorAll(
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
+    );
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (e) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    modal.addEventListener("keydown", handleTabKey);
+    return () => modal.removeEventListener("keydown", handleTabKey);
+  }, [isZoneModalOpen]);
 
   useEffect(() => {
     if (isZoneModalOpen) {
@@ -970,6 +1009,26 @@ export default function Layout({ children }) {
         </nav>
       </header>
 
+
+      {/* Accessible Live Region for USDA Zone Updates */}
+      <div
+        role="status"
+        aria-live="polite"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
+        {zoneStatusMessage}
+      </div>
+
       {/* Main Page Content Wrapper */}
       <main id="main-content" className="site-main">{children}</main>
 
@@ -1429,6 +1488,26 @@ export default function Layout({ children }) {
             <p style={{ color: '#E9DCBE', fontSize: '0.95rem', margin: '0 0 1.2rem 0', lineHeight: '1.5' }}>
               Calculate your USDA Hardiness Zone via 5-digit ZIP code or manually select your zone below.
             </p>
+
+
+            {zoneStatusMessage && (
+              <div
+                role="status"
+                style={{
+                  background: "rgba(36, 145, 96, 0.2)",
+                  border: "1px solid #249160",
+                  color: "#F5E7C4",
+                  padding: "0.6rem 0.8rem",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  marginBottom: "1rem",
+                  textAlign: "center",
+                  fontWeight: "bold"
+                }}
+              >
+                ✓ {zoneStatusMessage}
+              </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* ZIP Code Lookup */}

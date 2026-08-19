@@ -5,6 +5,7 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [fulfillmentMethod, setFulfillmentMethodState] = useState('shipping');
+  const [userHardinessZone, setUserHardinessZone] = useState('10a');
 
   useEffect(() => {
     const storedCart = localStorage.getItem('botanical_cart');
@@ -90,7 +91,8 @@ export function CartProvider({ children }) {
         cartCount,
         cartTotal,
         fulfillmentMethod,
-        setFulfillmentMethod
+        setFulfillmentMethod,
+        userHardinessZone
       }}
     >
       {children}

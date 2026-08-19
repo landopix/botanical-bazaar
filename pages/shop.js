@@ -41,6 +41,38 @@ export async function getStaticProps() {
   }
 }
 
+
+export function getZoneCompatibility(product, userZone = "10a") {
+  if (!product) return { badgeLabel: "Seasonal Culture", badgeColor: "#D4B06A", matchStatus: "SEASONAL" };
+
+  const zones = Array.isArray(product.zones) ? product.zones.map(z => z.toLowerCase().trim()) : [];
+  const userZoneClean = (userZone || "10a").toLowerCase().trim();
+  const userNum = parseFloat(userZoneClean);
+
+  let matchStatus = "SEASONAL";
+  let badgeLabel = "Seasonal Culture";
+  let badgeColor = "#D4B06A";
+
+  if (zones.length > 0) {
+    const isDirectMatch = zones.includes(userZoneClean) || zones.some(z => z.replace(/[a-b]/g, "") === userZoneClean.replace(/[a-b]/g, ""));
+
+    if (isDirectMatch) {
+      matchStatus = "GOOD_FIT";
+      badgeLabel = "Good Fit Outdoors";
+      badgeColor = "#249160";
+    } else {
+      const minZone = Math.min(...zones.map(z => parseFloat(z)).filter(n => !isNaN(n)));
+      if (!isNaN(minZone) && userNum < minZone) {
+        matchStatus = "NOT_RECOMMENDED";
+        badgeLabel = "Not Recommended Outdoors";
+        badgeColor = "#ba2f2f";
+      }
+    }
+  }
+
+  return { badgeLabel, badgeColor, matchStatus };
+}
+
 export default function Shop({ initialProducts = [] }) {
   const router = useRouter();
   const { toggleWishlist, wishlist } = useWishlist();
@@ -55,6 +87,7 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedZone, setSelectedZone] = useState("");
+  const [userZone, setUserZone] = useState("10a");
   const [sortOrder, setSortOrder] = useState("");
   const [viewSoldOut, setViewSoldOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -76,6 +109,22 @@ export default function Shop({ initialProducts = [] }) {
   });
 
   const launchGatePassed = hasOverallInventory && hasShippingInventory && hasPickupInventory;
+
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("user_hardiness_zone");
+      if (saved) setUserZone(saved);
+
+      const handleZoneUpdated = () => {
+        const updated = localStorage.getItem("user_hardiness_zone");
+        if (updated) setUserZone(updated);
+      };
+
+      window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      return () => window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+    }
+  }, []);
 
   useEffect(() => {
     if (initialProducts && initialProducts.length > 0) {
@@ -659,6 +708,37 @@ export default function Shop({ initialProducts = [] }) {
                 </select>
               </div>
 
+
+              {/* My Zone Quick Filter Shortcut Button */}
+              <div className="filter-control">
+                <label>My Climate Zone</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedZone === userZone) {
+                      updateFilters({ zone: "" });
+                    } else {
+                      updateFilters({ zone: userZone });
+                    }
+                  }}
+                  className={`my-zone-btn ${selectedZone === userZone ? "active" : ""}`}
+                  style={{
+                    padding: "0.5rem 0.8rem",
+                    borderRadius: "6px",
+                    border: "1px solid #D4B06A",
+                    backgroundColor: selectedZone === userZone ? "#D4B06A" : "#1C3D2E",
+                    color: selectedZone === userZone ? "#00301E" : "#F5E7C4",
+                    fontWeight: "bold",
+                    fontSize: "0.85rem",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  aria-label={`Filter catalog for my hardiness zone ${userZone}`}
+                >
+                  {selectedZone === userZone ? `✓ My Zone (${userZone})` : `Filter My Zone (${userZone})`}
+                </button>
+              </div>
+
               {/* Hardiness Zone Filter Dropdown */}
               <div className="filter-control">
                 <label htmlFor="zone-select">Hardiness Zone</label>
@@ -837,12 +917,28 @@ export default function Shop({ initialProducts = [] }) {
                             ? "Price on Request"
                             : `$${product.price.toFixed(2)}`}
                       </div>
-                      {/* Cold tolerance hardiness badge */}
-                      {product.type === "Plant" && (
-                        <div className="hardiness-badge">
-                          Hardy to: {product.temp_threshold || "50"}°F
-                        </div>
-                      )}
+                      {/* Cold tolerance dynamic hardiness compatibility badge */}
+                      {product.type === "Plant" && (() => {
+                        const compat = getZoneCompatibility(product, userZone);
+                        return (
+                          <div
+                            className="hardiness-badge"
+                            style={{
+                              display: "inline-block",
+                              fontSize: "0.75rem",
+                              fontWeight: "bold",
+                              padding: "0.2rem 0.55rem",
+                              borderRadius: "4px",
+                              marginTop: "0.4rem",
+                              marginBottom: "0.6rem",
+                              backgroundColor: compat.badgeColor,
+                              color: compat.badgeColor === "#D4B06A" ? "#00301E" : "#FFFFFF"
+                            }}
+                          >
+                            {compat.badgeLabel} • Zone {userZone}
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Bottom aligned button or Sold out text box */}
