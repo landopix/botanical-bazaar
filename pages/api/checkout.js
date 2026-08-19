@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { cart, fulfillment_method, customer_name, customer_email, customer_phone, shipping_address, pickup_date, notes } = req.body;
+    const { cart, fulfillment_method, customer_name, customer_email, customer_phone, shipping_address, pickup_date, notes, user_hardiness_zone } = req.body;
 
     if (!cart || !Array.isArray(cart) || cart.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
@@ -55,6 +55,7 @@ export default async function handler(req, res) {
             customer_name: customer_name || '',
             customer_phone: customer_phone || '',
             fulfillment_method: fulfillment_method || 'shipping',
+            user_hardiness_zone: user_hardiness_zone || '10a',
             pickup_date: pickup_date || '',
             shipping_address: shipping_address ? JSON.stringify(shipping_address) : '',
             notes: notes || ''

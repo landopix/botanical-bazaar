@@ -3,9 +3,10 @@ import React from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
 import { useCart } from '../context/CartContext';
+import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
 
 export default function Cart() {
-  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod } = useCart();
+  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
 
   if (cart.length === 0) {
     return (
@@ -25,6 +26,24 @@ export default function Cart() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto' }}>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', marginBottom: '2.5rem' }}>Shopping Cart</h1>
+
+
+      {/* Cold Hardiness Advisory Banner */}
+      {cart.some(item => getZoneCompatibility(item, userHardinessZone || "10a").matchStatus === "NOT_RECOMMENDED") && (
+        <div style={{
+          background: "rgba(186, 47, 47, 0.15)",
+          border: "1px solid #ba2f2f",
+          borderRadius: "10px",
+          padding: "1rem 1.25rem",
+          marginBottom: "2rem",
+          color: "#F5E7C4",
+          fontSize: "0.95rem",
+          lineHeight: "1.4"
+        }}>
+          <strong style={{ color: "#ff8a8a", fontFamily: "Cinzel, serif" }}>❄️ Cold Protection Advisory (USDA Zone {userHardinessZone || "10a"}):</strong>
+          {" "}Your cart includes tropical plant species sensitive to cold conditions in Zone {userHardinessZone || "10a"}. Please ensure indoor or greenhouse winter shelter. Live-plant thermal boxing will be included with standard shipping.
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         {cart.map((item) => (

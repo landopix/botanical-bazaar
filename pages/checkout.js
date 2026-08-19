@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 
 export default function Checkout() {
   const router = useRouter();
-  const { cart, cartTotal, fulfillmentMethod, setFulfillmentMethod } = useCart();
+  const { cart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -60,6 +60,7 @@ export default function Checkout() {
             zip: formData.zip
           } : null,
           pickup_date: fulfillmentMethod === 'pickup' ? formData.pickupDate : null,
+          user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a'),
           notes: formData.notes
         })
       });
