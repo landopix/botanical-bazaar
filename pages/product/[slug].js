@@ -293,8 +293,8 @@ export default function ProductDetail({ initialProduct }) {
         '@type': 'MerchantReturnPolicy',
         'name': 'Live Plant Guarantee',
         'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
-        'merchantReturnDays': 7,
-        'returnMethod': 'InStoreOnly',
+        'merchantReturnDays': 2,
+        'returnMethod': 'https://schema.org/ReturnByMail',
         'refundType': 'StoreCredit'
       },
       'shippingDetails': {

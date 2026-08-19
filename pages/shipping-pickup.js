@@ -10,32 +10,33 @@ export default function ShippingPickup() {
         <title>Shipping & Local Nursery Pickup Policies | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Explore Standard Shipping and Local Nursery Pickup policies from The Botanical Bazaar in St. Petersburg, FL. Secure live-plant packaging, heat packs, and weather holds for rare tropicals, aroids, and orchids."
+          content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, and FDACS citrus rules."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/shipping-pickup" />
         <meta property="og:title" content="Shipping & Local Nursery Pickup Policies | The Botanical Bazaar" />
         <meta
           property="og:description"
-          content="Standard Shipping and Local Nursery Pickup policies from The Botanical Bazaar in St. Petersburg, FL. Secure live-plant packaging, heat packs, and weather holds for rare tropicals, aroids, and orchids."
+          content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, and FDACS citrus rules."
         />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
         <meta property="og:url" content="https://thebotanicalbazaar.com/shipping-pickup" />
       </Head>
 
-      <div style={{ padding: '3rem 1.5rem', maxWidth: '850px', margin: '0 auto' }}>
+      <div style={{ padding: '3.5rem 1.5rem', maxWidth: '850px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem', fontSize: '2.4rem' }}>
           Shipping &amp; Local Nursery Pickup
         </h1>
 
         <p style={{ fontSize: '1.15rem', lineHeight: '1.7', textAlign: 'center', color: '#E9DCBE', marginBottom: '2.5rem', maxWidth: '70ch', marginLeft: 'auto', marginRight: 'auto' }}>
-          The Botanical Bazaar is located in St. Petersburg, Florida. We specialize in rare tropical foliage, collector aroids, specimen orchids, and medicinal plants. We offer flexible fulfillment options: <strong>Standard Shipping</strong> and <strong>Local Nursery Pickup ($0.00 / Free)</strong>.
+          At The Botanical Bazaar in St. Petersburg, Florida, we grow and curate rare tropical foliage, collector aroids, specimen orchids, and medicinal plants. We offer two transparent fulfillment options: <strong>Standard Live Plant Shipping</strong> and <strong>Free Local Nursery Pickup ($0.00)</strong>.
         </p>
 
         {/* Policy Cards Grid */}
         <div style={{ display: 'grid', gap: '2rem', marginBottom: '3rem' }}>
+
           {/* Standard Shipping Box */}
           <div style={{ background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
-            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.5rem' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="3" width="15" height="13"></rect>
                 <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
@@ -46,41 +47,58 @@ export default function ShippingPickup() {
             </h2>
             <ul style={{ color: '#E9DCBE', lineHeight: '1.7', paddingLeft: '1.2rem', margin: 0 }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Dispatch Nursery Location:</strong> All plant shipments depart directly from our greenhouse facilities in St. Petersburg, FL.
+                <strong>Direct Greenhouse Dispatch:</strong> All orders depart directly from our St. Petersburg greenhouse using expedited carrier options like USPS Express and UPS Ground.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Expert Live-Plant Packaging:</strong> Every specimen is secured with root moisture barriers, protective cardboard collars, and shock-absorbing cushioning to ensure arrival in perfect condition.
+                <strong>Custom Protective Packaging:</strong> Every specimen is secured with root moisture wrapping, protective corrugated collar supports, and shock-absorbing cushioning to prevent soil displacement and leaf breakage during transit.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Thermal Protection &amp; Weather Holds:</strong> During cold seasons, complimentary heat packs and thermal insulation layers are added. If severe freezes or excessive heat events affect transit routes, shipments are held until safe weather windows open.
+                <strong>Cool Weather Advisory (&lt; 45&deg;F):</strong> When destination temperatures fall below 45&deg;F, we automatically apply insulated thermal packaging and heat packs to protect tropical foliage.
+              </li>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Severe Cold Weather Hold (&lt; 32&deg;F):</strong> If temperatures along the transit route drop below freezing (32&deg;F), we hold your order safely in our heated greenhouse until safe thermal recovery occurs.
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong>Carrier Rates &amp; Delivery Speeds:</strong> Shipping rates are calculated at checkout based on package weight, dimensions, and destination. We utilize USPS Express and UPS Ground for swift 1-3 day transit.
+                <strong>Calculated Shipping Rates:</strong> Transit costs are calculated transparently at checkout based on total weight, box dimensions, and delivery location.
               </li>
             </ul>
           </div>
 
           {/* Local Nursery Pickup Box */}
-          <div style={{ background: '#123826', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
-            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div style={{ background: '#123826', padding: '2rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.5rem' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
               </svg>
-              Local Nursery Pickup ($0.00 / Free)
+              Free Local Nursery Pickup ($0.00)
             </h2>
             <ul style={{ color: '#E9DCBE', lineHeight: '1.7', paddingLeft: '1.2rem', margin: 0 }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Convenient Scheduling:</strong> Upon checkout completion, you will receive an order confirmation email with a link to schedule your pickup appointment in St. Petersburg, FL.
+                <strong>Appointment Scheduling:</strong> Select local pickup at checkout. Once your order is prepared, you will receive an email confirmation with instructions to select your preferred pickup time slot at our St. Petersburg nursery.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Horticultural Guidance:</strong> At pickup, our guides review custom light, soil, and humidity care recommendations for your specific plants.
+                <strong>In-Person Inspection &amp; Advice:</strong> You inspect your plants side-by-side with our team before taking them home. Our growers share tailored advice regarding humidity, soil mix, and lighting for your home environment.
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong>Live Plant Guarantee:</strong> Every plant is inspected with you at collection. We offer a full 7-day guarantee for exchange or store credit.
+                <strong>48-Hour Guarantee:</strong> Our 100% Live Arrival Guarantee applies to local pickup items as well. Unbox and inspect your plants upon pickup, and reach out within 48 hours to <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a> if you notice any health concerns.
               </li>
             </ul>
           </div>
+
+          {/* Agricultural Restrictions Box */}
+          <div style={{ background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.5rem' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Agricultural Regulations &amp; Citrus Rules
+            </h2>
+            <p style={{ color: '#E9DCBE', lineHeight: '1.7', margin: 0 }}>
+              We comply strictly with Florida Department of Agriculture and Consumer Services (FDACS) state agricultural codes. To prevent the spread of citrus greening disease, all citrus varieties (citrus trees, citrus specimens, and regulated host plants) are restricted to in-state Florida shipping or local nursery pickup. Out-of-state orders containing citrus will be canceled and refunded. For questions regarding shipping regulations, contact <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a>.
+            </p>
+          </div>
+
         </div>
 
         <div style={{ textAlign: 'center' }}>
