@@ -4,13 +4,13 @@
    serif reminiscent of the small caps seen in the logo, while Crimson Text
    continues to serve as a body font fallback. Including both weights allows
    headings and body copy to harmonize across the site. */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap");
 
 /* Define CSS variables for fonts so they can be referenced throughout the
    stylesheets. This makes it easy to update the typeface in one place. */
 :root {
-  --font-heading: 'Cinzel', serif;
-  --font-body: 'Crimson Text', serif;
+  --font-heading: "Cinzel", serif;
+  --font-body: "Crimson Text", serif;
 }
 
 /* Apply the body font to all text by default. Individual pages can override
@@ -20,12 +20,25 @@ body {
   /* Set a base dark green background matching the submark color.
      Individual pages should not override this. */
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+main, .site-main {
+  flex: 1 0 auto;
 }
 
 /* Headings inherit the Cinzel font to echo the logo styling. Adjust the
    line-height to ensure readability and avoid crowding. */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   line-height: 1.2;
 }
@@ -38,16 +51,29 @@ h1, h2, h3, h4, h5, h6 {
   width: 220px;
   height: 100vh;
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
   padding: 1rem;
   overflow-y: auto;
   /* Hidden by default on mobile */
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1000;
+  border-right: 2px solid #d4b06a;
 }
 .sidebar.open {
   transform: translateX(0);
+}
+
+/* Custom branded Warm Gold (#D4B06A) scrollbar styling on the sidebar menu */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #00301e;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #d4b06a;
+  border-radius: 4px;
 }
 
 /* Toggle button to open/close sidebar.
@@ -57,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
    Remove the fixed positioning here so it can be positioned by its parent. */
 .sidebar-toggle {
   background-color: #00301e;
-  color: #E9DCBE;
+  color: #e9dcbe;
   border: none;
   padding: 0.4rem;
   font-size: 1.4rem;
@@ -72,13 +98,14 @@ h1, h2, h3, h4, h5, h6 {
 /* Quick actions container holds the search toggle, cart, wishlist and account icons. */
 .quick-actions {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  right: calc(1rem + env(safe-area-inset-right, 0px));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.6rem;
   z-index: 1100;
+  pointer-events: auto;
 }
 
 /* Style for each quick action button or link. These share the same circle shape and colors. */
@@ -87,17 +114,56 @@ h1, h2, h3, h4, h5, h6 {
   width: 44px;
   height: 44px;
   background-color: #00301e;
-  border: none;
+  border: none !important;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #D4B06A;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  color: #d4b06a;
   text-decoration: none;
-  /* Prevent SVG icons from being clipped by hiding overflow */
-  overflow: hidden;
-  /* Provide inner padding so icons do not touch the edges of the circle */
-  padding: 6px;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.quick-actions button:hover,
+.quick-actions a:hover {
+  background-color: #1c3d2e !important;
+  border: none !important;
+  transform: scale(1.08) !important;
+}
+
+/* Overrides to prevent clipping of absolute-positioned badges on quick action bubbles */
+.quick-actions a.cart-btn,
+.quick-actions a.wishlist-btn {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Ensure the notification badge inside quick actions is a clean, perfect, distinct circle */
+.quick-actions .cart-btn span,
+.quick-actions .wishlist-btn span {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  border: 1px solid #00301e !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: #ba2f2f !important;
+  color: #ffffff !important;
+  font-size: 0.7rem !important;
+  font-weight: bold !important;
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  transform: translate(25%, -25%) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+  z-index: 10 !important;
+  box-sizing: border-box !important;
 }
 
 .quick-actions button svg,
@@ -109,8 +175,11 @@ h1, h2, h3, h4, h5, h6 {
 .quick-actions a svg {
   width: 24px;
   height: 24px;
-  stroke: #D4B06A;
+  stroke: #d4b06a;
   object-fit: contain;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
 }
 
 /* On larger screens keep the toggle visible and sidebar hidden by default. The menu will open via the toggle. */
@@ -125,37 +194,57 @@ h1, h2, h3, h4, h5, h6 {
 /* Global link colors: make inline links gold for better readability on dark backgrounds.
    Product cards and specific components override this to inherit their own color if needed. */
 body a {
-  color: #D4B06A;
+  color: #d4b06a;
 }
 body a:hover {
-  color: #E9DCBE;
+  color: #e9dcbe;
 }
 .sidebar li {
   margin-bottom: 0.3rem;
 }
 .sidebar a {
-  color: #E9DCBE;
+  color: #e9dcbe;
   text-decoration: none;
   display: block;
   padding: 0.35rem 0.2rem;
   border-radius: 4px;
 }
 .sidebar a:hover {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
 }
 .sidebar a.active {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
+}
+
+/* Footer styling: ensure absolute center-alignment across all layouts */
+footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #e9dcbe;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+footer p {
+  margin: 0.5rem auto;
+  text-align: center;
+  width: 100%;
 }
 
 /* Footer links: use the gold palette instead of default blue. */
 footer a {
-  color: #D4B06A;
+  color: #d4b06a;
   text-decoration: underline;
 }
 footer a:hover {
-  color: #E9DCBE;
+  color: #e9dcbe;
 }
 
 /* When the sidebar is open, slide the page content to the right instead of overlaying it. */
@@ -188,16 +277,56 @@ header > a:first-of-type::before {
   border-radius: 50%;
   /* Softer radial gradient: start with a slightly lighter green and fade to transparent.
      This creates a subtle glow around the logo rather than a dark halo. */
-  background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 66, 38, 0.5) 0%,
+    rgba(0, 66, 38, 0.1) 60%,
+    transparent 90%
+  );
   z-index: -1;
   pointer-events: none;
 }
 
-/* Reduce the horizontal margin between header navigation links slightly so that
-   the full word "Contact" fits comfortably on one line without getting truncated.
-   This style applies to any nav inside a header across the site. */
+/* Header container layout, centering, and spacing to match the staging reference precisely */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 2.5rem;
+  background-color: #00301e;
+  flex-wrap: wrap;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 60px; /* Balance the left-aligned lantern logo for perfect screen centering */
+}
+
+@media (max-width: 1023px) {
+  header nav {
+    margin-right: 0;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+/* Header Nav Links Typography: Remove underline, use normal weight, apply elegant heading font */
 header nav a {
-  margin: 0 0.8rem;
+  margin: 0 1.2rem;
+  text-decoration: none !important;
+  color: #e9dcbe !important;
+  font-weight: 400 !important;
+  font-family: var(--font-heading), "Cinzel", serif !important;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
+}
+
+header nav a:hover {
+  color: #d4b06a !important;
 }
 
 /*
@@ -244,7 +373,7 @@ body::before {
   /* Use the lighter vine pattern with increased brightness so that
      the Art Nouveau botanical overlay remains visible across all
      pages. */
-  background-image: url('assets/vine-pattern-light.png');
+  background-image: url("assets/vine-pattern-light.png");
   background-repeat: repeat;
   /* Increase the size so the motifs are large and appear less frequently */
   /* Adjust pattern scale and opacity so the vines appear larger and less frequent.
@@ -275,7 +404,7 @@ body::before {
 .sidebar .group-toggle {
   background: none;
   border: none;
-  color: #E9DCBE;
+  color: #e9dcbe;
   padding: 0.35rem 0.2rem;
   width: 100%;
   text-align: left;
@@ -284,8 +413,8 @@ body::before {
   font-family: inherit;
 }
 .sidebar .group-toggle:hover {
-  background-color: #1C3D2E;
-  color: #D4B06A;
+  background-color: #1c3d2e;
+  color: #d4b06a;
 }
 .sidebar .submenu {
   display: none;
@@ -295,15 +424,42 @@ body::before {
   display: block;
 }
 
+.sidebar-search-row,
+.sidebar-search-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+  width: 100%;
+}
+
+.sidebar-search-submark-link {
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.sidebar-lantern-submark,
+.sidebar-search-submark {
+  width: 32px !important;
+  height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+  object-fit: contain !important;
+  flex-shrink: 0;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
 /* Search bar at top of sidebar */
 #sidebar-search {
-  width: 100%;
-  margin-bottom: 0.8rem;
-  padding: 0.45rem 0.6rem;
-  border: 1px solid #1C3D2E;
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 1rem;
+  border: 1px solid #1c3d2e;
   border-radius: 6px;
   background-color: #123826;
-  color: #F5E7C4;
+  color: #f5e7c4;
   font-family: inherit;
   font-size: 1rem;
 }
@@ -319,9 +475,603 @@ body::before {
  * toggles improves legibility and reduces the perception of left‑aligned
  * clutter. This rule applies only on screens 900px wide or smaller.
  */
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   #site-sidebar a,
   #site-sidebar .group-toggle {
     text-align: center;
   }
+}
+
+/* Precise sizing, padding, and aspect ratio definitions to prevent asset distortion or layout shifts */
+header img,
+header .lantern-emblem {
+  height: 60px !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  box-shadow: 0 0 25px 12px rgba(1, 61, 36, 0.45);
+  border-radius: 50%;
+  display: block;
+}
+
+/* Ensure the hero-image animated logo GIF scales beautifully on mobile and desktop without layout shifts */
+.hero-image {
+  position: relative;
+  width: 45%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  aspect-ratio: 1 / 1; /* Match the exact 1:1 ratio of the brand logo GIF */
+  box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+  border-radius: 12px;
+}
+
+/* Globally reposition Back-to-Top to bottom-left to prevent collision with quick actions */
+#back-to-top {
+  right: auto !important;
+  left: calc(20px + env(safe-area-inset-left, 0px)) !important;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (max-width: 600px) {
+  .quick-actions {
+    bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    right: calc(0.75rem + env(safe-area-inset-right, 0px));
+    gap: 0.5rem;
+  }
+
+  .quick-actions button,
+  .quick-actions a {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .quick-actions button svg,
+  .quick-actions a svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  #back-to-top {
+    left: calc(12px + env(safe-area-inset-left, 0px)) !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.25rem !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero-image {
+    width: 80% !important;
+    margin-top: 1.5rem;
+  }
+}
+
+/* Sidebar Product Search Results Dropdown Styling */
+.sidebar-search-results-drawer {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.2rem;
+  overflow-x: hidden;
+}
+.search-results-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.85rem;
+  color: #d4b06a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.2);
+  padding-bottom: 0.3rem;
+}
+.no-matches-text {
+  font-size: 0.95rem;
+  color: #8da38b;
+  font-style: italic;
+}
+.search-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+.search-result-item-card {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #123826;
+  border: 1px solid rgba(212, 176, 106, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem !important;
+  text-decoration: none;
+  color: #e9dcbe;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+.search-result-item-card:hover {
+  background-color: #1c3d2e;
+  border-color: #d4b06a;
+  transform: translateY(-2px);
+}
+.result-img-wrapper {
+  width: 50px !important;
+  height: 50px !important;
+  flex-shrink: 0 !important;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
+  margin-bottom: 0 !important;
+}
+.result-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.result-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.result-name {
+  font-family: "Cinzel", serif;
+  font-size: 0.95rem;
+  color: #d4b06a;
+  line-height: 1.2;
+  white-space: normal !important;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+.result-type {
+  font-size: 0.8rem;
+  color: #8da38b;
+}
+.result-price-row {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+.result-price {
+  color: #f5e7c4;
+}
+.result-sold-out {
+  color: #ba2f2f;
+  font-weight: bold;
+}
+
+/* High-Fidelity Footer Layout Styles */
+.footer-container {
+  background-color: #001f14 !important;
+  border-top: 1px solid rgba(212, 176, 106, 0.3) !important;
+  padding: 3rem 2rem 1.5rem 2rem !important;
+  color: #e9dcbe !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  font-family: "Crimson Text", serif !important;
+}
+.footer-columns {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important;
+  gap: 2.5rem !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+}
+.footer-column {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.6rem !important;
+  text-align: left !important;
+  align-items: flex-start !important;
+}
+.footer-column h3 {
+  color: #d4b06a !important;
+  font-family: "Cinzel", serif !important;
+  font-size: 1.1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.8rem !important;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.25) !important;
+  padding-bottom: 0.4rem !important;
+  width: 100% !important;
+}
+.footer-column p {
+  margin: 0 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.4 !important;
+  color: #e9dcbe !important;
+  text-align: left !important;
+}
+.footer-column a {
+  color: #e9dcbe !important;
+  text-decoration: none !important;
+  font-size: 0.95rem !important;
+  transition: color 0.15s ease !important;
+  width: fit-content !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+.footer-column a:hover {
+  color: #d4b06a !important;
+  text-decoration: underline !important;
+}
+.footer-bottom {
+  text-align: center !important;
+  margin-top: 3rem !important;
+  padding-top: 1.5rem !important;
+  border-top: 1px solid rgba(212, 176, 106, 0.15) !important;
+  font-size: 0.85rem !important;
+  color: #8da38b !important;
+  font-family: "Cinzel", serif !important;
+  width: 100% !important;
+}
+
+/* Header Mobile Hamburger Toggle Button */
+.header-mobile-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .header-mobile-toggle {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  header nav {
+    display: none !important;
+  }
+  .header-mobile-toggle {
+    display: flex !important;
+  }
+  .footer-columns {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center !important;
+  }
+  .footer-column {
+    text-align: center !important;
+    align-items: center !important;
+  }
+  .footer-column h3 {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .footer-column p {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .footer-column a {
+    text-align: center !important;
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .footer-zone-selector {
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .footer-zone-selector > div {
+    justify-content: center !important;
+  }
+  .footer-bottom {
+    text-align: center !important;
+  }
+}
+
+
+/* Ensure mobile header toggle button has pointer cursor, explicit sizing, and highest interactive z-index */
+.header-mobile-toggle {
+  display: none;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1100 !important;
+  position: relative !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+}
+
+.header-mobile-toggle svg {
+  width: 28px !important;
+  height: 28px !important;
+  stroke: #D4B06A !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+/* Ensure absolute uniform centering of floating quick action icons across all pages */
+.quick-actions button,
+.quick-actions a {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.quick-actions button svg,
+.quick-actions a svg {
+  width: 24px !important;
+  height: 24px !important;
+  stroke: #D4B06A !important;
+  display: block !important;
+  margin: auto !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Zone Change button styling */
+.zone-change-btn {
+  background: none;
+  border: none;
+  color: #D4B06A !important;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0;
+  text-decoration: none !important;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: color 0.2s ease-in-out, text-decoration 0.2s ease-in-out;
+}
+
+.zone-change-btn:hover,
+.zone-change-btn:focus {
+  color: #F5E7C4 !important;
+  text-decoration: underline !important;
+}
+
+/* Unified Navigation Dropdown Menu Styling */
+.nav-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+.nav-dropdown-trigger {
+  cursor: pointer;
+  color: #E9DCBE !important;
+  font-weight: 700;
+  font-family: 'Crimson Text', serif;
+  text-decoration: none !important;
+  padding: 0.5rem 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.nav-dropdown-wrapper:hover .nav-dropdown-trigger {
+  color: #D4B06A !important;
+}
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1C3D2E;
+  border: 1px solid #D4B06A;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  min-width: 380px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  z-index: 1000;
+  text-align: left;
+}
+.nav-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  right: -20px;
+  height: 35px;
+  background: transparent;
+}
+.nav-dropdown-wrapper:hover .nav-dropdown-menu {
+  display: block;
+}
+.dropdown-title {
+  display: block;
+  color: #D4B06A !important;
+  font-family: 'Cinzel', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  text-decoration: none !important;
+}
+.dropdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+.dropdown-col h4 {
+  color: #D4B06A;
+  font-family: 'Cinzel', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem 0;
+}
+.dropdown-col a {
+  display: block;
+  color: #E9DCBE !important;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  margin: 0.3rem 0 !important;
+  padding: 0 !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease;
+  font-weight: normal !important;
+}
+.dropdown-col a:hover {
+  color: #D4B06A !important;
+  text-decoration: underline !important;
+}
+
+/* Custom Branded USDA Hardiness Zone Selector Modal & Pill Button */
+.zone-pill-btn {
+  background: #001f14;
+  color: #D4B06A;
+  border: 1px solid #D4B06A;
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.zone-pill-btn:hover,
+.zone-pill-btn:focus {
+  background: #11402A;
+  color: #F5E7C4;
+  border-color: #F5E7C4;
+  box-shadow: 0 2px 8px rgba(212, 176, 106, 0.25);
+}
+
+.zone-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(3px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.zone-modal-container {
+  background: #00301E;
+  border: 2px solid #D4B06A;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
+}
+
+.zone-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+  padding-bottom: 0.8rem;
+}
+
+.zone-modal-title {
+  color: #D4B06A;
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.zone-modal-close {
+  background: none;
+  border: none;
+  color: #D4B06A;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.zone-modal-close:hover {
+  color: #F5E7C4;
+}
+
+.zone-modal-grid {
+  overflow-y: auto;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  padding-right: 0.3rem;
+}
+
+@media (max-width: 480px) {
+  .zone-modal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.zone-modal-pill {
+  background: #1C3D2E;
+  border: 1px solid #D4B06A;
+  color: #E9DCBE;
+  border-radius: 20px;
+  padding: 0.5rem 0.2rem;
+  font-family: 'Crimson Text', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+  outline: none;
+}
+
+.zone-modal-pill:hover,
+.zone-modal-pill:focus {
+  background: #11402A;
+  color: #F5E7C4;
+  border-color: #F5E7C4;
+}
+
+.zone-modal-pill.active {
+  background: #D4B06A;
+  color: #00301E;
+  border-color: #F5E7C4;
+  font-weight: bold;
 }

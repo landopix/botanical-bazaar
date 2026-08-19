@@ -5,15 +5,68 @@
 document.addEventListener('DOMContentLoaded', function () {
   var sidebar = document.getElementById('site-sidebar');
   var toggle = document.querySelector('.sidebar-toggle');
-  // Toggle sidebar open/close on mobile
-  if (toggle && sidebar) {
-    toggle.addEventListener('click', function () {
-      var isOpen = sidebar.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', isOpen);
-      // When toggling the sidebar, also toggle a class on the body so content can slide over
-      document.body.classList.toggle('sidebar-open', isOpen);
+  var triggerBtn = null;
+
+  // Function to open sidebar
+  function openSidebar(btn) {
+    if (!sidebar) return;
+    triggerBtn = btn || toggle || document.activeElement;
+    sidebar.classList.add('open');
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    sidebar.setAttribute('aria-modal', 'true');
+    document.body.classList.add('sidebar-open');
+    document.body.style.overflow = 'hidden';
+
+    var searchInput = document.getElementById('sidebar-search');
+    if (searchInput) {
+      setTimeout(function() { searchInput.focus(); }, 50);
+    } else {
+      sidebar.focus();
+    }
+  }
+
+  // Function to close sidebar
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    sidebar.setAttribute('aria-modal', 'false');
+    document.body.classList.remove('sidebar-open');
+    document.body.style.overflow = '';
+
+    if (triggerBtn && typeof triggerBtn.focus === 'function') {
+      triggerBtn.focus();
+    } else if (toggle && typeof toggle.focus === 'function') {
+      toggle.focus();
+    }
+  }
+
+  // Toggle sidebar open/close on mobile and FAB search trigger
+  if (sidebar) {
+    document.addEventListener('click', function(e) {
+      var clickToggle = e.target.closest('.header-mobile-toggle, .sidebar-toggle');
+      if (clickToggle) {
+        e.preventDefault();
+        if (sidebar.classList.contains('open')) {
+          closeSidebar();
+        } else {
+          openSidebar(clickToggle);
+        }
+        return;
+      }
+
+      var backdrop = e.target.closest('.sidebar-backdrop');
+      if (backdrop) {
+        closeSidebar();
+        return;
+      }
+
+      if (sidebar.classList.contains('open') && !sidebar.contains(e.target)) {
+        closeSidebar();
+      }
     });
   }
+
   // Toggle expandable groups
   var groupToggles = document.querySelectorAll('.group-toggle');
   groupToggles.forEach(function (btn) {
@@ -26,19 +79,17 @@ document.addEventListener('DOMContentLoaded', function () {
       submenu.classList.toggle('open', !expanded);
     });
   });
+
   // Highlight active link
   var current = window.location.pathname.split('/').pop() || 'index.html';
-  // Remove query parameters if present
   current = current.split('?')[0];
   var links = document.querySelectorAll('#site-sidebar a');
   links.forEach(function (link) {
     if (link.getAttribute('href') === current) {
       link.classList.add('active');
-      // If nested, ensure its parent submenu is open
       var parentSubmenu = link.closest('.submenu');
       if (parentSubmenu && !parentSubmenu.classList.contains('open')) {
         parentSubmenu.classList.add('open');
-        // Find associated toggle and set aria-expanded
         var toggleId = parentSubmenu.getAttribute('id');
         var parentToggle = document.querySelector('[aria-controls="' + toggleId + '"]');
         if (parentToggle) {
@@ -46,24 +97,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     }
+    // Automatically close sidebar when link is clicked
+    link.addEventListener('click', function() {
+      closeSidebar();
+    });
   });
-  // Close sidebar when pressing Esc on mobile
+
+  // Close sidebar when pressing Esc key
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
-      sidebar.classList.remove('open');
-      if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      // Remove the slide class when closing via Escape key
-      document.body.classList.remove('sidebar-open');
+    if (e.key === 'Escape') {
+      var zoneModal = document.getElementById('global-zone-modal');
+      if (zoneModal && zoneModal.style.display !== 'none') {
+        zoneModal.style.display = 'none';
+        document.body.style.overflow = '';
+        if (triggerBtn && typeof triggerBtn.focus === 'function') {
+          triggerBtn.focus();
+        }
+      } else if (sidebar && sidebar.classList.contains('open')) {
+        closeSidebar();
+      }
     }
   });
 
-  // Ensure the collector's gallery appears in the navigation. Because
-  // each page embeds the sidebar markup statically, we add the link
-  // programmatically if it doesn't already exist. This reduces
-  // duplication across pages and guarantees users can find the
-  // gallery from anywhere on the site.
+  // Ensure the collector's gallery appears in navigation
   try {
-    // Sidebar insertion
     var sidebarList = document.querySelector('#site-sidebar ul');
     if (sidebarList && !sidebarList.querySelector('a[href="orchids-gallery.html"]')) {
       var li = document.createElement('li');
@@ -71,8 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
       link.href = 'orchids-gallery.html';
       link.textContent = 'Gallery';
       li.appendChild(link);
-      // Insert before the first .group if present so the gallery sits
-      // above the expandable sections.
       var firstGroup = sidebarList.querySelector('li.group');
       if (firstGroup) {
         sidebarList.insertBefore(li, firstGroup);
@@ -80,13 +135,11 @@ document.addEventListener('DOMContentLoaded', function () {
         sidebarList.appendChild(li);
       }
     }
-    // Header nav insertion
     var headerNav = document.querySelector('header nav');
     if (headerNav && !headerNav.querySelector('a[href="orchids-gallery.html"]')) {
       var galleryLink = document.createElement('a');
       galleryLink.href = 'orchids-gallery.html';
       galleryLink.textContent = 'Gallery';
-      // Insert before the contact link if it exists for consistent order
       var contactLink = headerNav.querySelector('a[href="contact.html"]');
       if (contactLink) {
         headerNav.insertBefore(galleryLink, contactLink);
@@ -98,12 +151,11 @@ document.addEventListener('DOMContentLoaded', function () {
     console.warn('Failed to insert gallery link into navigation:', err);
   }
 
-  // Insert search input for live menu search
-  if (sidebar) {
+  // Insert search input for live menu search if not present
+  if (sidebar && !document.getElementById('sidebar-search')) {
     var searchInput = document.createElement('input');
     searchInput.id = 'sidebar-search';
     searchInput.type = 'text';
-    // Use an ASCII ellipsis to avoid non-ASCII characters in the UI
     searchInput.placeholder = 'Search...';
     searchInput.setAttribute('aria-label', 'Search navigation');
     sidebar.insertBefore(searchInput, sidebar.firstChild);
@@ -120,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
         if (li.classList.contains('group')) {
-          // check children links
           var childLinks = li.querySelectorAll('ul.submenu a');
           childLinks.forEach(function (cl) {
             var t = cl.textContent.toLowerCase();
@@ -131,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         li.style.display = matches ? '' : 'none';
       });
-      // Expand all groups when searching
       if (query !== '') {
         groupToggles.forEach(function (btn) {
           var submenu = document.getElementById(btn.getAttribute('aria-controls'));
@@ -143,4 +193,124 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // Custom Branded Hardiness Zone Modal for static pages
+  function initZoneModal() {
+    function updateTriggers() {
+      var currentZone = localStorage.getItem('user_hardiness_zone') || '10a';
+      var triggers = document.querySelectorAll('.zone-pill-btn');
+      triggers.forEach(function (btn) {
+        btn.textContent = 'Zone ' + currentZone + ' ▾';
+      });
+    }
+
+    updateTriggers();
+    window.addEventListener('user_hardiness_zone_updated', updateTriggers);
+
+    var modalOverlay = document.getElementById('global-zone-modal');
+    if (!modalOverlay) {
+      modalOverlay = document.createElement('div');
+      modalOverlay.id = 'global-zone-modal';
+      modalOverlay.className = 'zone-modal-overlay';
+      modalOverlay.style.display = 'none';
+
+      var container = document.createElement('div');
+      container.className = 'zone-modal-container';
+
+      var header = document.createElement('div');
+      header.className = 'zone-modal-header';
+
+      var title = document.createElement('h3');
+      title.className = 'zone-modal-title';
+      title.textContent = 'Select Your USDA Zone';
+
+      var closeBtn = document.createElement('button');
+      closeBtn.className = 'zone-modal-close';
+      closeBtn.innerHTML = '✕';
+      closeBtn.setAttribute('aria-label', 'Close climate zone modal');
+      closeBtn.onclick = function() {
+        modalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+        if (triggerBtn && typeof triggerBtn.focus === 'function') {
+          triggerBtn.focus();
+        }
+      };
+
+      header.appendChild(title);
+      header.appendChild(closeBtn);
+
+      var grid = document.createElement('div');
+      grid.className = 'zone-modal-grid';
+
+      var zones = [];
+      for (var i = 1; i <= 13; i++) {
+        zones.push(i + 'a');
+        zones.push(i + 'b');
+      }
+
+      zones.forEach(function(z) {
+        var pill = document.createElement('button');
+        var cz = localStorage.getItem('user_hardiness_zone') || '10a';
+        pill.className = 'zone-modal-pill' + (cz === z ? ' active' : '');
+        pill.textContent = 'Zone ' + z;
+        pill.onclick = function() {
+          localStorage.setItem('user_hardiness_zone', z);
+          window.dispatchEvent(new Event('user_hardiness_zone_updated'));
+          modalOverlay.style.display = 'none';
+          document.body.style.overflow = '';
+          if (triggerBtn && typeof triggerBtn.focus === 'function') {
+            triggerBtn.focus();
+          }
+        };
+        grid.appendChild(pill);
+      });
+
+      container.appendChild(header);
+      container.appendChild(grid);
+      modalOverlay.appendChild(container);
+
+      modalOverlay.onclick = function(e) {
+        if (e.target === modalOverlay) {
+          modalOverlay.style.display = 'none';
+          document.body.style.overflow = '';
+          if (triggerBtn && typeof triggerBtn.focus === 'function') {
+            triggerBtn.focus();
+          }
+        }
+      };
+
+      document.body.appendChild(modalOverlay);
+    }
+
+    function openModal() {
+      if (modalOverlay) {
+        triggerBtn = document.activeElement;
+        var cz = localStorage.getItem('user_hardiness_zone') || '10a';
+        var pills = modalOverlay.querySelectorAll('.zone-modal-pill');
+        pills.forEach(function(p) {
+          if (p.textContent === 'Zone ' + cz) {
+            p.classList.add('active');
+          } else {
+            p.classList.remove('active');
+          }
+        });
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        var firstPill = modalOverlay.querySelector('button');
+        if (firstPill) firstPill.focus();
+      }
+    }
+
+    window.addEventListener('open_zone_modal', openModal);
+
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('zone-pill-btn')) {
+        e.preventDefault();
+        openModal();
+      }
+    });
+  }
+
+  initZoneModal();
+
 });
