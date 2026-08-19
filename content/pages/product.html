@@ -575,14 +575,14 @@ body {
           'availability': availabilityUrl,
           'url': new URL(window.location.href).href,
           // Add a truthful merchant return policy. Live plants can be
-          // exchanged or store credit issued within 7 days after pickup. No
+          // exchanged or store credit issued within 48 hours after delivery or pickup. No
           // traditional returns are accepted beyond this window.
           'hasMerchantReturnPolicy': {
             '@type': 'MerchantReturnPolicy',
             'name': 'Live Plant Guarantee',
             'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
-            'merchantReturnDays': 7,
-            'returnMethod': 'InStoreOnly',
+            'merchantReturnDays': 2,
+            'returnMethod': 'https://schema.org/ReturnByMail',
             'refundType': 'StoreCredit'
           },
           // Local pickup is the only delivery mode currently offered. The
