@@ -7,17 +7,32 @@ export default function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { page, html, css } = req.body;
-  if (!page || html === undefined || css === undefined) {
+  const { page, html, css } = req.body || {};
+  if (!page || typeof page !== 'string' || html === undefined || css === undefined) {
     return res.status(400).json({ message: 'Missing page, html, or css parameter' });
   }
 
-  // Define pathways
-  const htmlPath = path.join(process.cwd(), 'content', 'pages', `${page}.html`);
-  const cssPath = path.join(process.cwd(), 'content', 'pages', `${page}.css`);
+  // Validate page string format against strict alphanumeric, hyphen, underscore pattern
+  const PAGE_REGEX = /^[a-zA-Z0-9_-]+$/;
+  if (!PAGE_REGEX.test(page)) {
+    return res.status(400).json({ message: 'Invalid page parameter format' });
+  }
+
+  // Ensure no directory traversal components remain
+  const safePage = path.basename(page);
+
+  // Define allowed pages directory and construct resolved pathways
+  const pagesDir = path.resolve(process.cwd(), 'content', 'pages');
+  const htmlPath = path.resolve(pagesDir, `${safePage}.html`);
+  const cssPath = path.resolve(pagesDir, `${safePage}.css`);
+
+  // Verify paths are strictly within pagesDir directory boundary
+  if (!htmlPath.startsWith(pagesDir + path.sep) || !cssPath.startsWith(pagesDir + path.sep)) {
+    return res.status(403).json({ message: 'Access denied: Path outside allowed directory' });
+  }
 
   if (!fs.existsSync(htmlPath)) {
-    return res.status(404).json({ message: `Page ${page} not found` });
+    return res.status(404).json({ message: 'Page not found' });
   }
 
   try {
@@ -66,7 +81,7 @@ export default function handler(req, res) {
 
     return res.status(200).json({ message: 'Success' });
   } catch (error) {
-    console.error(`Error saving page ${page}:`, error);
+    console.error('Error saving page %s:', safePage, error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }
