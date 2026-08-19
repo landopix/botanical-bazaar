@@ -580,7 +580,7 @@ export default function Layout({ children }) {
           <Link
             href="/cart"
             className="cart-btn"
-            aria-label={`View cart with ${cartCount} items`}
+            aria-label="View cart"
             style={{ position: "relative" }}
           >
             <svg
@@ -630,7 +630,7 @@ export default function Layout({ children }) {
         <Link
           href="/wishlist"
           className="wishlist-btn"
-          aria-label={`View wishlist with ${wishlist.length} items`}
+          aria-label="View wishlist"
           style={{ position: "relative" }}
         >
           <svg
