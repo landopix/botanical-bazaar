@@ -43,7 +43,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           className="microclimate-btn"
           type="button"
         >
-          Microclimate Tip ℹ️
+          Microclimate Tip
         </button>
       </div>
 

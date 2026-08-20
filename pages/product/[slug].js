@@ -9,7 +9,6 @@ import WhatYouWillReceiveCard from '../../components/WhatYouWillReceiveCard';
 import LiveArrivalGuarantee from '../../components/LiveArrivalGuarantee';
 import ZoneCompatibilityBadges from '../../components/ZoneCompatibilityBadges';
 import CareSpine from '../../components/CareSpine';
-import OwnerBenchNotes from '../../components/OwnerBenchNotes';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles } from '../../lib/shopify';
@@ -694,9 +693,6 @@ export default function ProductDetail({ initialProduct }) {
 
           {/* Care Spine Quick Guide */}
           <CareSpine product={product} />
-
-          {/* Owner Bench Notes */}
-          <OwnerBenchNotes notes={product.ownerNotes} />
 
           {/* USDA Zone Compatibility Badges & Microclimate Tip */}
           <ZoneCompatibilityBadges product={product} userZone={hardinessZone} />

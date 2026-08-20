@@ -14,7 +14,7 @@ export default function Checkout() {
     phone: '',
     shippingAddress: '',
     city: '',
-    state: 'FL',
+    state: '',
     zip: '',
     pickupDate: '',
     notes: ''

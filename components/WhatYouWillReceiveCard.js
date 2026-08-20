@@ -11,7 +11,7 @@ export default function WhatYouWillReceiveCard({ product }) {
   return (
     <div className="receive-card">
       <div className="card-header">
-        <span className="card-icon">🪴</span>
+
         <h3 className="card-title">What You Will Receive</h3>
       </div>
 
@@ -35,7 +35,7 @@ export default function WhatYouWillReceiveCard({ product }) {
       </div>
 
       <div className="photo-disclosure">
-        <span className="disclosure-icon">📸</span>
+
         <p className="disclosure-text">
           <strong>Representative Photo Disclosure:</strong> You will receive a healthy specimen similar in size, form, and fullness to the featured botanical photography. Each plant is unique and individually grown on our St. Petersburg benches.
         </p>

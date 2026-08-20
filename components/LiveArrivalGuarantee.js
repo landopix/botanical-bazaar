@@ -5,7 +5,7 @@ export default function LiveArrivalGuarantee() {
   return (
     <div className="guarantee-card">
       <div className="card-header">
-        <span className="card-icon">🛡️</span>
+
         <h3 className="card-title">Live-Arrival &amp; Establishment Guarantee</h3>
       </div>
 
