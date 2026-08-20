@@ -22,7 +22,7 @@
     "react-dom": "^18.3.1",
     "react-is": "^19.2.8",
     "resend": "^6.20.0",
-    "sanity": "^3.99.0",
+    "sanity": "^6.9.2",
     "stripe": "^22.5.0",
     "styled-components": "^6.5.3"
   },
