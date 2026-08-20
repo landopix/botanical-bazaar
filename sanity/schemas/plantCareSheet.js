@@ -34,6 +34,24 @@ export default {
       description: 'e.g. Keep evenly moist, Allow top 2 inches to dry',
     },
     {
+      name: 'humidityNeeds',
+      title: 'Humidity Needs',
+      type: 'string',
+      description: 'e.g. High Humidity (60%+), Average Indoor',
+    },
+    {
+      name: 'soilNeeds',
+      title: 'Soil Needs',
+      type: 'string',
+      description: 'e.g. Well-draining chunky aroid mix, Rich organic loam',
+    },
+    {
+      name: 'toxicity',
+      title: 'Pet Safety / Toxicity',
+      type: 'string',
+      description: 'e.g. Non-toxic / Pet Safe, Toxic to cats and dogs if ingested',
+    },
+    {
       name: 'zoneCompatibility',
       title: 'USDA Zone Compatibility',
       type: 'string',

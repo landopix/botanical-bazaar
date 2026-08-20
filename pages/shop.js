@@ -803,7 +803,7 @@ export default function Shop({ initialProducts = [] }) {
                   Request Specimen &rarr;
                 </Button>
                 <Button variant="outline" onClick={() => updateFilters({ category: "", size: "", zone: "", tag: "", light: "", bloom: "", search: "" })}>
-                  View All Available Flora
+                  View All Available Plants
                 </Button>
               </div>
             </div>
