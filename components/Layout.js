@@ -157,6 +157,13 @@ export default function Layout({ children }) {
   const [zipInput, setZipInput] = useState("");
   const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
   const [zipError, setZipError] = useState("");
+  const [zoneStatusMessage, setZoneStatusMessage] = useState("");
+
+  const sidebarRef = useRef(null);
+  const toggleBtnRef = useRef(null);
+  const searchInputRef = useRef(null);
+  const zoneModalRef = useRef(null);
+  const triggerElementRef = useRef(null);
 
   useEffect(() => {
     if (hardinessZone) {
@@ -187,8 +194,6 @@ export default function Layout({ children }) {
   const [isCollectionsOpen, setIsCollectionsOpen] = useState(false);
 
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const sidebarRef = useRef(null);
-  const toggleBtnRef = useRef(null);
 
   // Load products for the live navigation search
   useEffect(() => {
@@ -209,6 +214,7 @@ export default function Layout({ children }) {
       };
 
       const handleOpenZoneModal = () => {
+        triggerElementRef.current = document.activeElement;
         setIsZoneModalOpen(true);
       };
 
@@ -228,21 +234,33 @@ export default function Layout({ children }) {
 
   const handleSelectZone = (newZone) => {
     setHardinessZone(newZone);
+    const msg = `USDA Hardiness Zone updated to Zone ${newZone}.`;
+    setZoneStatusMessage(msg);
     if (typeof window !== "undefined") {
       localStorage.setItem("user_hardiness_zone", newZone);
       window.dispatchEvent(new Event("user_hardiness_zone_updated"));
     }
-    setIsZoneModalOpen(false);
+    setTimeout(() => {
+      setIsZoneModalOpen(false);
+    }, 300);
   };
 
-  // Manage Esc key press to close sidebar or USDA Zone modal
+  // Manage Esc key press to close sidebar or USDA Zone modal & restore focus
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         if (isZoneModalOpen) {
           setIsZoneModalOpen(false);
+          if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+            triggerElementRef.current.focus();
+          }
         } else if (isSidebarOpen) {
           setIsSidebarOpen(false);
+          if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+            triggerElementRef.current.focus();
+          } else if (toggleBtnRef.current) {
+            toggleBtnRef.current.focus();
+          }
         }
       }
     };
@@ -250,12 +268,76 @@ export default function Layout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSidebarOpen, isZoneModalOpen]);
 
+  // Focus management when opening/closing sidebar or zone modal
+  useEffect(() => {
+    if (isSidebarOpen) {
+      const searchInput = document.getElementById("sidebar-search");
+      if (searchInput) {
+        searchInput.focus();
+      } else if (sidebarRef.current) {
+        sidebarRef.current.focus();
+      }
+    } else {
+      if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+        triggerElementRef.current.focus();
+      }
+    }
+  }, [isSidebarOpen]);
+
+
+  // Focus trapping within Zone Selector Modal
+  useEffect(() => {
+    if (!isZoneModalOpen || !zoneModalRef.current) return;
+
+    const modal = zoneModalRef.current;
+    const focusableElements = modal.querySelectorAll(
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
+    );
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (e) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    modal.addEventListener("keydown", handleTabKey);
+    return () => modal.removeEventListener("keydown", handleTabKey);
+  }, [isZoneModalOpen]);
+
+  useEffect(() => {
+    if (isZoneModalOpen) {
+      if (zoneModalRef.current) {
+        const firstInput = zoneModalRef.current.querySelector("input, select, button");
+        if (firstInput) firstInput.focus();
+      }
+    } else {
+      if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+        triggerElementRef.current.focus();
+      }
+    }
+  }, [isZoneModalOpen]);
+
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
     const handleDocumentClick = (e) => {
       const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
       if (toggleBtn) {
         e.preventDefault();
+        triggerElementRef.current = toggleBtn;
         setIsSidebarOpen((prev) => !prev);
         return;
       }
@@ -273,7 +355,7 @@ export default function Layout({ children }) {
     return () => document.removeEventListener("click", handleDocumentClick, true);
   }, [isSidebarOpen]);
 
-  // Handle scroll trigger for Back to Top and body class toggle
+  // Handle scroll trigger for Back to Top
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
@@ -286,23 +368,18 @@ export default function Layout({ children }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Update body class for sidebar sliding
+  // Update body class and scroll locking for sidebar sliding & modals
   useEffect(() => {
     if (typeof document !== "undefined") {
-      if (isSidebarOpen) {
+      if (isSidebarOpen || isZoneModalOpen) {
         document.body.classList.add("sidebar-open");
+        document.body.style.overflow = "hidden";
       } else {
         document.body.classList.remove("sidebar-open");
+        document.body.style.overflow = "";
       }
     }
-  }, [isSidebarOpen]);
-
-  // Listen for open_zone_modal event from page components
-  useEffect(() => {
-    const handleOpenZoneModal = () => setIsZoneModalOpen(true);
-    window.addEventListener("open_zone_modal", handleOpenZoneModal);
-    return () => window.removeEventListener("open_zone_modal", handleOpenZoneModal);
-  }, []);
+  }, [isSidebarOpen, isZoneModalOpen]);
 
   // Route Change State Cleanup (Fixes Layout Stickiness on Back/Forward Button)
   useEffect(() => {
@@ -313,6 +390,10 @@ export default function Layout({ children }) {
       setIsCollectionsOpen(false);
       setIsZoneModalOpen(false);
       setSearchQuery("");
+      if (typeof document !== "undefined") {
+        document.body.classList.remove("sidebar-open");
+        document.body.style.overflow = "";
+      }
     };
 
     router.events.on('routeChangeComplete', handleRouteChange);
@@ -488,6 +569,9 @@ export default function Layout({ children }) {
         <div
           onClick={() => setIsSidebarOpen(false)}
           className="sidebar-backdrop"
+          aria-label="Close menu drawer overlay"
+          role="button"
+          tabIndex={-1}
           style={{
             position: "fixed",
             top: 0,
@@ -505,12 +589,12 @@ export default function Layout({ children }) {
       )}
 
       {/* Quick Actions Bubble Panel (Bottom Right) */}
-      <div className="quick-actions">
+      <div className="quick-actions" role="region" aria-label="Quick action navigation stack">
         {/* Toggle / Search Bubble */}
         <button
           ref={toggleBtnRef}
           className="sidebar-toggle"
-          aria-label="Toggle navigation"
+          aria-label="Toggle navigation search menu"
           aria-controls="site-sidebar"
           aria-expanded={isSidebarOpen}
         >
@@ -535,7 +619,7 @@ export default function Layout({ children }) {
           <Link
             href="/cart"
             className="cart-btn"
-            aria-label="View cart"
+            aria-label={`View cart with ${cartCount} items`}
             style={{ position: "relative" }}
           >
             <svg
@@ -585,7 +669,7 @@ export default function Layout({ children }) {
         <Link
           href="/wishlist"
           className="wishlist-btn"
-          aria-label="View wishlist"
+          aria-label={`View wishlist with ${wishlist.length} items`}
           style={{ position: "relative" }}
         >
           <svg
@@ -629,7 +713,7 @@ export default function Layout({ children }) {
         </Link>
 
         {/* Account Action Link */}
-        <Link href="/account" className="account-btn" aria-label="My account">
+        <Link href="/account" className="account-btn" aria-label="My account dashboard">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -653,7 +737,10 @@ export default function Layout({ children }) {
         ref={sidebarRef}
         id="site-sidebar"
         className={`sidebar ${isSidebarOpen ? "open" : ""}`}
-        role="navigation"
+        role="dialog"
+        aria-label="Navigation and Search Menu"
+        aria-modal={isSidebarOpen ? "true" : "false"}
+        tabIndex={-1}
       >
         <div className="sidebar-search-container">
           <Link
@@ -669,6 +756,7 @@ export default function Layout({ children }) {
           </Link>
           <input
             id="sidebar-search"
+            ref={searchInputRef}
             type="text"
             placeholder="Search"
             aria-label="Search navigation and products"
@@ -921,6 +1009,26 @@ export default function Layout({ children }) {
         </nav>
       </header>
 
+
+      {/* Accessible Live Region for USDA Zone Updates */}
+      <div
+        role="status"
+        aria-live="polite"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
+        {zoneStatusMessage}
+      </div>
+
       {/* Main Page Content Wrapper */}
       <main id="main-content" className="site-main">{children}</main>
 
@@ -974,7 +1082,10 @@ export default function Layout({ children }) {
               <span style={{ color: "#d4b06a", fontWeight: "bold", fontFamily: "'Cinzel', serif", fontSize: "0.85rem", letterSpacing: "0.05em", textTransform: "uppercase" }}>My Hardiness Zone</span>
               <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 <button
-                  onClick={() => setIsZoneModalOpen(true)}
+                  onClick={(e) => {
+                    triggerElementRef.current = e.currentTarget;
+                    setIsZoneModalOpen(true);
+                  }}
                   className="zone-pill-btn"
                   aria-label="Select USDA climate hardiness zone"
                 >
@@ -1340,8 +1451,17 @@ export default function Layout({ children }) {
         }
       `}</style>
       {isZoneModalOpen && (
-        <div className="zone-modal-overlay" onClick={() => setIsZoneModalOpen(false)}>
+        <div
+          className="zone-modal-overlay"
+          onClick={() => {
+            setIsZoneModalOpen(false);
+            if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+              triggerElementRef.current.focus();
+            }
+          }}
+        >
           <div
+            ref={zoneModalRef}
             className="zone-modal-container"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
@@ -1353,7 +1473,12 @@ export default function Layout({ children }) {
               <h3 id="zone-modal-title" className="zone-modal-title">Select Your Hardiness Zone</h3>
               <button
                 className="zone-modal-close"
-                onClick={() => setIsZoneModalOpen(false)}
+                onClick={() => {
+                  setIsZoneModalOpen(false);
+                  if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
+                    triggerElementRef.current.focus();
+                  }
+                }}
                 aria-label="Close climate zone modal"
               >
                 ✕
@@ -1363,6 +1488,26 @@ export default function Layout({ children }) {
             <p style={{ color: '#E9DCBE', fontSize: '0.95rem', margin: '0 0 1.2rem 0', lineHeight: '1.5' }}>
               Calculate your USDA Hardiness Zone via 5-digit ZIP code or manually select your zone below.
             </p>
+
+
+            {zoneStatusMessage && (
+              <div
+                role="status"
+                style={{
+                  background: "rgba(36, 145, 96, 0.2)",
+                  border: "1px solid #249160",
+                  color: "#F5E7C4",
+                  padding: "0.6rem 0.8rem",
+                  borderRadius: "6px",
+                  fontSize: "0.9rem",
+                  marginBottom: "1rem",
+                  textAlign: "center",
+                  fontWeight: "bold"
+                }}
+              >
+                ✓ {zoneStatusMessage}
+              </div>
+            )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* ZIP Code Lookup */}

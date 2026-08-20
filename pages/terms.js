@@ -9,7 +9,7 @@ export default function Terms() {
         <title>Terms of Service & Sales Policies | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Review the terms of service, live plant sales policies, ordering terms, and website usage conditions for The Botanical Bazaar LLC in St. Petersburg, FL."
+          content="Review the terms of service, live plant sales policies, ordering terms, weather holds, and guarantees for The Botanical Bazaar LLC in St. Petersburg, FL."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/terms" />
       </Head>
@@ -29,47 +29,124 @@ export default function Terms() {
             Terms of Service &amp; Store Policies
           </h1>
           <p style={{ color: '#8DA38B', fontSize: '0.95rem', fontStyle: 'italic', margin: 0 }}>
-            The Botanical Bazaar LLC &bull; St. Petersburg, Florida
+            The Botanical Bazaar LLC &bull; St. Petersburg, Florida &bull; Last Updated: February 2026
           </p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', fontSize: '1.05rem' }}>
+
           <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              1. Overview &amp; Agreement
+              1. Welcome &amp; Plain-Spoken Agreement
             </h2>
             <p style={{ marginTop: 0 }}>
-              By accessing our website or purchasing live plant flora, botanical goods, or horticultural consultations from <strong>The Botanical Bazaar LLC</strong>, you agree to be bound by these Terms of Service and all applicable federal, state, and local laws.
+              We are growers and plant lovers dedicated to healthy, high-quality botanical specimens. When you browse our site, request custom sourcing, or place an order with <strong>The Botanical Bazaar LLC</strong>, you agree to these practical store terms. We keep our rules straightforward and transparent so you always know what to expect from us.
             </p>
           </section>
 
-          <section>
-            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginBottom: '0.8rem' }}>
-              2. Live Plant Purchases &amp; Guarantees
+          <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              2. Ordering, Inventory &amp; Payment
             </h2>
-            <p>
-              Live plants are perishable living organisms. We take extreme care in packaging and preparing all specimens departing our St. Petersburg nursery.
+            <p style={{ marginTop: 0 }}>
+              Living plants grow at their own pace, so individual specimens vary in height, leaf count, and character. We process payment securely at checkout. Because inventory changes quickly in our greenhouse, submitting an order reserves your plant once payment completes. If a plant becomes unavailable prior to fulfillment, we will contact you immediately to offer a replacement, store credit, or full refund.
+            </p>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              3. Fulfillment: Shipping &amp; Free Local Nursery Pickup
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              We offer two convenient ways to receive your plants:
             </p>
             <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong>Arrival Guarantee:</strong> We guarantee healthy arrival on all shipped plants when transit orders are unboxed within 24 hours of delivery.
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Standard Live Plant Shipping:</strong> We pack and ship live specimens across the contiguous United States directly from our St. Petersburg greenhouse. Each plant is secured with root moisture wrapping, cardboard collar protection, and shock-absorbing fill.
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong>Claim Submissions:</strong> In the rare event a plant arrives damaged or stressed from transit, submit photos to{' '}
-                <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a> within 48 hours for immediate replacement or store credit.
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <strong>Acclimatization:</strong> Environmental variables such as local humidity, lighting, and soil moisture after arrival are the responsibility of the purchaser.
+                <strong>Local Nursery Pickup ($0.00 / Free):</strong> You can choose free local pickup at our St. Petersburg nursery facility. Once your order is ready, we will notify you to schedule a convenient appointment time.
               </li>
             </ul>
           </section>
 
           <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              3. Fulfillment, Local Pickup &amp; Shipping
+              4. Weather Holds &amp; Thermal Protection
             </h2>
             <p style={{ marginTop: 0 }}>
-              We offer Standard Shipping across the contiguous United States and Local Nursery Pickup in St. Petersburg, FL ($0.00 / Free). Weather holds may be initiated during freeze or high-temperature events to protect live specimens during transit.
+              Extreme temperatures put live tropical foliage at risk during transit. We monitor destination temperatures along shipping routes and apply the following weather rules:
+            </p>
+            <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Cool Weather Advisory (&lt; 45&deg;F):</strong> When destination temperatures drop below 45&deg;F, we automatically pack your plants using insulated thermal barriers and heat packs.
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong>Severe Cold Hard Hold (&lt; 32&deg;F):</strong> When temperatures fall below freezing (32&deg;F), we pause shipments to protect living tissue. We hold your order safely in our heated greenhouse until a secure temperature window opens.
+              </li>
+            </ul>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              5. Agricultural Regulations &amp; State Restrictions
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              We abide strictly by Florida Department of Agriculture and Consumer Services (FDACS) guidelines and federal agricultural laws. Due to strict quarantine rules regarding citrus greening, citrus trees and regulated host plants cannot be shipped outside the State of Florida. Any out-of-state order containing restricted citrus plants will be canceled and refunded.
+            </p>
+          </section>
+
+          <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              6. 100% Live Arrival Guarantee &amp; 48-Hour Claim Process
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              We take pride in our grown inventory and guarantee that every plant will arrive alive, healthy, and hydrated.
+            </p>
+            <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Unboxing Window:</strong> Please unpack your plant within 24 hours of delivery or nursery pickup so it can access light and fresh air.
+              </li>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>48-Hour Claim Window:</strong> If your plant arrives damaged or suffers transit shock, email us at{' '}
+                <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline', fontWeight: 'bold' }}>
+                  info@thebotanicalbazaar.com
+                </a>{' '}
+                within 48 hours of delivery or pickup. Include clear photos of the damaged foliage, root system, and shipping package.
+              </li>
+              <li style={{ marginBottom: '0.5rem' }}>
+                <strong>Resolution:</strong> Once our growers verify the claim, we will send a replacement plant or issue store credit. Minor cosmetic leaf blemishes or minor transit stress do not qualify as plant death or permanent damage.
+              </li>
+            </ul>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              7. Acclimatization &amp; Long-Term Care
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              Plants need time to adjust after traveling. Once you receive your plant, place it in bright indirect light and allow it to settle before repotting. Because watering practices, light levels, humidity, and home environments vary widely, our formal guarantee expires 48 hours after delivery. However, our nursery team is always here to answer care questions and help your plants thrive.
+            </p>
+          </section>
+
+          <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              8. Limitation of Liability &amp; Governing Law
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              We stand firmly behind our nursery stock, but our legal liability for any order is strictly limited to the total purchase price of that order. We are not liable for incidental damage, environmental loss, or improper post-delivery care. These terms are governed by the laws of the State of Florida, with jurisdiction in Pinellas County, Florida.
+            </p>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              9. Contact Us
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              If you have questions about these terms, shipping policies, or plant care, email our team directly at{' '}
+              <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline', fontWeight: 'bold' }}>
+                info@thebotanicalbazaar.com
+              </a>. We are happy to help.
             </p>
           </section>
 

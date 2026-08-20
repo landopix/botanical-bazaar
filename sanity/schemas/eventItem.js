@@ -1,19 +1,24 @@
 export default {
   name: 'eventItem',
-  title: 'Event Item',
+  title: 'Event',
   type: 'document',
   fields: [
     {
       name: 'title',
-      title: 'Event Title',
+      title: 'Title',
       type: 'string',
       validation: Rule => Rule.required(),
     },
     {
       name: 'dateTime',
-      title: 'Date and Time',
+      title: 'Date & Time',
       type: 'datetime',
       validation: Rule => Rule.required(),
+    },
+    {
+      name: 'description',
+      title: 'Description / Content',
+      type: 'text',
     },
     {
       name: 'location',
@@ -22,13 +27,15 @@ export default {
       description: 'e.g. St. Petersburg Nursery or Gulfport Community Center',
     },
     {
-      name: 'description',
-      title: 'Description',
-      type: 'text',
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Optional banner or highlight image for the event',
     },
     {
       name: 'ticketUrl',
-      title: 'External Ticket / RSVP Link',
+      title: 'Ticket / Registration Link',
       type: 'url',
     },
   ],

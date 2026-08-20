@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
-import { checkAgRestrictions } from '../lib/fulfillment';
+import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
 
 export default function CartDrawer({ isOpen, onClose }) {
-  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod } = useCart();
+  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -20,6 +20,7 @@ export default function CartDrawer({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   const hasRestrictedItems = cart.some(item => checkAgRestrictions(item).isRestricted);
+  const hasZoneSensitiveItems = cart.some(item => getZoneCompatibility(item, userHardinessZone || '10a').matchStatus === 'NOT_RECOMMENDED');
 
   return (
     <div className="cart-drawer-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Shopping Cart Drawer">
@@ -58,6 +59,13 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <span>St. Pete Pickup ($0.00)</span>
               </label>
             </div>
+
+
+            {hasZoneSensitiveItems && (
+              <div className="restriction-notice" style={{ background: "rgba(186, 47, 47, 0.15)", borderColor: "#ba2f2f" }}>
+                ❄️ Cold Protection Advisory (Zone {userHardinessZone || "10a"}): Contains tropical plant species requiring indoor protection or greenhouse shelter in your zone. Insulated packaging will be automatically applied.
+              </div>
+            )}
 
             {hasRestrictedItems && (
               <div className="restriction-notice">

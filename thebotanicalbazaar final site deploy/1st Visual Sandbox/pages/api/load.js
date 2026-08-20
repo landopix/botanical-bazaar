@@ -21,7 +21,7 @@ export default function handler(req, res) {
 
   try {
     const fullHtml = fs.readFileSync(htmlPath, 'utf8');
-    
+
     // Extract everything inside <body>...</body> to load inside GrapesJS
     const bodyMatch = fullHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i);
     const bodyHtml = bodyMatch ? bodyMatch[1] : fullHtml;

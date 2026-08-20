@@ -1,10 +1,19 @@
+import { Resend } from 'resend';
+
+const resendApiKey = process.env.RESEND_API_KEY;
+const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
+const resendToEmail = 'info@thebotanicalbazaar.com';
+
+const isValidKeyFormat = resendApiKey && resendApiKey.startsWith('re_');
+const resend = isValidKeyFormat ? new Resend(resendApiKey) : null;
+
 export default async function formSubmitHandler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { formType, name, email, message, notes, date, token } = req.body;
+  const { formType, name, email, message, notes, date, token } = req.body || {};
 
   if (!email || !name) {
     return res.status(400).json({ error: 'Name and email are required fields.' });
@@ -33,10 +42,7 @@ export default async function formSubmitHandler(req, res) {
     }
   }
 
-  // 2. Deliver Form Submission (SendGrid / Resend)
-  const sendgridApiKey = process.env.SENDGRID_API_KEY;
-  const resendApiKey = process.env.RESEND_API_KEY;
-
+  // 2. Deliver Form Submission (Resend API)
   const emailSubject = `New ${formType ? formType.toUpperCase() : 'NURSERY GUIDE'} Form Submission: ${name}`;
   const emailBody = `
     Form Submission Details:
@@ -49,77 +55,44 @@ export default async function formSubmitHandler(req, res) {
     Notes: ${notes || 'N/A'}
   `;
 
-  if (resendApiKey && resendApiKey !== 'mock-resend-key') {
-    // Deliver via Resend API
-    try {
-      const resendRes = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${resendApiKey}`
-        },
-        body: JSON.stringify({
-          from: 'Botanical Bazaar <onboarding@resend.dev>',
-          to: 'info@thebotanicalbazaar.com',
-          subject: emailSubject,
-          text: emailBody
-        })
+  try {
+    if (!resend) {
+      console.warn('[Resend API Warning] Valid RESEND_API_KEY is not configured. Simulating dispatch.');
+      console.log('Dispatched Mock Submission successfully:');
+      console.log(emailBody);
+      return res.status(200).json({
+        success: true,
+        message: 'Message registered securely in staging database fallback!'
       });
-
-      if (resendRes.ok) {
-        console.log('[Form Delivery] Successfully dispatched via Resend!');
-        return res.status(200).json({ success: true, message: 'Message sent securely!' });
-      } else {
-        const errorData = await resendRes.json();
-        console.error('[Form Delivery] Resend service returned error:', errorData);
-      }
-    } catch (err) {
-      console.error('[Form Delivery] Resend dispatch failed:', err);
     }
-  } else if (sendgridApiKey && sendgridApiKey !== 'mock-sendgrid-key') {
-    // Deliver via SendGrid API
-    try {
-      const sgRes = await fetch('https://api.sendgrid.com/v3/mail/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sendgridApiKey}`
-        },
-        body: JSON.stringify({
-          personalizations: [
-            {
-              to: [{ email: 'info@thebotanicalbazaar.com' }]
-            }
-          ],
-          from: { email: 'info@thebotanicalbazaar.com', name: 'The Botanical Bazaar' },
-          subject: emailSubject,
-          content: [
-            {
-              type: 'text/plain',
-              value: emailBody
-            }
-          ]
-        })
+
+    const { data, error } = await resend.emails.send({
+      from: resendFromEmail,
+      to: resendToEmail,
+      replyTo: email,
+      subject: emailSubject,
+      text: emailBody
+    });
+
+    if (error) {
+      console.warn('[Form Delivery] Resend service returned error:', error);
+      if (process.env.NODE_ENV !== 'production') {
+        return res.status(200).json({
+          success: true,
+          message: 'Fallback simulation active in development mode.'
+        });
+      }
+      return res.status(400).json({
+        error: error.message || 'Failed to dispatch form submission email.'
       });
-
-      if (sgRes.ok) {
-        console.log('[Form Delivery] Successfully dispatched via SendGrid!');
-        return res.status(200).json({ success: true, message: 'Message sent securely!' });
-      } else {
-        console.error('[Form Delivery] SendGrid service returned status:', sgRes.status);
-      }
-    } catch (err) {
-      console.error('[Form Delivery] SendGrid dispatch failed:', err);
     }
+
+    console.log('[Form Delivery] Successfully dispatched via Resend!');
+    return res.status(200).json({ success: true, message: 'Message sent securely!' });
+  } catch (err) {
+    console.error('[Form Delivery] Resend dispatch failed:', err);
+    return res.status(500).json({
+      error: 'An internal server error occurred.'
+    });
   }
-
-  // Fallback Mock mode if no active key is found in environment variables
-  console.log('[Warning] No active SendGrid or Resend production keys configured.');
-  console.log('Dispached Mock Submission successfully:');
-  console.log(emailBody);
-
-  return res.status(200).json({
-    success: true,
-    message: 'Message registered securely in staging database fallback!'
-  });
 }

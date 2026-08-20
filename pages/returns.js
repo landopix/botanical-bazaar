@@ -9,7 +9,7 @@ export default function Returns() {
         <title>Plant Care Guarantee & Refund Policy | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Learn about our 100% Live Arrival Guarantee, replacement guidelines, and plant return policies at The Botanical Bazaar in St. Petersburg, FL."
+          content="Learn about our 100% Live Arrival Guarantee, 48-hour claim window, and plant refund guidelines at The Botanical Bazaar in St. Petersburg, FL."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/returns" />
       </Head>
@@ -34,37 +34,68 @@ export default function Returns() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', fontSize: '1.05rem' }}>
+
           <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
               100% Live Arrival Guarantee
             </h2>
             <p style={{ marginTop: 0 }}>
-              At <strong>The Botanical Bazaar</strong>, we propagate and package every tropical specimen with painstaking detail. We guarantee that your plants will arrive healthy, hydrated, and ready to thrive.
+              We grow and package every plant with extreme care so it arrives healthy and hydrated. Whether your order travels across the country with standard shipping or is handed to you at our St. Petersburg nursery, we guarantee 100% live arrival on every specimen.
             </p>
           </section>
 
           <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              48-Hour Claim Process
+              48-Hour Claim Process &amp; Guidelines
             </h2>
             <p style={{ marginTop: 0 }}>
-              If your plant suffers transit shock or severe damage during shipping:
+              Living plants are sensitive to prolonged darkness and extreme temperature shifts. If your plant suffers severe shipping damage or arrives in poor condition, please follow these steps:
             </p>
             <ol style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                Unbox your package within 24 hours of delivery.
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Unbox Promptly:</strong> Open your package within 24 hours of delivery or nursery pickup so your plant can breathe and receive light.
               </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                Take clear photos of the affected foliage, root ball, and shipping box.
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Document the Damage:</strong> Take clear, well-lit photos showing the damaged foliage, the root ball or soil line, and the outer shipping container.
               </li>
               <li style={{ marginBottom: 0 }}>
-                Email photos and your order number to{' '}
-                <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', fontWeight: 'bold' }}>
+                <strong>Submit Within 48 Hours:</strong> Email your photos and order number to{' '}
+                <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', fontWeight: 'bold', textDecoration: 'underline' }}>
                   info@thebotanicalbazaar.com
                 </a>{' '}
-                within 48 hours. Our horticulturists will process a free replacement or store credit.
+                within 48 hours of delivery or pickup. Our nursery team will review your photos promptly and arrange a replacement plant or issue store credit.
               </li>
             </ol>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              What Is Covered (and What Isn't)
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              We keep our policy transparent and fair for both growers and collectors:
+            </p>
+            <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Covered:</strong> Severe stem breakage, root rot present upon unboxing, severe freeze or heat collapse, and lost or destroyed parcels verified by carrier tracking.
+              </li>
+              <li style={{ marginBottom: 0 }}>
+                <strong>Not Covered:</strong> Minor cosmetic leaf creasing, normal transit shedding of older bottom leaves, failure to unbox within 24 hours, or damage resulting from immediate repotting into improper soil mixes.
+              </li>
+            </ul>
+          </section>
+
+          <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              Returns &amp; Plant Care Support
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              Because live plants cannot endure multiple return transit trips, we do not accept physical plant returns. If you experience care questions weeks or months after purchase, our experienced growers are always available at{' '}
+              <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', fontWeight: 'bold', textDecoration: 'underline' }}>
+                info@thebotanicalbazaar.com
+              </a>{' '}
+              to offer practical advice on light, soil moisture, and pest prevention.
+            </p>
           </section>
 
           <div style={{ textAlign: 'center', marginTop: '1rem' }}>
