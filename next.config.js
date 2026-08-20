@@ -55,7 +55,12 @@ const nextConfig = {
       },
       {
         source: '/garden-month.html',
-        destination: '/garden-month',
+        destination: '/shop',
+        permanent: true,
+      },
+      {
+        source: '/garden-month',
+        destination: '/shop',
         permanent: true,
       },
       {

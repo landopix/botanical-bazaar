@@ -120,7 +120,7 @@ export default function Sales({ products = [] }) {
                 Our master growers are currently propagating our next seasonal collection. Check back soon for upcoming batch discounts, or explore our full catalog of available flora below.
               </p>
               <Button variant="gold-filled" href="/shop">
-                Browse All Flora &rarr;
+                Browse All Plants &rarr;
               </Button>
             </div>
 
