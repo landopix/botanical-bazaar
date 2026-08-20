@@ -7,7 +7,7 @@ const resendToEmail = 'info@thebotanicalbazaar.com';
 const isValidKeyFormat = resendApiKey && resendApiKey.startsWith('re_');
 const resend = isValidKeyFormat ? new Resend(resendApiKey) : null;
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

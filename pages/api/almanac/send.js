@@ -6,7 +6,7 @@ const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 // Standard basic email validation regex
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

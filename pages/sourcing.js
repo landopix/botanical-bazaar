@@ -16,7 +16,7 @@ const MATURITY_OPTIONS = [
   { value: 'Specimen', label: 'Mature / Specimen Size' }
 ];
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function Sourcing() {
   const [formData, setFormData] = useState({
