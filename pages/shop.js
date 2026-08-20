@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
+import ProductCard from "../components/ProductCard";
+import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 import NurseryUpdateFallback from "../components/NurseryUpdateFallback";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
@@ -40,7 +41,6 @@ export async function getStaticProps() {
     };
   }
 }
-
 
 export function getZoneCompatibility(product, userZone = "10a") {
   if (!product) return { badgeLabel: "Seasonal Culture", badgeColor: "#D4B06A", matchStatus: "SEASONAL" };
@@ -96,20 +96,19 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedBloom, setSelectedBloom] = useState("");
 
   // Verification Gate for Catalog Launch (OPP-001, TBB-001)
-  const hasOverallInventory = products.some((p) => p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1));
+  const hasOverallInventory = products.some((p) => p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1));
   const hasShippingInventory = products.some((p) => {
-    const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1);
-    const isPickupOnly = Array.isArray(p.tags) && p.tags.some((t) => t.toLowerCase() === 'pickup-only' || t.toLowerCase() === 'local-pickup-only');
+    const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
+    const isPickupOnly = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'pickup-only' || t?.toLowerCase() === 'local-pickup-only');
     return isAvailable && !isPickupOnly;
   });
   const hasPickupInventory = products.some((p) => {
-    const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 1);
-    const isNoPickup = Array.isArray(p.tags) && p.tags.some((t) => t.toLowerCase() === 'no-pickup' || t.toLowerCase() === 'shipping-only');
+    const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
+    const isNoPickup = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'no-pickup' || t?.toLowerCase() === 'shipping-only');
     return isAvailable && !isNoPickup;
   });
 
   const launchGatePassed = hasOverallInventory && hasShippingInventory && hasPickupInventory;
-
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -220,16 +219,16 @@ export default function Shop({ initialProducts = [] }) {
       const catLower = selectedCategory.toLowerCase();
       result = result.filter((product) => {
         const matchesCollectionHandle =
-          Array.isArray(product.collectionHandles) &&
-          product.collectionHandles.some((h) => h.toLowerCase() === catLower);
+          Array.isArray(product?.collectionHandles) &&
+          product.collectionHandles.some((h) => h?.toLowerCase() === catLower);
         const matchesCategory =
-          Array.isArray(product.categories) &&
-          product.categories.some((pc) => pc.toLowerCase() === catLower);
+          Array.isArray(product?.categories) &&
+          product.categories.some((pc) => pc?.toLowerCase() === catLower);
         const matchesTag =
-          Array.isArray(product.tags) &&
-          product.tags.some((pt) => pt.toLowerCase() === catLower);
+          Array.isArray(product?.tags) &&
+          product.tags.some((pt) => pt?.toLowerCase() === catLower);
         const textMatches = (keyword) =>
-          `${product.name || ""} ${product.description || ""}`
+          `${product?.name || ""} ${product?.description || ""}`
             .toLowerCase()
             .includes(keyword);
 
@@ -273,10 +272,10 @@ export default function Shop({ initialProducts = [] }) {
       });
     }
 
-    // 2. Availability Filter (filter out availableForSale === false or quantity < 3 by default)
+    // 2. Availability Filter
     if (!viewSoldOut) {
       result = result.filter((p) => {
-        const isAvailable = p.availableForSale !== false && (p.quantity === undefined || p.quantity >= 3);
+        const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 3);
         return isAvailable;
       });
     }
@@ -285,11 +284,11 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedTag) {
       const tLower = selectedTag.toLowerCase().replace(/-/g, ' ');
       result = result.filter((product) => {
-        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(tLower));
-        const nameMatch = (product.name || '').toLowerCase().includes(tLower);
-        const descMatch = (product.description || '').toLowerCase().includes(tLower);
+        const hasTag = Array.isArray(product?.tags) && product.tags.some((pt) => pt?.toLowerCase().replace(/-/g, ' ').includes(tLower));
+        const nameMatch = (product?.name || '').toLowerCase().includes(tLower);
+        const descMatch = (product?.description || '').toLowerCase().includes(tLower);
         if (tLower === 'pet safe' || tLower === 'petsafe') {
-          return product.petSafe || hasTag || nameMatch || descMatch;
+          return product?.petSafe || hasTag || nameMatch || descMatch;
         }
         return hasTag || nameMatch || descMatch;
       });
@@ -299,9 +298,9 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedLight) {
       const lLower = selectedLight.toLowerCase().replace(/-/g, ' ');
       result = result.filter((product) => {
-        const lightText = (product.lightLevels || '').toLowerCase();
-        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(lLower));
-        const descMatch = (product.description || '').toLowerCase().includes(lLower);
+        const lightText = (product?.lightLevels || '').toLowerCase();
+        const hasTag = Array.isArray(product?.tags) && product.tags.some((pt) => pt?.toLowerCase().replace(/-/g, ' ').includes(lLower));
+        const descMatch = (product?.description || '').toLowerCase().includes(lLower);
         return lightText.includes(lLower) || hasTag || descMatch;
       });
     }
@@ -310,8 +309,8 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedBloom) {
       const bLower = selectedBloom.toLowerCase().replace(/-/g, ' ');
       result = result.filter((product) => {
-        const hasTag = Array.isArray(product.tags) && product.tags.some((pt) => pt.toLowerCase().replace(/-/g, ' ').includes(bLower));
-        const descMatch = (product.description || '').toLowerCase().includes(bLower);
+        const hasTag = Array.isArray(product?.tags) && product.tags.some((pt) => pt?.toLowerCase().replace(/-/g, ' ').includes(bLower));
+        const descMatch = (product?.description || '').toLowerCase().includes(bLower);
         return hasTag || descMatch;
       });
     }
@@ -320,10 +319,10 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedSize) {
       const sizeLower = selectedSize.toLowerCase();
       result = result.filter((product) => {
-        if (product.custom?.pot_size) {
+        if (product?.custom?.pot_size) {
           if (product.custom.pot_size.toLowerCase().includes(sizeLower)) return true;
         }
-        if (product.sizes && typeof product.sizes === "string") {
+        if (product?.sizes && typeof product.sizes === "string") {
           const parts = product.sizes.split("|").map((p) => p.trim().toLowerCase());
           return parts.some((p) => p.includes(sizeLower));
         }
@@ -331,14 +330,14 @@ export default function Shop({ initialProducts = [] }) {
       });
     }
 
-    // 4. Hardiness Zone Filter (custom.hardiness_zone or zones fallback)
+    // 4. Hardiness Zone Filter
     if (selectedZone) {
       const zoneTarget = selectedZone.toLowerCase();
       result = result.filter((product) => {
-        if (product.custom?.hardiness_zone) {
+        if (product?.custom?.hardiness_zone) {
           if (product.custom.hardiness_zone.toLowerCase().includes(zoneTarget)) return true;
         }
-        return Array.isArray(product.zones) && product.zones.some((z) => z.toLowerCase() === zoneTarget);
+        return Array.isArray(product?.zones) && product.zones.some((z) => z?.toLowerCase() === zoneTarget);
       });
     }
 
@@ -346,46 +345,44 @@ export default function Shop({ initialProducts = [] }) {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter((p) => {
-        let haystack = [p.name, p.type, p.description, p.sku, p.custom?.pot_size, p.custom?.hardiness_zone]
+        let haystack = [p?.name, p?.type, p?.description, p?.sku, p?.custom?.pot_size, p?.custom?.hardiness_zone]
           .filter(Boolean)
           .join(" ")
           .toLowerCase();
-        if (Array.isArray(p.categories)) haystack += " " + p.categories.join(" ").toLowerCase();
-        if (Array.isArray(p.zones)) haystack += " " + p.zones.join(" ").toLowerCase();
-        if (Array.isArray(p.tags)) haystack += " " + p.tags.join(" ").toLowerCase();
+        if (Array.isArray(p?.categories)) haystack += " " + p.categories.join(" ").toLowerCase();
+        if (Array.isArray(p?.zones)) haystack += " " + p.zones.join(" ").toLowerCase();
+        if (Array.isArray(p?.tags)) haystack += " " + p.tags.join(" ").toLowerCase();
         return haystack.includes(q);
       });
     }
 
-    // 6. Client-Side Array Sorting
+    // 6. Sorting
     if (sortOrder === "price-low-to-high") {
       result.sort((a, b) => {
-        const priceA = a.minVariantPrice !== undefined ? a.minVariantPrice : (a.price || 0);
-        const priceB = b.minVariantPrice !== undefined ? b.minVariantPrice : (b.price || 0);
+        const priceA = a?.minVariantPrice !== undefined ? a.minVariantPrice : (a?.price || 0);
+        const priceB = b?.minVariantPrice !== undefined ? b.minVariantPrice : (b?.price || 0);
         return priceA - priceB;
       });
     } else if (sortOrder === "price-high-to-low") {
       result.sort((a, b) => {
-        const priceA = a.minVariantPrice !== undefined ? a.minVariantPrice : (a.price || 0);
-        const priceB = b.minVariantPrice !== undefined ? b.minVariantPrice : (b.price || 0);
+        const priceA = a?.minVariantPrice !== undefined ? a.minVariantPrice : (a?.price || 0);
+        const priceB = b?.minVariantPrice !== undefined ? b.minVariantPrice : (b?.price || 0);
         return priceB - priceA;
       });
     } else if (sortOrder === "alphabetical") {
-      result.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      result.sort((a, b) => (a?.name || "").localeCompare(b?.name || ""));
     } else {
-      // Default: "Featured / Newest" -> Sort descending by createdAt date
       result.sort((a, b) => {
-        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        const dateA = a?.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b?.createdAt ? new Date(b.createdAt).getTime() : 0;
         return dateB - dateA;
       });
     }
 
-    // Push sold out items to bottom if viewSoldOut is true
     if (viewSoldOut) {
       result.sort((a, b) => {
-        const aSold = a.availableForSale === false || (!a.quantity || a.quantity < 3);
-        const bSold = b.availableForSale === false || (!b.quantity || b.quantity < 3);
+        const aSold = a?.availableForSale === false || (!a?.quantity || a.quantity < 3);
+        const bSold = b?.availableForSale === false || (!b?.quantity || b.quantity < 3);
         if (aSold && !bSold) return 1;
         if (!aSold && bSold) return -1;
         return 0;
@@ -409,12 +406,12 @@ export default function Shop({ initialProducts = [] }) {
   // Dynamically extract unique available hardiness zones
   const availableZones = new Set();
   products.forEach((prod) => {
-    if (prod.custom?.hardiness_zone) {
+    if (prod?.custom?.hardiness_zone) {
       availableZones.add(prod.custom.hardiness_zone.trim());
     }
-    if (Array.isArray(prod.zones)) {
+    if (Array.isArray(prod?.zones)) {
       prod.zones.forEach((zone) => {
-        if (zone !== "1" && zone !== "2") {
+        if (zone && zone !== "1" && zone !== "2") {
           availableZones.add(zone);
         }
       });
@@ -424,13 +421,13 @@ export default function Shop({ initialProducts = [] }) {
     (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
   );
 
-  // Dynamically extract unique pot size container options
+  // Dynamically extract unique pot size options
   const availableSizes = new Set();
   products.forEach((prod) => {
-    if (prod.custom?.pot_size) {
+    if (prod?.custom?.pot_size) {
       availableSizes.add(prod.custom.pot_size.trim());
     }
-    if (prod.sizes && typeof prod.sizes === "string") {
+    if (prod?.sizes && typeof prod.sizes === "string") {
       const parts = prod.sizes.split("|");
       parts.forEach((part) => {
         const clean = part.trim();
@@ -442,22 +439,20 @@ export default function Shop({ initialProducts = [] }) {
   });
   const sortedSizes = Array.from(availableSizes).sort();
 
-  // Helper to determine active in-stock count for collections dynamically
   const getActiveInStockCountForCategory = (categoryId) => {
     return products.filter((product) => {
-      const isSoldOut = !product.quantity || product.quantity < 3;
+      const isSoldOut = !product?.quantity || product.quantity < 3;
       if (isSoldOut) return false;
 
       const catLower = categoryId.toLowerCase();
       const hasCategory = (c) =>
-        Array.isArray(product.categories) &&
-        product.categories.some((pc) => pc.toLowerCase() === c.toLowerCase());
+        Array.isArray(product?.categories) &&
+        product.categories.some((pc) => pc?.toLowerCase() === c.toLowerCase());
       const hasTag = (t) =>
-        Array.isArray(product.tags) &&
-        product.tags.some((pt) => pt.toLowerCase() === t.toLowerCase());
+        Array.isArray(product?.tags) &&
+        product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
       const textMatches = (keyword) => {
-        const text =
-          `${product.name} ${product.description || ""}`.toLowerCase();
+        const text = `${product?.name || ""} ${product?.description || ""}`.toLowerCase();
         return text.includes(keyword);
       };
 
@@ -538,8 +533,7 @@ export default function Shop({ initialProducts = [] }) {
       }
       if (
         catLower === "terrarium-vivarium" ||
-        catLower === "terrarium & vivarium" ||
-        catLower === "terrarium & vivarium components"
+        catLower === "terrarium & vivarium"
       ) {
         return (
           hasCategory("terrarium-vivarium") ||
@@ -559,7 +553,7 @@ export default function Shop({ initialProducts = [] }) {
   };
 
   const visibleCollections = COLLECTIONS.filter((collection) => {
-    if (products.length === 0) return true; // keep visible during initial load
+    if (products.length === 0) return true;
     return getActiveInStockCountForCategory(collection.id) > 0;
   });
 
@@ -579,10 +573,9 @@ export default function Shop({ initialProducts = [] }) {
         <meta name="twitter:description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids." />
         <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
       </Head>
-      {/* Page Heading styled strictly using Cinzel serif with uppercase spacing */}
+
       <h1 className="shop-title">Shop All Plants</h1>
 
-      {/* Fulfillment Options Banner */}
       <div className="fulfillment-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.8rem 1.2rem', borderRadius: '10px', marginBottom: '1.2rem', textAlign: 'center', fontSize: '1rem' }}>
         <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Now offering Standard Shipping from St. Petersburg, FL with secure live-plant packaging and weather holds, alongside Free Local Nursery Pickup $0.00. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.5rem' }}>View Shipping Details &rarr;</Link>
       </div>
@@ -599,9 +592,7 @@ export default function Shop({ initialProducts = [] }) {
         />
       ) : (
         <>
-          {/* Structured Comprehensive Filter Bar Panel */}
           <div className="filter-panel">
-            {/* Relocated Introductory Content */}
             <p className="shop-intro">
               Browse our curated selection of rare and resilient tropical plants
               grown in St.&nbsp;Petersburg. Use the filters to explore categories
@@ -618,7 +609,6 @@ export default function Shop({ initialProducts = [] }) {
               note if you're looking for something special.
             </p>
 
-            {/* Category Pill Buttons */}
             <div className="category-section">
               <label className="filter-group-label">Collections:</label>
               <div className="category-pills">
@@ -640,9 +630,7 @@ export default function Shop({ initialProducts = [] }) {
               </div>
             </div>
 
-            {/* Dynamic Select Filters and Inputs Grid */}
             <div className="filters-grid">
-              {/* Search Filter Input with Sleek Clear Button */}
               <div className="filter-control">
                 <label htmlFor="search-input">Search Plants</label>
                 <div className="search-input-wrapper">
@@ -665,33 +653,13 @@ export default function Shop({ initialProducts = [] }) {
                       onClick={() => updateFilters({ search: "" })}
                       className="search-clear-btn"
                       aria-label="Clear search query"
-                      onKeyDown={(e) => {
-                        if (e.key === "Escape") {
-                          updateFilters({ search: "" });
-                          document.getElementById("search-input")?.focus();
-                        }
-                      }}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
+                      ✕
                     </button>
                   )}
                 </div>
               </div>
 
-              {/* Pot Size / Container Filter Dropdown */}
               <div className="filter-control">
                 <label htmlFor="size-select">Pot Size / Container</label>
                 <select
@@ -708,8 +676,6 @@ export default function Shop({ initialProducts = [] }) {
                 </select>
               </div>
 
-
-              {/* My Zone Quick Filter Shortcut Button */}
               <div className="filter-control">
                 <label>My Climate Zone</label>
                 <button
@@ -739,7 +705,6 @@ export default function Shop({ initialProducts = [] }) {
                 </button>
               </div>
 
-              {/* Hardiness Zone Filter Dropdown */}
               <div className="filter-control">
                 <label htmlFor="zone-select">Hardiness Zone</label>
                 <select
@@ -756,7 +721,6 @@ export default function Shop({ initialProducts = [] }) {
                 </select>
               </div>
 
-              {/* Sort Options Dropdown */}
               <div className="filter-control">
                 <label htmlFor="sort-select">Sort By</label>
                 <select
@@ -772,7 +736,6 @@ export default function Shop({ initialProducts = [] }) {
               </div>
             </div>
 
-            {/* View Sold Out Toggle Button */}
             <div className="toggle-section">
               <label className="toggle-label">
                 <input
@@ -788,13 +751,11 @@ export default function Shop({ initialProducts = [] }) {
             </div>
           </div>
 
-          {/* Results Count Summary with Accessible Announcements */}
           <div className="results-count" role="status" aria-live="polite">
             Showing {filteredProducts.length}{" "}
             {filteredProducts.length === 1 ? "product" : "products"}
           </div>
 
-          {/* Products Grid */}
           {selectedCategory &&
           products.length > 0 &&
           getActiveInStockCountForCategory(selectedCategory) === 0 ? (
@@ -848,130 +809,17 @@ export default function Shop({ initialProducts = [] }) {
             </div>
           ) : (
             <div className="products">
-              {filteredProducts.map((product) => {
-                const isSoldOut = !product.quantity || product.quantity < 3;
-                const isWishlisted = wishlist.some(
-                  (item) => item.slug === product.slug,
-                );
-
-                return (
-                  <div
-                    key={product.slug}
-                    className={`product-card ${isSoldOut ? "sold-out" : ""}`}
-                  >
-                    {/* Wishlist Heart Icon */}
-                    <button
-                      onClick={() => toggleWishlist(product)}
-                      className="wishlist-heart-btn"
-                      aria-label="Add to wishlist"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="22"
-                        height="22"
-                        viewBox="0 0 24 24"
-                        fill={isWishlisted ? "#ba2f2f" : "none"}
-                        stroke={isWishlisted ? "#ba2f2f" : "#D4B06A"}
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                      </svg>
-                    </button>
-
-                    {/* Absolute sold-out-badge in upper right if sold out */}
-                    {isSoldOut && <div className="sold-out-badge">Sold Out</div>}
-
-                    {/* Top content wrapper keeps image, title, properties together */}
-                    <div className="product-card-top">
-                      <Link
-                        href={`/product/${product.slug}`}
-                        className="product-link"
-                      >
-                        <div className="product-image-container">
-                          <Image
-                            src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
-                            alt={product.name}
-                            fill
-                            sizes="220px"
-                            className="product-image"
-                            unoptimized={
-                              !product.image ||
-                              !product.image.includes("cdn.sanity.io")
-                            }
-                          />
-                        </div>
-                        <strong className="product-card-title">
-                          {product.name}
-                        </strong>
-                      </Link>
-                      <p className="product-sizes">
-                        {product.sizes || "Standard Pot"}
-                      </p>
-                      <p className="product-type">{product.type}</p>
-                      <div className={`price ${isSoldOut ? "sold" : "available"}`}>
-                        {isSoldOut
-                          ? "Sold Out"
-                          : isNaN(product.price) || !product.price
-                            ? "Price on Request"
-                            : `$${product.price.toFixed(2)}`}
-                      </div>
-                      {/* Cold tolerance dynamic hardiness compatibility badge */}
-                      {product.type === "Plant" && (() => {
-                        const compat = getZoneCompatibility(product, userZone);
-                        return (
-                          <div
-                            className="hardiness-badge"
-                            style={{
-                              display: "inline-block",
-                              fontSize: "0.75rem",
-                              fontWeight: "bold",
-                              padding: "0.2rem 0.55rem",
-                              borderRadius: "4px",
-                              marginTop: "0.4rem",
-                              marginBottom: "0.6rem",
-                              backgroundColor: compat.badgeColor,
-                              color: compat.badgeColor === "#D4B06A" ? "#00301E" : "#FFFFFF"
-                            }}
-                          >
-                            {compat.badgeLabel} • Zone {userZone}
-                          </div>
-                        );
-                      })()}
-                    </div>
-
-                    {/* Bottom aligned button or Sold out text box */}
-                    <div className="product-card-bottom">
-                      {isSoldOut ? (
-                        <div className="sold-out-btn">Sold Out</div>
-                      ) : (
-                        <Button
-                          variant="green-filled"
-                          href={`/product/${product.slug}`}
-                          style={{
-                            width: "100%",
-                            marginTop: "0.6rem",
-                            fontFamily: "'Crimson Text', serif",
-                            fontSize: "1rem",
-                            padding: "0.5rem 1.4rem",
-                            borderRadius: "18px",
-                            boxSizing: "border-box",
-                          }}
-                        >
-                          View Product
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product?.slug || product?.id}
+                  product={product}
+                />
+              ))}
             </div>
           )}
         </>
       )}
 
-      {/* Styled JSX strictly using Cinzel and Crimson Text font tokens and our verified color design tokens */}
       <style jsx>{`
         .shop-container {
           max-width: 1150px;
@@ -980,12 +828,6 @@ export default function Shop({ initialProducts = [] }) {
           box-sizing: border-box;
           font-family: "Crimson Text", serif;
           color: #f5e7c4;
-        }
-
-        @media (max-width: 900px) {
-          .shop-container {
-            padding: 0.5rem;
-          }
         }
 
         .shop-title {
@@ -997,17 +839,6 @@ export default function Shop({ initialProducts = [] }) {
           margin-bottom: 0.4em;
           font-family: "Cinzel", serif;
           text-transform: uppercase;
-        }
-
-        .pickup-banner {
-          background: #d4b06a;
-          color: #00301e;
-          padding: 0.6rem 1rem;
-          border-radius: 10px;
-          margin-bottom: 1rem;
-          text-align: center;
-          font-size: 1.05rem;
-          font-family: "Crimson Text", serif;
         }
 
         .shop-intro {
@@ -1076,11 +907,6 @@ export default function Shop({ initialProducts = [] }) {
           box-shadow: 0 0 10px rgba(212, 176, 106, 0.35);
         }
 
-        .category-pills button:focus-visible {
-          outline: 2px solid #d4b06a;
-          outline-offset: 2px;
-        }
-
         .filters-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1125,19 +951,6 @@ export default function Shop({ initialProducts = [] }) {
           align-items: center;
           justify-content: center;
           padding: 4px;
-          border-radius: 50%;
-          transition: all 0.2s ease;
-        }
-
-        .search-clear-btn:hover {
-          opacity: 1;
-          background: rgba(0, 48, 30, 0.15);
-        }
-
-        .search-clear-btn:focus-visible {
-          outline: 2px solid #00301e;
-          outline-offset: 1px;
-          opacity: 1;
         }
 
         .filter-control input,
@@ -1151,18 +964,6 @@ export default function Shop({ initialProducts = [] }) {
           font-size: 1rem;
           outline: none;
           box-sizing: border-box;
-          transition: border-color 0.2s ease;
-        }
-
-        .filter-control input:focus,
-        .filter-control select:focus {
-          border-color: #d4b06a;
-        }
-
-        .filter-control input:focus-visible,
-        .filter-control select:focus-visible {
-          outline: 2px solid #d4b06a;
-          outline-offset: 1px;
         }
 
         .toggle-section {
@@ -1209,7 +1010,6 @@ export default function Shop({ initialProducts = [] }) {
           color: #d4b06a;
           font-weight: bold;
           font-family: "Crimson Text", serif;
-          outline: none;
         }
 
         .products {
@@ -1232,161 +1032,6 @@ export default function Shop({ initialProducts = [] }) {
           .products {
             grid-template-columns: 1fr;
           }
-        }
-
-        .product-card {
-          background-color: #f5e7c4;
-          border: 1px solid #d4b06a;
-          border-radius: 10px;
-          padding: 1.2rem;
-          width: 100%;
-          box-sizing: border-box;
-          color: #00301e;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          transition:
-            transform 0.15s ease-in-out,
-            box-shadow 0.15s ease-in-out;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-          position: relative;
-        }
-
-        .product-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-          z-index: 2;
-        }
-
-        .product-card.sold-out {
-          opacity: 0.6;
-        }
-
-        .wishlist-heart-btn {
-          position: absolute;
-          top: 12px;
-          right: 12px;
-          background: none;
-          border: none;
-          cursor: pointer;
-          z-index: 10;
-          padding: 4px;
-          transition: transform 0.1s ease;
-          filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.5));
-        }
-
-        .wishlist-heart-btn:hover {
-          transform: scale(1.1);
-        }
-
-        .sold-out-badge {
-          position: absolute;
-          top: 12px;
-          left: 12px;
-          background: #ba2f2f;
-          color: #ffffff;
-          padding: 0.2rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.8rem;
-          font-weight: bold;
-          font-family: "Crimson Text", serif;
-          z-index: 5;
-        }
-
-        .product-card-top {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          flex-grow: 1;
-          text-align: center;
-        }
-
-        .product-link {
-          text-decoration: none;
-          color: inherit;
-          display: block;
-        }
-
-        .product-image-container {
-          position: relative !important;
-          overflow: hidden !important;
-          width: 100% !important;
-          aspect-ratio: 4 / 3 !important;
-          margin-bottom: 0.8rem;
-        }
-
-        .product-image {
-          object-fit: cover !important;
-          width: 100% !important;
-          height: 100% !important;
-          border-radius: 8px;
-          background: rgba(0, 0, 0, 0.05);
-        }
-
-        .product-card-title {
-          display: block;
-          margin-top: 0.4rem;
-          font-size: 1.3rem;
-          font-family: "Cinzel", serif;
-          line-height: 1.2;
-          min-height: 3.2rem;
-          color: #00301e;
-        }
-
-        .product-sizes {
-          margin: 0.2rem 0;
-          font-size: 1rem;
-          color: #555;
-          font-family: "Crimson Text", serif;
-        }
-
-        .product-type {
-          margin: 0.1rem 0;
-          font-size: 1rem;
-          color: #00301e;
-          font-family: "Crimson Text", serif;
-        }
-
-        .price {
-          font-weight: bold;
-          margin: 0.6rem 0 0.3rem 0;
-          font-size: 1.15rem;
-          font-family: "Crimson Text", serif;
-        }
-
-        .price.available {
-          color: #11402a;
-        }
-
-        .price.sold {
-          color: #ba2f2f;
-        }
-
-        .hardiness-badge {
-          font-size: 0.85rem;
-          color: #3a604d;
-          margin-top: 0.2rem;
-          margin-bottom: 0.8rem;
-          font-family: "Crimson Text", serif;
-        }
-
-        .product-card-bottom {
-          width: 100%;
-          margin-top: auto;
-        }
-
-        .sold-out-btn {
-          background: #ba2f2f;
-          color: #ffffff;
-          padding: 0.5rem;
-          border-radius: 24px;
-          text-align: center;
-          font-weight: bold;
-          width: 100%;
-          box-sizing: border-box;
-          font-size: 1rem;
-          margin-top: 0.6rem;
-          font-family: "Crimson Text", serif;
         }
       `}</style>
     </div>

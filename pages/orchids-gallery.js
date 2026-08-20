@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
+import GalleryItemCard from '../components/GalleryItemCard';
 import { sanityClient } from '../lib/sanity';
 
 const CATEGORY_MAP = {
@@ -84,8 +85,8 @@ export async function getStaticProps() {
       if (cmsImages && cmsImages.length > 0) {
         images = cmsImages.map(img => ({
           ...img,
-          categoryLabel: CATEGORY_MAP[img.category] || img.category || 'Botanical Highlight',
-          alt: img.title
+          categoryLabel: CATEGORY_MAP[img?.category] || img?.category || 'Botanical Highlight',
+          alt: img?.title
         }));
       }
     }
@@ -106,11 +107,11 @@ export default function OrchidsGallery({ initialImages }) {
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const categoryValues = ['All', ...Array.from(new Set(images.map(img => img.category).filter(Boolean)))];
+  const categoryValues = ['All', ...Array.from(new Set(images.map(img => img?.category).filter(Boolean)))];
 
   const filteredImages = activeCategory === 'All'
     ? images
-    : images.filter(img => img.category === activeCategory);
+    : images.filter(img => img?.category === activeCategory);
 
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
@@ -166,75 +167,16 @@ export default function OrchidsGallery({ initialImages }) {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '1.8rem'
+          gap: '1.8rem',
+          alignItems: 'stretch'
         }}>
-          {filteredImages.map((img) => {
-            const displayCategory = img.categoryLabel || CATEGORY_MAP[img.category] || img.category;
-            return (
-              <div
-                key={img._id || img.title}
-                onClick={() => setSelectedImage(img)}
-                style={{
-                  background: '#1C3D2E',
-                  borderRadius: '12px',
-                  border: '1px solid #D4B06A',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}
-                className="gallery-card"
-              >
-                <div style={{ position: 'relative', width: '100%', height: '260px', overflow: 'hidden', background: '#001F14' }}>
-                  <img
-                    src={img.imageUrl || '/assets/placeholder.png'}
-                    alt={img.alt || img.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      transition: 'transform 0.4s ease'
-                    }}
-                    onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-                    className="gallery-img"
-                  />
-                  {displayCategory && (
-                    <span style={{
-                      position: 'absolute',
-                      top: '12px',
-                      left: '12px',
-                      background: 'rgba(0, 48, 30, 0.85)',
-                      color: '#D4B06A',
-                      border: '1px solid #D4B06A',
-                      borderRadius: '12px',
-                      padding: '0.2rem 0.7rem',
-                      fontSize: '0.75rem',
-                      fontFamily: 'Cinzel, serif',
-                      textTransform: 'uppercase',
-                      backdropFilter: 'blur(4px)'
-                    }}>
-                      {displayCategory}
-                    </span>
-                  )}
-                </div>
-                <div style={{ padding: '1.2rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                  <div>
-                    <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.15rem', marginTop: 0, marginBottom: '0.5rem' }}>
-                      {img.title}
-                    </h3>
-                    <p style={{ color: '#F5E7C4', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>
-                      {img.description}
-                    </p>
-                  </div>
-                  <div style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#D4B06A', fontSize: '0.85rem', fontFamily: 'Cinzel, serif', fontWeight: 'bold' }}>
-                    <span>Click to view photo</span>
-                    <span>→</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {filteredImages.map((img) => (
+            <GalleryItemCard
+              key={img?._id || img?.title}
+              item={img}
+              onClick={() => setSelectedImage(img)}
+            />
+          ))}
         </div>
       </div>
 
@@ -295,25 +237,25 @@ export default function OrchidsGallery({ initialImages }) {
             >
               ✕
             </button>
-            <div style={{ width: '100%', height: '400px', maxH: '50vh', background: '#001F14', position: 'relative' }}>
+            <div style={{ width: '100%', height: '400px', background: '#001F14', position: 'relative' }}>
               <img
-                src={selectedImage.imageUrl || '/assets/placeholder.png'}
-                alt={selectedImage.alt || selectedImage.title}
+                src={selectedImage?.imageUrl || selectedImage?.image || '/assets/placeholder.png'}
+                alt={selectedImage?.alt || selectedImage?.title || 'Gallery Specimen'}
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
               />
             </div>
             <div style={{ padding: '2rem' }}>
-              {(selectedImage.categoryLabel || CATEGORY_MAP[selectedImage.category] || selectedImage.category) && (
+              {(selectedImage?.categoryLabel || CATEGORY_MAP[selectedImage?.category] || selectedImage?.category) && (
                 <span style={{ color: '#8DA38B', textTransform: 'uppercase', fontFamily: 'Cinzel, serif', fontSize: '0.85rem', letterSpacing: '0.05em' }}>
-                  {selectedImage.categoryLabel || CATEGORY_MAP[selectedImage.category] || selectedImage.category}
+                  {selectedImage?.categoryLabel || CATEGORY_MAP[selectedImage?.category] || selectedImage?.category}
                 </span>
               )}
               <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: '0.3rem', marginBottom: '1rem' }}>
-                {selectedImage.title}
+                {selectedImage?.title || 'Botanical Specimen'}
               </h2>
               <p style={{ color: '#F5E7C4', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '1.8rem' }}>
-                {selectedImage.description}
+                {selectedImage?.description || ''}
               </p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>

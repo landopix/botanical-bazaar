@@ -1,0 +1,148 @@
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+
+export default function ProductCard({
+  product = {},
+  titleClamp = 2,
+  descClamp = 3,
+  className = ''
+}) {
+  const slug = product?.slug?.current || product?.slug || '';
+  const name = product?.name ?? product?.title ?? 'Botanical Specimen';
+  const price = product?.price;
+  const quantity = product?.quantity ?? 10;
+  const isSoldOut = quantity < 3 || product?.availableForSale === false;
+  const rawImage = product?.image ?? product?.imageUrl ?? product?.featuredImage?.url;
+  const imageSrc = rawImage
+    ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
+    : '/assets/placeholder.png';
+  const sizes = product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
+  const type = product?.type || product?.category || 'Tropical Plant';
+
+  return (
+    <div
+      className={`product-card flex flex-col justify-between h-full bg-[#F5E7C4] border border-[#D4B06A] rounded-xl overflow-hidden shadow-md relative ${
+        isSoldOut ? 'opacity-60' : ''
+      } ${className}`}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+        backgroundColor: '#F5E7C4',
+        border: '1px solid #D4B06A',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        position: 'relative',
+        boxSizing: 'border-box'
+      }}
+    >
+      {isSoldOut && (
+        <div
+          className="sold-out-badge"
+          style={{
+            position: 'absolute',
+            top: '12px',
+            left: '12px',
+            background: '#ba2f2f',
+            color: '#ffffff',
+            padding: '0.2rem 0.6rem',
+            borderRadius: '4px',
+            fontSize: '0.8rem',
+            fontWeight: 'bold',
+            zIndex: 10
+          }}
+        >
+          Sold Out
+        </div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1, padding: '1.2rem 1.2rem 0 1.2rem' }}>
+        <Link
+          href={slug ? `/product/${slug}` : '/shop'}
+          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+        >
+          {/* Aspect Square (1:1) Image Wrapper */}
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              paddingTop: '100%', // aspect-square 1:1
+              borderRadius: '8px',
+              overflow: 'hidden',
+              backgroundColor: '#1C3D2E',
+              marginBottom: '0.8rem'
+            }}
+          >
+            <Image
+              src={imageSrc}
+              alt={name}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
+              unoptimized={!imageSrc.includes('cdn.sanity.io')}
+              onError={(e) => {
+                if (e.target) e.target.src = '/assets/placeholder.png';
+              }}
+            />
+          </div>
+
+          <strong
+            className={`line-clamp-${titleClamp}`}
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: titleClamp,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              fontSize: '1.2rem',
+              fontFamily: 'Cinzel, serif',
+              lineHeight: '1.3',
+              color: '#00301E',
+              textAlign: 'center',
+              minHeight: '2.6rem'
+            }}
+          >
+            {name}
+          </strong>
+        </Link>
+
+        <p style={{ margin: '0.3rem 0 0.1rem 0', fontSize: '0.95rem', color: '#555', textAlign: 'center' }}>
+          {sizes}
+        </p>
+        <p style={{ margin: '0.1rem 0', fontSize: '0.95rem', color: '#00301E', textAlign: 'center' }}>
+          {type}
+        </p>
+        <p style={{ fontWeight: 'bold', margin: '0.4rem 0 0.8rem 0', fontSize: '1.1rem', color: '#11402A', textAlign: 'center' }}>
+          {isSoldOut
+            ? 'Sold Out'
+            : typeof price === 'number'
+            ? `$${price.toFixed(2)}`
+            : price ?? 'Price on Request'}
+        </p>
+      </div>
+
+      <div style={{ width: '100%', padding: '0 1.2rem 1.2rem 1.2rem', marginTop: 'auto' }}>
+        <Link
+          href={slug ? `/product/${slug}` : '/shop'}
+          style={{
+            display: 'block',
+            width: '100%',
+            textAlign: 'center',
+            padding: '0.5rem 1.2rem',
+            borderRadius: '18px',
+            background: '#00301E',
+            color: '#F5E7C4',
+            border: '1px solid #D4B06A',
+            fontWeight: 'bold',
+            fontSize: '0.95rem',
+            textDecoration: 'none',
+            boxSizing: 'border-box'
+          }}
+        >
+          View Plant
+        </Link>
+      </div>
+    </div>
+  );
+}

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import Button from '../components/Button';
+import CareSheetCard from '../components/CareSheetCard';
 
 const defaultCareSheets = [
   {
@@ -58,38 +59,9 @@ export default function Almanac({ careSheets }) {
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Botanical Care Sheets
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
           {sheets.map((sheet, i) => (
-            <div key={i} style={{ background: '#1C3D2E', borderRadius: '12px', border: '1px solid #D4B06A', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <img
-                src={sheet.imageUrl || sheet.imagePath || '/assets/placeholder.png'}
-                alt={sheet.commonName || sheet.botanicalName}
-                style={{ width: '100%', height: '220px', objectFit: 'cover' }}
-                onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-              />
-              <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'space-between' }}>
-                <div>
-                  <h3 style={{ color: '#D4B06A', margin: '0 0 0.2rem 0', fontFamily: 'Cinzel, serif', fontSize: '1.3rem' }}>
-                    {sheet.commonName}
-                  </h3>
-                  <p style={{ color: '#F5E7C4', fontStyle: 'italic', margin: '0 0 1rem 0', fontSize: '0.95rem' }}>
-                    {sheet.botanicalName}
-                  </p>
-                  
-                  <div style={{ background: '#00301E', padding: '0.8rem', borderRadius: '6px', fontSize: '0.88rem', marginBottom: '1rem', border: '1px solid #2d5a44' }}>
-                    <p style={{ margin: '0 0 0.3rem 0' }}><strong style={{ color: '#D4B06A' }}>Light:</strong> {sheet.lightNeeds}</p>
-                    <p style={{ margin: '0 0 0.3rem 0' }}><strong style={{ color: '#D4B06A' }}>Watering:</strong> {sheet.wateringNeeds}</p>
-                    <p style={{ margin: 0 }}><strong style={{ color: '#D4B06A' }}>USDA Zones:</strong> {sheet.zoneCompatibility}</p>
-                  </div>
-
-                  <p style={{ fontSize: '0.92rem', lineHeight: '1.5', margin: '0 0 1.2rem 0' }}>
-                    {sheet.careInstructions}
-                  </p>
-                </div>
-
-                <Button variant="outline" href="/shop">Find Plants</Button>
-              </div>
-            </div>
+            <CareSheetCard key={sheet?._id || sheet?.commonName || i} sheet={sheet} />
           ))}
         </div>
       </section>
