@@ -48,7 +48,7 @@ export default function Checkout() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          cart: cart.map(item => ({ slug: item.slug, quantity: item.quantity, selectedSize: item.selectedSize })),
+          cart: cart.map(item => ({ slug: item.slug, quantity: item.quantity, selectedSize: item.selectedSize, variantId: item.variantId || item.id, name: item.name })),
           fulfillment_method: fulfillmentMethod,
           customer_name: formData.name,
           customer_email: formData.email,
@@ -259,7 +259,7 @@ export default function Checkout() {
             </div>
 
             <Button type="submit" variant="gold-filled" disabled={loading} style={{ width: '100%', marginTop: '1rem' }}>
-              {loading ? 'Processing Secure Stripe Checkout...' : 'Proceed to Payment'}
+              {loading ? 'Creating Secure Shopify Checkout...' : 'Proceed to Shopify Checkout'}
             </Button>
           </form>
         </div>

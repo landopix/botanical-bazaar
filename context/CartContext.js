@@ -41,16 +41,38 @@ export function CartProvider({ children }) {
     }
   };
 
-  const addToCart = (product, quantity = 1, selectedSize = null) => {
+  const addToCart = (product, quantity = 1, selectedSize = null, variantId = null) => {
+    let resolvedVariantId = variantId || product.variantId;
+    if (!resolvedVariantId && product.variants && product.variants.length > 0) {
+      if (selectedSize) {
+        const matched = product.variants.find(
+          (v) => v.title && v.title.toLowerCase() === selectedSize.toLowerCase()
+        );
+        if (matched) resolvedVariantId = matched.id;
+      }
+      if (!resolvedVariantId) resolvedVariantId = product.variants[0].id;
+    }
+
     const existingIndex = cart.findIndex(
       (item) => item.slug === product.slug && item.selectedSize === selectedSize
     );
     if (existingIndex > -1) {
       const newCart = [...cart];
       newCart[existingIndex].quantity += quantity;
+      if (resolvedVariantId && !newCart[existingIndex].variantId) {
+        newCart[existingIndex].variantId = resolvedVariantId;
+      }
       saveCart(newCart);
     } else {
-      saveCart([...cart, { ...product, quantity, selectedSize: selectedSize || (product.sizes ? product.sizes.split('|')[0].trim() : '') }]);
+      saveCart([
+        ...cart,
+        {
+          ...product,
+          variantId: resolvedVariantId || product.id,
+          quantity,
+          selectedSize: selectedSize || (product.sizes ? product.sizes.split('|')[0].trim() : '')
+        }
+      ]);
     }
   };
 
