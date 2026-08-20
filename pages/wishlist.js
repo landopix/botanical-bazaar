@@ -1,209 +1,73 @@
-import React from "react";
-import Link from "next/link";
-import Button from "../components/Button";
-import { useWishlist } from "../context/WishlistContext";
-import { useCart } from "../context/CartContext";
+import Head from 'next/head';
+import React from 'react';
+import Link from 'next/link';
+import Button from '../components/Button';
+import ProductCard from '../components/ProductCard';
+import { useWishlist } from '../context/WishlistContext';
 
 export default function Wishlist() {
-  const { wishlist, removeFromWishlist } = useWishlist();
-  const { addToCart } = useCart();
-
-  if (wishlist.length === 0) {
-    return (
-      <div style={{ padding: "5rem 1.5rem", textAlign: "center" }}>
-        <h1 style={{ color: "#D4B06A", marginBottom: "1.5rem", fontFamily: "'Cinzel', serif", textTransform: "uppercase", letterSpacing: "0.15em" }}>
-          Your Wishlist is Empty
-        </h1>
-        <p style={{ fontSize: "1.2rem", marginBottom: "2rem", color: "#E9DCBE" }}>
-          Save your favorite rare and resilient tropical plants to view or buy
-          later!
-        </p>
-        <Button variant="gold-filled" href="/shop">
-          Browse the Catalog
-        </Button>
-      </div>
-    );
-  }
+  const { wishlist, clearWishlist } = useWishlist();
 
   return (
-    <div
-      style={{ padding: "3rem 1.5rem", maxWidth: "1050px", margin: "0 auto", boxSizing: "border-box" }}
-    >
-      <h1
-        style={{
-          color: "#D4B06A",
-          textAlign: "center",
-          marginBottom: "2.5rem",
-          fontFamily: "'Cinzel', serif",
-          textTransform: "uppercase",
-          letterSpacing: "0.15em",
-          fontSize: "2.5rem"
-        }}
-      >
-        Your Botanical Wishlist
+    <div style={{ padding: '3rem 1.5rem', maxWidth: '1100px', margin: '0 auto', color: '#E9DCBE', minHeight: '60vh' }}>
+      <Head>
+        <title>Your Botanical Wishlist | The Botanical Bazaar</title>
+        <meta name="description" content="View and manage your saved tropical plants, collector orchids, and wishlist items at The Botanical Bazaar." />
+      </Head>
+
+      <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.5rem' }}>
+        Your Wishlist
       </h1>
+      <p style={{ textAlign: 'center', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto 2.5rem auto', lineHeight: '1.5', fontStyle: 'italic' }}>
+        Keep track of rare tropical specimens, collector orchids, and fruit trees for your garden collection.
+      </p>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-          gap: "1.5rem",
-          alignItems: "stretch"
-        }}
-      >
-        {wishlist.map((product) => {
-          const isSoldOut = !product.quantity || product.quantity < 3;
-          const imageSrc = product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
-
-          return (
-            <div
-              key={product.slug}
-              className={`product-card ${isSoldOut ? "sold-out" : ""}`}
+      {wishlist && wishlist.length > 0 ? (
+        <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid #D4B06A', paddingBottom: '0.8rem' }}>
+            <span style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#D4B06A' }}>
+              {wishlist.length} {wishlist.length === 1 ? 'Saved Specimen' : 'Saved Specimens'}
+            </span>
+            <button
+              onClick={clearWishlist}
               style={{
-                backgroundColor: "#F5E7C4",
-                border: "1px solid #D4B06A",
-                borderRadius: "10px",
-                padding: "1.2rem",
-                color: "#00301E",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.15)",
-                position: "relative",
-                boxSizing: "border-box"
+                background: 'transparent',
+                color: '#ba2f2f',
+                border: '1px solid #ba2f2f',
+                padding: '0.4rem 1rem',
+                borderRadius: '20px',
+                fontFamily: 'Crimson Text, serif',
+                fontWeight: 'bold',
+                cursor: 'pointer'
               }}
             >
-              <button
-                onClick={() => removeFromWishlist(product.slug)}
-                style={{
-                  position: "absolute",
-                  top: "10px",
-                  right: "10px",
-                  background: "#ba2f2f",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "26px",
-                  height: "26px",
-                  color: "#ffffff",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.85rem",
-                  fontWeight: "bold",
-                  zIndex: 10,
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.3)"
-                }}
-                title="Remove from Wishlist"
-                aria-label="Remove from wishlist"
-              >
-                ✕
-              </button>
+              Clear All Wishlist Items
+            </button>
+          </div>
 
-              <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, textAlign: "center" }}>
-                <Link
-                  href={`/product/${product.slug}`}
-                  style={{ textDecoration: "none", color: "inherit", display: "block" }}
-                >
-                  <div
-                    style={{
-                      position: "relative",
-                      overflow: "hidden",
-                      width: "100%",
-                      aspectRatio: "4 / 3",
-                      marginBottom: "0.8rem",
-                      borderRadius: "8px",
-                      background: "rgba(0, 0, 0, 0.05)"
-                    }}
-                  >
-                    <img
-                      src={imageSrc}
-                      alt={product.name}
-                      onError={(e) => {
-                        e.target.src = "/assets/placeholder.png";
-                      }}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block"
-                      }}
-                    />
-                  </div>
-                  <strong
-                    style={{
-                      display: "block",
-                      marginTop: "0.4rem",
-                      fontSize: "1.2rem",
-                      fontFamily: "'Cinzel', serif",
-                      lineHeight: "1.2",
-                      minHeight: "3.2rem",
-                      color: "#00301E"
-                    }}
-                  >
-                    {product.name}
-                  </strong>
-                </Link>
-                <p style={{ margin: "0.2rem 0", fontSize: "1rem", color: "#555", fontFamily: "'Crimson Text', serif" }}>
-                  {product.sizes || "Standard Pot"}
-                </p>
-                <p style={{ margin: "0.1rem 0", fontSize: "1rem", color: "#00301E", fontFamily: "'Crimson Text', serif" }}>
-                  {product.type}
-                </p>
-                <p style={{ fontWeight: "bold", margin: "0.4rem 0 0.2rem 0", fontSize: "1.1rem", color: isSoldOut ? "#ba2f2f" : "#11402A", fontFamily: "'Crimson Text', serif" }}>
-                  {isSoldOut
-                    ? "Sold Out"
-                    : isNaN(product.price) || !product.price
-                      ? "Price on Request"
-                      : `$${product.price.toFixed(2)}`}
-                </p>
-              </div>
-
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.6rem",
-                  marginTop: "0.8rem",
-                  width: "100%"
-                }}
-              >
-                {!isSoldOut ? (
-                  <Button
-                    variant="green-filled"
-                    onClick={() => addToCart(product, 1)}
-                    style={{ width: "100%", fontFamily: "'Crimson Text', serif", fontSize: "1rem", padding: "0.5rem 1.2rem", borderRadius: "18px" }}
-                  >
-                    Add to Cart
-                  </Button>
-                ) : (
-                  <div
-                    style={{
-                      background: "#ba2f2f",
-                      color: "#ffffff",
-                      padding: "0.5rem",
-                      borderRadius: "18px",
-                      textAlign: "center",
-                      fontWeight: "bold",
-                      fontSize: "0.95rem",
-                      fontFamily: "'Crimson Text', serif"
-                    }}
-                  >
-                    Sold Out
-                  </div>
-                )}
-                <Button
-                  variant="outline"
-                  href={`/product/${product.slug}`}
-                  style={{ width: "100%", fontFamily: "'Crimson Text', serif", fontSize: "0.95rem", padding: "0.4rem 1rem", borderRadius: "18px" }}
-                >
-                  View Details
-                </Button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '1.5rem',
+              alignItems: 'stretch',
+              marginBottom: '3rem'
+            }}
+          >
+            {wishlist.map((item) => (
+              <ProductCard key={item?.slug || item?.id} product={item} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <div style={{ background: '#00301E', border: '1px solid #D4B06A', padding: '3rem 2rem', borderRadius: '12px', textAlign: 'center', maxWidth: '600px', margin: '2rem auto' }}>
+          <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0 }}>Your Wishlist is Empty</h2>
+          <p style={{ margin: '1rem 0 2rem 0', fontSize: '1.1rem', lineHeight: '1.6' }}>
+            Explore our nursery catalog and click the heart icon on any plant card to save items to your wishlist.
+          </p>
+          <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
+        </div>
+      )}
     </div>
   );
 }

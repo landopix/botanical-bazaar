@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import Button from '../components/Button';
+import EventCard from '../components/EventCard';
 import SeasonalArchive from '../components/SeasonalArchive';
 
 const defaultEvents = [
@@ -87,59 +88,14 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
       {activeEvents.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '3.5rem' }}>
           {activeEvents.map((evt, i) => (
-            <div key={evt._id || i} style={{ background: '#1C3D2E', borderRadius: '12px', border: '1px solid #D4B06A', padding: '1.8rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              {evt.imageUrl && (
-                <div style={{ width: '100%', height: '220px', borderRadius: '8px', overflow: 'hidden', background: '#001F14', marginBottom: '0.5rem' }}>
-                  <img
-                    src={evt.imageUrl}
-                    alt={evt.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
-              )}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <h2 style={{ color: '#D4B06A', margin: 0, fontFamily: 'Cinzel, serif', fontSize: '1.4rem' }}>{evt.title}</h2>
-                <span style={{ background: '#00301E', color: '#D4B06A', border: '1px solid #D4B06A', padding: '0.3rem 0.8rem', borderRadius: '20px', fontSize: '0.85rem', fontWeight: 'bold' }}>
-                  {evt.formattedDate || evt.dateTime}
-                </span>
-              </div>
-
-              <p style={{ margin: 0, fontSize: '0.95rem', color: '#F5E7C4', fontWeight: 'bold' }}>
-                📍 {evt.location || 'St. Petersburg, FL'}
-              </p>
-
-              <p style={{ margin: 0, lineHeight: '1.6', fontSize: '1rem' }}>
-                {evt.description}
-              </p>
-
-              <div style={{ marginTop: '0.5rem', alignSelf: 'flex-start' }}>
-                {evt.ticketUrl ? (
-                  <Button variant="gold-filled" href={evt.ticketUrl}>RSVP &amp; Tickets</Button>
-                ) : (
-                  <span style={{ fontSize: '0.9rem', fontStyle: 'italic', color: '#D4B06A' }}>Free Community Event — No Ticket Required</span>
-                )}
-              </div>
-            </div>
+            <EventCard key={evt._id || evt.title || i} event={evt} />
           ))}
         </div>
       ) : (
         <SeasonalArchive title="Past Events &amp; Workshop Archive">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {archivedEvents.map((evt, i) => (
-              <div key={evt._id || i} style={{ background: 'rgba(28, 61, 46, 0.6)', borderRadius: '8px', border: '1px solid rgba(212, 176, 106, 0.3)', padding: '1.2rem' }}>
-                {evt.imageUrl && (
-                  <div style={{ width: '100%', height: '160px', borderRadius: '6px', overflow: 'hidden', background: '#001F14', marginBottom: '0.8rem' }}>
-                    <img
-                      src={evt.imageUrl}
-                      alt={evt.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
-                )}
-                <h3 style={{ color: '#D4B06A', margin: '0 0 0.4rem 0', fontFamily: 'Cinzel, serif' }}>{evt.title}</h3>
-                <p style={{ margin: '0 0 0.4rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>Held: {evt.formattedDate || evt.dateTime}</p>
-                <p style={{ margin: 0, fontSize: '0.95rem' }}>{evt.description}</p>
-              </div>
+              <EventCard key={evt._id || evt.title || i} event={evt} />
             ))}
           </div>
         </SeasonalArchive>
