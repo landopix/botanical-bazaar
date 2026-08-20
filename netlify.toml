@@ -1,8 +1,0 @@
-[build]
-  command = "npm run build"
-
-[build.environment]
-  NPM_FLAGS = "--legacy-peer-deps"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
