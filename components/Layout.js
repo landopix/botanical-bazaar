@@ -268,7 +268,7 @@ export default function Layout({ children }) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isSidebarOpen, isZoneModalOpen]);
 
-  // Focus management when opening/closing sidebar or zone modal
+  // Focus management & focus trapping when opening/closing sidebar
   useEffect(() => {
     if (isSidebarOpen) {
       const searchInput = document.getElementById("sidebar-search");
@@ -277,6 +277,37 @@ export default function Layout({ children }) {
       } else if (sidebarRef.current) {
         sidebarRef.current.focus();
       }
+
+      const sidebar = sidebarRef.current;
+      if (!sidebar) return;
+
+      const handleSidebarTabKey = (e) => {
+        if (e.key !== "Tab") return;
+        const focusableElements = sidebar.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      };
+
+      sidebar.addEventListener("keydown", handleSidebarTabKey);
+      return () => {
+        sidebar.removeEventListener("keydown", handleSidebarTabKey);
+      };
     } else {
       if (triggerElementRef.current && typeof triggerElementRef.current.focus === "function") {
         triggerElementRef.current.focus();
@@ -740,6 +771,8 @@ export default function Layout({ children }) {
         role="dialog"
         aria-label="Navigation and Search Menu"
         aria-modal={isSidebarOpen ? "true" : "false"}
+        aria-hidden={!isSidebarOpen}
+        inert={!isSidebarOpen ? "" : undefined}
         tabIndex={-1}
       >
         <div className="sidebar-search-container">

@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Ensure the collector's gallery appears in navigation
   try {
     var sidebarList = document.querySelector('#site-sidebar ul');
-    if (sidebarList && !sidebarList.querySelector('a[href="orchids-gallery.html"]')) {
+    if (sidebarList && !sidebarList.querySelector('a[href="orchids-gallery"]')) {
       var li = document.createElement('li');
       var link = document.createElement('a');
       link.href = 'orchids-gallery.html';
@@ -136,11 +136,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
     var headerNav = document.querySelector('header nav');
-    if (headerNav && !headerNav.querySelector('a[href="orchids-gallery.html"]')) {
+    if (headerNav && !headerNav.querySelector('a[href="orchids-gallery"]')) {
       var galleryLink = document.createElement('a');
       galleryLink.href = 'orchids-gallery.html';
       galleryLink.textContent = 'Gallery';
-      var contactLink = headerNav.querySelector('a[href="contact.html"]');
+      var contactLink = headerNav.querySelector('a[href="contact"]');
       if (contactLink) {
         headerNav.insertBefore(galleryLink, contactLink);
       } else {
