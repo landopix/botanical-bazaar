@@ -9,18 +9,18 @@ export default function FulfillmentCard({ product, userZoneTemp }) {
   return (
     <div className="fulfillment-card">
       <div className="card-header">
-        <span className="card-icon">🌿</span>
+
         <h3 className="card-title">Fulfillment &amp; Dispatch Guidance</h3>
       </div>
 
       <div className="fulfillment-options">
         <div className="option-item">
-          <div className="option-title">📍 St. Petersburg Nursery Pickup</div>
+          <div className="option-title">St. Petersburg Nursery Pickup</div>
           <div className="option-desc">Free ($0.00) local pickup available by appointment at our St. Pete nursery benched facility.</div>
         </div>
 
         <div className="option-item">
-          <div className="option-title">📦 Florida &amp; Out-of-State Shipping</div>
+          <div className="option-title">Florida &amp; Out-of-State Shipping</div>
           <div className="option-desc">Secure live-plant shipping with custom botanical crating. Standard dispatch within 2–4 business days.</div>
         </div>
       </div>

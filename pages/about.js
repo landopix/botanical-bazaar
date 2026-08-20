@@ -161,7 +161,7 @@ export default function AboutPage({ aboutData }) {
             maxWidth: '650px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
           }}>
-            <div style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#D4B06A' }}>🌿</div>
+
             <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.2rem', marginTop: 0, marginBottom: '1rem', letterSpacing: '0.05em' }}>
               New Botanical Updates Coming Soon!
             </h1>

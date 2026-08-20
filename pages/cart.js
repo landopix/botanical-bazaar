@@ -40,7 +40,7 @@ export default function Cart() {
           fontSize: "0.95rem",
           lineHeight: "1.4"
         }}>
-          <strong style={{ color: "#ff8a8a", fontFamily: "Cinzel, serif" }}>❄️ Cold Protection Advisory (USDA Zone {userHardinessZone || "10a"}):</strong>
+          <strong style={{ color: "#ff8a8a", fontFamily: "Cinzel, serif" }}>Cold Protection Advisory (USDA Zone {userHardinessZone || "10a"}):</strong>
           {" "}Your cart includes tropical plant species sensitive to cold conditions in Zone {userHardinessZone || "10a"}. Please ensure indoor or greenhouse winter shelter. Live-plant thermal boxing will be included with standard shipping.
         </div>
       )}

@@ -23,7 +23,7 @@ export default function CareSpine({ product }) {
   return (
     <div className="care-spine-card">
       <div className="card-header">
-        <span className="card-icon">🌱</span>
+
         <h3 className="card-title">Care Spine Quick Guide</h3>
         <Link href="/almanac" className="almanac-link">
           Explore Almanac &rarr;
@@ -32,7 +32,7 @@ export default function CareSpine({ product }) {
 
       <div className="care-grid">
         <div className="care-item">
-          <span className="care-icon">☀️</span>
+
           <div className="care-meta">
             <span className="care-label">Light Requirements</span>
             <span className="care-val">{light}</span>
@@ -40,7 +40,7 @@ export default function CareSpine({ product }) {
         </div>
 
         <div className="care-item">
-          <span className="care-icon">💧</span>
+
           <div className="care-meta">
             <span className="care-label">Watering Frequency</span>
             <span className="care-val">{water}</span>
@@ -48,7 +48,7 @@ export default function CareSpine({ product }) {
         </div>
 
         <div className="care-item">
-          <span className="care-icon">💨</span>
+
           <div className="care-meta">
             <span className="care-label">Humidity Level</span>
             <span className="care-val">{humidity}</span>
@@ -56,7 +56,7 @@ export default function CareSpine({ product }) {
         </div>
 
         <div className="care-item">
-          <span className="care-icon">🪴</span>
+
           <div className="care-meta">
             <span className="care-label">Container Pot Size</span>
             <span className="care-val">{potSize}</span>
@@ -64,7 +64,7 @@ export default function CareSpine({ product }) {
         </div>
 
         <div className="care-item">
-          <span className="care-icon">❄️</span>
+
           <div className="care-meta">
             <span className="care-label">Cold Tolerance</span>
             <span className="care-val">{coldHardiness}</span>

@@ -63,13 +63,13 @@ export default function CartDrawer({ isOpen, onClose }) {
 
             {hasZoneSensitiveItems && (
               <div className="restriction-notice" style={{ background: "rgba(186, 47, 47, 0.15)", borderColor: "#ba2f2f" }}>
-                ❄️ Cold Protection Advisory (Zone {userHardinessZone || "10a"}): Contains tropical plant species requiring indoor protection or greenhouse shelter in your zone. Insulated packaging will be automatically applied.
+                Cold Protection Advisory (Zone {userHardinessZone || "10a"}): Contains tropical plant species requiring indoor protection or greenhouse shelter in your zone. Insulated packaging will be automatically applied.
               </div>
             )}
 
             {hasRestrictedItems && (
               <div className="restriction-notice">
-                ⚠️ Citrus / Regulated Specimen in Cart: Per FDACS regulations, citrus items must be picked up in St. Petersburg or shipped strictly within Florida.
+                Citrus / Regulated Specimen in Cart: Per FDACS regulations, citrus items must be picked up in St. Petersburg or shipped strictly within Florida.
               </div>
             )}
 

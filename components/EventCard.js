@@ -98,7 +98,7 @@ export default function EventCard({
         </div>
 
         <p style={{ margin: 0, fontSize: '0.95rem', color: '#F5E7C4', fontWeight: 'bold' }}>
-          📍 {location}
+          {location}
         </p>
 
         <p
