@@ -1,44 +1,63 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
-
-const defaultCareSheets = [
-  {
-    botanicalName: 'Dendrobium Nobile',
-    commonName: 'Nobile Dendrobium Orchid',
-    lightNeeds: 'Bright Indirect Light',
-    wateringNeeds: 'Allow to dry slightly between waterings',
-    zoneCompatibility: 'Zones 10a - 11 (Protect under 45°F)',
-    careInstructions: 'Provide ample air circulation and morning sunlight. Reduce watering during cool winter dormancy to encourage vibrant spring blooms.',
-    imagePath: '/assets/lantern.png'
-  },
-  {
-    botanicalName: 'Bunchosia Glandulifera',
-    commonName: 'Peanut Butter Fruit Tree',
-    lightNeeds: 'Full Sun to Partial Shade',
-    wateringNeeds: 'Moderate, well-draining soil',
-    zoneCompatibility: 'Zones 9b - 11',
-    careInstructions: 'Fast-growing tropical shrub yielding sweet, peanut butter-flavored berries. Protect from hard freezes during early growth stages.',
-    imagePath: '/assets/peanut-butter-fruit.jpg'
-  },
-  {
-    botanicalName: 'Solanum Lycopersicum var. Cerasiforme',
-    commonName: 'Everglades Tomato',
-    lightNeeds: 'Full Sun',
-    wateringNeeds: 'Regular moist conditions',
-    zoneCompatibility: 'Zones 8a - 11',
-    careInstructions: 'Extremely resilient Florida native heirloom vine. Highly heat and humidity tolerant, producing abundant sweet cherry tomatoes year-round in St. Petersburg.',
-    imagePath: '/assets/everglades-tomato.jpg'
-  }
-];
+import CareSheetSkeleton from '../components/skeletons/CareSheetSkeleton';
 
 export default function Almanac({ careSheets }) {
-  const sheets = (careSheets && careSheets.length > 0) ? careSheets : defaultCareSheets;
+  const sheets = careSheets && careSheets.length > 0 ? careSheets : [];
+
+  // Almanac subscription form state
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [statusMsg, setStatusMsg] = useState('');
+  const [statusType, setStatusType] = useState('success');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email || !email.includes('@')) {
+      setStatusType('error');
+      setStatusMsg('Please enter a valid email address.');
+      return;
+    }
+
+    setSubmitting(true);
+    setStatusMsg('');
+
+    try {
+      const res = await fetch('/api/inquiry/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerEmail: email,
+          customerName: 'Almanac Subscriber',
+          inquiryType: 'almanac_subscription',
+          subject: 'Botanical Almanac Monthly Care Dispatch Signup',
+          message: `Subscriber requested monthly Almanac care dispatches for ${email}`
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setStatusType('success');
+        setStatusMsg('Welcome! You are subscribed to our monthly Almanac botanical dispatches.');
+        setEmail('');
+      } else {
+        setStatusType('error');
+        setStatusMsg(data.error || 'Unable to subscribe right now. Please try again.');
+      }
+    } catch (err) {
+      console.error('Almanac subscription error:', err);
+      setStatusType('error');
+      setStatusMsg('An unexpected error occurred. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
-    <div style={{ padding: '3rem 1.5rem', maxWidth: '1050px', margin: '0 auto', color: '#E9DCBE' }}>
+    <div style={{ padding: '3rem 1.5rem', maxWidth: '1050px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
       <Head>
         <title>The Almanac & Plant Care Guides | The Botanical Bazaar</title>
         <meta name="description" content="Explore tropical plant care sheets, seasonal gardening advice, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
@@ -55,15 +74,101 @@ export default function Almanac({ careSheets }) {
         Welcome to our Almanac, a curated library of tropical plant care sheets and cultivation guides for curious growers in St. Petersburg, Florida.
       </p>
 
+      {/* Almanac Email Dispatch Subscription Form */}
+      <section style={{ background: '#00301E', padding: '2.5rem 1.8rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center', marginBottom: '3.5rem', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.8rem', letterSpacing: '0.05em' }}>
+          Subscribe to Monthly Almanac Dispatches
+        </h2>
+        <p style={{ maxWidth: '620px', margin: '0.5rem auto 1.5rem auto', fontSize: '1.1rem', color: '#F5E7C4', lineHeight: '1.6' }}>
+          Receive seasonal St. Petersburg planting advice, cold hardiness weather alerts, and rare specimen releases straight to your inbox.
+        </p>
+
+        <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', maxWidth: '460px', margin: '0 auto' }}>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email address"
+            required
+            style={{
+              padding: '0.8rem 1.2rem',
+              borderRadius: '8px',
+              border: '1px solid #D4B06A',
+              width: '100%',
+              fontFamily: 'Crimson Text, serif',
+              fontSize: '1.05rem',
+              background: '#123826',
+              color: '#F5E7C4',
+              boxSizing: 'border-box'
+            }}
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            style={{
+              background: '#D4B06A',
+              color: '#00301E',
+              border: '1px solid #D4B06A',
+              padding: '0.8rem 2.2rem',
+              borderRadius: '24px',
+              fontFamily: 'Cinzel, serif',
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              cursor: submitting ? 'not-allowed' : 'pointer',
+              width: '100%',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            {submitting ? 'Submitting...' : 'Join The Almanac Registry'}
+          </button>
+        </form>
+
+        {statusMsg && (
+          <div style={{
+            marginTop: '1.2rem',
+            padding: '0.8rem 1rem',
+            borderRadius: '6px',
+            background: statusType === 'success' ? 'rgba(212, 176, 106, 0.15)' : 'rgba(224, 108, 117, 0.15)',
+            border: statusType === 'success' ? '1px solid #D4B06A' : '1px solid #e06c75',
+            color: statusType === 'success' ? '#D4B06A' : '#f08d8d',
+            fontSize: '1rem',
+            fontWeight: 'bold'
+          }}>
+            {statusMsg}
+          </div>
+        )}
+      </section>
+
       <section style={{ marginBottom: '3.5rem' }}>
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Botanical Care Sheets
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
-          {sheets.map((sheet, i) => (
-            <CareSheetCard key={sheet?._id || sheet?.commonName || i} sheet={sheet} />
-          ))}
-        </div>
+        {sheets.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'stretch' }}>
+            {sheets.map((sheet, i) => (
+              <CareSheetCard key={sheet?._id || sheet?.commonName || i} sheet={sheet} />
+            ))}
+          </div>
+        ) : (
+          <div style={{
+            background: '#00301E',
+            border: '1px solid #D4B06A',
+            borderRadius: '12px',
+            padding: '3.5rem 2rem',
+            textAlign: 'center',
+            margin: '1rem auto 2.5rem auto',
+            maxWidth: '650px',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#D4B06A' }}>📖</div>
+            <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
+              New Botanical Updates Coming Soon!
+            </h3>
+            <p style={{ color: '#E9DCBE', fontSize: '1.1rem', margin: '0 0 1.5rem 0', lineHeight: '1.6' }}>
+              Our plant care library is currently updating with fresh cultivation sheets and tropical guides. Check back soon for detailed growing instructions.
+            </p>
+          </div>
+        )}
       </section>
 
       <section style={{ background: '#00301E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }}>
@@ -100,7 +205,7 @@ export async function getStaticProps() {
       }
     }
   } catch (err) {
-    console.warn('Sanity plantCareSheet fetch error, using fallback:', err.message);
+    console.warn('Sanity plantCareSheet fetch error:', err.message);
   }
 
   return {

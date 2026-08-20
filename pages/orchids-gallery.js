@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
 import GalleryItemCard from '../components/GalleryItemCard';
+import GalleryItemSkeleton from '../components/skeletons/GalleryItemSkeleton';
 import { sanityClient } from '../lib/sanity';
 
 const CATEGORY_MAP = {
@@ -13,65 +14,8 @@ const CATEGORY_MAP = {
   'apothecary-goods': 'Apothecary Goods',
 };
 
-const DEFAULT_GALLERY_IMAGES = [
-  {
-    _id: '1',
-    title: 'Awarded Cattleya Orchid Specimen',
-    category: 'collector-orchids',
-    categoryLabel: 'Collector Orchids',
-    description: 'A vibrant specimen Cattleya orchid in full spring bloom with cascading purple petals and sweet scent.',
-    imageUrl: '/assets/lantern.png',
-    alt: 'Awarded Cattleya Orchid'
-  },
-  {
-    _id: '2',
-    title: 'Peanut Butter Fruit Tree (Bunchosia Glandulifera)',
-    category: 'tropical-fruit-trees',
-    categoryLabel: 'Tropical Fruit Trees',
-    description: 'Resilient tropical fruit tree producing sweet peanut-butter flavored red berries in Zone 9b/10a.',
-    imageUrl: '/assets/peanut-butter-fruit.jpg',
-    alt: 'Peanut Butter Fruit Tree'
-  },
-  {
-    _id: '3',
-    title: 'Everglades Tomato Vine',
-    category: 'herbs-medicinal',
-    categoryLabel: 'Herbs & Medicinal',
-    description: 'Indeterminate wild Florida Everglades heirloom producing heavy clusters of sweet currant tomatoes.',
-    imageUrl: '/assets/everglades-tomato.jpg',
-    alt: 'Everglades Tomato Vine'
-  },
-  {
-    _id: '4',
-    title: 'Rare Variegated Monstera Deliciosa',
-    category: 'rare-aroids',
-    categoryLabel: 'Rare Aroids',
-    description: 'High-contrast cream and mint chimera fenestrated leaf Aroid nurtured at our St. Petersburg nursery.',
-    imageUrl: '/assets/brand-banner.png',
-    alt: 'Variegated Monstera'
-  },
-  {
-    _id: '5',
-    title: 'Vanda Orchid Hanging Display',
-    category: 'collector-orchids',
-    categoryLabel: 'Collector Orchids',
-    description: 'Aerial root system with striking cobalt blue flowers cultivated under natural Florida shade cloth.',
-    imageUrl: '/assets/lantern.png',
-    alt: 'Vanda Orchid'
-  },
-  {
-    _id: '6',
-    title: 'Organic Apothecary Tinctures',
-    category: 'apothecary-goods',
-    categoryLabel: 'Apothecary Goods',
-    description: 'Handcrafted herbal extracts made from nursery-harvested medicinal botanicals.',
-    imageUrl: '/assets/lantern-submark.png',
-    alt: 'Organic Tinctures'
-  }
-];
-
 export async function getStaticProps() {
-  let images = DEFAULT_GALLERY_IMAGES;
+  let images = [];
   try {
     if (sanityClient) {
       const query = `*[_type == "galleryImage"]{
@@ -82,7 +26,7 @@ export async function getStaticProps() {
         "imageUrl": image.asset->url
       }`;
       const cmsImages = await sanityClient.fetch(query);
-      if (cmsImages && cmsImages.length > 0) {
+      if (Array.isArray(cmsImages) && cmsImages.length > 0) {
         images = cmsImages.map(img => ({
           ...img,
           categoryLabel: CATEGORY_MAP[img?.category] || img?.category || 'Botanical Highlight',
@@ -91,7 +35,7 @@ export async function getStaticProps() {
       }
     }
   } catch (err) {
-    console.warn("Sanity fetch failed for galleryImage, falling back to local dataset:", err.message);
+    console.warn("Sanity fetch failed for galleryImage:", err.message);
   }
 
   return {
@@ -102,12 +46,14 @@ export async function getStaticProps() {
   };
 }
 
-export default function OrchidsGallery({ initialImages }) {
-  const images = initialImages && initialImages.length > 0 ? initialImages : DEFAULT_GALLERY_IMAGES;
+export default function OrchidsGallery({ initialImages = [] }) {
+  const images = initialImages;
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const categoryValues = ['All', ...Array.from(new Set(images.map(img => img?.category).filter(Boolean)))];
+  const categoryValues = images.length > 0
+    ? ['All', ...Array.from(new Set(images.map(img => img?.category).filter(Boolean)))]
+    : [];
 
   const filteredImages = activeCategory === 'All'
     ? images
@@ -135,49 +81,73 @@ export default function OrchidsGallery({ initialImages }) {
           <div style={{ width: '80px', height: '2px', background: '#D4B06A', margin: '0 auto' }}></div>
         </div>
 
-        {/* Category Filter Pills */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', justifyContent: 'center', marginBottom: '2.5rem' }}>
-          {categoryValues.map((catVal) => {
-            const label = catVal === 'All' ? 'All' : (CATEGORY_MAP[catVal] || catVal);
-            return (
-              <button
-                key={catVal}
-                onClick={() => setActiveCategory(catVal)}
-                style={{
-                  backgroundColor: activeCategory === catVal ? '#D4B06A' : '#1C3D2E',
-                  color: activeCategory === catVal ? '#00301E' : '#D4B06A',
-                  border: '1px solid #D4B06A',
-                  borderRadius: '24px',
-                  padding: '0.5rem 1.2rem',
-                  fontFamily: 'Cinzel, serif',
-                  fontSize: '0.9rem',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: activeCategory === catVal ? '0 4px 12px rgba(212, 176, 106, 0.3)' : 'none'
-                }}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
+        {/* Category Filter Pills (rendered only when items exist) */}
+        {categoryValues.length > 1 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', justifyContent: 'center', marginBottom: '2.5rem' }}>
+            {categoryValues.map((catVal) => {
+              const label = catVal === 'All' ? 'All' : (CATEGORY_MAP[catVal] || catVal);
+              return (
+                <button
+                  key={catVal}
+                  onClick={() => setActiveCategory(catVal)}
+                  style={{
+                    backgroundColor: activeCategory === catVal ? '#D4B06A' : '#1C3D2E',
+                    color: activeCategory === catVal ? '#00301E' : '#D4B06A',
+                    border: '1px solid #D4B06A',
+                    borderRadius: '24px',
+                    padding: '0.5rem 1.2rem',
+                    fontFamily: 'Cinzel, serif',
+                    fontSize: '0.9rem',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: activeCategory === catVal ? '0 4px 12px rgba(212, 176, 106, 0.3)' : 'none'
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Masonry / Responsive Visual Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '1.8rem',
-          alignItems: 'stretch'
-        }}>
-          {filteredImages.map((img) => (
-            <GalleryItemCard
-              key={img?._id || img?.title}
-              item={img}
-              onClick={() => setSelectedImage(img)}
-            />
-          ))}
-        </div>
+        {/* Dynamic Gallery Content vs Branded Empty State */}
+        {filteredImages.length > 0 ? (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '1.8rem',
+            alignItems: 'stretch'
+          }}>
+            {filteredImages.map((img) => (
+              <GalleryItemCard
+                key={img?._id || img?.title}
+                item={img}
+                onClick={() => setSelectedImage(img)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div style={{
+            background: '#00301E',
+            border: '1px solid #D4B06A',
+            borderRadius: '12px',
+            padding: '3.5rem 2rem',
+            textAlign: 'center',
+            margin: '2rem auto',
+            maxWidth: '650px',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
+          }}>
+            <div style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#D4B06A' }}>🌿</div>
+            <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
+              New Botanical Updates Coming Soon!
+            </h3>
+            <p style={{ color: '#E9DCBE', fontSize: '1.1rem', margin: '0 0 1.8rem 0', lineHeight: '1.6' }}>
+              Our specimen gallery is currently updating with fresh tropical and orchid photography from our St. Petersburg greenhouse.
+            </p>
+            <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
+          </div>
+        )}
       </div>
 
       {/* Click-to-Expand Lightbox Modal */}
@@ -278,16 +248,6 @@ export default function OrchidsGallery({ initialImages }) {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        .gallery-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-        }
-        .gallery-card:hover .gallery-img {
-          transform: scale(1.04);
-        }
-      `}</style>
     </div>
   );
 }
