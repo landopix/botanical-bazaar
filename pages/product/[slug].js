@@ -13,6 +13,7 @@ import OwnerBenchNotes from '../../components/OwnerBenchNotes';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles } from '../../lib/shopify';
+import { isSanityCdnUrl } from '../../lib/image-utils';
 
 export async function getStaticPaths() {
   try {
@@ -334,6 +335,8 @@ export default function ProductDetail({ initialProduct }) {
     }
   };
 
+  const productImage = product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
+
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto', boxSizing: 'border-box' }}>
       <Head>
@@ -490,13 +493,13 @@ export default function ProductDetail({ initialProduct }) {
         {/* Product Image */}
         <div className="product-img" style={{ position: 'relative', width: '100%', height: '280px', minWidth: '220px', maxWidth: '280px' }}>
           <Image
-            src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
+            src={productImage}
             alt={product.name}
             fill
             sizes="(max-width: 800px) 100vw, 280px"
             style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
             priority
-            unoptimized={!product.image || !product.image.includes('cdn.sanity.io')}
+            unoptimized={!isSanityCdnUrl(productImage)}
           />
         </div>
 

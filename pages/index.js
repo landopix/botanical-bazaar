@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import ProductCard from "../components/ProductCard";
 import { useWishlist } from "../context/WishlistContext";
 import { isSanityConfigured, sanityClient } from "../lib/sanity";
 
@@ -141,20 +142,6 @@ export default function Index() {
     return getActiveCount(catId) > 0;
   };
 
-  const handleZoneClick = (e) => {
-    e.preventDefault();
-    if (typeof window !== "undefined") {
-      const savedZone = localStorage.getItem("user_hardiness_zone");
-      if (savedZone) {
-        router.push(`/shop?zone=${encodeURIComponent(savedZone)}`);
-      } else {
-        router.push("/zones");
-      }
-    } else {
-      router.push("/zones");
-    }
-  };
-
   return (
     <div className="home-container">
       <Head>
@@ -240,96 +227,6 @@ export default function Index() {
           .products {
             grid-template-columns: 1fr;
           }
-        }
-        .product-card {
-          background-color: #F5E7C4;
-          border: 1px solid #D4B06A;
-          border-radius: 10px;
-          padding: 1.2rem;
-          width: 100%;
-          box-sizing: border-box;
-          color: #00301E;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-          position: relative;
-          text-decoration: none;
-        }
-        .product-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-          z-index: 2;
-        }
-        .product-card.sold-out {
-          opacity: 0.6;
-        }
-        .product-card .sold-out-badge {
-          position: absolute;
-          top: 12px;
-          left: 12px;
-          background: #ba2f2f;
-          color: #ffffff;
-          padding: 0.2rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.8rem;
-          font-weight: bold;
-          font-family: 'Crimson Text', serif;
-          z-index: 5;
-        }
-        .product-card-top {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          flex-grow: 1;
-          text-align: center;
-        }
-        .product-image-container {
-          position: relative !important;
-          overflow: hidden !important;
-          width: 100% !important;
-          aspect-ratio: 4 / 3 !important;
-          margin-bottom: 0.8rem;
-        }
-        .product-card img {
-          object-fit: cover !important;
-          width: 100% !important;
-          height: 100% !important;
-          border-radius: 8px;
-          background: rgba(0, 0, 0, 0.05);
-        }
-        .product-card-title {
-          display: block;
-          margin-top: 0.4rem;
-          font-size: 1.2rem;
-          font-family: 'Cinzel', serif;
-          line-height: 1.2;
-          min-height: 3.2rem;
-          color: #00301E;
-        }
-        .product-sizes {
-          margin: 0.2rem 0;
-          font-size: 1rem;
-          color: #555;
-          font-family: 'Crimson Text', serif;
-        }
-        .product-type {
-          margin: 0.1rem 0;
-          font-size: 1rem;
-          color: #00301E;
-          font-family: 'Crimson Text', serif;
-        }
-        .product-price {
-          font-weight: bold;
-          margin: 0.4rem 0 0.2rem 0;
-          font-size: 1.1rem;
-          color: #11402A;
-          font-family: 'Crimson Text', serif;
-        }
-        .product-card-bottom {
-          width: 100%;
-          margin-top: auto;
         }
         .shop-categories {
           padding: 2rem;
@@ -527,7 +424,7 @@ export default function Index() {
             The Almanac
           </h2>
           <Link
-            href="/care-sheets"
+            href="/garden-month"
             style={{
               display: "block",
               color: "#E9DCBE",
@@ -536,11 +433,10 @@ export default function Index() {
               marginBottom: "0.3rem",
             }}
           >
-            Plant Care Sheets
+            This Month in the Garden
           </Link>
           <Link
             href="/zones"
-            onClick={handleZoneClick}
             style={{
               display: "block",
               color: "#E9DCBE",
@@ -702,7 +598,7 @@ export default function Index() {
               Exotics&nbsp;&amp;&nbsp;Rare
             </Link>
           )}
-          <Link href="/zones" onClick={handleZoneClick} className="category-card">
+          <Link href="/zones" className="category-card">
             Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone
           </Link>
           <Link href="/orchids-gallery" className="category-card">
@@ -711,77 +607,13 @@ export default function Index() {
         </div>
       </section>
 
-            {/* Featured Plants Grid */}
+      {/* Featured Plants Grid */}
       <section className="featured" id="collection">
         <h2>Featured Plants</h2>
         <div className="products">
-          {featuredProducts.map((product) => {
-            const isSoldOut = !product.quantity || product.quantity < 3;
-            const imageSrc = product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
-
-            return (
-              <div
-                key={product.slug}
-                className={`product-card ${isSoldOut ? "sold-out" : ""}`}
-              >
-                {isSoldOut && <div className="sold-out-badge">Sold Out</div>}
-                <div className="product-card-top">
-                  <Link
-                    href={`/product/${product.slug}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <div className="product-image-container">
-                      <Image
-                        src={imageSrc}
-                        alt={product.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="product-image"
-                        style={{ objectFit: "cover", borderRadius: "8px" }}
-                        unoptimized={!imageSrc.includes("cdn.sanity.io")}
-                      />
-                    </div>
-                    <strong className="product-card-title">
-                      {product.name}
-                    </strong>
-                  </Link>
-                  <p className="product-sizes">
-                    {product.sizes || "Standard Pot"}
-                  </p>
-                  <p className="product-type">{product.type}</p>
-                  <p className="product-price">
-                    {isSoldOut
-                      ? "Sold Out"
-                      : isNaN(product.price) || !product.price
-                        ? "Price on Request"
-                        : `$${product.price.toFixed(2)}`}
-                  </p>
-                </div>
-                <div className="product-card-bottom">
-                  <Link
-                    href={`/product/${product.slug}`}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      textAlign: "center",
-                      padding: "0.5rem 1.2rem",
-                      borderRadius: "18px",
-                      background: "#00301E",
-                      color: "#F5E7C4",
-                      border: "1px solid #D4B06A",
-                      fontWeight: "bold",
-                      fontSize: "0.95rem",
-                      textDecoration: "none",
-                      boxSizing: "border-box",
-                      marginTop: "0.6rem",
-                    }}
-                  >
-                    View Plant
-                  </Link>
-                </div>
-              </div>
-            );
-          })}
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.slug || product.id} product={product} />
+          ))}
         </div>
       </section>
 

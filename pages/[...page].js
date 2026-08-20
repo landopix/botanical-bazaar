@@ -57,7 +57,7 @@ const LOCAL_TEMPLATES = {
         </p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
           <div style="background: #123826; padding: 1.5rem; border-radius: 8px; border: 1px solid #D4B06A;">
-            <h3 style="color: #D4B06A; margin-top: 0;">Plant Care Sheets</h3>
+            <h3 style="color: #D4B06A; margin-top: 0;">This Month in the Garden</h3>
             <p>Practical monthly tips for planting, fertilizing, and protecting tropical gems.</p>
           </div>
           <div style="background: #123826; padding: 1.5rem; border-radius: 8px; border: 1px solid #D4B06A;">

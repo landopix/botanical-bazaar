@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
+import { isSanityCdnUrl } from '../lib/image-utils';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
@@ -60,7 +61,6 @@ export default function CartDrawer({ isOpen, onClose }) {
               </label>
             </div>
 
-
             {hasZoneSensitiveItems && (
               <div className="restriction-notice" style={{ background: "rgba(186, 47, 47, 0.15)", borderColor: "#ba2f2f" }}>
                 ❄️ Cold Protection Advisory (Zone {userHardinessZone || "10a"}): Contains tropical plant species requiring indoor protection or greenhouse shelter in your zone. Insulated packaging will be automatically applied.
@@ -76,15 +76,16 @@ export default function CartDrawer({ isOpen, onClose }) {
             <div className="cart-items">
               {cart.map((item) => {
                 const agCheck = checkAgRestrictions(item);
+                const itemImage = item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png";
                 return (
                   <div key={`${item.slug}-${item.selectedSize || 'std'}`} className="cart-item">
                     <div className="item-image">
                       <Image
-                        src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
+                        src={itemImage}
                         alt={item.name}
                         width={60}
                         height={60}
-                        unoptimized={!item.image || !item.image.includes("cdn.sanity.io")}
+                        unoptimized={!isSanityCdnUrl(itemImage)}
                       />
                     </div>
                     <div className="item-details">

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { isSanityCdnUrl } from '../lib/image-utils';
 
 export default function ProductCard({
   product = {},
@@ -81,7 +82,7 @@ export default function ProductCard({
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-              unoptimized={!imageSrc.includes('cdn.sanity.io')}
+              unoptimized={!isSanityCdnUrl(imageSrc)}
               onError={(e) => {
                 if (e.target) e.target.src = '/assets/placeholder.png';
               }}
