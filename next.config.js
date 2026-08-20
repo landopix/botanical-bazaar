@@ -9,26 +9,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/account.html',
-        destination: '/account',
-        permanent: true,
-      },
-      {
-        source: '/cart.html',
-        destination: '/cart',
-        permanent: true,
-      },
-      {
-        source: '/wishlist.html',
-        destination: '/wishlist',
-        permanent: true,
-      },
-      {
-        source: '/checkout.html',
-        destination: '/checkout',
-        permanent: true,
-      },
-      {
         source: '/index.html',
         destination: '/',
         permanent: true,

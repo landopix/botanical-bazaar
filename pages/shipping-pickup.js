@@ -28,7 +28,7 @@ export default function ShippingPickup() {
         </h1>
 
         <p style={{ fontSize: '1.15rem', lineHeight: '1.7', textAlign: 'center', color: '#E9DCBE', marginBottom: '2.5rem', maxWidth: '70ch', marginLeft: 'auto', marginRight: 'auto' }}>
-          At The Botanical Bazaar in St. Petersburg, Florida, we grow and curate rare tropical foliage, collector aroids, specimen orchids, and medicinal plants. We offer two transparent fulfillment options: <strong>Standard Live Plant Shipping (Contiguous US Only)</strong> and <strong>Free Local Nursery Pickup ($0.00)</strong>.
+          At The Botanical Bazaar in St. Petersburg, Florida, we grow and curate rare tropical foliage, collector aroids, specimen orchids, and medicinal plants. We offer two transparent fulfillment options: <strong>Standard Live Plant Shipping</strong> and <strong>Free Local Nursery Pickup ($0.00)</strong>.
         </p>
 
         {/* Policy Cards Grid */}
@@ -43,11 +43,11 @@ export default function ShippingPickup() {
                 <circle cx="5.5" cy="18.5" r="2.5"></circle>
                 <circle cx="18.5" cy="18.5" r="2.5"></circle>
               </svg>
-              Standard Live Plant Shipping (Contiguous US Only)
+              Standard Live Plant Shipping
             </h2>
             <ul style={{ color: '#E9DCBE', lineHeight: '1.7', paddingLeft: '1.2rem', margin: 0 }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Direct Greenhouse Dispatch:</strong> All live plant shipping orders depart directly from our St. Petersburg greenhouse to street addresses across the contiguous United States (Contiguous US only) using expedited carrier options like USPS Express and UPS Ground.
+                <strong>Direct Greenhouse Dispatch:</strong> All orders depart directly from our St. Petersburg greenhouse using expedited carrier options like USPS Express and UPS Ground.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
                 <strong>Custom Protective Packaging:</strong> Every specimen is secured with root moisture wrapping, protective corrugated collar supports, and shock-absorbing cushioning to prevent soil displacement and leaf breakage during transit.
@@ -81,7 +81,7 @@ export default function ShippingPickup() {
                 <strong>In-Person Inspection &amp; Advice:</strong> You inspect your plants side-by-side with our team before taking them home. Our growers share tailored advice regarding humidity, soil mix, and lighting for your home environment.
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong>48-Hour Guarantee:</strong> Our 100% Live Arrival Guarantee applies to local nursery pickup items as well (photos of shipping boxes are not required for local pickup claims). Inspect your plants upon pickup, and reach out within 48 hours to <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a> if you notice any health concerns.
+                <strong>48-Hour Guarantee:</strong> Our 100% Live Arrival Guarantee applies to local pickup items as well. Unbox and inspect your plants upon pickup, and reach out within 48 hours to <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline' }}>info@thebotanicalbazaar.com</a> if you notice any health concerns.
               </li>
             </ul>
           </div>

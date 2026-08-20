@@ -9,7 +9,7 @@ const DEFAULT_ABOUT_DATA = {
   subtitle: 'Cultivating resilient biodiversity in St. Petersburg, Florida',
   storyHeading: 'The Botanical Bazaar Story',
   storyParagraph1: 'At The Botanical Bazaar LLC, our primary mission is to make resilient, rare tropical plants accessible and understandable for the local St. Petersburg, Florida community and beyond.',
-  storyParagraph2: 'We lovingly propagate and nurture a curated catalog of acclimated species—including healthy Aroids, hard-to-find tropical fruit trees, robust medicinal herbs, and award-winning collector orchids.',
+  storyParagraph2: 'We lovingly propagate and nurture a curated catalog of highly-desired species—including spectacular Aroids, hard-to-find tropical fruit trees, robust medicinal herbs, and award-winning collector orchids.',
   bannerImageUrl: '/assets/brand-banner.png',
   logoImageUrl: '/assets/lantern.png',
   features: [

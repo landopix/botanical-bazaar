@@ -112,10 +112,10 @@ export default function Terms() {
                 <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline', fontWeight: 'bold' }}>
                   info@thebotanicalbazaar.com
                 </a>{' '}
-                within 48 hours of delivery or pickup. Include clear photos of the damaged foliage and root system (shipping box photo required for shipped orders; not required for local nursery pickup claims).
+                within 48 hours of delivery or pickup. Include clear photos of the damaged foliage, root system, and shipping package.
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong>Resolution:</strong> For verified Live Arrival Guarantee claims submitted within 48 hours, refunds will be issued to your original payment method. For other approved claims or post-arrival concerns, we issue store credit or a replacement plant. Minor cosmetic leaf blemishes or minor transit stress do not qualify as plant death or permanent damage.
+                <strong>Resolution:</strong> Once our growers verify the claim, we will send a replacement plant or issue store credit. Minor cosmetic leaf blemishes or minor transit stress do not qualify as plant death or permanent damage.
               </li>
             </ul>
           </section>
