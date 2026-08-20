@@ -354,7 +354,7 @@ body {
       }
       // Track consultation CTA clicks. There may be multiple consultation links on the page,
       // so iterate through them. GA tracking already exists; this complements it for Clarity.
-      document.querySelectorAll('a[href="consultations.html"]').forEach(function(btn) {
+      document.querySelectorAll('a[href="consultations"]').forEach(function(btn) {
         btn.addEventListener('click', function() {
           if (typeof clarity === 'function') {
             clarity('track', 'consultation_click');
@@ -390,19 +390,19 @@ body {
         <line x1="20" y1="20" x2="15.65" y2="15.65"></line>
       </svg>
     </button>
-    <a href="cart.html" class="cart-btn" aria-label="View cart">
+    <a href="cart" class="cart-btn" aria-label="View cart">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="20" cy="21" r="1"></circle>
         <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
       </svg>
     </a>
-    <a href="wishlist.html" class="wishlist-btn" aria-label="View wishlist">
+    <a href="wishlist" class="wishlist-btn" aria-label="View wishlist">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
       </svg>
     </a>
-    <a href="account.html" class="account-btn" aria-label="My account">
+    <a href="account" class="account-btn" aria-label="My account">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#D4B06A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
         <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
@@ -413,30 +413,30 @@ body {
   <!-- Sidebar navigation -->
   <nav id="site-sidebar" class="sidebar" role="navigation">
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="shop.html">Shop All</a></li>
-      <li><a href="consultations.html">Consultations</a></li>
-      <li><a href="almanac.html">The Almanac</a></li>
-      <li><a href="events.html">Events</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="index">Home</a></li>
+      <li><a href="about">About</a></li>
+      <li><a href="shop">Shop All</a></li>
+      <li><a href="consultations">Consultations</a></li>
+      <li><a href="almanac">The Almanac</a></li>
+      <li><a href="events">Events</a></li>
+      <li><a href="contact">Contact</a></li>
       <!-- Link to the collector's gallery so visitors can easily find the awarded orchid collection -->
-      <li><a href="orchids-gallery.html">Gallery</a></li>
+      <li><a href="orchids-gallery">Gallery</a></li>
       <li class="group">
         <button class="group-toggle" aria-expanded="false" aria-controls="guides-submenu">Plant Guides</button>
         <ul id="guides-submenu" class="submenu">
-          <li><a href="garden-month.html">This Month in the Garden</a></li>
-          <li><a href="zones.html">Best Plants for Your Zone</a></li>
+          <li><a href="garden-month">This Month in the Garden</a></li>
+          <li><a href="zones">Best Plants for Your Zone</a></li>
         </ul>
       </li>
       <li class="group">
         <button class="group-toggle" aria-expanded="false" aria-controls="policies-submenu">FAQ</button>
         <ul id="policies-submenu" class="submenu">
-          <li><a href="faq.html">FAQ Overview</a></li>
-          <li><a href="shipping-pickup.html">Shipping &amp; Pickup</a></li>
-          <li><a href="returns.html">Live Plant Guarantee</a></li>
-          <li><a href="terms.html">Terms &amp; Conditions</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="faq">FAQ Overview</a></li>
+          <li><a href="shipping-pickup">Shipping &amp; Pickup</a></li>
+          <li><a href="returns">Live Plant Guarantee</a></li>
+          <li><a href="terms">Terms &amp; Conditions</a></li>
+          <li><a href="privacy">Privacy Policy</a></li>
         </ul>
       </li>
     </ul>
@@ -454,39 +454,39 @@ body {
   </button>
     <nav>
             <div class="nav-dropdown-wrapper">
-        <a href="shop.html" class="nav-dropdown-trigger">
+        <a href="shop" class="nav-dropdown-trigger">
           SHOP ALL ▾
         </a>
         <div class="nav-dropdown-menu">
-          <a href="shop.html" class="dropdown-title">
+          <a href="shop" class="dropdown-title">
             SHOP ALL
           </a>
           <div class="dropdown-grid">
             <div class="dropdown-col">
               <h4>LIVE PLANTS</h4>
-              <a href="shop.html?category=houseplants">Houseplants</a>
-              <a href="shop.html?category=orchids-tropicals">Orchids &amp; Tropicals</a>
-              <a href="shop.html?category=fruit-trees">Fruit Trees</a>
-              <a href="shop.html?category=exotics-rare">Exotics &amp; Rare</a>
+              <a href="shop?category=houseplants">Houseplants</a>
+              <a href="shop?category=orchids-tropicals">Orchids &amp; Tropicals</a>
+              <a href="shop?category=fruit-trees">Fruit Trees</a>
+              <a href="shop?category=exotics-rare">Exotics &amp; Rare</a>
             </div>
             <div class="dropdown-col">
               <h4>Botanical Goods</h4>
-              <a href="shop.html?category=seeds">Seeds</a>
-              <a href="shop.html?category=herbs-medicinal">Herbs &amp; Medicinal</a>
-              <a href="shop.html?category=stickers-art">Stickers &amp; Art</a>
-              <a href="shop.html?category=tinctures-apothecary">Tinctures &amp; Apothecary</a>
-              <a href="shop.html?category=terrarium-vivarium">Terrarium &amp; Vivarium</a>
+              <a href="shop?category=seeds">Seeds</a>
+              <a href="shop?category=herbs-medicinal">Herbs &amp; Medicinal</a>
+              <a href="shop?category=stickers-art">Stickers &amp; Art</a>
+              <a href="shop?category=tinctures-apothecary">Tinctures &amp; Apothecary</a>
+              <a href="shop?category=terrarium-vivarium">Terrarium &amp; Vivarium</a>
             </div>
           </div>
         </div>
       </div>
-      <a href="consultations.html">Consultations</a>
-      <a href="almanac.html">The Almanac</a>
-      <a href="events.html">Events</a>
-      <a href="orchids-gallery.html">Gallery</a>
-      <a href="contact.html">Contact</a>
-      <a href="faq.html">FAQ</a>
-      <a href="about.html">About</a>
+      <a href="consultations">Consultations</a>
+      <a href="almanac">The Almanac</a>
+      <a href="events">Events</a>
+      <a href="orchids-gallery">Gallery</a>
+      <a href="contact">Contact</a>
+      <a href="faq">FAQ</a>
+      <a href="about">About</a>
     </nav>
 </header>
   <section class="hero">
@@ -497,8 +497,8 @@ body {
       <!-- Clear positioning statement -->
       <p style="font-size:1.1rem;margin:0.5em 0 1em 0;max-width:28ch;line-height:1.4;">Rare and resilient tropical plants, curated in St.&nbsp;Petersburg, FL - lovingly grown for our community and beyond.</p>
       <div style="display:flex;gap:1rem;flex-wrap:wrap;">
-        <a href="shop.html" style="background:#D4B06A;color:#1C3D2E;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','click', { event_category: 'CTA', event_label: 'Shop the Store' }); }">Shop the Store</a>
-        <a href="consultations.html" style="background:transparent;color:#D4B06A;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;border:2px solid #D4B06A;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','consultation_click', { event_category: 'CTA', event_label: 'Book Consultation' }); }">Book a Consultation</a>
+        <a href="shop" style="background:#D4B06A;color:#1C3D2E;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','click', { event_category: 'CTA', event_label: 'Shop the Store' }); }">Shop the Store</a>
+        <a href="consultations" style="background:transparent;color:#D4B06A;padding:0.6rem 1.4rem;border-radius:24px;font-weight:bold;border:2px solid #D4B06A;text-decoration:none;" onclick="if (typeof gtag==='function'){ gtag('event','consultation_click', { event_category: 'CTA', event_label: 'Book Consultation' }); }">Book a Consultation</a>
       </div>
     </div>
     <!-- Optimised animated logo in place of the slideshow. The original
@@ -514,17 +514,60 @@ body {
          together in the hero makes it immediately visible on page load. -->
     <div class="almanac-hero" style="width:100%;max-width:600px;margin-top:1rem;text-align:center;">
       <h2 style="color:#D4B06A;margin-bottom:0.4rem;">The Almanac</h2>
-      <a href="garden-month.html" style="display:block;color:#E9DCBE;text-decoration:none;font-style:italic;margin-bottom:0.3rem;">This Month in the Garden</a>
-      <a href="zones.html" style="display:block;color:#E9DCBE;text-decoration:none;margin-bottom:0.6rem;">Best Plants for Your Zone</a>
+      <a href="garden-month" style="display:block;color:#E9DCBE;text-decoration:none;font-style:italic;margin-bottom:0.3rem;">This Month in the Garden</a>
+      <a href="zones" style="display:block;color:#E9DCBE;text-decoration:none;margin-bottom:0.6rem;">Best Plants for Your Zone</a>
       <div class="almanac-signup-inner" style="background:#123826;color:#F5E7C4;padding:1.5rem;margin:1rem auto;border-radius:12px;max-width:600px;text-align:center;box-shadow:0 3px 14px rgba(20,40,30,0.10);">
         <h3 style="color:#D4B06A;margin-top:0;margin-bottom:0.5rem;">Join Our Almanac</h3>
         <p style="margin:0.5rem auto 1rem auto;max-width:500px;font-size:1.05rem;line-height:1.4;">Subscribe to receive seasonal gardening tips, new plant arrivals and exclusive offers directly to your inbox.</p>
-        <form name="almanac-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;max-width:500px;margin:0 auto;">
-          <input type="hidden" name="form-name" value="almanac-signup" />
-          <p style="display:none;"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
-          <input type="email" name="email" placeholder="Your email address" required style="flex:1;min-width:200px;padding:0.5rem 0.8rem;border-radius:8px;border:1px solid #749c7f;background:#F5E7C4;color:#1C3D2E;font-family:'Crimson Text',serif;font-size:1rem;" />
+        <form id="almanac-home-form" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;max-width:500px;margin:0 auto;">
+          <label for="almanac-email-input" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">Your email address</label>
+          <input id="almanac-email-input" type="email" name="email" placeholder="Your email address" required aria-describedby="almanac-form-status" style="flex:1;min-width:200px;padding:0.5rem 0.8rem;border-radius:8px;border:1px solid #749c7f;background:#F5E7C4;color:#1C3D2E;font-family:'Crimson Text',serif;font-size:1rem;" />
           <button type="submit" style="background:#D4B06A;color:#1C3D2E;border:none;border-radius:8px;padding:0.5rem 1.2rem;font-family:'Crimson Text',serif;font-size:1rem;cursor:pointer;">Subscribe</button>
+          <div id="almanac-form-status" role="status" aria-live="polite" style="width:100%;color:#D4B06A;font-weight:bold;display:none;margin-top:0.5rem;"></div>
         </form>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var form = document.getElementById('almanac-home-form');
+            var statusDiv = document.getElementById('almanac-form-status');
+            if (form) {
+              form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                statusDiv.style.display = 'block';
+                statusDiv.style.color = '#D4B06A';
+                statusDiv.textContent = 'Subscribing...';
+
+                var email = document.getElementById('almanac-email-input').value;
+
+                fetch('/api/inquiry/send', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    customerName: 'Almanac Subscriber',
+                    customerEmail: email,
+                    inquiryType: 'newsletter',
+                    subject: 'Almanac Newsletter Subscription',
+                    message: 'Subscribe email: ' + email
+                  })
+                })
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                  if (data.success) {
+                    statusDiv.style.color = '#D4B06A';
+                    statusDiv.textContent = 'Thank you! You are now subscribed to the Almanac.';
+                    form.reset();
+                  } else {
+                    statusDiv.style.color = '#ff8888';
+                    statusDiv.textContent = data.error || 'Unable to subscribe right now. Please try again.';
+                  }
+                })
+                .catch(function(err) {
+                  statusDiv.style.color = '#ff8888';
+                  statusDiv.textContent = 'A network error occurred. Please try again.';
+                });
+              });
+            }
+          });
+        </script>
       </div>
     </div>
   </section>
@@ -542,16 +585,16 @@ body {
            links point to filtered views on the shop page by setting the
            category query parameter.  Only categories that exist in the
            inventory are exposed here to avoid dead‑end pages. -->
-      <a href="shop.html" class="category-card">Shop&nbsp;All</a>
-      <a href="shop.html?category=herbs-medicinal" class="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</a>
-      <a href="shop.html?category=fruit-trees" class="category-card">Fruit&nbsp;Trees</a>
-      <a href="shop.html?category=houseplants" class="category-card">Houseplants</a>
-      <a href="shop.html?category=orchids-tropicals" class="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</a>
-      <a href="shop.html?category=seeds" class="category-card">Seeds</a>
-      <a href="shop.html?category=exotics-rare" class="category-card">Exotics&nbsp;&amp;&nbsp;Rare</a>
-      <a href="zones.html" class="category-card">Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone</a>
+      <a href="shop" class="category-card">Shop&nbsp;All</a>
+      <a href="shop?category=herbs-medicinal" class="category-card">Herbs&nbsp;&amp;&nbsp;Medicinal</a>
+      <a href="shop?category=fruit-trees" class="category-card">Fruit&nbsp;Trees</a>
+      <a href="shop?category=houseplants" class="category-card">Houseplants</a>
+      <a href="shop?category=orchids-tropicals" class="category-card">Orchids&nbsp;&amp;&nbsp;Tropicals</a>
+      <a href="shop?category=seeds" class="category-card">Seeds</a>
+      <a href="shop?category=exotics-rare" class="category-card">Exotics&nbsp;&amp;&nbsp;Rare</a>
+      <a href="zones" class="category-card">Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone</a>
       <!-- Dedicated card linking to the collector's gallery page -->
-      <a href="orchids-gallery.html" class="category-card">Collector's&nbsp;Gallery</a>
+      <a href="orchids-gallery" class="category-card">Collector's&nbsp;Gallery</a>
     </div>
   </section>
   <section class="featured" id="collection">
@@ -562,7 +605,7 @@ body {
   </section>
   <section class="cta">
     <h2>Book Time with a Plant Guide</h2>
-    <button onclick="location.href='consultations.html'">Book a Consultation</button>
+    <button onclick="location.href='consultations'">Book a Consultation</button>
   </section>
   <!-- Almanac content has been moved into the hero above. The original
        standalone Almanac and signup sections are no longer rendered
@@ -629,7 +672,7 @@ body {
         }
         return `
         <div class="product-card">
-          <a href="product.html?item=${encodeURIComponent(product.slug)}">
+          <a href="product?item=${encodeURIComponent(product.slug)}">
             <img src="${product.image}" alt="${product.name}" onerror="this.src="/assets/placeholder.png'">
           </a>
           <strong>${product.name}</strong>

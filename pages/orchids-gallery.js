@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
 import { sanityClient } from '../lib/sanity';
@@ -25,7 +25,7 @@ const DEFAULT_GALLERY_IMAGES = [
     _id: '3',
     title: 'Everglades Tomato Vine',
     category: 'Herbs & Medicinal',
-    description: 'Indeterminate wild Florida Everglades heirloom producing heavy clusters of sweet currant tomatoes.',
+    description: 'Heat-tolerant, prolific wild-type Florida currant/cherry tomato adapted to humid sub-tropical climates with strong heirloom popularity across South Florida.',
     imageUrl: '/assets/everglades-tomato.jpg',
     alt: 'Everglades Tomato Vine'
   },
@@ -81,6 +81,60 @@ export default function OrchidsGallery({ initialImages }) {
   const images = initialImages && initialImages.length > 0 ? initialImages : DEFAULT_GALLERY_IMAGES;
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedImage, setSelectedImage] = useState(null);
+  const modalRef = useRef(null);
+  const triggerCardRef = useRef(null);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+        if (triggerCardRef.current && typeof triggerCardRef.current.focus === 'function') {
+          triggerCardRef.current.focus();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    if (modalRef.current) {
+      const closeBtn = modalRef.current.querySelector('button');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedImage]);
+
+  useEffect(() => {
+    if (!selectedImage || !modalRef.current) return;
+    const modal = modalRef.current;
+    const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusableElements.length === 0) return;
+
+    const firstEl = focusableElements[0];
+    const lastEl = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (e) => {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    };
+
+    modal.addEventListener('keydown', handleTabKey);
+    return () => modal.removeEventListener('keydown', handleTabKey);
+  }, [selectedImage]);
 
   const categories = ['All', ...Array.from(new Set(images.map(img => img.category).filter(Boolean)))];
 
@@ -142,9 +196,19 @@ export default function OrchidsGallery({ initialImages }) {
           gap: '1.8rem'
         }}>
           {filteredImages.map((img) => (
-            <div
+            <button
               key={img._id || img.title}
-              onClick={() => setSelectedImage(img)}
+              onClick={(e) => {
+                triggerCardRef.current = e.currentTarget;
+                setSelectedImage(img);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  triggerCardRef.current = e.currentTarget;
+                  setSelectedImage(img);
+                }
+              }}
               style={{
                 background: '#1C3D2E',
                 borderRadius: '12px',
@@ -153,9 +217,14 @@ export default function OrchidsGallery({ initialImages }) {
                 cursor: 'pointer',
                 transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                textAlign: 'left',
+                padding: 0,
+                font: 'inherit',
+                color: 'inherit'
               }}
               className="gallery-card"
+              aria-label={"View photo of " + img.title}
             >
               <div style={{ position: 'relative', width: '100%', height: '260px', overflow: 'hidden', background: '#001F14' }}>
                 <img
@@ -203,7 +272,7 @@ export default function OrchidsGallery({ initialImages }) {
                   <span>→</span>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -211,7 +280,12 @@ export default function OrchidsGallery({ initialImages }) {
       {/* Click-to-Expand Lightbox Modal */}
       {selectedImage && (
         <div
-          onClick={() => setSelectedImage(null)}
+          onClick={() => {
+            setSelectedImage(null);
+            if (triggerCardRef.current && typeof triggerCardRef.current.focus === 'function') {
+              triggerCardRef.current.focus();
+            }
+          }}
           style={{
             position: 'fixed',
             top: 0,
@@ -229,6 +303,10 @@ export default function OrchidsGallery({ initialImages }) {
           }}
         >
           <div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={selectedImage.title}
             onClick={(e) => e.stopPropagation()}
             style={{
               background: '#00301E',
@@ -243,7 +321,12 @@ export default function OrchidsGallery({ initialImages }) {
             }}
           >
             <button
-              onClick={() => setSelectedImage(null)}
+              onClick={() => {
+                setSelectedImage(null);
+                if (triggerCardRef.current && typeof triggerCardRef.current.focus === 'function') {
+                  triggerCardRef.current.focus();
+                }
+              }}
               style={{
                 position: 'absolute',
                 top: '15px',
@@ -288,7 +371,12 @@ export default function OrchidsGallery({ initialImages }) {
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
                 <button
-                  onClick={() => setSelectedImage(null)}
+                  onClick={() => {
+                setSelectedImage(null);
+                if (triggerCardRef.current && typeof triggerCardRef.current.focus === 'function') {
+                  triggerCardRef.current.focus();
+                }
+              }}
                   style={{
                     background: 'transparent',
                     color: '#D4B06A',

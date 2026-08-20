@@ -46,41 +46,44 @@ export default function Returns() {
 
           <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              48-Hour Claim Process &amp; Guidelines
+              48-Hour Claim Process &amp; Refund Guidelines
             </h2>
             <p style={{ marginTop: 0 }}>
-              Living plants are sensitive to prolonged darkness and extreme temperature shifts. If your plant suffers severe shipping damage or arrives in poor condition, please follow these steps:
+              Living plants are sensitive to transit stresses and extreme temperature shifts. If your plant suffers severe damage or arrives in poor condition, please follow these steps:
             </p>
             <ol style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Unbox Promptly:</strong> Open your package within 24 hours of delivery or nursery pickup so your plant can breathe and receive light.
+                <strong>Unbox Promptly:</strong> Inspect your plants within 24 hours of delivery or local nursery pickup so your plant can breathe and receive light.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Document the Damage:</strong> Take clear, well-lit photos showing the damaged foliage, the root ball or soil line, and the outer shipping container.
+                <strong>Document the Issue:</strong> Take clear, well-lit photos showing the affected foliage and root system/soil line. For shipped orders, please also include a photo of the outer shipping box. For local nursery pickup claims, shipping box photos are not required.
               </li>
               <li style={{ marginBottom: 0 }}>
                 <strong>Submit Within 48 Hours:</strong> Email your photos and order number to{' '}
                 <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', fontWeight: 'bold', textDecoration: 'underline' }}>
                   info@thebotanicalbazaar.com
                 </a>{' '}
-                within 48 hours of delivery or pickup. Our nursery team will review your photos promptly and arrange a replacement plant or issue store credit.
+                within 48 hours of delivery or pickup. For verified Live Arrival Guarantee claims submitted within 48 hours, refunds will be issued to your <strong>original payment method</strong>. For other approved claims or post-arrival concerns, we issue <strong>store credit or a replacement plant</strong>.
               </li>
             </ol>
           </section>
 
           <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              What Is Covered (and What Isn't)
+              What Is Covered &amp; Thermal Safeguards
             </h2>
             <p style={{ marginTop: 0 }}>
               We keep our policy transparent and fair for both growers and collectors:
             </p>
             <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Covered:</strong> Severe stem breakage, root rot present upon unboxing, severe freeze or heat collapse, and lost or destroyed parcels verified by carrier tracking.
+                <strong>Hot &amp; Cold Weather Safeguards:</strong> During extreme cold (&lt;45°F), we automatically apply thermal wrap and heat packs. If temperatures fall below freezing (&lt;32°F) along transit routes, orders are held safely in our greenhouse. In extreme summer heat (&gt;90°F), we utilize heat-reflective packaging and dispatch routing.
+              </li>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Covered Claims:</strong> Severe stem breakage, root rot present upon unboxing, severe freeze/heat collapse, and lost or destroyed parcels verified by carrier tracking.
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong>Not Covered:</strong> Minor cosmetic leaf creasing, normal transit shedding of older bottom leaves, failure to unbox within 24 hours, or damage resulting from immediate repotting into improper soil mixes.
+                <strong>Not Covered:</strong> Minor cosmetic leaf creasing, normal transit shedding of older lower leaves, failure to unbox within 24 hours of delivery, or damage from immediate repotting into improper soil mixes.
               </li>
             </ul>
           </section>

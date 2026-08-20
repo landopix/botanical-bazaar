@@ -7,23 +7,23 @@ import SeasonalArchive from '../components/SeasonalArchive';
 const defaultEvents = [
   {
     title: 'Spring Tropical Propagation & Air-Layering Workshop',
-    dateTime: '2025-04-12T10:00:00Z',
-    formattedDate: 'Saturday, April 12, 2025 at 10:00 AM',
+    dateTime: '2026-04-11T10:00:00Z',
+    formattedDate: 'Saturday, April 11, 2026 at 10:00 AM',
     location: 'St. Petersburg Nursery & Demonstration Garden',
     description: 'Learn hands-on techniques for propagating rare tropicals, aroids, and fruit trees in Florida zone 9b/10a.',
     ticketUrl: 'https://thebotanicalbazaar.com/shop',
-    publishFrom: '2025-01-01T00:00:00Z',
-    expiresOn: '2025-04-13T00:00:00Z'
+    publishFrom: '2026-01-01T00:00:00Z',
+    expiresOn: '2026-04-12T00:00:00Z'
   },
   {
     title: 'Collector Orchid Mounts & Care Masterclass',
-    dateTime: '2025-05-10T14:00:00Z',
-    formattedDate: 'Saturday, May 10, 2025 at 2:00 PM',
+    dateTime: '2026-05-09T14:00:00Z',
+    formattedDate: 'Saturday, May 9, 2026 at 2:00 PM',
     location: 'Gulfport Community Botanical Hub',
     description: 'Mount your own specimen orchid on cedar slab with live moss. All materials and light refreshments provided.',
     ticketUrl: 'https://thebotanicalbazaar.com/shop',
-    publishFrom: '2025-01-01T00:00:00Z',
-    expiresOn: '2025-05-11T00:00:00Z'
+    publishFrom: '2026-01-01T00:00:00Z',
+    expiresOn: '2026-05-10T00:00:00Z'
   }
 ];
 
@@ -134,12 +134,17 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
         </p>
 
         <form onSubmit={handleNotifySubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8rem', maxWidth: '420px', margin: '0 auto' }}>
+          <label htmlFor="events-react-email" style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+            Email Address
+          </label>
           <input
+            id="events-react-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
             required
+            aria-describedby="events-react-status"
             style={{ padding: '0.7rem 1rem', borderRadius: '6px', border: '1px solid #D4B06A', width: '100%', fontFamily: 'Crimson Text, serif', fontSize: '1rem', background: '#F5E7C4', color: '#00301E' }}
           />
           <button
@@ -152,7 +157,7 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
         </form>
 
         {statusMsg && (
-          <p style={{ marginTop: '1rem', color: statusMsg.startsWith('Success') ? '#D4B06A' : '#ff8888', fontWeight: 'bold' }}>
+          <p id="events-react-status" role="status" aria-live="polite" style={{ marginTop: '1rem', color: statusMsg.startsWith('Success') ? '#D4B06A' : '#ff8888', fontWeight: 'bold' }}>
             {statusMsg}
           </p>
         )}

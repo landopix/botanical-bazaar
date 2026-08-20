@@ -9,12 +9,12 @@ Disallow: /checkout
 Disallow: /cancel
 Disallow: /success
 Disallow: /wishlist
-Disallow: /account.html
-Disallow: /cart.html
-Disallow: /checkout.html
-Disallow: /cancel.html
-Disallow: /success.html
-Disallow: /wishlist.html
+Disallow: /account
+Disallow: /cart
+Disallow: /checkout
+Disallow: /cancel
+Disallow: /success
+Disallow: /wishlist
 
 # Explicitly Allow AI Scrapers, SearchBots, and LLM Crawlers
 User-agent: GPTBot
