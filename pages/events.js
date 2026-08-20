@@ -1,32 +1,10 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { sanityClient, isSanityConfigured } from '../lib/sanity';
+import { sanityClient } from '../lib/sanity';
 import Button from '../components/Button';
 import EventCard from '../components/EventCard';
+import EventCardSkeleton from '../components/skeletons/EventCardSkeleton';
 import SeasonalArchive from '../components/SeasonalArchive';
-
-const defaultEvents = [
-  {
-    title: 'Spring Tropical Propagation & Air-Layering Workshop',
-    dateTime: '2025-04-12T10:00:00Z',
-    formattedDate: 'Saturday, April 12, 2025 at 10:00 AM',
-    location: 'St. Petersburg Nursery & Demonstration Garden',
-    description: 'Learn hands-on techniques for propagating rare tropicals, aroids, and fruit trees in Florida zone 9b/10a.',
-    ticketUrl: 'https://thebotanicalbazaar.com/shop',
-    publishFrom: '2025-01-01T00:00:00Z',
-    expiresOn: '2025-04-13T00:00:00Z'
-  },
-  {
-    title: 'Collector Orchid Mounts & Care Masterclass',
-    dateTime: '2025-05-10T14:00:00Z',
-    formattedDate: 'Saturday, May 10, 2025 at 2:00 PM',
-    location: 'Gulfport Community Botanical Hub',
-    description: 'Mount your own specimen orchid on cedar slab with live moss. All materials and light refreshments provided.',
-    ticketUrl: 'https://thebotanicalbazaar.com/shop',
-    publishFrom: '2025-01-01T00:00:00Z',
-    expiresOn: '2025-05-11T00:00:00Z'
-  }
-];
 
 export default function Events({ activeEvents = [], archivedEvents = [] }) {
   const [email, setEmail] = useState('');
@@ -70,6 +48,8 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
     }
   };
 
+  const hasEvents = activeEvents.length > 0 || archivedEvents.length > 0;
+
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
       <Head>
@@ -91,7 +71,7 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
             <EventCard key={evt._id || evt.title || i} event={evt} />
           ))}
         </div>
-      ) : (
+      ) : archivedEvents.length > 0 ? (
         <SeasonalArchive title="Past Events &amp; Workshop Archive">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {archivedEvents.map((evt, i) => (
@@ -99,6 +79,25 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
             ))}
           </div>
         </SeasonalArchive>
+      ) : (
+        <div style={{
+          background: '#00301E',
+          border: '1px solid #D4B06A',
+          borderRadius: '12px',
+          padding: '3.5rem 2rem',
+          textAlign: 'center',
+          margin: '2rem auto 3.5rem auto',
+          maxWidth: '650px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
+        }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '1rem', color: '#D4B06A' }}>📅</div>
+          <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
+            New Botanical Updates Coming Soon!
+          </h3>
+          <p style={{ color: '#E9DCBE', fontSize: '1.1rem', margin: '0 0 1.5rem 0', lineHeight: '1.6' }}>
+            We are preparing our upcoming workshop calendar and community plant sales. Subscribe below to receive early notifications!
+          </p>
+        </div>
       )}
 
       <div style={{ background: '#00301E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }}>
@@ -137,7 +136,7 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
 
 export async function getStaticProps() {
   const now = new Date();
-  let rawEvents = defaultEvents;
+  let rawEvents = [];
 
   try {
     if (sanityClient) {
@@ -158,7 +157,7 @@ export async function getStaticProps() {
       }
     }
   } catch (err) {
-    console.warn('Sanity eventItem fetch error, using fallback:', err.message);
+    console.warn('Sanity eventItem fetch error:', err.message);
   }
 
   const activeEvents = [];
