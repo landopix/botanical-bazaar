@@ -206,7 +206,7 @@ body {
         const total = (item.price || 0) * (item.quantity || 1);
         subtotal += total;
         summaryHtml += `<li style="display:flex;justify-content:space-between;margin-bottom:0.6rem;font-size:1.1rem;">
-          <span style="color:#D4B06A;">${item.name} × ${item.quantity}</span>
+          <span style="color:#D4B06A;">${escapeHtml(item.name)} × ${item.quantity}</span>
           <span style="color:#E9DCBE;">$${total.toFixed(2)}</span>
         </li>`;
       });

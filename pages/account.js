@@ -456,7 +456,7 @@ export default function Account() {
               >
                 {wishlist.map((item) => {
                   const resolvedImg = item.image
-                    ? item.image.startsWith('http') || item.image.startsWith('/')
+                    ? (item.image.startsWith('http://') || item.image.startsWith('https://')) || item.image.startsWith('/')
                       ? item.image
                       : '/' + item.image
                     : '/assets/placeholder.png';

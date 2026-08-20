@@ -47,7 +47,7 @@ export default async function notifyMeHandler(req, res) {
 
     fs.writeFileSync(filePath, JSON.stringify(requests, null, 2), 'utf8');
 
-    console.log(`[Notify Me Capture] Registered request successfully for ${email.trim()} on ${name} (${slug}) [type: ${newRequest.type}]`);
+    console.log('[Notify Me Capture] Registered request successfully for email:', email.trim(), 'name:', name, 'slug:', slug, 'type:', newRequest.type);
 
     return res.status(200).json({
       success: true,

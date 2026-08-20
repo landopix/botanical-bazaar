@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Customer Name is required.' });
   }
 
-  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+  if (!email || typeof email !== 'string' || email.trim().length > 254 || !EMAIL_REGEX.test(email.trim())) {
     return res.status(400).json({ error: 'A valid email address is required.' });
   }
 

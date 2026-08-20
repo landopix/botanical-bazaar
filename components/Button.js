@@ -23,7 +23,7 @@ export default function Button({
 
   if (href) {
     // If it's an external link
-    if (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+    if ((href.startsWith('http://') || href.startsWith('https://')) || href.startsWith('mailto:') || href.startsWith('tel:')) {
       return (
         <a href={href} className={combinedClassName} {...props}>
           {children}

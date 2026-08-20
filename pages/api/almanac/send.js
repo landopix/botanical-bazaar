@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'At least one valid recipient email address is required.' });
   }
 
-  const invalidEmails = targetList.filter(email => !EMAIL_REGEX.test(email));
+  const invalidEmails = targetList.filter(email => email.length > 254 || !EMAIL_REGEX.test(email));
   if (invalidEmails.length > 0) {
     return res.status(400).json({ error: `Invalid email address format: ${invalidEmails.join(', ')}` });
   }

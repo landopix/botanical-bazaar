@@ -352,7 +352,7 @@
             return `
           <div class="product-card sold-out">
             <div>
-              <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
+              <img src="${product.image}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
               <strong>${product.name}</strong>
             </div>
             <p>${product.sizes}</p>
@@ -409,6 +409,15 @@
   </script>
 
   <script>
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
     document.addEventListener('DOMContentLoaded', function() {
       var sidebar = document.getElementById('site-sidebar');
       var headerToggle = document.querySelector('.header-mobile-toggle');

@@ -49,7 +49,7 @@ export async function getStaticProps({ params }) {
       revalidate: 60
     };
   } catch (error) {
-    console.error(`Error fetching product handle ${params.slug}:`, error);
+    console.error('Error fetching product handle:', params?.slug, error);
     return {
       notFound: true,
       revalidate: 60
@@ -273,7 +273,7 @@ export default function ProductDetail({ initialProduct }) {
   };
 
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const imageUrl = product.image ? (product.image.startsWith('http') ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image.startsWith('/') ? product.image : '/' + product.image}`) : '';
+  const imageUrl = product.image ? ((product.image.startsWith('http://') || product.image.startsWith('https://')) ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image.startsWith('/') ? product.image : '/' + product.image}`) : '';
   const descriptionText = product.description || `${product.name} live plant available for purchase.`;
 
   const structuredSchema = {
@@ -490,7 +490,7 @@ export default function ProductDetail({ initialProduct }) {
         {/* Product Image */}
         <div className="product-img" style={{ position: 'relative', width: '100%', height: '280px', minWidth: '220px', maxWidth: '280px' }}>
           <Image
-            src={product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
+            src={product.image ? ((product.image.startsWith("http://") || product.image.startsWith("https://")) || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png"}
             alt={product.name}
             fill
             sizes="(max-width: 800px) 100vw, 280px"

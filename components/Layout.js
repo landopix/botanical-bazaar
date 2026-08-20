@@ -818,7 +818,7 @@ export default function Layout({ children }) {
                 {matchingProducts.map((prod) => {
                   const isSold = !prod.quantity || prod.quantity < 3;
                   const resolvedImageSrc = prod.image
-                    ? (prod.image.startsWith("http") || prod.image.startsWith("/")
+                    ? ((prod.image.startsWith("http://") || prod.image.startsWith("https://")) || prod.image.startsWith("/")
                         ? prod.image
                         : "/" + prod.image)
                     : "/assets/placeholder.png";

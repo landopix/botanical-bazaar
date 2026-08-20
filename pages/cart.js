@@ -63,7 +63,7 @@ export default function Cart() {
           >
             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
               <img
-                src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
+                src={item.image ? ((item.image.startsWith("http://") || item.image.startsWith("https://")) || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
                 alt={item.name}
                 onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
                 style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}

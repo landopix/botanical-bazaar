@@ -416,8 +416,8 @@ body {
           return `
         <div class="product-card sold-out">
           <div>
-            <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
-            <strong>${product.name}</strong>
+            <img src="${product.image}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
+            <strong>${escapeHtml(product.name)}</strong>
           </div>
           <p>${product.sizes}</p>
           <p>${product.type}</p>
@@ -431,8 +431,8 @@ body {
         return `
         <div class="product-card">
           <a href="product.html?item=${encodeURIComponent(product.slug)}">
-            <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
-            <strong>${product.name}</strong>
+            <img src="${product.image}" alt="${escapeHtml(product.name)}" loading="lazy" onerror="this.src="/assets/placeholder.png'">
+            <strong>${escapeHtml(product.name)}</strong>
           </a>
           <p>${product.sizes}</p>
           <p>${product.type}</p>

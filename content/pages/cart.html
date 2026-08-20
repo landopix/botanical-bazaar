@@ -260,6 +260,15 @@ body {
   </footer>
   <script src="/sidebar.js"></script>
   <script>
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
     /**
      * Render the items from localStorage cart and display the subtotal. If the cart
      * is empty, show the appropriate message and hide the checkout button.
@@ -292,16 +301,16 @@ body {
       itemsContainer.innerHTML = cart.map((item, index) => {
         const price = (item.price || 0) * (item.quantity || 1);
         subtotal += price;
-        const sizeLabel = item.selectedSize ? `<span style="font-size:0.85rem;color:#E9DCBE;display:block;">Size: ${item.selectedSize}</span>` : '';
+        const sizeLabel = item.selectedSize ? `<span style="font-size:0.85rem;color:#E9DCBE;display:block;">Size: ${escapeHtml(item.selectedSize)}</span>` : '';
         const resolvedImage = item.image
-          ? (item.image.startsWith('http') || item.image.startsWith('/') ? item.image : '/' + item.image)
+          ? ((item.image.startsWith('http://') || item.image.startsWith('https://')) || item.image.startsWith('/') ? item.image : '/' + item.image)
           : '/assets/placeholder.png';
 
         return `<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #749c7f;padding:0.6rem 0;">
           <div style="display:flex;align-items:center;gap:0.8rem;">
-            <img src="${resolvedImage}" alt="${item.name}" loading="lazy" onerror="this.src='/assets/placeholder.png'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;background:#e9dcbe11;">
+            <img src="${resolvedImage}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='/assets/placeholder.png'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;background:#e9dcbe11;">
             <div style="text-align:left;">
-              <strong style="color:#D4B06A;">${item.name}</strong>
+              <strong style="color:#D4B06A;">${escapeHtml(item.name)}</strong>
               ${sizeLabel}
               <span style="font-size:0.9rem;color:#E9DCBE;">Qty: ${item.quantity}</span>
             </div>

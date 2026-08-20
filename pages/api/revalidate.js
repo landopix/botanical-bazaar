@@ -68,7 +68,7 @@ export default async function handler(req, res) {
       try {
         await res.revalidate(`/product/${productHandle}`);
       } catch (prodErr) {
-        console.warn(`Could not revalidate product page /product/${productHandle}:`, prodErr);
+        console.warn('Could not revalidate product page:', productHandle, prodErr);
       }
     }
 

@@ -702,7 +702,7 @@ export default function Index() {
         <div className="products">
           {featuredProducts.map((product) => {
             const isSoldOut = !product.quantity || product.quantity < 3;
-            const imageSrc = product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
+            const imageSrc = product.image ? ((product.image.startsWith("http://") || product.image.startsWith("https://")) || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
 
             return (
               <div

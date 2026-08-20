@@ -80,7 +80,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                   <div key={`${item.slug}-${item.selectedSize || 'std'}`} className="cart-item">
                     <div className="item-image">
                       <Image
-                        src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
+                        src={item.image ? ((item.image.startsWith("http://") || item.image.startsWith("https://")) || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
                         alt={item.name}
                         width={60}
                         height={60}

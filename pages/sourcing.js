@@ -48,7 +48,7 @@ export default function Sourcing() {
     }
     if (!formData.customerEmail.trim()) {
       newErrors.customerEmail = 'Email address is required.';
-    } else if (!EMAIL_REGEX.test(formData.customerEmail.trim())) {
+    } else if (formData.customerEmail.trim().length > 254 || !EMAIL_REGEX.test(formData.customerEmail.trim())) {
       newErrors.customerEmail = 'Please enter a valid email address.';
     }
     if (!formData.plantName.trim()) {
