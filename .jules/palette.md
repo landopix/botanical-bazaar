@@ -1,5 +1,6 @@
-# Palette's Journal - Critical Learnings
+# Palette's Journal - The Botanical Bazaar
 
-## 2025-05-18 - Dialog Accessibility and Keyboard Navigation Shortcuts
-**Learning:** React modals (such as `.zone-modal-container`) require proper ARIA dialog semantics (`role="dialog"`, `aria-modal="true"`, `aria-labelledby`) and global keydown handlers (`Escape`) to guarantee screen readers correctly announce the dialog context and keyboard users can easily exit active overlays. Additionally, adding a hidden-until-focused 'Skip to main content' anchor link (`.skip-to-content`) provides immediate keyboard bypass around sticky navigation headers.
-**Action:** When creating or auditing overlays/modals or primary site layouts, always ensure `Escape` key handlers, explicit dialog ARIA roles, and skip navigation links are present.
+## 2025-02-17 - Accessible Search Polish & Live Announcements
+
+**Learning:** For a stateful, rich-filtering catalog search, screen readers do not automatically perceive updates to the matching product count when users type or select filter options. Providing an active `aria-live="polite"` element with `role="status"` ensures that screen reader users receive immediate, clear feedback about how many products match their current criteria without interrupting their typing flow.
+**Action:** Add `role="status"` and `aria-live="polite"` to the results count element. Additionally, design a highly keyboard-accessible clear button (✕) embedded within the search container, featuring explicit `aria-label`, visible focus outline conforming to brand palettes, and an `Escape` key shortcut on the input for a seamless clearing experience.
