@@ -141,6 +141,20 @@ export default function Index() {
     return getActiveCount(catId) > 0;
   };
 
+  const handleZoneClick = (e) => {
+    e.preventDefault();
+    if (typeof window !== "undefined") {
+      const savedZone = localStorage.getItem("user_hardiness_zone");
+      if (savedZone) {
+        router.push(`/shop?zone=${encodeURIComponent(savedZone)}`);
+      } else {
+        router.push("/zones");
+      }
+    } else {
+      router.push("/zones");
+    }
+  };
+
   return (
     <div className="home-container">
       <Head>
@@ -513,7 +527,7 @@ export default function Index() {
             The Almanac
           </h2>
           <Link
-            href="/garden-month"
+            href="/care-sheets"
             style={{
               display: "block",
               color: "#E9DCBE",
@@ -522,10 +536,11 @@ export default function Index() {
               marginBottom: "0.3rem",
             }}
           >
-            This Month in the Garden
+            Plant Care Sheets
           </Link>
           <Link
             href="/zones"
+            onClick={handleZoneClick}
             style={{
               display: "block",
               color: "#E9DCBE",
@@ -687,7 +702,7 @@ export default function Index() {
               Exotics&nbsp;&amp;&nbsp;Rare
             </Link>
           )}
-          <Link href="/zones" className="category-card">
+          <Link href="/zones" onClick={handleZoneClick} className="category-card">
             Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone
           </Link>
           <Link href="/orchids-gallery" className="category-card">

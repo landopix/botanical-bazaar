@@ -106,8 +106,8 @@ const staticPages = [
     content: "gallery orchids flowers visual photos greenhouse orchid display designs"
   },
   {
-    title: "This Month in the Garden",
-    href: "/garden-month",
+    title: "Plant Care Sheets",
+    href: "/care-sheets",
     category: "Guides",
     description: "What to plant, fertilize, and prune this month for tropical microclimates.",
     content: "garden month seasonal planting gardening tips pruning fertilizer schedule tasks weather"
@@ -144,6 +144,22 @@ const staticPages = [
 
 export default function Layout({ children }) {
   const router = useRouter();
+
+  const handleZoneNavClick = (e) => {
+    e.preventDefault();
+    if (typeof window !== "undefined") {
+      const savedZone = localStorage.getItem("user_hardiness_zone");
+      if (savedZone) {
+        router.push(`/shop?zone=${encodeURIComponent(savedZone)}`);
+      } else {
+        router.push("/zones");
+      }
+    } else {
+      router.push("/zones");
+    }
+    setIsSidebarOpen(false);
+  };
+
   const { cartCount } = useCart();
   const { wishlist } = useWishlist();
 
@@ -411,7 +427,7 @@ export default function Layout({ children }) {
     { label: "About", href: "/about" },
     { label: "Shop All", href: "/shop" },
     { label: "Consultations", href: "/consultations" },
-    { label: "Plant Sourcing", href: "/sourcing" },
+    { label: "Plant Sourcing & Inquiries", href: "/sourcing" },
     { label: "The Almanac", href: "/almanac" },
     { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
@@ -449,8 +465,8 @@ export default function Layout({ children }) {
       isOpenState: isGuidesOpen,
       setOpenState: setIsGuidesOpen,
       items: [
-        { label: "This Month in the Garden", href: "/garden-month" },
-        { label: "Best Plants for Your Zone", href: "/zones" },
+        { label: "Plant Care Sheets", href: "/care-sheets" },
+        { label: "Best Plants for Your Zone", href: "/zones", onClick: handleZoneNavClick },
       ],
     },
     {
@@ -1056,7 +1072,7 @@ export default function Layout({ children }) {
             <h3>About Us</h3>
             <Link href="/about">Our History</Link>
             <Link href="/contact">Store Visit</Link>
-            <Link href="/sourcing">Plant Sourcing</Link>
+            <Link href="/sourcing">Plant Sourcing & Inquiries</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/accessibility">Accessibility</Link>
             <Link href="/terms">Terms of Service</Link>
