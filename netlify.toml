@@ -1,21 +1,8 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+
+[build.environment]
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[redirects]]
-  from = "/_next/image"
-  to = "/.netlify/images"
-  status = 200
-
-[[redirects]]
-  from = "/_ipx/*"
-  to = "/.netlify/images"
-  status = 200
