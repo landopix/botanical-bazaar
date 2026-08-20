@@ -65,12 +65,10 @@ export default function Contact() {
       ) : (
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
           <div>
-            <label htmlFor="contact-react-name" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>Your Full Name</label>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>Your Full Name</label>
             <input
-              id="contact-react-name"
               type="text"
               required
-              aria-describedby="contact-react-status"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #D4B06A', backgroundColor: '#123826', color: '#F4F1E1' }}
@@ -78,12 +76,10 @@ export default function Contact() {
           </div>
 
           <div>
-            <label htmlFor="contact-react-email" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>Email Address</label>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>Email Address</label>
             <input
-              id="contact-react-email"
               type="email"
               required
-              aria-describedby="contact-react-status"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #D4B06A', backgroundColor: '#123826', color: '#F4F1E1' }}
@@ -91,19 +87,15 @@ export default function Contact() {
           </div>
 
           <div>
-            <label htmlFor="contact-react-message" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>How Can We Help You?</label>
+            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold' }}>How Can We Help You?</label>
             <textarea
-              id="contact-react-message"
               required
               rows="5"
-              aria-describedby="contact-react-status"
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #D4B06A', backgroundColor: '#123826', color: '#F4F1E1', fontFamily: 'inherit' }}
             />
           </div>
-
-          <div id="contact-react-status" role="status" aria-live="polite" style={{ display: 'none' }}></div>
 
           <Button type="submit" variant="gold-filled" disabled={submitting} style={{ width: '100%' }}>
             {submitting ? 'Sending...' : 'Send Message'}

@@ -28,7 +28,7 @@ const defaultCareSheets = [
     lightNeeds: 'Full Sun',
     wateringNeeds: 'Regular moist conditions',
     zoneCompatibility: 'Zones 8a - 11',
-    careInstructions: 'Heat-tolerant and prolific wild-type currant/cherry tomato (Solanum pimpinellifolium) highly adapted to humid sub-tropical climates. Celebrated as an heirloom favorite across South Florida for its intense flavor and continuous production.',
+    careInstructions: 'Extremely resilient Florida native heirloom vine. Highly heat and humidity tolerant, producing abundant sweet cherry tomatoes year-round in St. Petersburg.',
     imagePath: '/assets/everglades-tomato.jpg'
   }
 ];

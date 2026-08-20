@@ -17,10 +17,13 @@
     "@sanity/image-url": "^2.1.1",
     "js-beautify": "^2.0.3",
     "next": "^16.3.1",
+    "next-sanity": "^9.8.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "resend": "^6.20.0",
-    "stripe": "^22.5.0"
+    "sanity": "^3.99.0",
+    "stripe": "^22.5.0",
+    "styled-components": "^6.5.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.4",
