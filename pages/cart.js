@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Button from '../components/Button';
 import { useCart } from '../context/CartContext';
@@ -7,15 +7,54 @@ import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
+
+  const handleCheckout = async (e) => {
+    if (e) e.preventDefault();
+    if (isRedirecting) return;
+    setIsRedirecting(true);
+    setCheckoutError('');
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cart: cart.map(item => ({
+            slug: item.slug,
+            quantity: item.quantity,
+            selectedSize: item.selectedSize,
+            variantId: item.variantId || item.id,
+            name: item.name
+          })),
+          fulfillment_method: fulfillmentMethod,
+          user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setCheckoutError(data.error || 'Failed to initialize checkout session. Please try again.');
+        setIsRedirecting(false);
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setCheckoutError('An error occurred during checkout setup.');
+      setIsRedirecting(false);
+    }
+  };
 
   if (cart.length === 0) {
     return (
       <div style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
-      <Head>
-        <title>Your Shopping Cart | The Botanical Bazaar St. Petersburg FL</title>
-        <meta name="description" content="Review your tropical plant selections and choose between Standard Shipping and Free Local Nursery Pickup at The Botanical Bazaar." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/cart" />
-      </Head>
+        <Head>
+          <title>Your Shopping Cart | The Botanical Bazaar St. Petersburg FL</title>
+          <meta name="description" content="Review your tropical plant selections and choose between Standard Shipping and Free Local Nursery Pickup at The Botanical Bazaar." />
+          <link rel="canonical" href="https://thebotanicalbazaar.com/cart" />
+        </Head>
         <h1 style={{ color: '#D4B06A', marginBottom: '1.5rem' }}>Your Cart is Empty</h1>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>Ready to fill your garden with rare and resilient tropical plants?</p>
         <Button variant="gold-filled" href="/shop">Browse the Catalog</Button>
@@ -25,8 +64,13 @@ export default function Cart() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto' }}>
-      <h1 style={{ color: '#D4B06A', textAlign: 'center', marginBottom: '2.5rem' }}>Shopping Cart</h1>
+      <Head>
+        <title>Your Shopping Cart | The Botanical Bazaar St. Petersburg FL</title>
+        <meta name="description" content="Review your tropical plant selections and choose between Standard Shipping and Free Local Nursery Pickup at The Botanical Bazaar." />
+        <link rel="canonical" href="https://thebotanicalbazaar.com/cart" />
+      </Head>
 
+      <h1 style={{ color: '#D4B06A', textAlign: 'center', marginBottom: '2.5rem' }}>Shopping Cart</h1>
 
       {/* Cold Hardiness Advisory Banner */}
       {cart.some(item => getZoneCompatibility(item, userHardinessZone || "10a").matchStatus === "NOT_RECOMMENDED") && (
@@ -119,16 +163,17 @@ export default function Cart() {
         ))}
       </div>
 
-      {/* Fulfillment Selection Section */}
-      <div style={{ marginTop: '2.5rem', background: '#123826', padding: '1.5rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
-        <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 1rem 0', fontSize: '1.3rem' }}>
+      {/* Fulfillment Selection Section (Semantic fieldset & radio group) */}
+      <fieldset style={{ marginTop: '2.5rem', background: '#123826', padding: '1.5rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+        <legend style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 1rem 0', fontSize: '1.3rem', padding: '0 0.5rem', fontWeight: 'bold' }}>
           Choose Fulfillment Method
-        </h2>
+        </legend>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
           {/* Standard Shipping Card */}
-          <div
-            onClick={() => setFulfillmentMethod('shipping')}
+          <label
+            htmlFor="cart-fulfillment-shipping"
             style={{
+              display: 'block',
               padding: '1.25rem',
               borderRadius: '10px',
               cursor: 'pointer',
@@ -139,22 +184,35 @@ export default function Cart() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
-                Standard Shipping
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input
+                  id="cart-fulfillment-shipping"
+                  type="radio"
+                  name="cart-fulfillment"
+                  value="shipping"
+                  checked={fulfillmentMethod === 'shipping'}
+                  aria-checked={fulfillmentMethod === 'shipping'}
+                  onChange={() => setFulfillmentMethod('shipping')}
+                  style={{ accentColor: '#D4B06A', width: '18px', height: '18px', cursor: 'pointer' }}
+                />
+                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
+                  Standard Shipping
+                </span>
+              </div>
               <span style={{ fontSize: '0.85rem', color: '#E9DCBE', background: 'rgba(212, 176, 106, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
                 Calculated at checkout
               </span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4', paddingLeft: '1.6rem' }}>
               Shipped with care from St. Petersburg, FL with secure live-plant packaging and weather holds.
             </p>
-          </div>
+          </label>
 
           {/* Local Nursery Pickup Card */}
-          <div
-            onClick={() => setFulfillmentMethod('pickup')}
+          <label
+            htmlFor="cart-fulfillment-pickup"
             style={{
+              display: 'block',
               padding: '1.25rem',
               borderRadius: '10px',
               cursor: 'pointer',
@@ -165,19 +223,31 @@ export default function Cart() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
-                Local Nursery Pickup
-              </span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <input
+                  id="cart-fulfillment-pickup"
+                  type="radio"
+                  name="cart-fulfillment"
+                  value="pickup"
+                  checked={fulfillmentMethod === 'pickup'}
+                  aria-checked={fulfillmentMethod === 'pickup'}
+                  onChange={() => setFulfillmentMethod('pickup')}
+                  style={{ accentColor: '#D4B06A', width: '18px', height: '18px', cursor: 'pointer' }}
+                />
+                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
+                  Local Nursery Pickup
+                </span>
+              </div>
               <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#27ae60', background: 'rgba(39, 174, 96, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
                 $0.00 / Free Pickup
               </span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4' }}>
+            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4', paddingLeft: '1.6rem' }}>
               Pick up directly at our nursery location in St. Petersburg, FL. Flexible scheduled appointment slots available.
             </p>
-          </div>
+          </label>
         </div>
-      </div>
+      </fieldset>
 
       {/* Cart Summary */}
       <div
@@ -256,10 +326,31 @@ export default function Cart() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', alignItems: 'center', flexWrap: 'wrap' }}>
           <Button variant="outline" href="/shop">Continue Shopping</Button>
-          <Button variant="green-filled" href="/checkout">Proceed to Checkout</Button>
+          <button
+            onClick={handleCheckout}
+            disabled={isRedirecting}
+            style={{
+              background: '#00301E',
+              color: '#D4B06A',
+              border: '1px solid #D4B06A',
+              padding: '0.85rem 1.75rem',
+              borderRadius: '24px',
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              cursor: isRedirecting ? 'not-allowed' : 'pointer',
+              opacity: isRedirecting ? 0.8 : 1,
+              transition: 'all 0.2s ease-in-out',
+              fontFamily: 'inherit'
+            }}
+          >
+            {isRedirecting ? 'Redirecting to secure checkout...' : 'Proceed to Checkout'}
+          </button>
         </div>
+        {checkoutError && (
+          <p style={{ color: '#ba2f2f', margin: '0.75rem 0 0 0', fontWeight: 'bold', textAlign: 'right' }}>{checkoutError}</p>
+        )}
       </div>
     </div>
   );

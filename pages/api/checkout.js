@@ -8,19 +8,26 @@ export default async function handler(req, res) {
   try {
     const {
       cart,
+      items,
       fulfillment_method,
-      customer_name,
+      fulfillmentMethod,
       customer_email,
+      customer_name,
       customer_phone,
-      shipping_address,
-      pickup_date,
-      notes,
-      user_hardiness_zone
+      user_hardiness_zone,
+      userHardinessZone,
+      notes
     } = req.body;
 
-    if (!cart || !Array.isArray(cart) || cart.length === 0) {
+    const cartItems = cart || items;
+
+    if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
+
+    const selectedFulfillment = fulfillment_method || fulfillmentMethod || 'shipping';
+    const deliveryMethod = selectedFulfillment === 'pickup' ? 'PICK_UP' : 'SHIPPING';
+    const zone = user_hardiness_zone || userHardinessZone || '10a';
 
     let catalog = [];
     try {
@@ -30,7 +37,7 @@ export default async function handler(req, res) {
     }
 
     // Resolve merchandise variant GIDs for all line items
-    const lines = cart.map(item => {
+    const lines = cartItems.map(item => {
       let merchandiseId = item.variantId || item.id;
 
       // If merchandiseId is not a valid variant GID, resolve from catalog product
@@ -40,7 +47,7 @@ export default async function handler(req, res) {
           // If a selectedSize is provided, try to match variant title or pot size
           if (item.selectedSize) {
             const matchedVariant = productDef.variants.find(
-              v => v.title.toLowerCase() === item.selectedSize.toLowerCase()
+              v => v.title && v.title.toLowerCase() === item.selectedSize.toLowerCase()
             );
             if (matchedVariant) {
               merchandiseId = matchedVariant.id;
@@ -65,26 +72,28 @@ export default async function handler(req, res) {
 
     // Custom order attributes for fulfillment, notes, hardiness zone, contact info
     const customAttributes = [
-      { key: 'Fulfillment Method', value: fulfillment_method || 'shipping' },
-      { key: 'Customer Name', value: customer_name || '' },
-      { key: 'Customer Phone', value: customer_phone || '' },
-      { key: 'USDA Hardiness Zone', value: user_hardiness_zone || '10a' }
+      { key: 'Fulfillment Method', value: selectedFulfillment === 'pickup' ? 'Local Nursery Pickup' : 'Standard Shipping' },
+      { key: 'USDA Hardiness Zone', value: zone }
     ];
 
-    if (pickup_date) {
-      customAttributes.push({ key: 'Pickup Date', value: pickup_date });
+    if (customer_name) {
+      customAttributes.push({ key: 'Customer Name', value: customer_name });
+    }
+    if (customer_phone) {
+      customAttributes.push({ key: 'Customer Phone', value: customer_phone });
     }
     if (notes) {
       customAttributes.push({ key: 'Order Notes', value: notes });
     }
-    if (shipping_address) {
-      customAttributes.push({
-        key: 'Shipping Details',
-        value: typeof shipping_address === 'object' ? JSON.stringify(shipping_address) : String(shipping_address)
-      });
-    }
 
-    const buyerIdentity = customer_email ? { email: customer_email } : null;
+    const buyerIdentity = {
+      ...(customer_email ? { email: customer_email } : {}),
+      deliveryPreferences: [
+        {
+          deliveryMethod
+        }
+      ]
+    };
 
     const { checkoutUrl } = await createShopifyCart({
       lines,
@@ -95,6 +104,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ url: checkoutUrl });
   } catch (error) {
     console.error('API Checkout Error:', error);
-    return res.status(500).json({ error: error.message || 'An internal server error occurred.' });
+    return res.status(500).json({ error: 'An internal server error occurred.' });
   }
 }
