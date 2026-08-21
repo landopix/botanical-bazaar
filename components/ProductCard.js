@@ -10,8 +10,14 @@ export default function ProductCard({
   descClamp = 3,
   className = ''
 }) {
-  const { wishlist = [], toggleWishlist } = useWishlist() || {};
+  const { wishlist, toggleWishlist } = useWishlist();
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item.slug === product.slug || item.id === product.id));
 
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
+  };
   const slug = product?.slug?.current || product?.slug || '';
   const name = product?.name ?? product?.title ?? 'Botanical Specimen';
   const price = product?.price;

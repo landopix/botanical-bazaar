@@ -8,6 +8,7 @@ import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 import NurseryUpdateFallback from "../components/NurseryUpdateFallback";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
+import { isZoneCompatible } from "../lib/fulfillment";
 
 // Static list of requested category collections
 const COLLECTIONS = [
@@ -332,13 +333,7 @@ export default function Shop({ initialProducts = [] }) {
 
     // 4. Hardiness Zone Filter
     if (selectedZone) {
-      const zoneTarget = selectedZone.toLowerCase();
-      result = result.filter((product) => {
-        if (product?.custom?.hardiness_zone) {
-          if (product.custom.hardiness_zone.toLowerCase().includes(zoneTarget)) return true;
-        }
-        return Array.isArray(product?.zones) && product.zones.some((z) => z?.toLowerCase() === zoneTarget);
-      });
+      result = result.filter((product) => isZoneCompatible(selectedZone, product));
     }
 
     // 5. Search Text Query

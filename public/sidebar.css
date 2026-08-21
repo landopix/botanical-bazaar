@@ -992,7 +992,8 @@ header .lantern-emblem {
   padding: 1.5rem;
   width: 100%;
   max-width: 480px;
-  max-height: 70vh;
+  max-height: 90vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
