@@ -68,7 +68,7 @@ export default function ProductDetail({ initialProduct }) {
   );
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
-  const { toggleWishlist, wishlist } = useWishlist();
+  const { toggleWishlist, wishlist = [] } = useWishlist() || {};
 
   const [notifyEmail, setNotifyEmail] = useState('');
   const [notifySubscribed, setNotifySubscribed] = useState(false);
@@ -177,7 +177,7 @@ export default function ProductDetail({ initialProduct }) {
   const activePrice = selectedVariant ? selectedVariant.price : product.price;
   const isVariantAvailable = selectedVariant ? selectedVariant.availableForSale : product.availableForSale;
   const isSoldOut = !isVariantAvailable || !product.quantity || product.quantity < 3;
-  const isWishlisted = wishlist.some(item => item.slug === product.slug);
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === product.slug);
   const variantsArray = product.variants && product.variants.length > 0 ? product.variants : [];
 
   // Parse Title for Scientific Name
@@ -493,8 +493,31 @@ export default function ProductDetail({ initialProduct }) {
 
           {/* Secondary Actions: Wishlist and Back buttons */}
           <div className="secondary-action-row">
-            <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: '1 1 auto' }}>
-              {isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
+            <Button
+              variant={isWishlisted ? "gold-filled" : "outline"}
+              onClick={() => toggleWishlist && toggleWishlist(product)}
+              style={{
+                flex: '1 1 auto',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem'
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill={isWishlisted ? "#00301E" : "none"}
+                stroke={isWishlisted ? "#00301E" : "#D4B06A"}
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+              {isWishlisted ? 'In Wishlist Sanctuary' : 'Add to Wishlist'}
             </Button>
             <Button variant="outline" href="/shop" style={{ flex: '1 1 auto' }}>
               Back to Shop
