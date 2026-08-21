@@ -111,7 +111,7 @@ export default function Account() {
     }
   };
 
-  const handleOrderLookup = (e) => {
+  const handleOrderLookup = async (e) => {
     e.preventDefault();
     setLookupError('');
 
@@ -130,11 +130,29 @@ export default function Account() {
 
     setIsSearching(true);
 
-    setTimeout(() => {
-      const lookupEndpoint = 'https://thebotanicalbazaar.com/apps/order-lookup';
-      const targetUrl = `${lookupEndpoint}?order=${encodeURIComponent(cleanOrder)}&email=${encodeURIComponent(cleanEmail)}`;
-      window.location.href = targetUrl;
-    }, 800);
+    try {
+      const res = await fetch('/api/order-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order: cleanOrder, email: cleanEmail })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.targetUrl) {
+          window.location.href = data.targetUrl;
+        } else {
+          setLookupError('Unable to locate order. Please check your order details.');
+        }
+      } else {
+        const data = await res.json();
+        setLookupError(data.error || 'Unable to locate order status.');
+      }
+    } catch (err) {
+      setLookupError('An unexpected error occurred while looking up your order. Please try again.');
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSignOut = () => {
