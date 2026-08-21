@@ -25,7 +25,7 @@ export default function FulfillmentCard({ product, userZoneTemp }) {
         </div>
 
         <div className="option-item">
-          <div className="option-title">Florida &amp; Out-of-State Shipping</div>
+          <div className="option-title">Shipping</div>
           <div className="option-desc">Secure live-plant shipping with custom botanical crating. Standard dispatch within 2–4 business days.</div>
         </div>
       </div>
