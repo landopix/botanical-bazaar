@@ -1,16 +1,28 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['cdn.sanity.io'],
-  },
-  experimental: {
-    serverMinification: false,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
   },
   async redirects() {
     return [
       {
         source: '/index.html',
         destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/checkout.html',
+        destination: '/cart',
+        permanent: true,
+      },
+      {
+        source: '/checkout',
+        destination: '/cart',
         permanent: true,
       },
       {
@@ -96,19 +108,6 @@ const nextConfig = {
       {
         source: '/orchids-gallery.html',
         destination: '/orchids-gallery',
-        permanent: true,
-      },
-      // Redirect legacy product.html?item=slug to extensionless route /product/slug
-      {
-        source: '/product.html',
-        has: [
-          {
-            type: 'query',
-            key: 'item',
-            value: '(?<slug>.*)',
-          },
-        ],
-        destination: '/product/:slug',
         permanent: true,
       },
       {

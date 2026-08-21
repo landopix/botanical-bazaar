@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
@@ -7,6 +7,8 @@ import { isSanityCdnUrl } from '../lib/image-utils';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -23,6 +25,43 @@ export default function CartDrawer({ isOpen, onClose }) {
   const hasRestrictedItems = cart.some(item => checkAgRestrictions(item).isRestricted);
   const hasZoneSensitiveItems = cart.some(item => getZoneCompatibility(item, userHardinessZone || '10a').matchStatus === 'NOT_RECOMMENDED');
 
+  const handleCheckout = async (e) => {
+    if (e) e.preventDefault();
+    if (isRedirecting) return;
+    setIsRedirecting(true);
+    setCheckoutError('');
+
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cart: cart.map(item => ({
+            slug: item.slug,
+            quantity: item.quantity,
+            selectedSize: item.selectedSize,
+            variantId: item.variantId || item.id,
+            name: item.name
+          })),
+          fulfillment_method: fulfillmentMethod,
+          user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        setCheckoutError(data.error || 'Failed to initialize checkout session. Please try again.');
+        setIsRedirecting(false);
+      }
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setCheckoutError('An error occurred during checkout setup.');
+      setIsRedirecting(false);
+    }
+  };
+
   return (
     <div className="cart-drawer-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Shopping Cart Drawer">
       <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
@@ -38,28 +77,33 @@ export default function CartDrawer({ isOpen, onClose }) {
           </div>
         ) : (
           <>
-            <div className="fulfillment-toggle">
-              <label className={`toggle-option ${fulfillmentMethod === 'shipping' ? 'active' : ''}`}>
+            <fieldset className="fulfillment-toggle">
+              <legend className="sr-only">Fulfillment Method</legend>
+              <label htmlFor="drawer-fulfillment-shipping" className={`toggle-option ${fulfillmentMethod === 'shipping' ? 'active' : ''}`}>
                 <input
+                  id="drawer-fulfillment-shipping"
                   type="radio"
                   name="drawer-fulfillment"
                   value="shipping"
                   checked={fulfillmentMethod === 'shipping'}
+                  aria-checked={fulfillmentMethod === 'shipping'}
                   onChange={() => setFulfillmentMethod('shipping')}
                 />
                 <span>Standard Shipping</span>
               </label>
-              <label className={`toggle-option ${fulfillmentMethod === 'pickup' ? 'active' : ''}`}>
+              <label htmlFor="drawer-fulfillment-pickup" className={`toggle-option ${fulfillmentMethod === 'pickup' ? 'active' : ''}`}>
                 <input
+                  id="drawer-fulfillment-pickup"
                   type="radio"
                   name="drawer-fulfillment"
                   value="pickup"
                   checked={fulfillmentMethod === 'pickup'}
+                  aria-checked={fulfillmentMethod === 'pickup'}
                   onChange={() => setFulfillmentMethod('pickup')}
                 />
                 <span>St. Pete Pickup ($0.00)</span>
               </label>
-            </div>
+            </fieldset>
 
             {hasZoneSensitiveItems && (
               <div className="restriction-notice" style={{ background: "rgba(186, 47, 47, 0.15)", borderColor: "#ba2f2f" }}>
@@ -96,9 +140,9 @@ export default function CartDrawer({ isOpen, onClose }) {
                       )}
                       <div className="item-price">${(item.price * item.quantity).toFixed(2)}</div>
                       <div className="quantity-controls">
-                        <button onClick={() => updateQuantity(item.slug, item.quantity - 1, item.selectedSize)}>-</button>
+                        <button onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity - 1)}>-</button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.slug, item.quantity + 1, item.selectedSize)}>+</button>
+                        <button onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity + 1)}>+</button>
                       </div>
                     </div>
                     <button onClick={() => removeFromCart(item.slug, item.selectedSize)} className="remove-btn" aria-label="Remove item">
@@ -118,9 +162,16 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <Link href="/cart" onClick={onClose} className="view-cart-btn">
                   View Full Cart
                 </Link>
-                <Link href="/checkout" onClick={onClose} className="checkout-btn">
-                  Proceed to Checkout
-                </Link>
+                <button
+                  onClick={handleCheckout}
+                  disabled={isRedirecting}
+                  className="checkout-btn"
+                >
+                  {isRedirecting ? 'Redirecting to secure checkout...' : 'Proceed to Checkout'}
+                </button>
+                {checkoutError && (
+                  <p className="checkout-error-msg">{checkoutError}</p>
+                )}
               </div>
             </div>
           </>
@@ -128,6 +179,17 @@ export default function CartDrawer({ isOpen, onClose }) {
       </div>
 
       <style jsx>{`
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
         .cart-drawer-overlay {
           position: fixed;
           top: 0;
@@ -197,16 +259,20 @@ export default function CartDrawer({ isOpen, onClose }) {
           border: 1px solid #D4B06A;
           border-radius: 8px;
           padding: 4px;
-          margin-bottom: 1rem;
+          margin: 0 0 1rem 0;
         }
         .toggle-option {
           flex: 1;
-          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
           padding: 0.4rem;
           font-size: 0.85rem;
           cursor: pointer;
           border-radius: 6px;
           color: #E9DCBE;
+          transition: all 0.2s ease;
         }
         .toggle-option.active {
           background: #D4B06A;
@@ -214,7 +280,8 @@ export default function CartDrawer({ isOpen, onClose }) {
           font-weight: bold;
         }
         .toggle-option input {
-          display: none;
+          accent-color: #00301E;
+          cursor: pointer;
         }
         .restriction-notice {
           background: rgba(212, 176, 106, 0.15);
@@ -328,15 +395,30 @@ export default function CartDrawer({ isOpen, onClose }) {
           text-decoration: none;
           font-weight: bold;
         }
-        .footer-actions :global(.checkout-btn) {
+        .checkout-btn {
           display: block;
+          width: 100%;
           text-align: center;
           background: #D4B06A;
           color: #00301E;
           padding: 0.75rem;
           border-radius: 20px;
-          text-decoration: none;
+          border: 1px solid #D4B06A;
           font-weight: bold;
+          font-family: inherit;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .checkout-btn:disabled {
+          opacity: 0.8;
+          cursor: not-allowed;
+        }
+        .checkout-error-msg {
+          color: #ff6b6b;
+          font-size: 0.85rem;
+          margin: 0;
+          text-align: center;
         }
       `}</style>
     </div>
