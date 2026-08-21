@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
@@ -398,159 +398,179 @@ export default function Shop({ initialProducts = [] }) {
     selectedBloom,
   ]);
 
-  // Dynamically extract unique available hardiness zones
-  const availableZones = new Set();
-  products.forEach((prod) => {
-    if (prod?.custom?.hardiness_zone) {
-      availableZones.add(prod.custom.hardiness_zone.trim());
-    }
-    if (Array.isArray(prod?.zones)) {
-      prod.zones.forEach((zone) => {
-        if (zone && zone !== "1" && zone !== "2") {
-          availableZones.add(zone);
+  // ⚡ Bolt Optimization: Memoize derived available hardiness zones so product array isn't scanned on every state change/keystroke
+  const sortedZones = useMemo(() => {
+    const availableZones = new Set();
+    products.forEach((prod) => {
+      if (prod?.custom?.hardiness_zone) {
+        availableZones.add(prod.custom.hardiness_zone.trim());
+      }
+      if (Array.isArray(prod?.zones)) {
+        prod.zones.forEach((zone) => {
+          if (zone && zone !== "1" && zone !== "2") {
+            availableZones.add(zone);
+          }
+        });
+      }
+    });
+    return Array.from(availableZones).sort(
+      (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
+    );
+  }, [products]);
+
+  // ⚡ Bolt Optimization: Memoize derived pot sizes to avoid array iterations during search typing
+  const sortedSizes = useMemo(() => {
+    const availableSizes = new Set();
+    products.forEach((prod) => {
+      if (prod?.custom?.pot_size) {
+        availableSizes.add(prod.custom.pot_size.trim());
+      }
+      if (prod?.sizes && typeof prod.sizes === "string") {
+        const parts = prod.sizes.split("|");
+        parts.forEach((part) => {
+          const clean = part.trim();
+          if (clean) {
+            availableSizes.add(clean);
+          }
+        });
+      }
+    });
+    return Array.from(availableSizes).sort();
+  }, [products]);
+
+  // ⚡ Bolt Optimization: Memoize active in-stock counts map per category handle to prevent full product scans during filtering & render passes
+  const categoryCountsMap = useMemo(() => {
+    const counts = {};
+    COLLECTIONS.forEach((collection) => {
+      const catId = collection.id;
+      const catLower = catId.toLowerCase();
+      counts[catId] = products.filter((product) => {
+        const isSoldOut = !product?.quantity || product.quantity < 3;
+        if (isSoldOut) return false;
+
+        const hasCategory = (c) =>
+          Array.isArray(product?.categories) &&
+          product.categories.some((pc) => pc?.toLowerCase() === c.toLowerCase());
+        const hasTag = (t) =>
+          Array.isArray(product?.tags) &&
+          product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
+        const textMatches = (keyword) => {
+          const text = `${product?.name || ""} ${product?.description || ""}`.toLowerCase();
+          return text.includes(keyword);
+        };
+
+        if (catLower === "houseplants") {
+          return (
+            hasCategory("houseplants") ||
+            hasTag("houseplant") ||
+            textMatches("houseplant")
+          );
         }
-      });
-    }
-  });
-  const sortedZones = Array.from(availableZones).sort(
-    (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
+        if (
+          catLower === "orchids-tropicals" ||
+          catLower === "orchids & tropicals"
+        ) {
+          return (
+            hasCategory("orchids-tropicals") ||
+            hasCategory("plants") ||
+            hasTag("tropical") ||
+            hasTag("orchid") ||
+            textMatches("orchid") ||
+            textMatches("tropical")
+          );
+        }
+        if (catLower === "fruit-trees" || catLower === "fruit trees") {
+          return (
+            hasCategory("fruit-trees") ||
+            hasTag("fruit-tree") ||
+            textMatches("fruit tree") ||
+            textMatches("fruit")
+          );
+        }
+        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
+          return (
+            hasCategory("herbs-medicinal") ||
+            hasTag("herb") ||
+            hasTag("medicinal") ||
+            textMatches("herb") ||
+            textMatches("medicinal") ||
+            textMatches("aromatic")
+          );
+        }
+        if (catLower === "exotics-rare" || catLower === "exotics & rare") {
+          return (
+            hasCategory("exotics-rare") ||
+            hasTag("rare") ||
+            hasTag("exotic") ||
+            textMatches("rare") ||
+            textMatches("exotic") ||
+            textMatches("unusual")
+          );
+        }
+        if (catLower === "seeds") {
+          return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
+        }
+        if (catLower === "stickers-art" || catLower === "stickers & art") {
+          return (
+            hasCategory("stickers-art") ||
+            hasCategory("art") ||
+            hasTag("sticker") ||
+            hasTag("art") ||
+            textMatches("sticker") ||
+            textMatches("art")
+          );
+        }
+        if (
+          catLower === "tinctures-apothecary" ||
+          catLower === "tinctures & apothecary"
+        ) {
+          return (
+            hasCategory("tinctures-apothecary") ||
+            hasCategory("apothecary") ||
+            hasTag("tincture") ||
+            hasTag("apothecary") ||
+            textMatches("tincture") ||
+            textMatches("apothecary") ||
+            textMatches("drops")
+          );
+        }
+        if (
+          catLower === "terrarium-vivarium" ||
+          catLower === "terrarium & vivarium"
+        ) {
+          return (
+            hasCategory("terrarium-vivarium") ||
+            hasCategory("habitat") ||
+            hasTag("leaf-litter") ||
+            hasTag("substrate") ||
+            textMatches("leaf litter") ||
+            textMatches("habitat") ||
+            textMatches("vivarium") ||
+            textMatches("shrimp") ||
+            textMatches("tank")
+          );
+        }
+
+        return hasCategory(catId);
+      }).length;
+    });
+    return counts;
+  }, [products]);
+
+  const getActiveInStockCountForCategory = useCallback(
+    (categoryId) => {
+      if (!categoryId) return 0;
+      return categoryCountsMap[categoryId] ?? 0;
+    },
+    [categoryCountsMap]
   );
 
-  // Dynamically extract unique pot size options
-  const availableSizes = new Set();
-  products.forEach((prod) => {
-    if (prod?.custom?.pot_size) {
-      availableSizes.add(prod.custom.pot_size.trim());
-    }
-    if (prod?.sizes && typeof prod.sizes === "string") {
-      const parts = prod.sizes.split("|");
-      parts.forEach((part) => {
-        const clean = part.trim();
-        if (clean) {
-          availableSizes.add(clean);
-        }
-      });
-    }
-  });
-  const sortedSizes = Array.from(availableSizes).sort();
-
-  const getActiveInStockCountForCategory = (categoryId) => {
-    return products.filter((product) => {
-      const isSoldOut = !product?.quantity || product.quantity < 3;
-      if (isSoldOut) return false;
-
-      const catLower = categoryId.toLowerCase();
-      const hasCategory = (c) =>
-        Array.isArray(product?.categories) &&
-        product.categories.some((pc) => pc?.toLowerCase() === c.toLowerCase());
-      const hasTag = (t) =>
-        Array.isArray(product?.tags) &&
-        product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
-      const textMatches = (keyword) => {
-        const text = `${product?.name || ""} ${product?.description || ""}`.toLowerCase();
-        return text.includes(keyword);
-      };
-
-      if (catLower === "houseplants") {
-        return (
-          hasCategory("houseplants") ||
-          hasTag("houseplant") ||
-          textMatches("houseplant")
-        );
-      }
-      if (
-        catLower === "orchids-tropicals" ||
-        catLower === "orchids & tropicals"
-      ) {
-        return (
-          hasCategory("orchids-tropicals") ||
-          hasCategory("plants") ||
-          hasTag("tropical") ||
-          hasTag("orchid") ||
-          textMatches("orchid") ||
-          textMatches("tropical")
-        );
-      }
-      if (catLower === "fruit-trees" || catLower === "fruit trees") {
-        return (
-          hasCategory("fruit-trees") ||
-          hasTag("fruit-tree") ||
-          textMatches("fruit tree") ||
-          textMatches("fruit")
-        );
-      }
-      if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
-        return (
-          hasCategory("herbs-medicinal") ||
-          hasTag("herb") ||
-          hasTag("medicinal") ||
-          textMatches("herb") ||
-          textMatches("medicinal") ||
-          textMatches("aromatic")
-        );
-      }
-      if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-        return (
-          hasCategory("exotics-rare") ||
-          hasTag("rare") ||
-          hasTag("exotic") ||
-          textMatches("rare") ||
-          textMatches("exotic") ||
-          textMatches("unusual")
-        );
-      }
-      if (catLower === "seeds") {
-        return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
-      }
-      if (catLower === "stickers-art" || catLower === "stickers & art") {
-        return (
-          hasCategory("stickers-art") ||
-          hasCategory("art") ||
-          hasTag("sticker") ||
-          hasTag("art") ||
-          textMatches("sticker") ||
-          textMatches("art")
-        );
-      }
-      if (
-        catLower === "tinctures-apothecary" ||
-        catLower === "tinctures & apothecary"
-      ) {
-        return (
-          hasCategory("tinctures-apothecary") ||
-          hasCategory("apothecary") ||
-          hasTag("tincture") ||
-          hasTag("apothecary") ||
-          textMatches("tincture") ||
-          textMatches("apothecary") ||
-          textMatches("drops")
-        );
-      }
-      if (
-        catLower === "terrarium-vivarium" ||
-        catLower === "terrarium & vivarium"
-      ) {
-        return (
-          hasCategory("terrarium-vivarium") ||
-          hasCategory("habitat") ||
-          hasTag("leaf-litter") ||
-          hasTag("substrate") ||
-          textMatches("leaf litter") ||
-          textMatches("habitat") ||
-          textMatches("vivarium") ||
-          textMatches("shrimp") ||
-          textMatches("tank")
-        );
-      }
-
-      return hasCategory(categoryId);
-    }).length;
-  };
-
-  const visibleCollections = COLLECTIONS.filter((collection) => {
-    if (products.length === 0) return true;
-    return getActiveInStockCountForCategory(collection.id) > 0;
-  });
+  const visibleCollections = useMemo(() => {
+    return COLLECTIONS.filter((collection) => {
+      if (products.length === 0) return true;
+      return (categoryCountsMap[collection.id] ?? 0) > 0;
+    });
+  }, [products.length, categoryCountsMap]);
 
   return (
     <div className="shop-container">

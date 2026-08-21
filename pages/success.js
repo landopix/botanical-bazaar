@@ -69,6 +69,6 @@ export default function Success() {
         <Button variant="gold-filled" href="https://the-botanical-bazaar.myshopify.com/account/login">Go to Customer Account</Button>
         <Button variant="outline" href="/shop">Browse More Catalog</Button>
       </div>
-    </>
+    </div>
   );
 }
