@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Button from '../../components/Button';
+import ProductImageGallery from '../../components/ProductImageGallery';
 import FulfillmentCard from '../../components/FulfillmentCard';
 import WhatYouWillReceiveCard from '../../components/WhatYouWillReceiveCard';
 import LiveArrivalGuarantee from '../../components/LiveArrivalGuarantee';
@@ -11,8 +11,7 @@ import ZoneCompatibilityBadges from '../../components/ZoneCompatibilityBadges';
 import CareSpine from '../../components/CareSpine';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
-import { getProductByHandle, getAllProductHandles } from '../../lib/shopify';
-import { isSanityCdnUrl } from '../../lib/image-utils';
+import { getProductByHandle, getAllProductHandles, parseProductTitle } from '../../lib/shopify';
 
 export async function getStaticPaths() {
   try {
@@ -181,6 +180,14 @@ export default function ProductDetail({ initialProduct }) {
   const isWishlisted = wishlist.some(item => item.slug === product.slug);
   const variantsArray = product.variants && product.variants.length > 0 ? product.variants : [];
 
+  // Parse Title for Scientific Name
+  const { commonName, scientificName } = parseProductTitle(product.name);
+
+  // Dynamic Size Text
+  const currentSizeDisplay = selectedVariant && selectedVariant.title && selectedVariant.title !== 'Default Title'
+    ? selectedVariant.title
+    : (product.sizes || 'Standard Pot');
+
   const handleAddToCart = () => {
     const itemToAdd = {
       ...product,
@@ -269,11 +276,19 @@ export default function ProductDetail({ initialProduct }) {
     if (tags.includes('drought-tolerant') && !moistureItems.some(it => it.label === 'Drought Tolerant')) featureItems.push({ label: 'Drought Tolerant', description: 'Allows soil to dry between waterings and thrives in dry conditions.' });
     if (featureItems.length > 0) panels.push(createPanel('Special Features', featureItems));
 
-    return <div className="plant-specs">{panels}</div>;
+    if (panels.length === 0) return null;
+
+    return (
+      <div className="plant-specs-container">
+        <h3 className="specs-heading">Plant Specifications &amp; Care Details</h3>
+        <div className="plant-specs">{panels}</div>
+      </div>
+    );
   };
 
   const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const imageUrl = product.image ? (product.image.startsWith('http') ? product.image : `${typeof window !== 'undefined' ? window.location.origin : ''}${product.image.startsWith('/') ? product.image : '/' + product.image}`) : '';
+  const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image || '/assets/placeholder.png'];
+  const imageUrl = galleryImages[0]?.startsWith('http') ? galleryImages[0] : `${typeof window !== 'undefined' ? window.location.origin : ''}${galleryImages[0]?.startsWith('/') ? galleryImages[0] : '/' + galleryImages[0]}`;
   const descriptionText = product.description || `${product.name} live plant available for purchase.`;
 
   const structuredSchema = {
@@ -334,10 +349,8 @@ export default function ProductDetail({ initialProduct }) {
     }
   };
 
-  const productImage = product.image ? (product.image.startsWith("http") || product.image.startsWith("/") ? product.image : "/" + product.image) : "/assets/placeholder.png";
-
   return (
-    <div style={{ padding: '3rem 1.5rem', maxWidth: '1000px', margin: '0 auto', boxSizing: 'border-box' }}>
+    <div className="pdp-wrapper">
       <Head>
         <title>{`${product.name} | The Botanical Bazaar`}</title>
         <meta name="description" content={descriptionText} />
@@ -355,73 +368,244 @@ export default function ProductDetail({ initialProduct }) {
         />
       </Head>
 
+      <Link href="/shop" className="back-link">
+        &larr; Back to Shop
+      </Link>
+
+      {/* Main Hero Container */}
+      <section className="product-hero-container">
+        {/* Left Column: Image Gallery Carousel */}
+        <div className="product-gallery-column">
+          <ProductImageGallery images={galleryImages} alt={product.name} />
+        </div>
+
+        {/* Right Column: Key Meta & Actions */}
+        <div className="product-info-column">
+          <h1 className="product-common-name">{commonName}</h1>
+          {scientificName && (
+            <p className="product-scientific-name">{scientificName}</p>
+          )}
+
+          <div className="meta-line">
+            <p><strong>Size:</strong> {currentSizeDisplay}</p>
+            <p><strong>Type:</strong> {product.type}</p>
+          </div>
+
+          <div className="price">
+            {isSoldOut ? (
+              <span className="sold-out-price">Sold Out</span>
+            ) : (
+              isNaN(activePrice) || !activePrice ? 'Price on Request' : `$${activePrice.toFixed(2)}`
+            )}
+          </div>
+
+          {/* Size / Variant dropdown selection */}
+          {variantsArray.length > 0 && variantsArray.some(v => v.title && v.title !== 'Default Title') && (
+            <div className="size-selector-container">
+              <label className="selector-label">Select Size / Variant:</label>
+              <select
+                value={selectedSize}
+                onChange={(e) => handleSizeChange(e.target.value)}
+                className="size-select"
+              >
+                {variantsArray.map(variant => (
+                  <option key={variant.id || variant.title} value={variant.title}>
+                    {variant.title} - ${variant.price?.toFixed(2)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Actions: Quantity Selector & Add to Cart */}
+          {!isSoldOut && (
+            <div className="action-row">
+              <div className="quantity-selector">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="qty-btn"
+                  type="button"
+                >
+                  -
+                </button>
+                <span className="qty-val">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="qty-btn"
+                  type="button"
+                >
+                  +
+                </button>
+              </div>
+
+              <Button variant="gold-filled" onClick={handleAddToCart} style={{ flex: '1 1 auto', minWidth: '150px' }}>
+                Add to Cart
+              </Button>
+            </div>
+          )}
+
+          {/* Sold out indicator if sold out */}
+          {isSoldOut && (
+            <div className="sold-out-section">
+              <div className="sold-out-banner">
+                Temporarily Sold Out
+              </div>
+
+              {/* Notify Me Form or Confirmation */}
+              <div className="notify-card">
+                {notifySubscribed ? (
+                  <div className="notify-success">
+                    You&apos;re on the list! We&apos;ll email you the moment this specimen returns.
+                  </div>
+                ) : (
+                  <form onSubmit={handleNotifyMe} className="notify-form">
+                    <label className="notify-label">
+                      Email me when available:
+                    </label>
+                    <div className="notify-input-group">
+                      <input
+                        type="email"
+                        placeholder="Your email address"
+                        required
+                        value={notifyEmail}
+                        onChange={(e) => setNotifyEmail(e.target.value)}
+                        disabled={notifyLoading}
+                        className="notify-input"
+                      />
+                      <button
+                        type="submit"
+                        disabled={notifyLoading}
+                        className="notify-submit-btn"
+                      >
+                        {notifyLoading ? 'Submitting...' : 'Notify Me'}
+                      </button>
+                    </div>
+                    {notifyError && (
+                      <p className="notify-error">
+                        {notifyError}
+                      </p>
+                    )}
+                  </form>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Secondary Actions: Wishlist and Back buttons */}
+          <div className="secondary-action-row">
+            <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: '1 1 auto' }}>
+              {isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
+            </Button>
+            <Button variant="outline" href="/shop" style={{ flex: '1 1 auto' }}>
+              Back to Shop
+            </Button>
+          </div>
+
+          {/* Render linked tag list if present */}
+          {product.tags && product.tags.length > 0 && (
+            <div className="product-tags-container">
+              <strong style={{ color: '#F5E7C4', marginRight: '0.4rem' }}>Tags:</strong>
+              {product.tags.map(tag => {
+                const label = tag.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+                return (
+                  <Link key={tag} href={`/shop?search=${encodeURIComponent(tag)}`} className="product-tag-link">
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Cold Hardiness & Thermal Guidance Card */}
+          {product.type === "Plant" && (
+            <div className="cold-guidance-card">
+              <h3 className="cold-card-title">
+                Cold Hardiness &amp; Thermal Guidance
+              </h3>
+
+              {/* Climate Zone Indicator and Selector */}
+              <div className="zone-indicator-row">
+                <span className="zone-indicator-label">
+                  My Climate Zone
+                </span>
+                <button
+                  onClick={() => window.dispatchEvent(new Event("open_zone_modal"))}
+                  className="zone-pill-btn"
+                  aria-label="Select USDA climate hardiness zone"
+                  type="button"
+                >
+                  Zone {hardinessZone} ▾
+                </button>
+              </div>
+
+              {product.minTempInGround && (
+                <div style={{ marginBottom: product.minTempInPot ? '0.8rem' : '0' }}>
+                  <h4 className="cold-hardiness-subtitle">
+                    In-Ground Hardiness ({product.minTempInGround})
+                  </h4>
+                  <p className="cold-hardiness-text">
+                    In-Ground Soil: The thermal mass of the Earth buffers extreme cold and heat swings, maintaining stable, moderate root zone temperatures.
+                  </p>
+                </div>
+              )}
+
+              {product.minTempInPot && (
+                <div>
+                  <h4 className="cold-hardiness-subtitle">
+                    In-Pot / Container Hardiness ({product.minTempInPot})
+                  </h4>
+                  <p className="cold-hardiness-text">
+                    In Pots (Containers): Containers cool down and freeze much faster because cold air surrounds all sides, exposing root systems to chilling risks at higher ambient temperatures.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Two-Column Informational Details Grid */}
+      <section className="product-details-grid">
+        {/* Column 1 (Left): Description, Care Spine, What You Will Receive, Specs */}
+        <div className="details-col details-col-left">
+          <div className="description-card">
+            <h3 className="section-card-title">Botanical Description</h3>
+            <p className="description-text">
+              {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
+            </p>
+          </div>
+
+          <CareSpine product={product} />
+
+          <WhatYouWillReceiveCard product={product} />
+
+          {renderSpecs(product)}
+        </div>
+
+        {/* Column 2 (Right): Zone Compatibility, Fulfillment, Guarantee, Policy Note */}
+        <div className="details-col details-col-right">
+          <ZoneCompatibilityBadges product={product} userZone={hardinessZone} />
+
+          <FulfillmentCard product={product} />
+
+          <LiveArrivalGuarantee />
+
+          {/* Policy notes (Standard Shipping & Nursery Pickup) */}
+          <div className="policy-note">
+            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup ($0.00 / Free) at checkout. <br />
+            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 48 hours for claim submission or exchange. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
+          </div>
+        </div>
+      </section>
+
       <style jsx global>{`
-        .product-main-container {
-          max-width: 820px;
-          margin: 2.5rem auto;
-          background: #123826;
-          border-radius: 16px;
-          box-shadow: 0 3px 14px rgba(20,40,30,0.12);
-          padding: 2rem 1.5rem;
-          color: #F5E7C4;
-          display: flex;
-          flex-direction: row;
-          gap: 2rem;
-          align-items: flex-start;
+        .pdp-wrapper {
+          padding: 2rem 1.5rem 4rem 1.5rem;
+          max-width: 1100px;
+          margin: 0 auto;
+          box-sizing: border-box;
           font-family: 'Crimson Text', serif;
-          box-sizing: border-box;
-        }
-        .product-img {
-          flex: 1;
-          min-width: 220px;
-          max-width: 280px;
-          box-sizing: border-box;
-        }
-        .product-img img {
-          width: 100%;
-          border-radius: 14px;
-          background: #e9dcbe11;
-          object-fit: cover;
-          display: block;
-        }
-        .product-info {
-          flex: 2;
-          text-align: left;
-          box-sizing: border-box;
-        }
-        .product-info h1 {
-          margin-top: 0;
-          font-size: 2rem;
-          color: #D4B06A;
-          font-family: 'Cinzel', serif;
-          line-height: 1.2;
-        }
-        .product-info p {
-          margin: 0.5rem 0;
-          font-size: 1.12rem;
-          line-height: 1.5;
-        }
-        .product-info .price {
-          color: #D4B06A;
-          font-size: 1.6rem;
-          font-weight: bold;
-          margin: 0.7rem 0;
-        }
-        .product-info .product-tag-link {
-          display: inline-block;
-          background-color: #1C3D2E;
           color: #F5E7C4;
-          border: 1px solid #749c7f;
-          border-radius: 14px;
-          padding: 0.15rem 0.55rem;
-          margin: 0 0.2rem 0.4rem 0;
-          font-size: 0.85rem;
-          text-decoration: none;
-          transition: background 0.12s, color 0.12s;
-        }
-        .product-info .product-tag-link:hover {
-          background-color: #249160;
-          color: #fffde6;
         }
         .back-link {
           color: #E9DCBE;
@@ -431,15 +615,338 @@ export default function ProductDetail({ initialProduct }) {
           font-size: 1rem;
         }
 
-        /* Plant specifications collapsible panels styled strictly to match legacy */
-        .plant-specs {
+        /* Hero Container */
+        .product-hero-container {
+          background: #123826;
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+          padding: 2rem;
+          margin-bottom: 2rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2.5rem;
+          align-items: start;
+          box-sizing: border-box;
+          border: 1px solid rgba(212, 176, 106, 0.2);
+        }
+        .product-gallery-column {
+          width: 100%;
+        }
+        .product-info-column {
+          width: 100%;
+          text-align: left;
+        }
+        .product-common-name {
+          margin-top: 0;
+          margin-bottom: 0.2rem;
+          font-size: 2rem;
+          color: #D4B06A;
+          font-family: 'Cinzel', serif;
+          line-height: 1.25;
+        }
+        .product-scientific-name {
+          margin-top: 0;
+          margin-bottom: 0.8rem;
+          font-size: 1.1rem;
+          font-style: italic;
+          color: #D4B06A;
+          font-family: 'Crimson Text', serif;
+          letter-spacing: 0.02em;
+        }
+        .meta-line {
+          display: flex;
+          gap: 1.5rem;
+          font-size: 1.05rem;
+          margin-bottom: 0.8rem;
+          color: #F5E7C4;
+        }
+        .meta-line p {
+          margin: 0;
+        }
+        .product-info-column .price {
+          color: #D4B06A;
+          font-size: 1.75rem;
+          font-weight: bold;
+          margin: 0.6rem 0 1rem 0;
+          font-family: 'Cinzel', serif;
+        }
+        .sold-out-price {
+          color: #ba2f2f;
+          font-weight: bold;
+        }
+        .size-selector-container {
+          margin-bottom: 1.2rem;
+        }
+        .selector-label {
+          font-weight: bold;
+          display: block;
+          margin-bottom: 0.4rem;
+          color: #F5E7C4;
+          font-size: 0.95rem;
+        }
+        .size-select {
+          width: 100%;
+          padding: 0.65rem 1rem;
+          border-radius: 8px;
+          border: 2px solid #D4B06A;
+          background-color: #1C3D2E;
+          color: #F4F1E1;
+          font-family: inherit;
+          fontSize: 1rem;
+          outline: none;
+        }
+        .action-row {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          margin-bottom: 1.2rem;
+          flex-wrap: wrap;
+        }
+        .quantity-selector {
+          display: flex;
+          align-items: center;
+          border: 2px solid #D4B06A;
+          border-radius: 24px;
+          overflow: hidden;
+          background-color: #1C3D2E;
+        }
+        .qty-btn {
+          background: none;
+          border: none;
+          color: #D4B06A;
+          padding: 0.5rem 1rem;
+          font-size: 1.2rem;
+          cursor: pointer;
+          outline: none;
+        }
+        .qty-val {
+          padding: 0 1rem;
+          color: #F4F1E1;
+          font-weight: bold;
+        }
+        .secondary-action-row {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          margin-bottom: 1.2rem;
+        }
+        .product-tags-container {
+          margin-top: 0.8rem;
+          margin-bottom: 1rem;
+        }
+        .product-tag-link {
+          display: inline-block;
+          background-color: #1C3D2E;
+          color: #F5E7C4;
+          border: 1px solid #749c7f;
+          border-radius: 14px;
+          padding: 0.15rem 0.55rem;
+          margin: 0 0.25rem 0.4rem 0;
+          font-size: 0.85rem;
+          text-decoration: none;
+          transition: background 0.12s, color 0.12s;
+        }
+        .product-tag-link:hover {
+          background-color: #249160;
+          color: #fffde6;
+        }
+
+        /* Sold Out Notify Section */
+        .sold-out-section {
+          margin-bottom: 1.2rem;
+        }
+        .sold-out-banner {
+          background: #ba2f2f;
+          color: #ffffff;
+          padding: 0.75rem;
+          border-radius: 8px;
+          text-align: center;
+          font-weight: bold;
+          font-size: 1.1rem;
+          margin-bottom: 0.8rem;
+          font-family: 'Cinzel', serif;
+        }
+        .notify-card {
+          background: #1C3D2E;
+          border: 1px solid #D4B06A;
+          border-radius: 8px;
+          padding: 1rem;
+          color: #F5E7C4;
+          box-sizing: border-box;
+        }
+        .notify-success {
+          color: #D4B06A;
+          font-weight: bold;
+          font-size: 1rem;
+          text-align: center;
+        }
+        .notify-form {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .notify-label {
+          font-weight: bold;
+          font-size: 0.95rem;
+          color: #D4B06A;
+        }
+        .notify-input-group {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+        .notify-input {
+          flex: 1 1 180px;
+          padding: 0.55rem 0.8rem;
+          border-radius: 8px;
+          border: 1px solid rgba(212, 176, 106, 0.4);
+          background: #D4B06A;
+          color: #00301E;
+          font-family: inherit;
+          font-size: 0.95rem;
+          outline: none;
+          box-sizing: border-box;
+        }
+        .notify-submit-btn {
+          background: #D4B06A;
+          color: #00301E;
+          border: none;
+          border-radius: 8px;
+          padding: 0.55rem 1rem;
+          font-family: inherit;
+          font-size: 0.95rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: opacity 0.2s;
+        }
+        .notify-error {
+          color: #ba2f2f;
+          margin: 0.3rem 0 0 0;
+          font-size: 0.85rem;
+          font-weight: bold;
+        }
+
+        /* Cold Hardiness Card */
+        .cold-guidance-card {
+          background: #D4B06A;
+          color: #00301E;
+          border-radius: 10px;
+          padding: 1.2rem;
+          margin-top: 1.2rem;
+          text-align: left;
+          box-sizing: border-box;
+        }
+        .cold-card-title {
+          font-family: 'Cinzel', serif;
+          font-size: 1.15rem;
+          margin: 0 0 0.8rem 0;
+          color: #00301E;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          border-bottom: 1px solid rgba(0, 48, 30, 0.25);
+          padding-bottom: 0.4rem;
+        }
+        .zone-indicator-row {
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
+        .zone-indicator-label {
+          color: #00301E;
+          font-weight: bold;
+          font-family: 'Cinzel', serif;
+          font-size: 0.85rem;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+        .zone-pill-btn {
+          background: #00301E;
+          color: #D4B06A;
+          border: 1px solid #00301E;
+          padding: 0.25rem 0.75rem;
+          border-radius: 16px;
+          font-weight: bold;
+          font-size: 0.85rem;
+          cursor: pointer;
+        }
+        .cold-hardiness-subtitle {
+          font-family: 'Cinzel', serif;
+          font-weight: bold;
+          font-size: 0.95rem;
+          margin: 0 0 0.2rem 0;
+          color: #00301E;
+        }
+        .cold-hardiness-text {
+          margin: 0;
+          font-size: 0.9rem;
+          line-height: 1.4;
+          color: #00301E;
+        }
+
+        /* Two-Column Details Grid */
+        .product-details-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: start;
+        }
+        .details-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+        }
+        .description-card {
+          background: #123826;
+          border: 1px solid #D4B06A;
+          border-radius: 10px;
+          padding: 1.25rem;
+          margin-bottom: 1rem;
+          color: #F5E7C4;
+        }
+        .section-card-title {
+          font-family: 'Cinzel', serif;
+          color: #D4B06A;
+          font-size: 1.15rem;
+          margin: 0 0 0.8rem 0;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
+          padding-bottom: 0.4rem;
+        }
+        .description-text {
+          margin: 0;
+          font-size: 1.05rem;
+          line-height: 1.55;
+          color: #F5E7C4;
+        }
+
+        .plant-specs-container {
+          background: #123826;
+          border: 1px solid #D4B06A;
+          border-radius: 10px;
+          padding: 1.25rem;
           margin-top: 1rem;
+        }
+        .specs-heading {
+          font-family: 'Cinzel', serif;
+          color: #D4B06A;
+          font-size: 1.15rem;
+          margin: 0 0 0.8rem 0;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
+          padding-bottom: 0.4rem;
+        }
+        .plant-specs {
+          margin-top: 0.5rem;
         }
         .plant-spec-detail {
           margin-top: 0.6rem;
-          background: #123826;
+          background: #1C3D2E;
           border-radius: 8px;
-          padding: 0.4rem 0.8rem;
+          padding: 0.5rem 0.8rem;
           color: #F5E7C4;
         }
         .plant-spec-summary {
@@ -464,350 +971,30 @@ export default function ProductDetail({ initialProduct }) {
           font-size: 0.95rem;
         }
 
-        @media (max-width: 800px) {
-          .product-main-container {
-            flex-direction: column;
-            align-items: center;
+        .policy-note {
+          margin-top: 1rem;
+          font-size: 0.95rem;
+          line-height: 1.45;
+          color: #d9cba9;
+          text-align: left;
+          background: rgba(0, 48, 30, 0.5);
+          border: 1px solid rgba(212,176,106,0.3);
+          border-radius: 10px;
+          padding: 1rem;
+        }
+
+        @media (max-width: 900px) {
+          .product-hero-container {
+            grid-template-columns: 1fr;
             gap: 1.5rem;
             padding: 1.5rem 1rem;
-            margin: 1rem auto;
           }
-          .product-img {
-            max-width: 320px !important;
-            width: 100% !important;
-            height: 280px !important;
-          }
-          .product-info {
-            text-align: center;
-            width: 100%;
+          .product-details-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
           }
         }
       `}</style>
-
-      <Link href="/shop" className="back-link">
-        &larr; Back to Shop
-      </Link>
-
-      <main className="product-main-container">
-        {/* Product Image */}
-        <div className="product-img" style={{ position: 'relative', width: '100%', height: '280px', minWidth: '220px', maxWidth: '280px' }}>
-          <Image
-            src={productImage}
-            alt={product.name}
-            fill
-            sizes="(max-width: 800px) 100vw, 280px"
-            style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
-            priority
-            unoptimized={!isSanityCdnUrl(productImage)}
-          />
-        </div>
-
-        {/* Product Meta, Specifications, Actions */}
-        <div className="product-info">
-          <h1>{product.name}</h1>
-          <p><strong>Size(s):</strong> {product.sizes || 'Standard Pot'}</p>
-          <p><strong>Type:</strong> {product.type}</p>
-          <p>
-            {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
-          </p>
-
-          <div className="price">
-            {isSoldOut ? (
-              <span style={{ color: '#ba2f2f', fontWeight: 'bold' }}>Sold Out</span>
-            ) : (
-              isNaN(activePrice) || !activePrice ? 'Price on Request' : `$${activePrice.toFixed(2)}`
-            )}
-          </div>
-
-          {/* Size / Variant dropdown selection */}
-          {variantsArray.length > 0 && variantsArray.some(v => v.title && v.title !== 'Default Title') && (
-            <div style={{ marginBottom: '1.2rem', textAlign: 'left' }}>
-              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem', color: '#F5E7C4' }}>Select Size:</label>
-              <select
-                value={selectedSize}
-                onChange={(e) => handleSizeChange(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 1rem',
-                  borderRadius: '8px',
-                  border: '2px solid #D4B06A',
-                  backgroundColor: '#1C3D2E',
-                  color: '#F4F1E1',
-                  fontFamily: 'inherit',
-                  fontSize: '1rem',
-                  outline: 'none'
-                }}
-              >
-                {variantsArray.map(variant => (
-                  <option key={variant.id || variant.title} value={variant.title}>
-                    {variant.title} - ${variant.price?.toFixed(2)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
-          {/* Actions: Quantity Selector & Add to Cart */}
-          {!isSoldOut && (
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', border: '2px solid #D4B06A', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#1C3D2E' }}>
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer', outline: 'none' }}
-                >
-                  -
-                </button>
-                <span style={{ padding: '0 1rem', color: '#F4F1E1', fontWeight: 'bold' }}>{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.5rem 1rem', fontSize: '1.2rem', cursor: 'pointer', outline: 'none' }}
-                >
-                  +
-                </button>
-              </div>
-
-              <Button variant="gold-filled" onClick={handleAddToCart} style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                Add to Cart
-              </Button>
-            </div>
-          )}
-
-          {/* Sold out indicator if sold out */}
-          {isSoldOut && (
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{
-                background: '#ba2f2f',
-                color: '#ffffff',
-                padding: '0.8rem',
-                borderRadius: '8px',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                fontSize: '1.2rem',
-                marginBottom: '1rem'
-              }}>
-                Temporarily Sold Out
-              </div>
-
-              {/* Notify Me Form or Confirmation */}
-              <div style={{
-                background: '#1C3D2E',
-                border: '1px solid #D4B06A',
-                borderRadius: '8px',
-                padding: '1.2rem',
-                color: '#F5E7C4',
-                textAlign: 'left',
-                boxSizing: 'border-box'
-              }}>
-                {notifySubscribed ? (
-                  <div style={{
-                    color: '#D4B06A',
-                    fontWeight: 'bold',
-                    fontSize: '1.1rem',
-                    textAlign: 'center',
-                    fontFamily: "'Crimson Text', serif"
-                  }}>
-                    You&apos;re on the list! We&apos;ll email you the moment this specimen returns.
-                  </div>
-                ) : (
-                  <form onSubmit={handleNotifyMe} style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-                    <label style={{ fontWeight: 'bold', fontSize: '1rem', color: '#D4B06A', fontFamily: "'Crimson Text', serif" }}>
-                      Email me when available:
-                    </label>
-                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <input
-                        type="email"
-                        placeholder="Your email address"
-                        required
-                        value={notifyEmail}
-                        onChange={(e) => setNotifyEmail(e.target.value)}
-                        disabled={notifyLoading}
-                        style={{
-                          flex: '1 1 200px',
-                          padding: '0.6rem 0.8rem',
-                          borderRadius: '8px',
-                          border: '1px solid rgba(212, 176, 106, 0.4)',
-                          background: '#D4B06A',
-                          color: '#00301E',
-                          fontFamily: 'inherit',
-                          fontSize: '1rem',
-                          outline: 'none',
-                          boxSizing: 'border-box'
-                        }}
-                      />
-                      <button
-                        type="submit"
-                        disabled={notifyLoading}
-                        style={{
-                          background: '#D4B06A',
-                          color: '#00301E',
-                          border: 'none',
-                          borderRadius: '8px',
-                          padding: '0.6rem 1.2rem',
-                          fontFamily: 'inherit',
-                          fontSize: '1rem',
-                          fontWeight: 'bold',
-                          cursor: notifyLoading ? 'not-allowed' : 'pointer',
-                          flex: '0 0 auto',
-                          transition: 'opacity 0.2s',
-                          opacity: notifyLoading ? 0.7 : 1
-                        }}
-                      >
-                        {notifyLoading ? 'Submitting...' : 'Notify Me'}
-                      </button>
-                    </div>
-                    {notifyError && (
-                      <p style={{ color: '#ba2f2f', margin: '0.4rem 0 0 0', fontSize: '0.9rem', fontWeight: 'bold' }}>
-                        {notifyError}
-                      </p>
-                    )}
-                  </form>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Secondary Actions: Wishlist and Back buttons */}
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1.5rem', justifyContent: 'center' }}>
-            <Button variant="outline" onClick={() => toggleWishlist(product)} style={{ flex: '1 1 auto' }}>
-              {isWishlisted ? 'In Wishlist' : 'Add to Wishlist'}
-            </Button>
-            <Button variant="outline" href="/shop" style={{ flex: '1 1 auto' }}>
-              Back to Shop
-            </Button>
-          </div>
-
-          {/* Render linked tag list if present */}
-          {product.tags && product.tags.length > 0 && (
-            <div style={{ marginTop: '0.8rem', marginBottom: '1rem', textAlign: 'left' }}>
-              <strong style={{ color: '#F5E7C4' }}>Tags: </strong>
-              {product.tags.map(tag => {
-                const label = tag.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
-                return (
-                  <Link key={tag} href={`/shop?search=${encodeURIComponent(tag)}`} className="product-tag-link">
-                    {label}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Care Spine Quick Guide */}
-          <CareSpine product={product} />
-
-          {/* USDA Zone Compatibility Badges & Microclimate Tip */}
-          <ZoneCompatibilityBadges product={product} userZone={hardinessZone} />
-
-          {/* Unified Fulfillment & Ag Restrictions Card */}
-          <FulfillmentCard product={product} />
-
-          {/* What You Will Receive Card */}
-          <WhatYouWillReceiveCard product={product} />
-
-          {/* Live-Arrival & Establishment Guarantee Card */}
-          <LiveArrivalGuarantee />
-
-          {/* Collapsible Plant specifications details panels */}
-          {renderSpecs(product)}
-
-          {/* Cold Hardiness & Thermal Guidance Card */}
-          {product.type === "Plant" && (
-            <div style={{
-              background: '#D4B06A',
-              color: '#00301E',
-              borderRadius: '8px',
-              padding: '1.25rem',
-              marginTop: '1.5rem',
-              textAlign: 'left',
-              fontFamily: "'Crimson Text', serif",
-              boxSizing: 'border-box'
-            }}>
-              <h3 style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: '1.25rem',
-                margin: '0 0 1rem 0',
-                color: '#00301E',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                borderBottom: '1px solid rgba(0, 48, 30, 0.25)',
-                paddingBottom: '0.5rem'
-              }}>
-                Cold Hardiness &amp; Thermal Guidance
-              </h3>
-
-              {/* Climate Zone Indicator and Selector */}
-              <div style={{
-                marginBottom: '1.2rem',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.4rem'
-              }}>
-                <span style={{ color: '#00301E', fontWeight: 'bold', fontFamily: "'Cinzel', serif", fontSize: '0.85rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                  My Climate Zone
-                </span>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                  <button
-                    onClick={() => window.dispatchEvent(new Event("open_zone_modal"))}
-                    className="zone-pill-btn"
-                    aria-label="Select USDA climate hardiness zone"
-                  >
-                    Zone {hardinessZone} ▾
-                  </button>
-                </div>
-              </div>
-
-              {product.minTempInGround && (
-                <div style={{ marginBottom: product.minTempInPot ? '1.1rem' : '0' }}>
-                  <h4 style={{
-                    fontFamily: "'Cinzel', serif",
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                    margin: '0 0 0.3rem 0',
-                    color: '#00301E'
-                  }}>
-                    In-Ground Hardiness ({product.minTempInGround})
-                  </h4>
-                  <p style={{
-                    margin: 0,
-                    fontSize: '0.95rem',
-                    lineHeight: '1.4',
-                    color: '#00301E'
-                  }}>
-                    In-Ground Soil: The thermal mass of the Earth buffers extreme cold and heat swings, maintaining stable, moderate root zone temperatures.
-                  </p>
-                </div>
-              )}
-
-              {product.minTempInPot && (
-                <div>
-                  <h4 style={{
-                    fontFamily: "'Cinzel', serif",
-                    fontWeight: 'bold',
-                    fontSize: '1rem',
-                    margin: '0 0 0.3rem 0',
-                    color: '#00301E'
-                  }}>
-                    In-Pot / Container Hardiness ({product.minTempInPot})
-                  </h4>
-                  <p style={{
-                    margin: 0,
-                    fontSize: '0.95rem',
-                    lineHeight: '1.4',
-                    color: '#00301E'
-                  }}>
-                    In Pots (Containers): Containers cool down and freeze much faster because cold air surrounds all sides, exposing root systems to chilling risks at higher ambient temperatures.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Policy notes (Standard Shipping & Nursery Pickup) */}
-          <div className="policy-note" style={{ marginTop: '1.5rem', fontSize: '0.95rem', lineHeight: '1.45', color: '#d9cba9', textAlign: 'left', borderTop: '1px solid rgba(212,176,106,0.2)', paddingTop: '1.2rem' }}>
-            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup ($0.00 / Free) at checkout. <br />
-            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 48 hours for claim submission or exchange. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
-          </div>
-        </div>
-      </main>
     </div>
   );
 }

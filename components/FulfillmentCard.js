@@ -9,7 +9,12 @@ export default function FulfillmentCard({ product, userZoneTemp }) {
   return (
     <div className="fulfillment-card">
       <div className="card-header">
-
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="card-icon">
+          <rect x="1" y="3" width="15" height="13" rx="2"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>
         <h3 className="card-title">Fulfillment &amp; Dispatch Guidance</h3>
       </div>
 
@@ -52,20 +57,20 @@ export default function FulfillmentCard({ product, userZoneTemp }) {
           border: 1px solid #D4B06A;
           border-radius: 10px;
           padding: 1.25rem;
-          margin: 1.5rem 0;
+          margin: 1rem 0;
           color: #F5E7C4;
           font-family: 'Crimson Text', serif;
         }
         .card-header {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.6rem;
           margin-bottom: 1rem;
           border-bottom: 1px solid rgba(212, 176, 106, 0.25);
           padding-bottom: 0.5rem;
         }
         .card-icon {
-          font-size: 1.2rem;
+          flex-shrink: 0;
         }
         .card-title {
           font-family: 'Cinzel', serif;
