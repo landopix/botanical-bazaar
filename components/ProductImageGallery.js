@@ -63,7 +63,7 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
           alt={`${alt} - Image ${currentIndex + 1}`}
           fill
           sizes="(max-width: 800px) 100vw, 400px"
-          style={{ objectFit: 'cover', borderRadius: '14px', background: '#e9dcbe11' }}
+          style={{ objectFit: 'contain', borderRadius: '14px' }}
           priority={currentIndex === 0}
           unoptimized={!isSanityCdnUrl(activeImage)}
         />

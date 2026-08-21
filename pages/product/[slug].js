@@ -577,7 +577,7 @@ export default function ProductDetail({ initialProduct }) {
 
           <CareSpine product={product} />
 
-          <WhatYouWillReceiveCard product={product} />
+          <WhatYouWillReceiveCard product={product} selectedVariant={selectedVariant} />
 
           {renderSpecs(product)}
         </div>
