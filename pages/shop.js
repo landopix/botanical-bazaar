@@ -219,21 +219,21 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedCategory) {
       const catLower = selectedCategory.toLowerCase();
       result = result.filter((product) => {
-        const matchesCollectionHandle =
+        const matchesCollectionHandle = (handle) =>
           Array.isArray(product?.collectionHandles) &&
-          product.collectionHandles.some((h) => h?.toLowerCase() === catLower);
-        const matchesCategory =
+          product.collectionHandles.some((h) => h?.toLowerCase() === handle.toLowerCase());
+        const matchesCategory = (cat) =>
           Array.isArray(product?.categories) &&
-          product.categories.some((pc) => pc?.toLowerCase() === catLower);
-        const matchesTag =
+          product.categories.some((pc) => pc?.toLowerCase() === cat.toLowerCase());
+        const matchesTag = (t) =>
           Array.isArray(product?.tags) &&
-          product.tags.some((pt) => pt?.toLowerCase() === catLower);
+          product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
         const textMatches = (keyword) =>
           `${product?.name || ""} ${product?.description || ""}`
             .toLowerCase()
-            .includes(keyword);
+            .includes(keyword.toLowerCase());
 
-        if (matchesCollectionHandle || matchesCategory || matchesTag) return true;
+        if (matchesCollectionHandle(catLower) || matchesCategory(catLower) || matchesTag(catLower)) return true;
 
         if (catLower === "houseplants") {
           return matchesTag("houseplant") || textMatches("houseplant");

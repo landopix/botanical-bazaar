@@ -30,6 +30,16 @@ export default function ProductCard({
   const sizes = product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
   const type = product?.type || product?.category || 'Tropical Plant';
 
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
+
+  const handleWishlistClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (toggleWishlist) {
+      toggleWishlist(product);
+    }
+  };
+
   return (
     <div
       className={`product-card flex flex-col justify-between h-full bg-[#F5E7C4] border border-[#D4B06A] rounded-xl overflow-hidden shadow-md relative ${
@@ -68,34 +78,37 @@ export default function ProductCard({
         </div>
       )}
 
-      {/* Wishlist Floating Heart Button */}
+      {/* Floating Wishlist Heart Trigger */}
       <button
         type="button"
-        onClick={handleWishlistToggle}
-        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        onClick={handleWishlistClick}
+        aria-label={isWishlisted ? `Remove ${name} from Wishlist` : `Save ${name} to Wishlist`}
+        title={isWishlisted ? "In Wishlist Sanctuary" : "Add to Wishlist"}
         style={{
           position: 'absolute',
-          top: '12px',
-          right: '12px',
+          top: '10px',
+          right: '10px',
+          zIndex: 15,
+          background: 'rgba(0, 48, 30, 0.75)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          border: '1px solid #D4B06A',
+          borderRadius: '50%',
           width: '36px',
           height: '36px',
-          borderRadius: '50%',
-          backgroundColor: '#00301E',
-          border: '1px solid #D4B06A',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          zIndex: 11,
           padding: 0,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
-          transition: 'transform 0.2s ease, background-color 0.2s ease'
+          transition: 'all 0.2s ease',
+          boxShadow: '0 2px 6px rgba(0,0,0,0.3)'
         }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill={isWishlisted ? "#D4B06A" : "none"}
           stroke="#D4B06A"
@@ -103,7 +116,7 @@ export default function ProductCard({
           strokeLinecap="round"
           strokeLinejoin="round"
         >
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
       </button>
 
