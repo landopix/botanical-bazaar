@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
 
-export default function ProductCard({
+function ProductCard({
   product = {},
   titleClamp = 2,
   descClamp = 3,
   className = ''
 }) {
   const { wishlist, toggleWishlist } = useWishlist();
+
   const slug = product?.slug?.current || product?.slug || '';
   const name = product?.name ?? product?.title ?? 'Botanical Specimen';
   const price = product?.price;
@@ -23,7 +24,9 @@ export default function ProductCard({
   const sizes = product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
   const type = product?.type || product?.category || 'Tropical Plant';
 
-  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(
+    item => (item?.slug?.current || item?.slug) === slug || item?.id === product?.id
+  );
 
   const handleWishlistClick = (e) => {
     e.preventDefault();
@@ -201,3 +204,6 @@ export default function ProductCard({
     </div>
   );
 }
+
+// ⚡ Bolt Optimization: Memoize ProductCard to prevent unnecessary grid re-renders when parent state updates
+export default memo(ProductCard);
