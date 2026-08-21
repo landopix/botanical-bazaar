@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { isSanityCdnUrl } from '../lib/image-utils';
+import { useWishlist } from '../context/WishlistContext';
 
 export default function ProductCard({
   product = {},
@@ -9,6 +10,14 @@ export default function ProductCard({
   descClamp = 3,
   className = ''
 }) {
+  const { wishlist, toggleWishlist } = useWishlist();
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item.slug === product.slug || item.id === product.id));
+
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
+  };
   const slug = product?.slug?.current || product?.slug || '';
   const name = product?.name ?? product?.title ?? 'Botanical Specimen';
   const price = product?.price;
@@ -58,6 +67,45 @@ export default function ProductCard({
           Sold Out
         </div>
       )}
+
+      {/* Wishlist Floating Heart Button */}
+      <button
+        type="button"
+        onClick={handleWishlistToggle}
+        aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+        style={{
+          position: 'absolute',
+          top: '12px',
+          right: '12px',
+          width: '36px',
+          height: '36px',
+          borderRadius: '50%',
+          backgroundColor: '#00301E',
+          border: '1px solid #D4B06A',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          zIndex: 11,
+          padding: 0,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+          transition: 'transform 0.2s ease, background-color 0.2s ease'
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill={isWishlisted ? "#D4B06A" : "none"}
+          stroke="#D4B06A"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+      </button>
 
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1, padding: '1.2rem 1.2rem 0 1.2rem' }}>
         <Link

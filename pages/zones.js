@@ -16,9 +16,39 @@ export default function Zones() {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem' }}>Best Plants for Your Zone</h1>
-      <p style={{ fontSize: '1.2rem', lineHeight: '1.6', textAlign: 'center', marginBottom: '3rem', color: '#E9DCBE' }}>
+      <p style={{ fontSize: '1.2rem', lineHeight: '1.6', textAlign: 'center', marginBottom: '2.5rem', color: '#E9DCBE' }}>
         Learn about local Florida microclimates and choose highly resilient species fully compatible with USDA Zones 9b, 10a, and 11.
       </p>
+
+      {/* USDA Hardiness Zone Map Visual Reference */}
+      <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem', fontSize: '1.4rem' }}>
+          USDA Plant Hardiness Zone Map
+        </h2>
+        <div
+          style={{
+            background: '#123826',
+            padding: '0.75rem',
+            borderRadius: '16px',
+            border: '1px solid #D4B06A',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            overflow: 'hidden'
+          }}
+        >
+          <img
+            src="/assets/usda-map-official.png"
+            alt="USDA Plant Hardiness Zone Map Reference"
+            style={{
+              width: '100%',
+              height: 'auto',
+              maxHeight: '500px',
+              objectFit: 'contain',
+              borderRadius: '10px',
+              display: 'block'
+            }}
+          />
+        </div>
+      </div>
 
       <div style={{ background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', marginBottom: '3rem' }}>
         <h2 style={{ color: '#D4B06A', marginTop: 0, fontFamily: 'Cinzel, serif' }}>St. Petersburg & Tampa Hardiness</h2>

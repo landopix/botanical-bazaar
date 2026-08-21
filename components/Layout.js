@@ -40,6 +40,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import { getAllProducts } from "../lib/shopify";
 
 const staticPages = [
   {
@@ -197,9 +198,26 @@ export default function Layout({ children }) {
 
   // Load products for the live navigation search
   useEffect(() => {
-    const loadProducts = () => {
-      setAllProducts(window.PRODUCTS || []);
-    };
+    let isMounted = true;
+    async function fetchSearchProducts() {
+      try {
+        const products = await getAllProducts();
+        if (isMounted && Array.isArray(products) && products.length > 0) {
+          setAllProducts(products);
+          if (typeof window !== "undefined") {
+            window.PRODUCTS = products;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch live products for global search:", err);
+        if (isMounted && typeof window !== "undefined" && window.PRODUCTS) {
+          setAllProducts(window.PRODUCTS);
+        }
+      }
+    }
+
+    fetchSearchProducts();
+
     if (typeof window !== "undefined") {
       const savedZone = localStorage.getItem("user_hardiness_zone");
       if (savedZone) {
@@ -221,11 +239,8 @@ export default function Layout({ children }) {
       window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
       window.addEventListener("open_zone_modal", handleOpenZoneModal);
 
-      if (window.PRODUCTS) {
-        loadProducts();
-      }
-
       return () => {
+        isMounted = false;
         window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
         window.removeEventListener("open_zone_modal", handleOpenZoneModal);
       };
@@ -475,7 +490,7 @@ export default function Layout({ children }) {
     query !== ""
       ? allProducts
           .filter((p) => {
-            let haystack = [p.name, p.type, p.description]
+            let haystack = [p.name, p.title, p.type, p.description, p.sku, p.custom?.pot_size, p.custom?.hardiness_zone]
               .filter(Boolean)
               .join(" ")
               .toLowerCase();
@@ -483,6 +498,8 @@ export default function Layout({ children }) {
               haystack += " " + p.categories.join(" ").toLowerCase();
             if (Array.isArray(p.tags))
               haystack += " " + p.tags.join(" ").toLowerCase();
+            if (Array.isArray(p.collections))
+              haystack += " " + p.collections.join(" ").toLowerCase();
             return haystack.includes(query);
           })
           .slice(0, 10)
@@ -713,7 +730,7 @@ export default function Layout({ children }) {
         </Link>
 
         {/* Account Action Link */}
-        <Link href="/account" className="account-btn" aria-label="My account dashboard">
+        <a href="https://the-botanical-bazaar.myshopify.com/account/login" className="account-btn" aria-label="My account login">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -729,7 +746,7 @@ export default function Layout({ children }) {
             <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-        </Link>
+        </a>
       </div>
 
       {/* Stateful Navigation Sidebar */}
@@ -1049,7 +1066,7 @@ export default function Layout({ children }) {
             <Link href="/faq">FAQ</Link>
             <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
             <Link href="/returns">Refunds &amp; Guarantee</Link>
-            <Link href="/account">Track Order</Link>
+            <a href="https://the-botanical-bazaar.myshopify.com/account/login">Track Order / Account</a>
             <Link href="/terms">Terms</Link>
           </div>
           <div className="footer-column">
@@ -1467,7 +1484,7 @@ export default function Layout({ children }) {
             role="dialog"
             aria-modal="true"
             aria-labelledby="zone-modal-title"
-            style={{ maxWidth: '440px' }}
+            style={{ maxWidth: '440px', maxHeight: '90vh', overflowY: 'auto' }}
           >
             <div className="zone-modal-header">
               <h3 id="zone-modal-title" className="zone-modal-title">Select Your Hardiness Zone</h3>

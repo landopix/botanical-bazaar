@@ -18,7 +18,7 @@ export default function Success() {
         We have secured your selected tropical plant companions! Our nursery guides are preparing your collection. We will email or text you shortly to coordinate your personalized local pickup slot in St. Petersburg, FL.
       </p>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-        <Button variant="gold-filled" href="/account">Go to Dashboard</Button>
+        <Button variant="gold-filled" href="https://the-botanical-bazaar.myshopify.com/account/login">Go to Customer Account</Button>
         <Button variant="outline" href="/shop">Browse More Catalog</Button>
       </div>
     </div>

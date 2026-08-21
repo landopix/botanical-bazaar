@@ -123,7 +123,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                 const itemImage = item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png";
                 return (
                   <div key={`${item.slug}-${item.selectedSize || 'std'}`} className="cart-item">
-                    <div className="item-image">
+                    <Link href={`/product/${item.slug}`} onClick={onClose} className="item-image">
                       <Image
                         src={itemImage}
                         alt={item.name}
@@ -131,9 +131,11 @@ export default function CartDrawer({ isOpen, onClose }) {
                         height={60}
                         unoptimized={!isSanityCdnUrl(itemImage)}
                       />
-                    </div>
+                    </Link>
                     <div className="item-details">
-                      <div className="item-name">{item.name}</div>
+                      <Link href={`/product/${item.slug}`} onClick={onClose} className="item-name-link">
+                        <div className="item-name">{item.name}</div>
+                      </Link>
                       <div className="item-meta">{item.selectedSize || 'Standard'}</div>
                       {agCheck.isRestricted && (
                         <span className="item-restriction-tag">FL Restricted</span>
@@ -318,6 +320,7 @@ export default function CartDrawer({ isOpen, onClose }) {
         .item-details {
           flex: 1;
         }
+        .item-name-link { text-decoration: none; color: inherit; }
         .item-name {
           font-weight: bold;
           color: #F5E7C4;
