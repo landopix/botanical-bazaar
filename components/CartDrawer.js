@@ -123,7 +123,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                 const itemImage = item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png";
                 return (
                   <div key={`${item.slug}-${item.selectedSize || 'std'}`} className="cart-item">
-                    <Link href={`/product/${item.slug}`} onClick={onClose} className="item-image">
+                    <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} onClick={onClose} className="item-image">
                       <Image
                         src={itemImage}
                         alt={item.name}
@@ -133,8 +133,8 @@ export default function CartDrawer({ isOpen, onClose }) {
                       />
                     </Link>
                     <div className="item-details">
-                      <Link href={`/product/${item.slug}`} onClick={onClose} className="item-name-link">
-                        <div className="item-name">{item.name}</div>
+                      <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} onClick={onClose} className="item-name-link">
+                        <div className="item-name">{String(item.name || "")}</div>
                       </Link>
                       <div className="item-meta">{item.selectedSize || 'Standard'}</div>
                       {agCheck.isRestricted && (

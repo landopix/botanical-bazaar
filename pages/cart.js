@@ -106,7 +106,7 @@ export default function Cart() {
             }}
           >
             <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-              <Link href={`/product/${item.slug}`}>
+              <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`}>
                 <img
                   src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
                   alt={item.name}
@@ -115,8 +115,8 @@ export default function Cart() {
                 />
               </Link>
               <div>
-                <Link href={`/product/${item.slug}`} style={{ textDecoration: 'none' }}>
-                  <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif', cursor: 'pointer' }}>{item.name}</h3>
+                <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} style={{ textDecoration: 'none' }}>
+                  <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif', cursor: 'pointer' }}>{String(item.name || "")}</h3>
                 </Link>
                 <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>Size: {item.selectedSize || 'Default'}</p>
                 <p style={{ margin: '0', fontWeight: 'bold', color: '#F4F1E1' }}>${(item.price || 0).toFixed(2)}</p>
