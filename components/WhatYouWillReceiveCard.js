@@ -11,7 +11,11 @@ export default function WhatYouWillReceiveCard({ product }) {
   return (
     <div className="receive-card">
       <div className="card-header">
-
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="card-icon">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
         <h3 className="card-title">What You Will Receive</h3>
       </div>
 
@@ -35,7 +39,11 @@ export default function WhatYouWillReceiveCard({ product }) {
       </div>
 
       <div className="photo-disclosure">
-
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="disclosure-icon">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
         <p className="disclosure-text">
           <strong>Representative Photo Disclosure:</strong> You will receive a healthy specimen similar in size, form, and fullness to the featured botanical photography. Each plant is unique and individually grown on our St. Petersburg benches.
         </p>
@@ -47,20 +55,20 @@ export default function WhatYouWillReceiveCard({ product }) {
           border: 1px solid #D4B06A;
           border-radius: 10px;
           padding: 1.25rem;
-          margin: 1.5rem 0;
+          margin: 1rem 0;
           color: #F5E7C4;
           font-family: 'Crimson Text', serif;
         }
         .card-header {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.6rem;
           margin-bottom: 1rem;
           border-bottom: 1px solid rgba(212, 176, 106, 0.25);
           padding-bottom: 0.5rem;
         }
         .card-icon {
-          font-size: 1.2rem;
+          flex-shrink: 0;
         }
         .card-title {
           font-family: 'Cinzel', serif;
@@ -72,7 +80,7 @@ export default function WhatYouWillReceiveCard({ product }) {
         }
         .specs-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 0.75rem;
           margin-bottom: 1rem;
         }
@@ -106,7 +114,8 @@ export default function WhatYouWillReceiveCard({ product }) {
           align-items: flex-start;
         }
         .disclosure-icon {
-          font-size: 1.1rem;
+          flex-shrink: 0;
+          margin-top: 2px;
         }
         .disclosure-text {
           margin: 0;
