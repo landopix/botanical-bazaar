@@ -9,7 +9,16 @@ const resendToEmail = 'info@thebotanicalbazaar.com';
 const isValidKeyFormat = typeof resendApiKey === 'string' && resendApiKey.startsWith('re_');
 const resend = isValidKeyFormat ? new Resend(resendApiKey) : null;
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isSimpleEmail(str) {
+  if (typeof str !== "string") return false;
+  const email = str.trim();
+  if (!email || email.length > 254 || email.includes(" ")) return false;
+  const atIndex = email.indexOf("@");
+  if (atIndex <= 0 || atIndex !== email.lastIndexOf("@") || atIndex === email.length - 1) return false;
+  const domain = email.slice(atIndex + 1);
+  const dotIndex = domain.indexOf(".");
+  return dotIndex > 0 && dotIndex < domain.length - 1;
+}
 
 function escapeHtml(str) {
   if (typeof str !== 'string') return '';
@@ -70,7 +79,7 @@ export default async function formSubmitHandler(req, res) {
   const cleanEmail = email.trim();
   const cleanName = name.trim();
 
-  if (!EMAIL_REGEX.test(cleanEmail)) {
+  if (!isSimpleEmail(cleanEmail)) {
     return res.status(400).json({ error: 'A valid email address is required.' });
   }
 

@@ -6,7 +6,16 @@ const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 // Standard basic email validation regex
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function isSimpleEmail(str) {
+  if (typeof str !== "string") return false;
+  const email = str.trim();
+  if (!email || email.length > 254 || email.includes(" ")) return false;
+  const atIndex = email.indexOf("@");
+  if (atIndex <= 0 || atIndex !== email.lastIndexOf("@") || atIndex === email.length - 1) return false;
+  const domain = email.slice(atIndex + 1);
+  const dotIndex = domain.indexOf(".");
+  return dotIndex > 0 && dotIndex < domain.length - 1;
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -38,7 +47,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'At least one valid recipient email address is required.' });
   }
 
-  const invalidEmails = targetList.filter(email => !EMAIL_REGEX.test(email));
+  const invalidEmails = targetList.filter(email => !isSimpleEmail(email));
   if (invalidEmails.length > 0) {
     return res.status(400).json({ error: `Invalid email address format: ${invalidEmails.join(', ')}` });
   }
