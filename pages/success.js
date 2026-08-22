@@ -74,5 +74,6 @@ export default function Success() {
         <Button variant="outline" href="/shop">Browse More Catalog</Button>
       </div>
     </div>
+    </>
   );
 }
