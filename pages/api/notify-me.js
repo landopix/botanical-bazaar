@@ -7,15 +7,31 @@ export default async function notifyMeHandler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { email, slug, name, type } = req.body;
+  const { email, slug, name, type } = req.body || {};
 
-  if (!email || !email.trim()) {
-    return res.status(400).json({ error: 'Email is required.' });
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Validate and sanitize email
+  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+    return res.status(400).json({ error: 'A valid email address is required.' });
   }
 
-  if (!slug || !name) {
-    return res.status(400).json({ error: 'Product details are required.' });
+  // Validate and sanitize product details
+  if (
+    !slug ||
+    typeof slug !== 'string' ||
+    !slug.trim() ||
+    !name ||
+    typeof name !== 'string' ||
+    !name.trim()
+  ) {
+    return res.status(400).json({ error: 'Valid product details (slug and name) are required.' });
   }
+
+  const cleanEmail = email.trim();
+  const cleanSlug = slug.trim();
+  const cleanName = name.trim();
+  const cleanType = typeof type === 'string' && type.trim() ? type.trim() : 'restock_notification';
 
   try {
     const dirPath = path.join(process.cwd(), 'content');
@@ -36,10 +52,10 @@ export default async function notifyMeHandler(req, res) {
     }
 
     const newRequest = {
-      email: email.trim(),
-      slug,
-      name,
-      type: type || 'restock_notification',
+      email: cleanEmail,
+      slug: cleanSlug,
+      name: cleanName,
+      type: cleanType,
       timestamp: new Date().toISOString()
     };
 
@@ -47,7 +63,7 @@ export default async function notifyMeHandler(req, res) {
 
     fs.writeFileSync(filePath, JSON.stringify(requests, null, 2), 'utf8');
 
-    console.log(`[Notify Me Capture] Registered request successfully for ${email.trim()} on ${name} (${slug}) [type: ${newRequest.type}]`);
+    console.log(`[Notify Me Capture] Registered request successfully for ${cleanEmail} on ${cleanName} (${cleanSlug}) [type: ${newRequest.type}]`);
 
     return res.status(200).json({
       success: true,
