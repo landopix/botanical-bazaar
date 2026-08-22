@@ -11,7 +11,6 @@ export default function ProductCard({
   className = ''
 }) {
   const { wishlist, toggleWishlist } = useWishlist();
-  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item.slug === product.slug || item.id === product.id));
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
@@ -84,6 +83,7 @@ export default function ProductCard({
         onClick={handleWishlistClick}
         aria-label={isWishlisted ? `Remove ${name} from Wishlist` : `Save ${name} to Wishlist`}
         title={isWishlisted ? "In Wishlist Sanctuary" : "Add to Wishlist"}
+        className="wishlist-btn-toggle"
         style={{
           position: 'absolute',
           top: '10px',
@@ -205,6 +205,12 @@ export default function ProductCard({
           View Plant
         </Link>
       </div>
+      <style jsx>{`
+        .wishlist-btn-toggle:focus-visible {
+          outline: 2px solid #D4B06A !important;
+          outline-offset: 2px !important;
+        }
+      `}</style>
     </div>
   );
 }

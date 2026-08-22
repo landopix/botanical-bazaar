@@ -9,6 +9,7 @@ export default function CartDrawer({ isOpen, onClose }) {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
+  const [announcement, setAnnouncement] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -67,6 +68,7 @@ export default function CartDrawer({ isOpen, onClose }) {
       <div className="cart-drawer" onClick={(e) => e.stopPropagation()}>
         <div className="drawer-header">
           <h2 className="drawer-title">Your Cart</h2>
+          <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
           <button onClick={onClose} className="close-btn" aria-label="Close cart drawer">✕</button>
         </div>
 
@@ -142,12 +144,12 @@ export default function CartDrawer({ isOpen, onClose }) {
                       )}
                       <div className="item-price">${(item.price * item.quantity).toFixed(2)}</div>
                       <div className="quantity-controls">
-                        <button onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity - 1)}>-</button>
+                        <button onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}>-</button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity + 1)}>+</button>
+                        <button onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}>+</button>
                       </div>
                     </div>
-                    <button onClick={() => removeFromCart(item.slug, item.selectedSize)} className="remove-btn" aria-label="Remove item">
+                    <button onClick={() => { removeFromCart(item.slug, item.selectedSize); setAnnouncement(`Removed ${item.name} from cart`); }} className="remove-btn" aria-label={`Remove ${item.name} from cart`}>
                       ✕
                     </button>
                   </div>
@@ -169,10 +171,18 @@ export default function CartDrawer({ isOpen, onClose }) {
                   disabled={isRedirecting}
                   className="checkout-btn"
                 >
-                  {isRedirecting ? 'Redirecting to secure checkout...' : 'Proceed to Checkout'}
+                  {isRedirecting ? (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ animation: 'spin 1s linear infinite' }}>
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
+                      <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" style={{ opacity: 0.75 }}></path>
+                    </svg>
+                    Redirecting to secure checkout...
+                  </span>
+                ) : 'Proceed to Checkout'}
                 </button>
                 {checkoutError && (
-                  <p className="checkout-error-msg">{checkoutError}</p>
+                  <p className="checkout-error-msg" role="alert" aria-live="assertive">{checkoutError}</p>
                 )}
               </div>
             </div>
@@ -417,6 +427,7 @@ export default function CartDrawer({ isOpen, onClose }) {
           opacity: 0.8;
           cursor: not-allowed;
         }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .checkout-error-msg {
           color: #ff6b6b;
           font-size: 0.85rem;

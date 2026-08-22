@@ -9,6 +9,7 @@ export default function Cart() {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
+  const [announcement, setAnnouncement] = useState('');
 
   const handleCheckout = async (e) => {
     if (e) e.preventDefault();
@@ -71,6 +72,7 @@ export default function Cart() {
       </Head>
 
       <h1 style={{ color: '#D4B06A', textAlign: 'center', marginBottom: '2.5rem' }}>Shopping Cart</h1>
+      <div style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }} role="status" aria-live="polite">{announcement}</div>
 
       {/* Cold Hardiness Advisory Banner */}
       {cart.some(item => getZoneCompatibility(item, userHardinessZone || "10a").matchStatus === "NOT_RECOMMENDED") && (
@@ -127,7 +129,7 @@ export default function Cart() {
               {/* Quantity Select */}
               <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #D4B06A', borderRadius: '24px', overflow: 'hidden' }}>
                 <button
-                  onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity - 1)}
+                  onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}
                   style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
                   aria-label="Decrease quantity"
                 >
@@ -135,7 +137,7 @@ export default function Cart() {
                 </button>
                 <span style={{ padding: '0 0.8rem', color: '#F4F1E1', fontWeight: 'bold' }}>{item.quantity}</span>
                 <button
-                  onClick={() => updateQuantity(item.slug, item.selectedSize, item.quantity + 1)}
+                  onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}
                   style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
                   aria-label="Increase quantity"
                 >
@@ -150,7 +152,7 @@ export default function Cart() {
 
               {/* Remove button */}
               <button
-                onClick={() => removeFromCart(item.slug, item.selectedSize)}
+                onClick={() => { removeFromCart(item.slug, item.selectedSize); setAnnouncement(`Removed ${item.name} from cart`); }}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -349,13 +351,27 @@ export default function Cart() {
               fontFamily: 'inherit'
             }}
           >
-            {isRedirecting ? 'Redirecting to secure checkout...' : 'Proceed to Checkout'}
+            {isRedirecting ? (
+            <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ animation: 'spin 1s linear infinite' }}>
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
+                <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" style={{ opacity: 0.75 }}></path>
+              </svg>
+              Redirecting to secure checkout...
+            </span>
+          ) : 'Proceed to Checkout'}
           </button>
         </div>
         {checkoutError && (
-          <p style={{ color: '#ba2f2f', margin: '0.75rem 0 0 0', fontWeight: 'bold', textAlign: 'right' }}>{checkoutError}</p>
+          <p style={{ color: '#ba2f2f', margin: '0.75rem 0 0 0', fontWeight: 'bold', textAlign: 'right' }} role="alert" aria-live="assertive">{checkoutError}</p>
         )}
       </div>
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
