@@ -638,11 +638,27 @@ export default function ProductDetail({ initialProduct }) {
           color: #F5E7C4;
         }
         .back-link {
-          color: #E9DCBE;
-          text-decoration: underline;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          color: #00301E;
+          background-color: #D4B06A;
+          border: 1px solid #D4B06A;
+          padding: 0.45rem 1.1rem;
+          border-radius: 20px;
+          font-family: 'Cinzel', serif;
+          font-weight: 700;
+          font-size: 0.9rem;
+          text-decoration: none;
           margin-bottom: 1.5rem;
-          display: inline-block;
-          font-size: 1rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .back-link:hover {
+          background-color: #E9DCBE;
+          border-color: #E9DCBE;
+          color: #00301E;
+          transform: translateY(-1px);
         }
 
         /* Hero Container */
