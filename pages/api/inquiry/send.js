@@ -1,13 +1,59 @@
+import fs from 'fs';
+import path from 'path';
 import { Resend } from 'resend';
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
 const resendToEmail = 'info@thebotanicalbazaar.com';
 
-const isValidKeyFormat = resendApiKey && resendApiKey.startsWith('re_');
+const isValidKeyFormat = typeof resendApiKey === 'string' && resendApiKey.startsWith('re_');
 const resend = isValidKeyFormat ? new Resend(resendApiKey) : null;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function escapeHtml(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function persistSubscriber(email, name, inquiryType, extraData = {}) {
+  try {
+    const dirPath = path.join(process.cwd(), 'content');
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+
+    const filePath = path.join(dirPath, 'subscribers.json');
+    let subscribers = [];
+
+    if (fs.existsSync(filePath)) {
+      try {
+        const content = fs.readFileSync(filePath, 'utf8');
+        subscribers = JSON.parse(content);
+      } catch (e) {
+        console.error('Error reading/parsing subscribers file:', e);
+      }
+    }
+
+    const entry = {
+      email,
+      name,
+      inquiryType,
+      timestamp: new Date().toISOString(),
+      ...extraData
+    };
+
+    subscribers.push(entry);
+    fs.writeFileSync(filePath, JSON.stringify(subscribers, null, 2), 'utf8');
+  } catch (err) {
+    console.error('Failed to persist subscriber lead:', err);
+  }
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -29,82 +75,99 @@ export default async function handler(req, res) {
     guestCount
   } = req.body || {};
 
-  const name = customerName || req.body.name;
-  const email = customerEmail || req.body.email;
+  const rawName = customerName || req.body.name || 'Anonymous Subscriber';
+  const rawEmail = customerEmail || req.body.email;
 
-  // Input Validation
-  if (!name || typeof name !== 'string' || !name.trim()) {
-    return res.status(400).json({ error: 'Customer Name is required.' });
-  }
-
-  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+  if (!rawEmail || typeof rawEmail !== 'string' || !EMAIL_REGEX.test(rawEmail.trim())) {
     return res.status(400).json({ error: 'A valid email address is required.' });
   }
 
-  const cleanName = name.trim();
-  const cleanEmail = email.trim();
-  const cleanPhone = phone ? phone.trim() : 'N/A';
+  const cleanName = rawName.trim();
+  const cleanEmail = rawEmail.trim();
+  const cleanPhone = phone ? String(phone).trim() : 'N/A';
   const cleanDetails = (additionalDetails || message || '').trim() || 'None provided.';
 
-  let subject = customSubject;
+  // Save lead locally to ensure zero lead loss
+  persistSubscriber(cleanEmail, cleanName, inquiryType, {
+    phone: cleanPhone !== 'N/A' ? cleanPhone : undefined,
+    plantName: plantName ? String(plantName).trim() : undefined,
+    budgetRange: budgetRange ? String(budgetRange).trim() : undefined,
+    desiredMaturity: desiredMaturity ? String(desiredMaturity).trim() : undefined,
+    details: cleanDetails !== 'None provided.' ? cleanDetails : undefined
+  });
+
+  const safeType = escapeHtml(inquiryType);
+  const safeName = escapeHtml(cleanName);
+  const safeEmail = escapeHtml(cleanEmail);
+  const safePhone = escapeHtml(cleanPhone);
+  const safePlantName = plantName ? escapeHtml(String(plantName).trim()) : '';
+  const safeBudgetRange = budgetRange ? escapeHtml(String(budgetRange).trim()) : '';
+  const safeDesiredMaturity = desiredMaturity ? escapeHtml(String(desiredMaturity).trim()) : '';
+  const safeEventDate = eventDate ? escapeHtml(String(eventDate).trim()) : '';
+  const safeGuestCount = guestCount ? escapeHtml(String(guestCount).trim()) : '';
+  const safeDetails = escapeHtml(cleanDetails);
+
+  let subject = customSubject ? escapeHtml(String(customSubject).trim()) : null;
   if (!subject) {
     if (inquiryType === 'consultation') {
-      subject = `Landscape Consultation Inquiry from ${cleanName}`;
-    } else if (inquiryType === 'event_booking') {
-      subject = `Event Booking Inquiry from ${cleanName}`;
+      subject = `Landscape Consultation Inquiry from ${safeName}`;
+    } else if (inquiryType === 'event_booking' || inquiryType === 'event_subscription') {
+      subject = `Event Inquiry / Signup from ${safeName}`;
     } else if (inquiryType === 'contact') {
-      subject = `General Contact Form Submission from ${cleanName}`;
+      subject = `General Contact Form Submission from ${safeName}`;
+    } else if (inquiryType === 'newsletter_subscription' || inquiryType === 'almanac_subscription') {
+      subject = `Almanac / Newsletter Signup from ${safeName}`;
     } else {
-      subject = `Plant Sourcing Request: ${plantName || 'Specimen'} (${cleanName})`;
+      subject = `Plant Sourcing Request: ${safePlantName || 'Specimen'} (${safeName})`;
     }
   }
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #00301E; color: #F5E7C4; padding: 24px; border-radius: 8px; border: 1px solid #D4B06A;">
       <h2 style="color: #D4B06A; border-bottom: 1px solid #D4B06A; padding-bottom: 8px; margin-top: 0; font-family: Georgia, serif;">
-        New Inquiry [Type: ${inquiryType}]
+        New Inquiry [Type: ${safeType}]
       </h2>
       <table style="width: 100%; border-collapse: collapse; color: #F5E7C4; font-size: 15px;">
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A; width: 35%;">Customer Name:</td>
-          <td style="padding: 8px 0;">${cleanName}</td>
+          <td style="padding: 8px 0;">${safeName}</td>
         </tr>
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Customer Email:</td>
-          <td style="padding: 8px 0;"><a href="mailto:${cleanEmail}" style="color: #D4B06A; text-decoration: underline;">${cleanEmail}</a></td>
+          <td style="padding: 8px 0;"><a href="mailto:${safeEmail}" style="color: #D4B06A; text-decoration: underline;">${safeEmail}</a></td>
         </tr>
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Phone:</td>
-          <td style="padding: 8px 0;">${cleanPhone}</td>
+          <td style="padding: 8px 0;">${safePhone}</td>
         </tr>
-        ${plantName ? `
+        ${safePlantName ? `
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Plant Name:</td>
-          <td style="padding: 8px 0;">${plantName}</td>
+          <td style="padding: 8px 0;">${safePlantName}</td>
         </tr>` : ''}
-        ${budgetRange ? `
+        ${safeBudgetRange ? `
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Budget Range:</td>
-          <td style="padding: 8px 0;">${budgetRange}</td>
+          <td style="padding: 8px 0;">${safeBudgetRange}</td>
         </tr>` : ''}
-        ${desiredMaturity ? `
+        ${safeDesiredMaturity ? `
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Desired Maturity:</td>
-          <td style="padding: 8px 0;">${desiredMaturity}</td>
+          <td style="padding: 8px 0;">${safeDesiredMaturity}</td>
         </tr>` : ''}
-        ${eventDate ? `
+        ${safeEventDate ? `
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Event Date:</td>
-          <td style="padding: 8px 0;">${eventDate}</td>
+          <td style="padding: 8px 0;">${safeEventDate}</td>
         </tr>` : ''}
-        ${guestCount ? `
+        ${safeGuestCount ? `
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A;">Guest Count:</td>
-          <td style="padding: 8px 0;">${guestCount}</td>
+          <td style="padding: 8px 0;">${safeGuestCount}</td>
         </tr>` : ''}
         <tr>
           <td style="padding: 8px 0; font-weight: bold; color: #D4B06A; vertical-align: top;">Message / Details:</td>
-          <td style="padding: 8px 0; white-space: pre-wrap;">${cleanDetails}</td>
+          <td style="padding: 8px 0; white-space: pre-wrap;">${safeDetails}</td>
         </tr>
       </table>
       <div style="margin-top: 20px; padding-top: 12px; border-top: 1px solid rgba(212,176,106,0.3); font-size: 12px; color: #E9DCBE;">
@@ -115,12 +178,17 @@ export default async function handler(req, res) {
 
   try {
     if (!resend) {
-      console.warn('[Resend API Warning] Valid RESEND_API_KEY is not configured. Simulating dispatch.');
+      if (process.env.NODE_ENV === 'production') {
+        console.error('[Resend API Error] RESEND_API_KEY is not configured or invalid in production.');
+        return res.status(500).json({
+          error: 'Email service is currently unconfigured. Your request has been saved to our team queue.'
+        });
+      }
+      console.warn('[Resend API Warning] Valid RESEND_API_KEY is not configured in development mode. Simulating email dispatch.');
       return res.status(200).json({
         success: true,
         mocked: true,
-        message: 'Inquiry logged successfully.',
-        details: { from: resendFromEmail, to: resendToEmail, subject }
+        message: 'Inquiry registered successfully in dev mode.'
       });
     }
 
@@ -133,13 +201,12 @@ export default async function handler(req, res) {
     });
 
     if (error) {
-      console.warn('Resend API returned error, falling back to simulated success in dev:', error);
+      console.warn('Resend API returned error:', error);
       if (process.env.NODE_ENV !== 'production') {
         return res.status(200).json({
           success: true,
           mocked: true,
-          message: 'Fallback simulation active in development mode.',
-          details: { from: resendFromEmail, to: resendToEmail, subject }
+          message: 'Fallback simulation active in development mode.'
         });
       }
       return res.status(400).json({

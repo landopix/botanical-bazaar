@@ -28,7 +28,7 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
         body: JSON.stringify({
           customerEmail: email,
           customerName: 'Event Subscriber',
-          inquiryType: 'event_booking',
+          inquiryType: 'event_subscription',
           subject: 'Event & Workshop Notification Signup',
           message: `Email signup for event updates from ${email}`
         })

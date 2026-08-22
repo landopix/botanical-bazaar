@@ -1,0 +1,9 @@
+[
+  {
+    "email": "jules_test_subscriber@example.com",
+    "name": "Homepage Subscriber",
+    "inquiryType": "newsletter_subscription",
+    "timestamp": "2026-08-22T15:46:13.346Z",
+    "details": "Newsletter subscription request from homepage for jules_test_subscriber@example.com"
+  }
+]
