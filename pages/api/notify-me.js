@@ -9,10 +9,18 @@ export default async function notifyMeHandler(req, res) {
 
   const { email, slug, name, type } = req.body || {};
 
-  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Simple non-backtracking email validation check
+  const isSimpleEmail = (str) => {
+    if (typeof str !== 'string' || str.length > 254) return false;
+    const atIdx = str.indexOf('@');
+    if (atIdx < 1 || atIdx !== str.lastIndexOf('@')) return false;
+    const dotIdx = str.lastIndexOf('.');
+    if (dotIdx <= atIdx + 1 || dotIdx === str.length - 1) return false;
+    return !/\s/.test(str);
+  };
 
   // Validate and sanitize email
-  if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
+  if (!email || !isSimpleEmail(email.trim())) {
     return res.status(400).json({ error: 'A valid email address is required.' });
   }
 
