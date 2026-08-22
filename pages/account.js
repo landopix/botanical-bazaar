@@ -1,10 +1,12 @@
+const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
+const LOGIN_URL = `https://${SHOPIFY_DOMAIN.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 
 export default function Account() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://the-botanical-bazaar.myshopify.com/account/login';
+      window.location.href = LOGIN_URL;
     }
   }, []);
 
@@ -129,7 +131,7 @@ export default function Account() {
         Customer account management and order tracking are hosted directly on our official Shopify customer portal.
       </p>
       <a
-        href="https://the-botanical-bazaar.myshopify.com/account/login"
+        href={LOGIN_URL}
         style={{
           display: 'inline-block',
           padding: '0.8rem 1.8rem',
