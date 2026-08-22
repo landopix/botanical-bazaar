@@ -12,6 +12,7 @@ import CareSpine from '../../components/CareSpine';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles, parseProductTitle } from '../../lib/shopify';
+import useBfcacheReset from '../../hooks/useBfcacheReset';
 
 export async function getStaticPaths() {
   try {
@@ -74,6 +75,8 @@ export default function ProductDetail({ initialProduct }) {
   const [notifySubscribed, setNotifySubscribed] = useState(false);
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [notifyError, setNotifyError] = useState('');
+
+  useBfcacheReset(() => setNotifyLoading(false));
 
   // Hardiness zone sync state
   const [hardinessZone, setHardinessZone] = useState('10a');

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 const BUDGET_OPTIONS = [
   'Under $50',
@@ -32,6 +33,8 @@ export default function Sourcing() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [serverError, setServerError] = useState('');
+
+  useBfcacheReset(() => setIsSubmitting(false));
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -4,12 +4,15 @@ import Link from 'next/link';
 import Button from '../components/Button';
 import { useCart } from '../context/CartContext';
 import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
   const [announcement, setAnnouncement] = useState('');
+
+  useBfcacheReset(() => setIsRedirecting(false));
 
   const handleCheckout = async (e) => {
     if (e) e.preventDefault();

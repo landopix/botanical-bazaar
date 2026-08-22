@@ -4,6 +4,7 @@ import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
 import CareSheetSkeleton from '../components/skeletons/CareSheetSkeleton';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Almanac({ careSheets }) {
   const sheets = careSheets && careSheets.length > 0 ? careSheets : [];
@@ -13,6 +14,8 @@ export default function Almanac({ careSheets }) {
   const [submitting, setSubmitting] = useState(false);
   const [statusMsg, setStatusMsg] = useState('');
   const [statusType, setStatusType] = useState('success');
+
+  useBfcacheReset(() => setSubmitting(false));
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
