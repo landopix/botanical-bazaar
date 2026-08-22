@@ -11,12 +11,43 @@ export default function Index() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [products, setProducts] = useState([]);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (email) {
-      setSubscribed(true);
+    if (!email || !email.includes("@")) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/inquiry/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customerEmail: email,
+          customerName: "Homepage Subscriber",
+          inquiryType: "newsletter_subscription",
+          subject: "Homepage Newsletter Subscription",
+          message: `Newsletter subscription request from homepage for ${email}`
+        })
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubscribed(true);
+      } else {
+        setErrorMsg(data.error || "Unable to subscribe right now. Please try again.");
+      }
+    } catch (err) {
+      setErrorMsg("An unexpected error occurred. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -518,6 +549,7 @@ export default function Index() {
                 />
                 <button
                   type="submit"
+                  disabled={submitting}
                   style={{
                     background: "#D4B06A",
                     color: "#1C3D2E",
@@ -527,12 +559,17 @@ export default function Index() {
                     fontFamily: "inherit",
                     fontSize: "1rem",
                     fontWeight: "bold",
-                    cursor: "pointer",
+                    cursor: submitting ? "not-allowed" : "pointer",
                   }}
                 >
-                  Subscribe
+                  {submitting ? "Submitting..." : "Subscribe"}
                 </button>
               </form>
+            )}
+            {errorMsg && (
+              <p style={{ color: "#ff8888", marginTop: "0.6rem", fontWeight: "bold" }}>
+                {errorMsg}
+              </p>
             )}
           </div>
         </div>

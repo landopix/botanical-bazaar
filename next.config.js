@@ -16,6 +16,21 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/cart.html',
+        destination: '/cart',
+        permanent: true,
+      },
+      {
+        source: '/wishlist.html',
+        destination: '/wishlist',
+        permanent: true,
+      },
+      {
+        source: '/account.html',
+        destination: '/account',
+        permanent: true,
+      },
+      {
         source: '/checkout.html',
         destination: '/cart',
         permanent: true,
@@ -108,6 +123,41 @@ const nextConfig = {
       {
         source: '/orchids-gallery.html',
         destination: '/orchids-gallery',
+        permanent: true,
+      },
+      {
+        source: '/gallery.html',
+        destination: '/gallery',
+        permanent: true,
+      },
+      {
+        source: '/sourcing.html',
+        destination: '/sourcing',
+        permanent: true,
+      },
+      {
+        source: '/help.html',
+        destination: '/help',
+        permanent: true,
+      },
+      {
+        source: '/sales.html',
+        destination: '/sales',
+        permanent: true,
+      },
+      {
+        source: '/accessibility.html',
+        destination: '/accessibility',
+        permanent: true,
+      },
+      {
+        source: '/success.html',
+        destination: '/success',
+        permanent: true,
+      },
+      {
+        source: '/cancel.html',
+        destination: '/cancel',
         permanent: true,
       },
       {
