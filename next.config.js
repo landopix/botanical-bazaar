@@ -81,8 +81,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/garden-month',
+        destination: '/almanac',
+        permanent: true,
+      },
+      {
         source: '/garden-month.html',
-        destination: '/garden-month',
+        destination: '/almanac',
         permanent: true,
       },
       {

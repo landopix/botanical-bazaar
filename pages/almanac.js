@@ -87,12 +87,19 @@ export default function Almanac({ careSheets }) {
         </p>
 
         <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', maxWidth: '460px', margin: '0 auto' }}>
+          <label htmlFor="almanac-newsletter-email" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
+            Email Address for Monthly Dispatches
+          </label>
           <input
+            id="almanac-newsletter-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email address"
             required
+            aria-required="true"
+            aria-invalid={statusType === 'error' && !!statusMsg}
+            aria-describedby={statusMsg ? "almanac-status-msg" : undefined}
             style={{
               padding: '0.8rem 1.2rem',
               borderRadius: '8px',
@@ -127,16 +134,21 @@ export default function Almanac({ careSheets }) {
         </form>
 
         {statusMsg && (
-          <div style={{
-            marginTop: '1.2rem',
-            padding: '0.8rem 1rem',
-            borderRadius: '6px',
-            background: statusType === 'success' ? 'rgba(212, 176, 106, 0.15)' : 'rgba(224, 108, 117, 0.15)',
-            border: statusType === 'success' ? '1px solid #D4B06A' : '1px solid #e06c75',
-            color: statusType === 'success' ? '#D4B06A' : '#f08d8d',
-            fontSize: '1rem',
-            fontWeight: 'bold'
-          }}>
+          <div
+            id="almanac-status-msg"
+            role={statusType === 'error' ? 'alert' : 'status'}
+            aria-live="polite"
+            style={{
+              marginTop: '1.2rem',
+              padding: '0.8rem 1rem',
+              borderRadius: '6px',
+              background: statusType === 'success' ? 'rgba(212, 176, 106, 0.15)' : 'rgba(224, 108, 117, 0.15)',
+              border: statusType === 'success' ? '1px solid #D4B06A' : '1px solid #e06c75',
+              color: statusType === 'success' ? '#D4B06A' : '#f08d8d',
+              fontSize: '1rem',
+              fontWeight: 'bold'
+            }}
+          >
             {statusMsg}
           </div>
         )}
