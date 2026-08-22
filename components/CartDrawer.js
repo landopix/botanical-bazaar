@@ -4,12 +4,15 @@ import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
 import { isSanityCdnUrl } from '../lib/image-utils';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function CartDrawer({ isOpen, onClose }) {
   const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
   const [announcement, setAnnouncement] = useState('');
+
+  useBfcacheReset(() => setIsRedirecting(false));
 
   useEffect(() => {
     const handleKeyDown = (e) => {

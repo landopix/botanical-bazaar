@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function NurseryUpdateFallback({ reason }) {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  useBfcacheReset(() => setLoading(false));
 
   const handleSubmit = async (e) => {
     e.preventDefault();

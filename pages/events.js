@@ -5,11 +5,14 @@ import Button from '../components/Button';
 import EventCard from '../components/EventCard';
 import EventCardSkeleton from '../components/skeletons/EventCardSkeleton';
 import SeasonalArchive from '../components/SeasonalArchive';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Events({ activeEvents = [], archivedEvents = [] }) {
   const [email, setEmail] = useState('');
   const [statusMsg, setStatusMsg] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useBfcacheReset(() => setLoading(false));
 
   const handleNotifySubmit = async (e) => {
     e.preventDefault();

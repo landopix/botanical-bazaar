@@ -1,12 +1,15 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Button from '../components/Button';
+import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  useBfcacheReset(() => setSubmitting(false));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
