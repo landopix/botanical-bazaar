@@ -1,10 +1,10 @@
-import React, { memo } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
 
-function ProductCard({
+export default function ProductCard({
   product = {},
   titleClamp = 2,
   descClamp = 3,
@@ -12,6 +12,11 @@ function ProductCard({
 }) {
   const { wishlist, toggleWishlist } = useWishlist();
 
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleWishlist(product);
+  };
   const slug = product?.slug?.current || product?.slug || '';
   const name = product?.name ?? product?.title ?? 'Botanical Specimen';
   const price = product?.price;
@@ -24,9 +29,7 @@ function ProductCard({
   const sizes = product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
   const type = product?.type || product?.category || 'Tropical Plant';
 
-  const isWishlisted = Array.isArray(wishlist) && wishlist.some(
-    item => (item?.slug?.current || item?.slug) === slug || item?.id === product?.id
-  );
+  const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
 
   const handleWishlistClick = (e) => {
     e.preventDefault();
@@ -80,6 +83,7 @@ function ProductCard({
         onClick={handleWishlistClick}
         aria-label={isWishlisted ? `Remove ${name} from Wishlist` : `Save ${name} to Wishlist`}
         title={isWishlisted ? "In Wishlist Sanctuary" : "Add to Wishlist"}
+        className="wishlist-btn-toggle"
         style={{
           position: 'absolute',
           top: '10px',
@@ -201,9 +205,12 @@ function ProductCard({
           View Plant
         </Link>
       </div>
+      <style jsx>{`
+        .wishlist-btn-toggle:focus-visible {
+          outline: 2px solid #D4B06A !important;
+          outline-offset: 2px !important;
+        }
+      `}</style>
     </div>
   );
 }
-
-// ⚡ Bolt Optimization: Memoize ProductCard to prevent unnecessary grid re-renders when parent state updates
-export default memo(ProductCard);
