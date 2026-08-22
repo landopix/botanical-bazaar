@@ -5,7 +5,7 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [fulfillmentMethod, setFulfillmentMethodState] = useState('shipping');
-  const [userHardinessZone, setUserHardinessZone] = useState('10a');
+  const [userHardinessZone, setUserHardinessZoneState] = useState('10a');
 
   useEffect(() => {
     const storedCart = localStorage.getItem('botanical_cart');
@@ -21,6 +21,28 @@ export function CartProvider({ children }) {
     if (storedFulfillment && (storedFulfillment === 'shipping' || storedFulfillment === 'pickup')) {
       setFulfillmentMethodState(storedFulfillment);
     }
+
+    const storedZone = localStorage.getItem('user_hardiness_zone');
+    if (storedZone) {
+      setUserHardinessZoneState(storedZone);
+    }
+
+    const handleZoneUpdated = () => {
+      const updatedZone = localStorage.getItem('user_hardiness_zone');
+      if (updatedZone) {
+        setUserHardinessZoneState(updatedZone);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('user_hardiness_zone_updated', handleZoneUpdated);
+    }
+
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('user_hardiness_zone_updated', handleZoneUpdated);
+      }
+    };
   }, []);
 
   const saveCart = (newCart) => {
@@ -102,6 +124,14 @@ export function CartProvider({ children }) {
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
   const cartTotal = cart.reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0);
 
+  const setUserHardinessZone = (zone) => {
+    setUserHardinessZoneState(zone);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_hardiness_zone', zone);
+      window.dispatchEvent(new Event('user_hardiness_zone_updated'));
+    }
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -114,7 +144,8 @@ export function CartProvider({ children }) {
         cartTotal,
         fulfillmentMethod,
         setFulfillmentMethod,
-        userHardinessZone
+        userHardinessZone,
+        setUserHardinessZone
       }}
     >
       {children}

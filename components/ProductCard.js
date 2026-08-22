@@ -21,7 +21,7 @@ export default function ProductCard({
   const name = product?.name ?? product?.title ?? 'Botanical Specimen';
   const price = product?.price;
   const quantity = product?.quantity ?? 10;
-  const isSoldOut = quantity < 3 || product?.availableForSale === false;
+  const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
   const rawImage = product?.image ?? product?.imageUrl ?? product?.featuredImage?.url;
   const imageSrc = rawImage
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
@@ -57,7 +57,7 @@ export default function ProductCard({
         boxSizing: 'border-box'
       }}
     >
-      {isSoldOut && (
+      {isSoldOut ? (
         <div
           className="sold-out-badge"
           style={{
@@ -75,7 +75,25 @@ export default function ProductCard({
         >
           Sold Out
         </div>
-      )}
+      ) : (quantity === 1 || quantity === 2) ? (
+        <div
+          className="low-stock-badge"
+          style={{
+            position: 'absolute',
+            top: '12px',
+            left: '12px',
+            background: '#D4B06A',
+            color: '#00301E',
+            padding: '0.2rem 0.6rem',
+            borderRadius: '4px',
+            fontSize: '0.8rem',
+            fontWeight: 'bold',
+            zIndex: 10
+          }}
+        >
+          {`Only ${quantity} Left!`}
+        </div>
+      ) : null}
 
       {/* Floating Wishlist Heart Trigger */}
       <button

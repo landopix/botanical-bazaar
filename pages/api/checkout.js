@@ -5,6 +5,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  const correlationId = 'chk_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
+
   try {
     const {
       cart,
@@ -22,7 +24,7 @@ export default async function handler(req, res) {
     const cartItems = cart || items;
 
     if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
-      return res.status(400).json({ error: 'Cart is empty' });
+      return res.status(400).json({ error: 'Cart is empty', correlationId });
     }
 
     const selectedFulfillment = fulfillment_method || fulfillmentMethod || 'shipping';
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
     try {
       catalog = await getAllProducts();
     } catch (e) {
-      console.warn('Could not fetch products catalog during checkout setup:', e);
+      console.warn(`[${correlationId}] Could not fetch products catalog during checkout setup:`, e);
     }
 
     // Resolve merchandise variant GIDs for all line items
@@ -88,11 +90,11 @@ export default async function handler(req, res) {
 
     const buyerIdentity = {
       ...(customer_email ? { email: customer_email } : {}),
-      deliveryPreferences: [
-        {
-          deliveryMethod
+      preferences: {
+        delivery: {
+          deliveryMethod: [deliveryMethod]
         }
-      ]
+      }
     };
 
     const { checkoutUrl } = await createShopifyCart({
@@ -101,9 +103,9 @@ export default async function handler(req, res) {
       customAttributes
     });
 
-    return res.status(200).json({ url: checkoutUrl });
+    return res.status(200).json({ url: checkoutUrl, correlationId });
   } catch (error) {
-    console.error('API Checkout Error:', error);
-    return res.status(500).json({ error: 'An internal server error occurred.' });
+    console.error(`[${correlationId}] API Checkout Error:`, error);
+    return res.status(500).json({ error: 'An internal server error occurred.', correlationId });
   }
 }
