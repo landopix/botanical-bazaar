@@ -457,19 +457,23 @@ export default function ProductDetail({ initialProduct }) {
               {/* Notify Me Form or Confirmation */}
               <div className="notify-card">
                 {notifySubscribed ? (
-                  <div className="notify-success">
+                  <div className="notify-success" role="status" aria-live="polite">
                     You&apos;re on the list! We&apos;ll email you the moment this specimen returns.
                   </div>
                 ) : (
                   <form onSubmit={handleNotifyMe} className="notify-form">
-                    <label className="notify-label">
+                    <label htmlFor="pdp-notify-email" className="notify-label">
                       Email me when available:
                     </label>
                     <div className="notify-input-group">
                       <input
+                        id="pdp-notify-email"
                         type="email"
                         placeholder="Your email address"
                         required
+                        aria-required="true"
+                        aria-invalid={!!notifyError}
+                        aria-describedby={notifyError ? "pdp-notify-error" : undefined}
                         value={notifyEmail}
                         onChange={(e) => setNotifyEmail(e.target.value)}
                         disabled={notifyLoading}
@@ -484,7 +488,7 @@ export default function ProductDetail({ initialProduct }) {
                       </button>
                     </div>
                     {notifyError && (
-                      <p className="notify-error">
+                      <p id="pdp-notify-error" className="notify-error" role="alert">
                         {notifyError}
                       </p>
                     )}
@@ -618,8 +622,8 @@ export default function ProductDetail({ initialProduct }) {
 
           {/* Policy notes (Standard Shipping & Nursery Pickup) */}
           <div className="policy-note">
-            <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Choose between Standard Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds) or Local Nursery Pickup ($0.00 / Free) at checkout. <br />
-            <strong>Live Plant Guarantee:</strong> Guaranteed health upon arrival or collection. Please inspect within 48 hours for claim submission or exchange. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
+            <strong>Nationwide Shipping &amp; Local Nursery Pickup:</strong> Choose between Nationwide Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds; USDA compliance applies for HI, CA, TX, AK) or Free Local Nursery Pickup ($0.00) at checkout. <br />
+            <strong>100% Live Arrival Guarantee:</strong> Guaranteed health upon arrival or collection. Inspect within 48 hours for replacement or store credit. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
           </div>
         </div>
       </section>

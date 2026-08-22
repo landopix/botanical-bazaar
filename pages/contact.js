@@ -64,33 +64,41 @@ export default function Contact() {
       </p>
 
       {submitted ? (
-        <div style={{ background: '#123826', padding: '2.5rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }}>
+        <div style={{ background: '#123826', padding: '2.5rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }} role="status" aria-live="polite">
           <h2 style={{ color: '#D4B06A', marginTop: 0, fontFamily: 'Cinzel, serif', fontSize: '1.8rem' }}>Message Received!</h2>
           <p style={{ fontSize: '1.1rem', marginBottom: '1.5rem', color: '#F5E7C4' }}>Our experienced horticulturists will get back to you shortly.</p>
           <Button variant="gold-filled" href="/shop">Browse Plants</Button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }} noValidate={false}>
           {errorMsg && (
-            <div style={{
-              backgroundColor: 'rgba(224, 108, 117, 0.15)',
-              border: '1px solid #e06c75',
-              color: '#f08d8d',
-              padding: '0.8rem 1rem',
-              borderRadius: '6px',
-              fontSize: '0.95rem'
-            }}>
+            <div
+              id="contact-error-banner"
+              role="alert"
+              style={{
+                backgroundColor: 'rgba(224, 108, 117, 0.15)',
+                border: '1px solid #e06c75',
+                color: '#f08d8d',
+                padding: '0.8rem 1rem',
+                borderRadius: '6px',
+                fontSize: '0.95rem'
+              }}
+            >
               {errorMsg}
             </div>
           )}
 
           <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <label htmlFor="contact-name" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Your Full Name
             </label>
             <input
+              id="contact-name"
               type="text"
               required
+              aria-required="true"
+              aria-invalid={!!errorMsg}
+              aria-describedby={errorMsg ? "contact-error-banner" : undefined}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #D4B06A', backgroundColor: '#123826', color: '#F4F1E1', boxSizing: 'border-box' }}
@@ -98,12 +106,16 @@ export default function Contact() {
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <label htmlFor="contact-email" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Email Address
             </label>
             <input
+              id="contact-email"
               type="email"
               required
+              aria-required="true"
+              aria-invalid={!!errorMsg}
+              aria-describedby={errorMsg ? "contact-error-banner" : undefined}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               style={{ width: '100%', padding: '0.75rem', borderRadius: '6px', border: '1px solid #D4B06A', backgroundColor: '#123826', color: '#F4F1E1', boxSizing: 'border-box' }}
@@ -111,11 +123,15 @@ export default function Contact() {
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <label htmlFor="contact-message" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               How Can We Help You?
             </label>
             <textarea
+              id="contact-message"
               required
+              aria-required="true"
+              aria-invalid={!!errorMsg}
+              aria-describedby={errorMsg ? "contact-error-banner" : undefined}
               rows="5"
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}

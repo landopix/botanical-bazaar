@@ -33,7 +33,6 @@ export function getZoneFromZip(zipInput) {
   return null;
 }
 
-
 import Head from 'next/head';
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -108,7 +107,7 @@ const staticPages = [
   },
   {
     title: "This Month in the Garden",
-    href: "/garden-month",
+    href: "/almanac",
     category: "Guides",
     description: "What to plant, fertilize, and prune this month for tropical microclimates.",
     content: "garden month seasonal planting gardening tips pruning fertilizer schedule tasks weather"
@@ -145,6 +144,7 @@ const staticPages = [
 
 const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
 const shopifyAccountUrl = `https://${rawDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
+
 export default function Layout({ children }) {
   const router = useRouter();
   const { cartCount } = useCart();
@@ -153,6 +153,10 @@ export default function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [allProducts, setAllProducts] = useState([]);
+
+  // Desktop Header Dropdowns state
+  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const [isFaqDropdownOpen, setIsFaqDropdownOpen] = useState(false);
 
   // Hardiness Zone Detector state (defaults to Zone 10a)
   const [hardinessZone, setHardinessZone] = useState("10a");
@@ -167,6 +171,16 @@ export default function Layout({ children }) {
   const searchInputRef = useRef(null);
   const zoneModalRef = useRef(null);
   const triggerElementRef = useRef(null);
+
+  const shopDropdownRef = useRef(null);
+  const faqDropdownRef = useRef(null);
+  const shopTriggerRef = useRef(null);
+  const faqTriggerRef = useRef(null);
+
+  const mainContentRef = useRef(null);
+  const headerRef = useRef(null);
+  const footerRef = useRef(null);
+  const quickActionsRef = useRef(null);
 
   useEffect(() => {
     if (hardinessZone) {
@@ -262,7 +276,7 @@ export default function Layout({ children }) {
     }, 300);
   };
 
-  // Manage Esc key press to close sidebar or USDA Zone modal & restore focus
+  // Manage Escape key press to close sidebar, USDA Zone modal, or desktop dropdowns & restore focus
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
@@ -278,14 +292,20 @@ export default function Layout({ children }) {
           } else if (toggleBtnRef.current) {
             toggleBtnRef.current.focus();
           }
+        } else if (isShopDropdownOpen) {
+          setIsShopDropdownOpen(false);
+          shopTriggerRef.current?.focus();
+        } else if (isFaqDropdownOpen) {
+          setIsFaqDropdownOpen(false);
+          faqTriggerRef.current?.focus();
         }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSidebarOpen, isZoneModalOpen]);
+  }, [isSidebarOpen, isZoneModalOpen, isShopDropdownOpen, isFaqDropdownOpen]);
 
-  // Focus management when opening/closing sidebar or zone modal
+  // Focus management when opening/closing sidebar
   useEffect(() => {
     if (isSidebarOpen) {
       const searchInput = document.getElementById("sidebar-search");
@@ -301,6 +321,38 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen]);
 
+  // Focus trapping within Navigation Sidebar
+  useEffect(() => {
+    if (!isSidebarOpen || !sidebarRef.current) return;
+
+    const sidebar = sidebarRef.current;
+    const focusableElements = sidebar.querySelectorAll(
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
+    );
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleTabKey = (e) => {
+      if (e.key !== "Tab") return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    sidebar.addEventListener("keydown", handleTabKey);
+    return () => sidebar.removeEventListener("keydown", handleTabKey);
+  }, [isSidebarOpen]);
 
   // Focus trapping within Zone Selector Modal
   useEffect(() => {
@@ -347,6 +399,24 @@ export default function Layout({ children }) {
       }
     }
   }, [isZoneModalOpen]);
+
+  // Apply inert attribute and aria-hidden to background elements when sidebar or modal is open
+  useEffect(() => {
+    const isOverlayOpen = isSidebarOpen || isZoneModalOpen;
+    const targets = [mainContentRef.current, headerRef.current, footerRef.current, quickActionsRef.current];
+
+    targets.forEach((el) => {
+      if (el) {
+        if (isOverlayOpen) {
+          el.setAttribute("aria-hidden", "true");
+          el.setAttribute("inert", "");
+        } else {
+          el.removeAttribute("aria-hidden");
+          el.removeAttribute("inert");
+        }
+      }
+    });
+  }, [isSidebarOpen, isZoneModalOpen]);
 
   // Global event delegation for mobile toggle and outside clicks
   useEffect(() => {
@@ -398,7 +468,7 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen, isZoneModalOpen]);
 
-  // Route Change State Cleanup (Fixes Layout Stickiness on Back/Forward Button)
+  // Route Change State Cleanup
   useEffect(() => {
     const handleRouteChange = () => {
       setIsSidebarOpen(false);
@@ -406,6 +476,8 @@ export default function Layout({ children }) {
       setIsFaqOpen(false);
       setIsCollectionsOpen(false);
       setIsZoneModalOpen(false);
+      setIsShopDropdownOpen(false);
+      setIsFaqDropdownOpen(false);
       setSearchQuery("");
       if (typeof document !== "undefined") {
         document.body.classList.remove("sidebar-open");
@@ -418,6 +490,18 @@ export default function Layout({ children }) {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router]);
+
+  const handleShopBlur = (e) => {
+    if (shopDropdownRef.current && !shopDropdownRef.current.contains(e.relatedTarget)) {
+      setIsShopDropdownOpen(false);
+    }
+  };
+
+  const handleFaqBlur = (e) => {
+    if (faqDropdownRef.current && !faqDropdownRef.current.contains(e.relatedTarget)) {
+      setIsFaqDropdownOpen(false);
+    }
+  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -466,7 +550,7 @@ export default function Layout({ children }) {
       isOpenState: isGuidesOpen,
       setOpenState: setIsGuidesOpen,
       items: [
-        { label: "This Month in the Garden", href: "/garden-month" },
+        { label: "This Month in the Garden", href: "/almanac" },
         { label: "Best Plants for Your Zone", href: "/zones" },
       ],
     },
@@ -583,7 +667,8 @@ export default function Layout({ children }) {
           }}
         />
       </Head>
-      {/* Sidebar backdrop overlay (Click outside to close) */}
+
+      {/* Sidebar backdrop overlay */}
       {isSidebarOpen && (
         <div
           onClick={() => setIsSidebarOpen(false)}
@@ -607,8 +692,8 @@ export default function Layout({ children }) {
         />
       )}
 
-      {/* Quick Actions Bubble Panel (Bottom Right) */}
-      <div className="quick-actions" role="region" aria-label="Quick action navigation stack">
+      {/* Quick Actions Bubble Panel */}
+      <div ref={quickActionsRef} className="quick-actions" role="region" aria-label="Quick action navigation stack">
         {/* Toggle / Search Bubble */}
         <button
           ref={toggleBtnRef}
@@ -633,7 +718,7 @@ export default function Layout({ children }) {
           </svg>
         </button>
 
-        {/* Cart Action Link with Badge (suppressed on /checkout for streamlined flow) */}
+        {/* Cart Action Link */}
         {router.pathname !== '/checkout' && (
           <Link
             href="/cart"
@@ -684,7 +769,7 @@ export default function Layout({ children }) {
           </Link>
         )}
 
-        {/* Wishlist Action Link with Badge */}
+        {/* Wishlist Action Link */}
         <Link
           href="/wishlist"
           className="wishlist-btn"
@@ -931,7 +1016,7 @@ export default function Layout({ children }) {
       </nav>
 
       {/* High-Fidelity Desktop Site Header */}
-      <header>
+      <header ref={headerRef}>
         <Link href="/" style={{ display: "inline-block" }}>
           <img
             src="/assets/lantern.png"
@@ -943,6 +1028,8 @@ export default function Layout({ children }) {
         <button
           className="header-mobile-toggle block lg:hidden"
           aria-label="Toggle mobile menu"
+          aria-expanded={isSidebarOpen}
+          aria-controls="site-sidebar"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -961,11 +1048,34 @@ export default function Layout({ children }) {
           </svg>
         </button>
         <nav>
-          <div className="nav-dropdown-wrapper">
-            <Link href="/shop" className="nav-dropdown-trigger">
+          {/* Shop All Dropdown */}
+          <div
+            ref={shopDropdownRef}
+            className="nav-dropdown-wrapper"
+            onBlur={handleShopBlur}
+            onMouseEnter={() => setIsShopDropdownOpen(true)}
+            onMouseLeave={() => setIsShopDropdownOpen(false)}
+          >
+            <button
+              ref={shopTriggerRef}
+              type="button"
+              className="nav-dropdown-trigger"
+              aria-expanded={isShopDropdownOpen}
+              aria-controls="desktop-shop-dropdown"
+              onClick={() => setIsShopDropdownOpen((prev) => !prev)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setIsShopDropdownOpen(true);
+                }
+              }}
+            >
               SHOP ALL ▾
-            </Link>
-            <div className="nav-dropdown-menu">
+            </button>
+            <div
+              id="desktop-shop-dropdown"
+              className={`nav-dropdown-menu ${isShopDropdownOpen ? "is-open" : ""}`}
+            >
               <Link href="/shop" className="dropdown-title">
                 SHOP ALL
               </Link>
@@ -1000,6 +1110,7 @@ export default function Layout({ children }) {
               </div>
             </div>
           </div>
+
           <Link href="/consultations">Consultations</Link>
           <Link href="/almanac">The Almanac</Link>
           <Link href="/events">Events</Link>
@@ -1007,11 +1118,34 @@ export default function Layout({ children }) {
           <Link href="/contact">Contact</Link>
 
           {/* FAQ Rich Dropdown Menu */}
-          <div className="nav-dropdown-wrapper">
-            <Link href="/faq" className="nav-dropdown-trigger">
+          <div
+            ref={faqDropdownRef}
+            className="nav-dropdown-wrapper"
+            onBlur={handleFaqBlur}
+            onMouseEnter={() => setIsFaqDropdownOpen(true)}
+            onMouseLeave={() => setIsFaqDropdownOpen(false)}
+          >
+            <button
+              ref={faqTriggerRef}
+              type="button"
+              className="nav-dropdown-trigger"
+              aria-expanded={isFaqDropdownOpen}
+              aria-controls="desktop-faq-dropdown"
+              onClick={() => setIsFaqDropdownOpen((prev) => !prev)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setIsFaqDropdownOpen(true);
+                }
+              }}
+            >
               FAQ ▾
-            </Link>
-            <div className="nav-dropdown-menu" style={{ minWidth: "260px" }}>
+            </button>
+            <div
+              id="desktop-faq-dropdown"
+              className={`nav-dropdown-menu ${isFaqDropdownOpen ? "is-open" : ""}`}
+              style={{ minWidth: "260px" }}
+            >
               <Link href="/faq" className="dropdown-title">
                 CUSTOMER HELP & FAQ
               </Link>
@@ -1027,7 +1161,6 @@ export default function Layout({ children }) {
           <Link href="/about">About</Link>
         </nav>
       </header>
-
 
       {/* Accessible Live Region for USDA Zone Updates */}
       <div
@@ -1049,10 +1182,10 @@ export default function Layout({ children }) {
       </div>
 
       {/* Main Page Content Wrapper */}
-      <main id="main-content" className="site-main">{children}</main>
+      <main id="main-content" ref={mainContentRef} className="site-main">{children}</main>
 
       {/* High-Fidelity Footer */}
-      <footer className="footer-container">
+      <footer ref={footerRef} className="footer-container">
         <div className="footer-columns">
           <div className="footer-column">
             <h3>Contact Info</h3>
@@ -1165,6 +1298,10 @@ export default function Layout({ children }) {
           margin-bottom: -0.5rem;
         }
         .nav-dropdown-trigger {
+          background: none;
+          border: none;
+          padding: 0;
+          font-size: inherit;
           cursor: pointer;
           font-family: var(--font-heading), "Cinzel", serif !important;
           color: #e9dcbe !important;
@@ -1173,7 +1310,8 @@ export default function Layout({ children }) {
           letter-spacing: 0.05em;
           transition: color 0.2s ease;
         }
-        .nav-dropdown-wrapper:hover .nav-dropdown-trigger {
+        .nav-dropdown-wrapper:hover .nav-dropdown-trigger,
+        .nav-dropdown-trigger:focus-visible {
           color: #d4b06a !important;
         }
         .nav-dropdown-menu {
@@ -1191,6 +1329,11 @@ export default function Layout({ children }) {
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
           margin-top: 0;
         }
+        .nav-dropdown-menu.is-open,
+        .nav-dropdown-wrapper:hover .nav-dropdown-menu,
+        .nav-dropdown-wrapper:focus-within .nav-dropdown-menu {
+          display: block;
+        }
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
@@ -1199,9 +1342,6 @@ export default function Layout({ children }) {
           right: 0;
           height: 25px;
           background: transparent;
-          display: block;
-        }
-        .nav-dropdown-wrapper:hover .nav-dropdown-menu {
           display: block;
         }
         .dropdown-title {
@@ -1242,9 +1382,27 @@ export default function Layout({ children }) {
           font-family: "Crimson Text", serif !important;
           font-weight: normal !important;
         }
-        .dropdown-col a:hover {
+        .dropdown-col a:hover,
+        .dropdown-col a:focus-visible {
           color: #d4b06a !important;
           text-decoration: underline !important;
+        }
+
+        /* Focus rings for keyboard navigation */
+        .nav-dropdown-trigger:focus-visible,
+        header nav a:focus-visible,
+        .nav-dropdown-menu a:focus-visible,
+        .quick-actions button:focus-visible,
+        .quick-actions a:focus-visible,
+        .sidebar a:focus-visible,
+        .sidebar button:focus-visible,
+        .sidebar input:focus-visible,
+        .zone-modal-container button:focus-visible,
+        .zone-modal-container input:focus-visible,
+        .zone-modal-container select:focus-visible {
+          outline: 2px solid #D4B06A !important;
+          outline-offset: 3px !important;
+          border-radius: 4px;
         }
 
         .sidebar-search-results-drawer {
@@ -1469,6 +1627,7 @@ export default function Layout({ children }) {
           }
         }
       `}</style>
+
       {isZoneModalOpen && (
         <div
           className="zone-modal-overlay"
@@ -1508,7 +1667,6 @@ export default function Layout({ children }) {
               Calculate your USDA Hardiness Zone via 5-digit ZIP code or manually select your zone below.
             </p>
 
-
             {zoneStatusMessage && (
               <div
                 role="status"
@@ -1531,11 +1689,12 @@ export default function Layout({ children }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               {/* ZIP Code Lookup */}
               <form onSubmit={handleZipSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
-                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <label htmlFor="modal-zip-input" style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   ZIP Code Lookup
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <input
+                    id="modal-zip-input"
                     type="text"
                     placeholder="e.g. 33705"
                     maxLength={5}
@@ -1569,11 +1728,12 @@ export default function Layout({ children }) {
 
               {/* Zone Dropdown */}
               <form onSubmit={handleDropdownSubmit} style={{ background: '#123826', padding: '1.2rem', borderRadius: '10px', border: '1px solid rgba(212, 176, 106, 0.3)' }}>
-                <label style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                <label htmlFor="modal-zone-select" style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', fontSize: '0.85rem', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Zone Dropdown
                 </label>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
                   <select
+                    id="modal-zone-select"
                     value={selectedDropdownZone}
                     onChange={(e) => setSelectedDropdownZone(e.target.value)}
                     style={{

@@ -20,21 +20,21 @@ export default function LiveArrivalGuarantee() {
         <div className="step-item">
           <span className="step-num">1</span>
           <div className="step-content">
-            <strong>24–48 Hour Claim Window:</strong> Notify our nursery team within 48 hours of carrier delivery timestamp.
+            <strong>48-Hour Claim Window:</strong> Notify our nursery team within 48 hours of carrier delivery timestamp or local pickup.
           </div>
         </div>
 
         <div className="step-item">
           <span className="step-num">2</span>
           <div className="step-content">
-            <strong>Photo Submission:</strong> Submit 2 clear photos showing the specimen, pot, and unboxing packaging via our help portal.
+            <strong>Photo Submission:</strong> Submit clear photos showing the specimen, root ball/soil line, and packaging to info@thebotanicalbazaar.com.
           </div>
         </div>
 
         <div className="step-item">
           <span className="step-num">3</span>
           <div className="step-content">
-            <strong>Immediate Remedy:</strong> Free replacement dispatch, store credit, or full refund issued promptly.
+            <strong>Guaranteed Remedy:</strong> Free replacement dispatch or store credit issued promptly upon claim approval.
           </div>
         </div>
       </div>

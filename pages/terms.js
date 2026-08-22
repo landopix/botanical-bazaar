@@ -9,7 +9,7 @@ export default function Terms() {
         <title>Terms of Service & Sales Policies | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Review the terms of service, live plant sales policies, ordering terms, weather holds, and guarantees for The Botanical Bazaar LLC in St. Petersburg, FL."
+          content="Review the terms of service, live plant sales policies, ordering terms, weather holds, USDA regulations, and guarantees for The Botanical Bazaar LLC in St. Petersburg, FL."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/terms" />
       </Head>
@@ -49,7 +49,7 @@ export default function Terms() {
               2. Ordering, Inventory &amp; Payment
             </h2>
             <p style={{ marginTop: 0 }}>
-              Living plants grow at their own pace, so individual specimens vary in height, leaf count, and character. We process payment securely at checkout. Because inventory changes quickly in our greenhouse, submitting an order reserves your plant once payment completes. If a plant becomes unavailable prior to fulfillment, we will contact you immediately to offer a replacement, store credit, or full refund.
+              Living plants grow at their own pace, so individual specimens vary in height, leaf count, and character. We process payment securely at checkout. Because inventory changes quickly in our greenhouse, submitting an order reserves your plant once payment completes. If a plant becomes unavailable prior to fulfillment, we will contact you immediately to offer a replacement plant or store credit.
             </p>
           </section>
 
@@ -62,7 +62,7 @@ export default function Terms() {
             </p>
             <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Standard Live Plant Shipping:</strong> We pack and ship live specimens across the contiguous United States directly from our St. Petersburg greenhouse. Each plant is secured with root moisture wrapping, cardboard collar protection, and shock-absorbing fill.
+                <strong>Nationwide Live Plant Shipping:</strong> We pack and ship live specimens nationwide across the United States directly from our St. Petersburg greenhouse. Each plant is secured with root moisture wrapping, cardboard collar protection, and shock-absorbing fill.
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
                 <strong>Local Nursery Pickup ($0.00 / Free):</strong> You can choose free local pickup at our St. Petersburg nursery facility. Once your order is ready, we will notify you to schedule a convenient appointment time.
@@ -92,7 +92,7 @@ export default function Terms() {
               5. Agricultural Regulations &amp; State Restrictions
             </h2>
             <p style={{ marginTop: 0 }}>
-              We abide strictly by Florida Department of Agriculture and Consumer Services (FDACS) guidelines and federal agricultural laws. Due to strict quarantine rules regarding citrus greening, citrus trees and regulated host plants cannot be shipped outside the State of Florida. Any out-of-state order containing restricted citrus plants will be canceled and refunded.
+              We abide strictly by state and federal agricultural laws. Shipments to states with strict USDA agricultural inspection codes (such as Hawaii, California, Texas, and Alaska) are subject to strict regulatory compliance, potential inspection delays, and weather holds. Furthermore, due to Florida Department of Agriculture and Consumer Services (FDACS) quarantine rules regarding citrus greening, citrus trees and regulated host plants cannot be shipped outside the State of Florida. Any out-of-state order containing restricted citrus plants will be canceled and refunded or issued store credit.
             </p>
           </section>
 
@@ -112,20 +112,20 @@ export default function Terms() {
                 <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', textDecoration: 'underline', fontWeight: 'bold' }}>
                   info@thebotanicalbazaar.com
                 </a>{' '}
-                within 48 hours of delivery or pickup. Include clear photos of the damaged foliage, root system, and shipping package.
+                within 48 hours of carrier delivery timestamp or pickup. Include clear photos of the damaged foliage, root system, and shipping package.
               </li>
               <li style={{ marginBottom: '0.5rem' }}>
-                <strong>Resolution:</strong> Once our growers verify the claim, we will send a replacement plant or issue store credit. Minor cosmetic leaf blemishes or minor transit stress do not qualify as plant death or permanent damage.
+                <strong>Resolution:</strong> Once our growers verify the claim, we will dispatch a replacement plant or issue store credit. Minor cosmetic leaf blemishes or minor transit stress do not qualify as plant death or permanent damage.
               </li>
             </ul>
           </section>
 
           <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
-              7. Acclimatization &amp; Long-Term Care
+              7. Transit Acclimatization &amp; Long-Term Care
             </h2>
             <p style={{ marginTop: 0 }}>
-              Plants need time to adjust after traveling. Once you receive your plant, place it in bright indirect light and allow it to settle before repotting. Because watering practices, light levels, humidity, and home environments vary widely, our formal guarantee expires 48 hours after delivery. However, our nursery team is always here to answer care questions and help your plants thrive.
+              Plants need time to adjust after traveling. Upon arrival, place your plant in bright indirect light, check soil moisture, and allow it to settle for 7 to 14 days before repotting. Immediate repotting voids guarantee coverage. Because post-acclimating watering practices, humidity, and environments vary widely, our formal guarantee expires 48 hours after delivery or pickup. However, our nursery team is always here to answer long-term care questions.
             </p>
           </section>
 

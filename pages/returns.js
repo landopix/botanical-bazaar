@@ -6,10 +6,10 @@ export default function Returns() {
   return (
     <>
       <Head>
-        <title>Plant Care Guarantee & Refund Policy | The Botanical Bazaar</title>
+        <title>Plant Care Guarantee & Guarantee Claims Policy | The Botanical Bazaar</title>
         <meta
           name="description"
-          content="Learn about our 100% Live Arrival Guarantee, 48-hour claim window, and plant refund guidelines at The Botanical Bazaar in St. Petersburg, FL."
+          content="Learn about our 100% Live Arrival Guarantee, 48-hour claim window, replacement and store credit remedies, and transit acclimatization guidelines at The Botanical Bazaar in St. Petersburg, FL."
         />
         <link rel="canonical" href="https://thebotanicalbazaar.com/returns" />
       </Head>
@@ -26,7 +26,7 @@ export default function Returns() {
               textTransform: 'uppercase'
             }}
           >
-            Plant Care Guarantee &amp; Refund Policy
+            Plant Care Guarantee &amp; Claims Policy
           </h1>
           <p style={{ color: '#8DA38B', fontSize: '0.95rem', fontStyle: 'italic', margin: 0 }}>
             Our 100% Live Arrival Commitment &bull; St. Petersburg, FL
@@ -40,7 +40,7 @@ export default function Returns() {
               100% Live Arrival Guarantee
             </h2>
             <p style={{ marginTop: 0 }}>
-              We grow and package every plant with extreme care so it arrives healthy and hydrated. Whether your order travels across the country with standard shipping or is handed to you at our St. Petersburg nursery, we guarantee 100% live arrival on every specimen.
+              We grow and package every plant with extreme care so it arrives healthy and hydrated. Whether your order travels across the country with nationwide shipping or is handed to you at our St. Petersburg nursery, we guarantee 100% live arrival on every botanical specimen.
             </p>
           </section>
 
@@ -49,7 +49,7 @@ export default function Returns() {
               48-Hour Claim Process &amp; Guidelines
             </h2>
             <p style={{ marginTop: 0 }}>
-              Living plants are sensitive to prolonged darkness and extreme temperature shifts. If your plant suffers severe shipping damage or arrives in poor condition, please follow these steps:
+              Living plants are sensitive to dark transit conditions and temperature shifts. If your plant suffers severe shipping damage or arrives in poor condition, follow these steps to file a claim:
             </p>
             <ol style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
               <li style={{ marginBottom: '0.8rem' }}>
@@ -63,7 +63,7 @@ export default function Returns() {
                 <a href="mailto:info@thebotanicalbazaar.com" style={{ color: '#D4B06A', fontWeight: 'bold', textDecoration: 'underline' }}>
                   info@thebotanicalbazaar.com
                 </a>{' '}
-                within 48 hours of delivery or pickup. Our nursery team will review your photos promptly and arrange a replacement plant or issue store credit.
+                within 48 hours of carrier delivery timestamp or pickup. Our nursery team will review your photos promptly and dispatch a replacement plant or issue store credit.
               </li>
             </ol>
           </section>
@@ -80,12 +80,35 @@ export default function Returns() {
                 <strong>Covered:</strong> Severe stem breakage, root rot present upon unboxing, severe freeze or heat collapse, and lost or destroyed parcels verified by carrier tracking.
               </li>
               <li style={{ marginBottom: 0 }}>
-                <strong>Not Covered:</strong> Minor cosmetic leaf creasing, normal transit shedding of older bottom leaves, failure to unbox within 24 hours, or damage resulting from immediate repotting into improper soil mixes.
+                <strong>Not Covered:</strong> Minor cosmetic leaf creasing, normal transit shedding of older bottom leaves, failure to unbox within 24 hours, or damage resulting from immediate repotting within 14 days without acclimation.
               </li>
             </ul>
           </section>
 
           <section style={{ background: '#123826', padding: '1.8rem', borderRadius: '12px', border: '1px solid rgba(212, 176, 106, 0.4)' }}>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
+              Transit Acclimatization &amp; Settlement
+            </h2>
+            <p style={{ marginTop: 0 }}>
+              Immediate post-arrival settlement is crucial to long-term plant health and differs from general plant care:
+            </p>
+            <ul style={{ paddingLeft: '1.5rem', margin: '0.5rem 0' }}>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Unbox Immediately:</strong> Remove wrapping within 24 hours of arrival to restore fresh airflow.
+              </li>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Indirect Light:</strong> Keep in bright, indirect light in a temperature-controlled indoor area.
+              </li>
+              <li style={{ marginBottom: '0.8rem' }}>
+                <strong>Moisture Check:</strong> Water lightly if topsoil is dry to the touch.
+              </li>
+              <li style={{ marginBottom: 0 }}>
+                <strong>Hold Repotting:</strong> Do not repot for at least 7 to 14 days while the plant recovers from transit shock.
+              </li>
+            </ul>
+          </section>
+
+          <section style={{ background: '#1C3D2E', padding: '1.8rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
             <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', fontSize: '1.5rem', marginTop: 0, marginBottom: '0.8rem' }}>
               Returns &amp; Plant Care Support
             </h2>

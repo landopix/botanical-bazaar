@@ -149,7 +149,7 @@ export default function Sourcing() {
         ) : (
           <form className="sourcing-form" onSubmit={handleSubmit} noValidate>
             {serverError && (
-              <div className="error-banner" role="alert">
+              <div id="sourcing-server-error" className="error-banner" role="alert">
                 {serverError}
               </div>
             )}
@@ -166,9 +166,16 @@ export default function Sourcing() {
                   value={formData.customerName}
                   onChange={handleChange}
                   placeholder="e.g. Jane Doe"
+                  aria-required="true"
+                  aria-invalid={!!errors.customerName}
+                  aria-describedby={errors.customerName ? "error-customerName" : undefined}
                   className={`form-input ${errors.customerName ? 'input-error' : ''}`}
                 />
-                {errors.customerName && <span className="error-text">{errors.customerName}</span>}
+                {errors.customerName && (
+                  <span id="error-customerName" className="error-text" role="alert">
+                    {errors.customerName}
+                  </span>
+                )}
               </div>
 
               <div className="form-group">
@@ -182,9 +189,16 @@ export default function Sourcing() {
                   value={formData.customerEmail}
                   onChange={handleChange}
                   placeholder="e.g. jane@example.com"
+                  aria-required="true"
+                  aria-invalid={!!errors.customerEmail}
+                  aria-describedby={errors.customerEmail ? "error-customerEmail" : undefined}
                   className={`form-input ${errors.customerEmail ? 'input-error' : ''}`}
                 />
-                {errors.customerEmail && <span className="error-text">{errors.customerEmail}</span>}
+                {errors.customerEmail && (
+                  <span id="error-customerEmail" className="error-text" role="alert">
+                    {errors.customerEmail}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -199,9 +213,16 @@ export default function Sourcing() {
                 value={formData.plantName}
                 onChange={handleChange}
                 placeholder="e.g. Philodendron Spiritus Sancti, Variegated Monstera, or Queen Anthurium"
+                aria-required="true"
+                aria-invalid={!!errors.plantName}
+                aria-describedby={errors.plantName ? "error-plantName" : undefined}
                 className={`form-input ${errors.plantName ? 'input-error' : ''}`}
               />
-              {errors.plantName && <span className="error-text">{errors.plantName}</span>}
+              {errors.plantName && (
+                <span id="error-plantName" className="error-text" role="alert">
+                  {errors.plantName}
+                </span>
+              )}
             </div>
 
             <div className="form-grid">
@@ -214,6 +235,9 @@ export default function Sourcing() {
                   name="budgetRange"
                   value={formData.budgetRange}
                   onChange={handleChange}
+                  aria-required="true"
+                  aria-invalid={!!errors.budgetRange}
+                  aria-describedby={errors.budgetRange ? "error-budgetRange" : undefined}
                   className={`form-select ${errors.budgetRange ? 'input-error' : ''}`}
                 >
                   <option value="">-- Select Budget --</option>
@@ -223,18 +247,23 @@ export default function Sourcing() {
                     </option>
                   ))}
                 </select>
-                {errors.budgetRange && <span className="error-text">{errors.budgetRange}</span>}
+                {errors.budgetRange && (
+                  <span id="error-budgetRange" className="error-text" role="alert">
+                    {errors.budgetRange}
+                  </span>
+                )}
               </div>
 
-              <div className="form-group">
-                <label className="form-label">
+              <fieldset className="form-group" style={{ border: 'none', padding: 0, margin: 0 }}>
+                <legend className="form-label">
                   Desired Maturity <span className="required">*</span>
-                </label>
+                </legend>
                 <div className="radio-group">
                   {MATURITY_OPTIONS.map((opt) => (
-                    <label key={opt.value} className="radio-label">
+                    <label key={opt.value} htmlFor={`maturity-${opt.value}`} className="radio-label">
                       <input
                         type="radio"
+                        id={`maturity-${opt.value}`}
                         name="desiredMaturity"
                         value={opt.value}
                         checked={formData.desiredMaturity === opt.value}
@@ -245,8 +274,12 @@ export default function Sourcing() {
                     </label>
                   ))}
                 </div>
-                {errors.desiredMaturity && <span className="error-text">{errors.desiredMaturity}</span>}
-              </div>
+                {errors.desiredMaturity && (
+                  <span id="error-desiredMaturity" className="error-text" role="alert">
+                    {errors.desiredMaturity}
+                  </span>
+                )}
+              </fieldset>
             </div>
 
             <div className="form-group">

@@ -458,7 +458,7 @@ export default function Index() {
             The Almanac
           </h2>
           <Link
-            href="/garden-month"
+            href="/almanac"
             style={{
               display: "block",
               color: "#E9DCBE",
@@ -517,7 +517,7 @@ export default function Index() {
               and exclusive offers directly to your inbox.
             </p>
             {subscribed ? (
-              <p style={{ color: "#D4B06A", fontWeight: "bold" }}>
+              <p role="status" aria-live="polite" style={{ color: "#D4B06A", fontWeight: "bold" }}>
                 Thank you! You are now subscribed to the Almanac.
               </p>
             ) : (
@@ -532,10 +532,17 @@ export default function Index() {
                   margin: "0 auto",
                 }}
               >
+                <label htmlFor="homepage-newsletter-email" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
+                  Email Address for Almanac Subscription
+                </label>
                 <input
+                  id="homepage-newsletter-email"
                   type="email"
                   placeholder="Your email address"
                   required
+                  aria-required="true"
+                  aria-invalid={!!errorMsg}
+                  aria-describedby={errorMsg ? "homepage-newsletter-error" : undefined}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   style={{
@@ -570,7 +577,7 @@ export default function Index() {
               </form>
             )}
             {errorMsg && (
-              <p style={{ color: "#ff8888", marginTop: "0.6rem", fontWeight: "bold" }}>
+              <p id="homepage-newsletter-error" role="alert" style={{ color: "#ff8888", marginTop: "0.6rem", fontWeight: "bold" }}>
                 {errorMsg}
               </p>
             )}
