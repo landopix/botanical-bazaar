@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
-import CareSheetSkeleton from '../components/skeletons/CareSheetSkeleton';
 import useBfcacheReset from '../hooks/useBfcacheReset';
 
-export default function Almanac({ careSheets }) {
+export default function Almanac({ careSheets, articles, events }) {
   const sheets = careSheets && careSheets.length > 0 ? careSheets : [];
+  const articleList = articles && articles.length > 0 ? articles : [];
+  const eventList = events && events.length > 0 ? events : [];
 
   // Almanac subscription form state
   const [email, setEmail] = useState('');
@@ -63,10 +64,10 @@ export default function Almanac({ careSheets }) {
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1050px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
       <Head>
         <title>The Almanac & Plant Care Guides | The Botanical Bazaar</title>
-        <meta name="description" content="Explore tropical plant care sheets, seasonal gardening advice, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
+        <meta name="description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
         <link rel="canonical" href="https://thebotanicalbazaar.com/almanac" />
         <meta property="og:title" content="The Almanac & Plant Care Guides | The Botanical Bazaar" />
-        <meta property="og:description" content="Explore tropical plant care sheets, seasonal gardening advice, and botanical guides curated for St. Petersburg growers." />
+        <meta property="og:description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
       </Head>
 
@@ -74,7 +75,7 @@ export default function Almanac({ careSheets }) {
         The Almanac
       </h1>
       <p style={{ textAlign: 'center', fontSize: '1.15rem', maxWidth: '750px', margin: '0 auto 2.5rem auto', lineHeight: '1.6', fontStyle: 'italic' }}>
-        Welcome to our Almanac, a curated library of tropical plant care sheets and cultivation guides for curious growers in St. Petersburg, Florida.
+        Welcome to our Almanac, a comprehensive botanical hub for seasonal cultivation dispatches, care guides, and upcoming nursery events for growers in St. Petersburg, Florida.
       </p>
 
       {/* Almanac Email Dispatch Subscription Form */}
@@ -154,6 +155,39 @@ export default function Almanac({ careSheets }) {
         )}
       </section>
 
+      {/* Seasonal Articles & Dispatches Section */}
+      <section style={{ marginBottom: '3.5rem' }}>
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
+          Seasonal Articles &amp; Dispatches
+        </h2>
+        {articleList.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {articleList.map((article, i) => (
+              <div key={article._id || i} style={{ background: '#1C3D2E', border: '1px solid #D4B06A', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  {article.imageUrl && (
+                    <img src={article.imageUrl} alt={article.name || article.seoTitle || 'Article Image'} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
+                  )}
+                  <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.3rem' }}>
+                    {article.name || article.seoTitle || 'Seasonal Gardening Note'}
+                  </h3>
+                  <p style={{ color: '#F5E7C4', fontSize: '1rem', lineHeight: '1.5' }}>
+                    {article.seoDescription || 'Read our latest insights on seasonal plant care and soil preparation.'}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ background: '#00301E', border: '1px solid rgba(212, 176, 106, 0.4)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+            <p style={{ color: '#F5E7C4', margin: 0, fontStyle: 'italic', fontSize: '1.05rem' }}>
+              Fresh seasonal cultivation dispatches are currently being drafted for our upcoming issue. Check back soon for new articles!
+            </p>
+          </div>
+        )}
+      </section>
+
+      {/* Botanical Care Sheets Section */}
       <section style={{ marginBottom: '3.5rem' }}>
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Botanical Care Sheets
@@ -186,6 +220,51 @@ export default function Almanac({ careSheets }) {
         )}
       </section>
 
+      {/* Nursery Calendar & Events Section */}
+      <section style={{ marginBottom: '3.5rem' }}>
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
+          Nursery Calendar &amp; Workshops
+        </h2>
+        {eventList.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            {eventList.map((eventItem, i) => (
+              <div key={eventItem._id || i} style={{ background: '#1C3D2E', border: '1px solid #D4B06A', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.3rem' }}>
+                    {eventItem.title}
+                  </h3>
+                  {eventItem.dateTime && (
+                    <p style={{ color: '#E9DCBE', fontWeight: 'bold', margin: '0.2rem 0 0.5rem 0', fontSize: '0.95rem' }}>
+                      {new Date(eventItem.dateTime).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  )}
+                  {eventItem.location && (
+                    <p style={{ color: '#D4B06A', fontStyle: 'italic', margin: '0 0 0.8rem 0', fontSize: '0.9rem' }}>
+                      Location: {eventItem.location}
+                    </p>
+                  )}
+                  <p style={{ color: '#F5E7C4', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                    {eventItem.description}
+                  </p>
+                </div>
+                {eventItem.ticketUrl && (
+                  <div style={{ marginTop: '1rem' }}>
+                    <Button variant="gold-filled" href={eventItem.ticketUrl}>RSVP / Ticket Info</Button>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ background: '#00301E', border: '1px solid rgba(212, 176, 106, 0.4)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+            <p style={{ color: '#F5E7C4', margin: '0 0 1rem 0', fontStyle: 'italic', fontSize: '1.05rem' }}>
+              No upcoming public events currently scheduled. Check back soon for workshops and pop-up plant drops!
+            </p>
+            <Button variant="outline" href="/events">View Full Events Calendar</Button>
+          </div>
+        )}
+      </section>
+
       <section style={{ background: '#00301E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center' }}>
         <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0 }}>Explore Climate & Care Resources</h3>
         <p style={{ maxWidth: '600px', margin: '0.5rem auto 1.5rem auto' }}>
@@ -202,10 +281,13 @@ export default function Almanac({ careSheets }) {
 
 export async function getStaticProps() {
   let careSheets = null;
+  let articles = null;
+  let events = null;
 
   try {
     if (isSanityConfigured()) {
-      const query = `*[_type == "plantCareSheet"]{
+      const sheetsQuery = `*[_type == "plantCareSheet"]{
+        _id,
         botanicalName,
         commonName,
         lightNeeds,
@@ -214,18 +296,44 @@ export async function getStaticProps() {
         careInstructions,
         "imageUrl": image.asset->url
       }`;
-      const res = await sanityClient.fetch(query);
-      if (Array.isArray(res) && res.length > 0) {
-        careSheets = res;
-      }
+
+      const articlesQuery = `*[_type == "page" && status == "published"]{
+        _id,
+        name,
+        "slug": slug.current,
+        seoTitle,
+        seoDescription
+      }`;
+
+      const eventsQuery = `*[_type == "eventItem"] | order(dateTime asc){
+        _id,
+        title,
+        dateTime,
+        description,
+        location,
+        ticketUrl,
+        "imageUrl": image.asset->url
+      }`;
+
+      const [resSheets, resArticles, resEvents] = await Promise.all([
+        sanityClient.fetch(sheetsQuery).catch(() => []),
+        sanityClient.fetch(articlesQuery).catch(() => []),
+        sanityClient.fetch(eventsQuery).catch(() => [])
+      ]);
+
+      if (Array.isArray(resSheets) && resSheets.length > 0) careSheets = resSheets;
+      if (Array.isArray(resArticles) && resArticles.length > 0) articles = resArticles;
+      if (Array.isArray(resEvents) && resEvents.length > 0) events = resEvents;
     }
   } catch (err) {
-    console.warn('Sanity plantCareSheet fetch error:', err.message);
+    console.warn('Sanity Almanac content fetch error:', err.message);
   }
 
   return {
     props: {
       careSheets,
+      articles,
+      events
     },
     revalidate: 60,
   };

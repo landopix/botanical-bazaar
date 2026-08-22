@@ -1,0 +1,30 @@
+[
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-22T21:07:03.815Z",
+    "message": "E2E automated test message for nursery inquiries."
+  },
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-22T21:08:24.247Z",
+    "message": "E2E automated test message for nursery inquiries."
+  },
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-22T21:09:43.454Z",
+    "message": "E2E automated test message for nursery inquiries."
+  },
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-22T21:10:30.050Z",
+    "message": "E2E automated test message for nursery inquiries."
+  }
+]

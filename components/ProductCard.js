@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
+import { parseProductTitle } from '../lib/shopify';
 
 export default function ProductCard({
   product = {},
@@ -12,13 +13,10 @@ export default function ProductCard({
 }) {
   const { wishlist, toggleWishlist } = useWishlist();
 
-  const handleWishlistToggle = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggleWishlist(product);
-  };
   const slug = product?.slug?.current || product?.slug || '';
-  const name = product?.name ?? product?.title ?? 'Botanical Specimen';
+  const rawName = product?.name ?? product?.title ?? 'Botanical Specimen';
+  const { commonName, scientificName } = parseProductTitle(rawName);
+
   const price = product?.price;
   const quantity = product?.quantity ?? 10;
   const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
@@ -26,7 +24,27 @@ export default function ProductCard({
   const imageSrc = rawImage
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
-  const sizes = product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
+
+  // Extract primary variant "Size" option value
+  let extractedSize = null;
+  const primaryVariant = product?.variants?.[0];
+  if (primaryVariant?.selectedOptions && Array.isArray(primaryVariant.selectedOptions)) {
+    const sizeOpt = primaryVariant.selectedOptions.find(
+      opt => opt?.name?.toLowerCase() === 'size'
+    );
+    if (sizeOpt?.value) {
+      extractedSize = sizeOpt.value;
+    }
+  }
+
+  if (!extractedSize && primaryVariant?.title && primaryVariant.title !== 'Default Title') {
+    extractedSize = primaryVariant.title;
+  }
+
+  if (!extractedSize) {
+    extractedSize = product?.custom?.pot_size || product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
+  }
+
   const type = product?.type || product?.category || 'Tropical Plant';
 
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
@@ -99,7 +117,7 @@ export default function ProductCard({
       <button
         type="button"
         onClick={handleWishlistClick}
-        aria-label={isWishlisted ? `Remove ${name} from Wishlist` : `Save ${name} to Wishlist`}
+        aria-label={isWishlisted ? `Remove ${commonName} from Wishlist` : `Save ${commonName} to Wishlist`}
         title={isWishlisted ? "In Wishlist Sanctuary" : "Add to Wishlist"}
         className="wishlist-btn-toggle"
         style={{
@@ -157,7 +175,7 @@ export default function ProductCard({
           >
             <Image
               src={imageSrc}
-              alt={name}
+              alt={commonName}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
@@ -179,19 +197,30 @@ export default function ProductCard({
               fontFamily: 'Cinzel, serif',
               lineHeight: '1.3',
               color: '#00301E',
-              textAlign: 'center',
-              minHeight: '2.6rem'
+              textAlign: 'center'
             }}
           >
-            {name}
+            {commonName}
           </strong>
+          {scientificName && (
+            <span
+              style={{
+                display: 'block',
+                fontSize: '0.88rem',
+                fontStyle: 'italic',
+                fontFamily: 'Crimson Text, serif',
+                color: '#11402A',
+                textAlign: 'center',
+                marginTop: '0.2rem'
+              }}
+            >
+              ({scientificName})
+            </span>
+          )}
         </Link>
 
-        <p style={{ margin: '0.3rem 0 0.1rem 0', fontSize: '0.95rem', color: '#555', textAlign: 'center' }}>
-          {sizes}
-        </p>
-        <p style={{ margin: '0.1rem 0', fontSize: '0.95rem', color: '#00301E', textAlign: 'center' }}>
-          {type}
+        <p style={{ margin: '0.5rem 0 0.1rem 0', fontSize: '0.9rem', color: '#00301E', textAlign: 'center', fontWeight: '500' }}>
+          Size: {extractedSize} &bull; Type: {type}
         </p>
         <p style={{ fontWeight: 'bold', margin: '0.4rem 0 0.8rem 0', fontSize: '1.1rem', color: '#11402A', textAlign: 'center' }}>
           {isSoldOut

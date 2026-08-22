@@ -457,18 +457,7 @@ export default function Index() {
           >
             The Almanac
           </h2>
-          <Link
-            href="/almanac"
-            style={{
-              display: "block",
-              color: "#E9DCBE",
-              textDecoration: "none",
-              fontStyle: "italic",
-              marginBottom: "0.3rem",
-            }}
-          >
-            This Month in the Garden
-          </Link>
+
           <Link
             href="/zones"
             style={{

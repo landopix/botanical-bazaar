@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "seed": "node bin/seed.js",
-    "prebuild": "node bin/generate-sitemap.js"
+    "prebuild": "node bin/generate-sitemap.js",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@builder.io/react": "^9.4.2",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.13",
+    "@playwright/test": "^1.62.1",
     "autoprefixer": "^10.5.4",
     "postcss": "^8.5.26",
     "tailwindcss": "^3.4.19"
