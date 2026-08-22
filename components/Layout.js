@@ -30,7 +30,7 @@ export function getZoneFromZip(zipInput) {
   if (num >= 3000 && num <= 5999) return '5a';
   if (num >= 80000 && num <= 89999) return '6a';
 
-  return '7a';
+  return null;
 }
 
 
@@ -833,7 +833,7 @@ export default function Layout({ children }) {
             ) : (
               <div className="search-results-list">
                 {matchingProducts.map((prod) => {
-                  const isSold = !prod.quantity || prod.quantity < 3;
+                  const isSold = prod.availableForSale === false || (prod.quantity !== undefined && prod.quantity < 1);
                   const resolvedImageSrc = prod.image
                     ? (prod.image.startsWith("http") || prod.image.startsWith("/")
                         ? prod.image

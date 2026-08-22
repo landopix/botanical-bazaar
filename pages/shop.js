@@ -276,7 +276,7 @@ export default function Shop({ initialProducts = [] }) {
     // 2. Availability Filter
     if (!viewSoldOut) {
       result = result.filter((p) => {
-        const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 3);
+        const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
         return isAvailable;
       });
     }
@@ -376,8 +376,8 @@ export default function Shop({ initialProducts = [] }) {
 
     if (viewSoldOut) {
       result.sort((a, b) => {
-        const aSold = a?.availableForSale === false || (!a?.quantity || a.quantity < 3);
-        const bSold = b?.availableForSale === false || (!b?.quantity || b.quantity < 3);
+        const aSold = a?.availableForSale === false || (a?.quantity !== undefined && a.quantity < 1);
+        const bSold = b?.availableForSale === false || (b?.quantity !== undefined && b.quantity < 1);
         if (aSold && !bSold) return 1;
         if (!aSold && bSold) return -1;
         return 0;
@@ -436,7 +436,7 @@ export default function Shop({ initialProducts = [] }) {
 
   const getActiveInStockCountForCategory = (categoryId) => {
     return products.filter((product) => {
-      const isSoldOut = !product?.quantity || product.quantity < 3;
+      const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
       if (isSoldOut) return false;
 
       const catLower = categoryId.toLowerCase();
