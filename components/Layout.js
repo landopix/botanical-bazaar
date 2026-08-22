@@ -143,6 +143,8 @@ const staticPages = [
   }
 ];
 
+const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
+const shopifyAccountUrl = `https://${rawDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
 export default function Layout({ children }) {
   const router = useRouter();
   const { cartCount } = useCart();
@@ -730,7 +732,7 @@ export default function Layout({ children }) {
         </Link>
 
         {/* Account Action Link */}
-        <a href="https://the-botanical-bazaar.myshopify.com/account/login" className="account-btn" aria-label="My account login">
+        <a href={shopifyAccountUrl} className="account-btn" aria-label="My account login">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -1066,7 +1068,7 @@ export default function Layout({ children }) {
             <Link href="/faq">FAQ</Link>
             <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
             <Link href="/returns">Refunds &amp; Guarantee</Link>
-            <a href="https://the-botanical-bazaar.myshopify.com/account/login">Track Order / Account</a>
+            <a href={shopifyAccountUrl}>Track Order / Account</a>
             <Link href="/terms">Terms</Link>
           </div>
           <div className="footer-column">

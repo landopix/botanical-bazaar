@@ -9,7 +9,8 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "seed": "node bin/seed.js"
+    "seed": "node bin/seed.js",
+    "prebuild": "node bin/generate-sitemap.js"
   },
   "dependencies": {
     "@builder.io/react": "^9.4.2",

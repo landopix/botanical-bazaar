@@ -286,9 +286,10 @@ export default function ProductDetail({ initialProduct }) {
     );
   };
 
-  const pageUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const SITE_ORIGIN = 'https://thebotanicalbazaar.com';
+  const pageUrl = `${SITE_ORIGIN}/product/${product.slug}`;
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image || '/assets/placeholder.png'];
-  const imageUrl = galleryImages[0]?.startsWith('http') ? galleryImages[0] : `${typeof window !== 'undefined' ? window.location.origin : ''}${galleryImages[0]?.startsWith('/') ? galleryImages[0] : '/' + galleryImages[0]}`;
+  const imageUrl = galleryImages[0]?.startsWith('http') ? galleryImages[0] : `${SITE_ORIGIN}${galleryImages[0]?.startsWith('/') ? galleryImages[0] : '/' + galleryImages[0]}`;
   const descriptionText = product.description || `${product.name} live plant available for purchase.`;
 
   const structuredSchema = {
@@ -309,7 +310,7 @@ export default function ProductDetail({ initialProduct }) {
         'name': 'Live Plant Guarantee',
         'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
         'merchantReturnDays': 2,
-        'returnMethod': 'https://schema.org/ReturnByMail',
+        'returnMethod': 'https://schema.org/ReturnNotPermitted',
         'refundType': 'StoreCredit'
       },
       'shippingDetails': {
@@ -321,26 +322,23 @@ export default function ProductDetail({ initialProduct }) {
         },
         'shippingDestination': {
           '@type': 'DefinedRegion',
-          'addressCountry': 'US',
-          'addressRegion': 'FL',
-          'addressLocality': 'St. Petersburg'
+          'addressCountry': 'US'
         },
         'deliveryTime': {
           '@type': 'ShippingDeliveryTime',
           'handlingTime': {
             '@type': 'QuantitativeValue',
-            'minValue': 0,
-            'maxValue': 2,
+            'minValue': 1,
+            'maxValue': 3,
             'unitCode': 'DAY'
           },
           'transitTime': {
             '@type': 'QuantitativeValue',
-            'minValue': 0,
-            'maxValue': 0,
+            'minValue': 2,
+            'maxValue': 5,
             'unitCode': 'DAY'
           }
-        },
-        'deliveryMode': 'https://schema.org/DeliveryModePickUp'
+        }
       }
     },
     'brand': {
@@ -358,6 +356,8 @@ export default function ProductDetail({ initialProduct }) {
         <meta property="og:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta property="og:description" content={descriptionText} />
         <meta property="og:image" content={imageUrl} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:type" content="product" />
         <meta name="twitter:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta name="twitter:description" content={descriptionText} />
         <meta name="twitter:image" content={imageUrl} />

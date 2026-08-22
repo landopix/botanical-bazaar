@@ -12,3 +12,14 @@
 - **Uniform Card Flex Layouts:** Cards across Shop, Wishlist, Sales, Almanac, Events, and Gallery use `flex flex-col h-full` with `flex-grow` on content containers so call-to-action buttons anchor uniformly to the bottom of each grid cell.
 - **Branded Skeleton Loaders:** Created standalone reusable skeleton loaders (`ProductCardSkeleton`, `CareSheetSkeleton`, `EventCardSkeleton`, `GalleryItemSkeleton`) styled with Tailwind `animate-pulse` using lighter forest green (`#123826` / `#1C3D2E`) backgrounds and low-opacity Warm Gold (`#D4B06A`) glowing borders.
 - **Defensive Data Fallbacks:** Applied optional chaining (`?.`) and nullish coalescing (`??`) across all card props and catalog mapping logic to safely render default fallbacks when fields are null or missing.
+
+## SEO & Sitemap Security & Discoverability
+- Build-time sitemap generation script  cleanly queries live Shopify product handles and merges canonical static routes into .
+- Exclude internal administrative routes (, , ) from  to prevent unnecessary search index exposure.
+- Enforce absolute site origin () for all canonical tags, , and  metadata across server rendering and client hydration.
+
+## SEO & Sitemap Discoverability & Account Unification
+- Build-time sitemap generator (`bin/generate-sitemap.js`) cleanly queries live Shopify product handles and merges canonical static routes into `public/sitemap.xml`.
+- Exclude internal administrative/utility routes (`/admin`, `/cancel`, `/success`) from `public/sitemap.xml` to prevent unnecessary search index exposure.
+- Enforce absolute site origin (`https://thebotanicalbazaar.com`) for all canonical tags, `og:url`, and `og:image` metadata across server rendering and client hydration.
+- Unify customer account links across header, footer, mobile sidebar, and redirects to target the configured Shopify customer portal login URL.
