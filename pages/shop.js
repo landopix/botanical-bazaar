@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Button from "../components/Button";
@@ -81,9 +81,6 @@ export default function Shop({ initialProducts = [] }) {
   // Products list provided via Next.js SSG/ISR
   const [products, setProducts] = useState(initialProducts);
 
-  // Real-time filtered & sorted products list
-  const [filteredProducts, setFilteredProducts] = useState(initialProducts);
-
   // Active Filter & Sort States
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -97,19 +94,25 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedBloom, setSelectedBloom] = useState("");
 
   // Verification Gate for Catalog Launch (OPP-001, TBB-001)
-  const hasOverallInventory = products.some((p) => p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1));
-  const hasShippingInventory = products.some((p) => {
-    const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
-    const isPickupOnly = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'pickup-only' || t?.toLowerCase() === 'local-pickup-only');
-    return isAvailable && !isPickupOnly;
-  });
-  const hasPickupInventory = products.some((p) => {
-    const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
-    const isNoPickup = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'no-pickup' || t?.toLowerCase() === 'shipping-only');
-    return isAvailable && !isNoPickup;
-  });
-
-  const launchGatePassed = hasOverallInventory && hasShippingInventory && hasPickupInventory;
+  const { hasOverallInventory, hasShippingInventory, hasPickupInventory, launchGatePassed } = useMemo(() => {
+    const hasOverall = products.some((p) => p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1));
+    const hasShipping = products.some((p) => {
+      const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
+      const isPickupOnly = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'pickup-only' || t?.toLowerCase() === 'local-pickup-only');
+      return isAvailable && !isPickupOnly;
+    });
+    const hasPickup = products.some((p) => {
+      const isAvailable = p?.availableForSale !== false && (p?.quantity === undefined || p?.quantity >= 1);
+      const isNoPickup = Array.isArray(p?.tags) && p.tags.some((t) => t?.toLowerCase() === 'no-pickup' || t?.toLowerCase() === 'shipping-only');
+      return isAvailable && !isNoPickup;
+    });
+    return {
+      hasOverallInventory: hasOverall,
+      hasShippingInventory: hasShipping,
+      hasPickupInventory: hasPickup,
+      launchGatePassed: hasOverall && hasShipping && hasPickup,
+    };
+  }, [products]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -211,8 +214,8 @@ export default function Shop({ initialProducts = [] }) {
     );
   };
 
-  // Perform real-time filtering and sorting
-  useEffect(() => {
+  // Real-time filtered & sorted products list derived via useMemo
+  const filteredProducts = useMemo(() => {
     let result = [...products];
 
     // 1. Collection Handle / Category Filter Logic
@@ -384,7 +387,7 @@ export default function Shop({ initialProducts = [] }) {
       });
     }
 
-    setFilteredProducts(result);
+    return result;
   }, [
     products,
     selectedCategory,
@@ -399,40 +402,44 @@ export default function Shop({ initialProducts = [] }) {
   ]);
 
   // Dynamically extract unique available hardiness zones
-  const availableZones = new Set();
-  products.forEach((prod) => {
-    if (prod?.custom?.hardiness_zone) {
-      availableZones.add(prod.custom.hardiness_zone.trim());
-    }
-    if (Array.isArray(prod?.zones)) {
-      prod.zones.forEach((zone) => {
-        if (zone && zone !== "1" && zone !== "2") {
-          availableZones.add(zone);
-        }
-      });
-    }
-  });
-  const sortedZones = Array.from(availableZones).sort(
-    (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
-  );
+  const sortedZones = useMemo(() => {
+    const availableZones = new Set();
+    products.forEach((prod) => {
+      if (prod?.custom?.hardiness_zone) {
+        availableZones.add(prod.custom.hardiness_zone.trim());
+      }
+      if (Array.isArray(prod?.zones)) {
+        prod.zones.forEach((zone) => {
+          if (zone && zone !== "1" && zone !== "2") {
+            availableZones.add(zone);
+          }
+        });
+      }
+    });
+    return Array.from(availableZones).sort(
+      (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
+    );
+  }, [products]);
 
   // Dynamically extract unique pot size options
-  const availableSizes = new Set();
-  products.forEach((prod) => {
-    if (prod?.custom?.pot_size) {
-      availableSizes.add(prod.custom.pot_size.trim());
-    }
-    if (prod?.sizes && typeof prod.sizes === "string") {
-      const parts = prod.sizes.split("|");
-      parts.forEach((part) => {
-        const clean = part.trim();
-        if (clean) {
-          availableSizes.add(clean);
-        }
-      });
-    }
-  });
-  const sortedSizes = Array.from(availableSizes).sort();
+  const sortedSizes = useMemo(() => {
+    const availableSizes = new Set();
+    products.forEach((prod) => {
+      if (prod?.custom?.pot_size) {
+        availableSizes.add(prod.custom.pot_size.trim());
+      }
+      if (prod?.sizes && typeof prod.sizes === "string") {
+        const parts = prod.sizes.split("|");
+        parts.forEach((part) => {
+          const clean = part.trim();
+          if (clean) {
+            availableSizes.add(clean);
+          }
+        });
+      }
+    });
+    return Array.from(availableSizes).sort();
+  }, [products]);
 
   const getActiveInStockCountForCategory = (categoryId) => {
     return products.filter((product) => {
@@ -547,10 +554,10 @@ export default function Shop({ initialProducts = [] }) {
     }).length;
   };
 
-  const visibleCollections = COLLECTIONS.filter((collection) => {
-    if (products.length === 0) return true;
-    return getActiveInStockCountForCategory(collection.id) > 0;
-  });
+  const visibleCollections = useMemo(() => {
+    if (products.length === 0) return COLLECTIONS;
+    return COLLECTIONS.filter((collection) => getActiveInStockCountForCategory(collection.id) > 0);
+  }, [products]);
 
   // Dynamic meta title and description based on active filters
   const activeCategoryObj = COLLECTIONS.find(c => c.id === selectedCategory);
