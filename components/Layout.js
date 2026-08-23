@@ -846,7 +846,7 @@ export default function Layout({ children }) {
         aria-modal={isSidebarOpen ? "true" : "false"}
         tabIndex={-1}
       >
-        <div className="sidebar-search-container">
+        <div className="sidebar-search-container" style={{ position: "relative", display: "flex", alignItems: "center" }}>
           <Link
             href="/"
             className="sidebar-search-submark-link"
@@ -858,15 +858,53 @@ export default function Layout({ children }) {
               className="sidebar-search-submark"
             />
           </Link>
-          <input
-            id="sidebar-search"
-            ref={searchInputRef}
-            type="text"
-            placeholder="Search"
-            aria-label="Search navigation and products"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center" }}>
+            <input
+              id="sidebar-search"
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search"
+              aria-label="Search navigation and products"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape" && searchQuery) {
+                  e.stopPropagation();
+                  setSearchQuery("");
+                }
+              }}
+              style={{ paddingRight: searchQuery.trim() !== "" ? "2rem" : "1rem", width: "100%" }}
+            />
+            {searchQuery.trim() !== "" && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  searchInputRef.current?.focus();
+                }}
+                aria-label="Clear search input"
+                title="Clear search (Esc)"
+                style={{
+                  position: "absolute",
+                  right: "0.5rem",
+                  background: "none",
+                  border: "none",
+                  color: "#D4B06A",
+                  fontSize: "1.1rem",
+                  lineHeight: 1,
+                  cursor: "pointer",
+                  padding: "0.2rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "50%",
+                  transition: "color 0.15s ease"
+                }}
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
 
         {searchQuery.trim() !== "" ? (
@@ -1161,6 +1199,26 @@ export default function Layout({ children }) {
           <Link href="/about">About</Link>
         </nav>
       </header>
+
+      {/* Accessible Live Region for Search Results */}
+      <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          padding: 0,
+          margin: "-1px",
+          overflow: "hidden",
+          clip: "rect(0, 0, 0, 0)",
+          whiteSpace: "nowrap",
+          border: 0,
+        }}
+      >
+        {searchQuery.trim() !== "" ? `Search for "${searchQuery}" returned ${matchingProducts.length} product${matchingProducts.length === 1 ? "" : "s"} and ${matchingPages.length} page${matchingPages.length === 1 ? "" : "s"}.` : ""}
+      </div>
 
       {/* Accessible Live Region for USDA Zone Updates */}
       <div
