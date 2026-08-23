@@ -75,7 +75,7 @@ export default function ShippingPickup() {
             </h2>
             <ul style={{ color: '#E9DCBE', lineHeight: '1.7', paddingLeft: '1.2rem', margin: 0 }}>
               <li style={{ marginBottom: '0.8rem' }}>
-                <strong>Appointment Scheduling:</strong> Select local pickup at checkout. Once your order is prepared, you will receive an email confirmation with instructions to select your preferred pickup time slot at our St. Petersburg nursery.
+                <strong>Ready for Pickup Timing:</strong> Ready for pickup within 24–48 hours by scheduled appointment. Once your order is prepared, you will receive an email notification with instructions to select your preferred pickup time slot at our St. Petersburg nursery.
               </li>
               <li style={{ marginBottom: '0.8rem' }}>
                 <strong>In-Person Inspection &amp; Advice:</strong> You inspect your plants side-by-side with our team before taking them home. Our growers share tailored advice regarding humidity, soil mix, and lighting for your home environment.

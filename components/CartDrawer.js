@@ -7,7 +7,7 @@ import { isSanityCdnUrl } from '../lib/image-utils';
 import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function CartDrawer({ isOpen, onClose }) {
-  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
+  const { cart, updateQuantity, removeFromCart, cartTotal, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
   const [announcement, setAnnouncement] = useState('');
@@ -47,7 +47,6 @@ export default function CartDrawer({ isOpen, onClose }) {
             variantId: item.variantId || item.id,
             name: item.name
           })),
-          fulfillment_method: fulfillmentMethod,
           user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
         })
       });
@@ -82,34 +81,6 @@ export default function CartDrawer({ isOpen, onClose }) {
           </div>
         ) : (
           <>
-            <fieldset className="fulfillment-toggle">
-              <legend className="sr-only">Fulfillment Method</legend>
-              <label htmlFor="drawer-fulfillment-shipping" className={`toggle-option ${fulfillmentMethod === 'shipping' ? 'active' : ''}`}>
-                <input
-                  id="drawer-fulfillment-shipping"
-                  type="radio"
-                  name="drawer-fulfillment"
-                  value="shipping"
-                  checked={fulfillmentMethod === 'shipping'}
-                  aria-checked={fulfillmentMethod === 'shipping'}
-                  onChange={() => setFulfillmentMethod('shipping')}
-                />
-                <span>Standard Shipping</span>
-              </label>
-              <label htmlFor="drawer-fulfillment-pickup" className={`toggle-option ${fulfillmentMethod === 'pickup' ? 'active' : ''}`}>
-                <input
-                  id="drawer-fulfillment-pickup"
-                  type="radio"
-                  name="drawer-fulfillment"
-                  value="pickup"
-                  checked={fulfillmentMethod === 'pickup'}
-                  aria-checked={fulfillmentMethod === 'pickup'}
-                  onChange={() => setFulfillmentMethod('pickup')}
-                />
-                <span>St. Pete Pickup ($0.00)</span>
-              </label>
-            </fieldset>
-
             {hasZoneSensitiveItems && (
               <div className="restriction-notice" style={{ background: "rgba(186, 47, 47, 0.15)", borderColor: "#ba2f2f" }}>
                 Cold Protection Advisory (Zone {userHardinessZone || "10a"}): Contains tropical plant species requiring indoor protection or greenhouse shelter in your zone. Insulated packaging will be automatically applied.
@@ -266,36 +237,6 @@ export default function CartDrawer({ isOpen, onClose }) {
           padding: 0.6rem 1.2rem;
           border-radius: 20px;
           font-weight: bold;
-          cursor: pointer;
-        }
-        .fulfillment-toggle {
-          display: flex;
-          background: #1C3D2E;
-          border: 1px solid #D4B06A;
-          border-radius: 8px;
-          padding: 4px;
-          margin: 0 0 1rem 0;
-        }
-        .toggle-option {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.4rem;
-          padding: 0.4rem;
-          font-size: 0.85rem;
-          cursor: pointer;
-          border-radius: 6px;
-          color: #E9DCBE;
-          transition: all 0.2s ease;
-        }
-        .toggle-option.active {
-          background: #D4B06A;
-          color: #00301E;
-          font-weight: bold;
-        }
-        .toggle-option input {
-          accent-color: #00301E;
           cursor: pointer;
         }
         .restriction-notice {

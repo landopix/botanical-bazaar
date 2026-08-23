@@ -11,8 +11,6 @@ export default async function handler(req, res) {
     const {
       cart,
       items,
-      fulfillment_method,
-      fulfillmentMethod,
       customer_email,
       customer_name,
       customer_phone,
@@ -27,8 +25,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Cart is empty', correlationId });
     }
 
-    const selectedFulfillment = fulfillment_method || fulfillmentMethod || 'shipping';
-    const deliveryMethod = selectedFulfillment === 'pickup' ? 'PICK_UP' : 'SHIPPING';
     const zone = user_hardiness_zone || userHardinessZone || '10a';
 
     let catalog = [];
@@ -72,9 +68,8 @@ export default async function handler(req, res) {
       };
     });
 
-    // Custom order attributes for fulfillment, notes, hardiness zone, contact info
+    // Custom order attributes for notes, hardiness zone, contact info
     const customAttributes = [
-      { key: 'Fulfillment Method', value: selectedFulfillment === 'pickup' ? 'Local Nursery Pickup' : 'Standard Shipping' },
       { key: 'USDA Hardiness Zone', value: zone }
     ];
 
@@ -88,18 +83,11 @@ export default async function handler(req, res) {
       customAttributes.push({ key: 'Order Notes', value: notes });
     }
 
-    const buyerIdentity = {
-      ...(customer_email ? { email: customer_email } : {}),
-      preferences: {
-        delivery: {
-          deliveryMethod: [deliveryMethod]
-        }
-      }
-    };
+    const buyerIdentity = customer_email ? { email: customer_email } : null;
 
     const { checkoutUrl } = await createShopifyCart({
       lines,
-      buyerIdentity,
+      ...(buyerIdentity ? { buyerIdentity } : {}),
       customAttributes
     });
 
