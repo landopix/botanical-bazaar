@@ -628,7 +628,7 @@ export default function Layout({ children }) {
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "GardenStore",
+              "@type": ["GardenStore", "LocalBusiness"],
               "@id": "https://thebotanicalbazaar.com/#nursery",
               "name": "The Botanical Bazaar",
               "alternateName": "The Botanical Bazaar LLC",
@@ -655,6 +655,28 @@ export default function Layout({ children }) {
                   "dayOfWeek": ["Thursday", "Friday", "Saturday", "Sunday"],
                   "opens": "10:00",
                   "closes": "17:00"
+                }
+              ],
+              "areaServed": [
+                {
+                  "@type": "AdministrativeArea",
+                  "name": "St. Petersburg"
+                },
+                {
+                  "@type": "AdministrativeArea",
+                  "name": "Tampa"
+                },
+                {
+                  "@type": "AdministrativeArea",
+                  "name": "Clearwater"
+                },
+                {
+                  "@type": "AdministrativeArea",
+                  "name": "Pinellas County"
+                },
+                {
+                  "@type": "State",
+                  "name": "Florida"
                 }
               ],
               "priceRange": "$$",

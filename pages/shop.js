@@ -552,20 +552,33 @@ export default function Shop({ initialProducts = [] }) {
     return getActiveInStockCountForCategory(collection.id) > 0;
   });
 
+  // Dynamic meta title and description based on active filters
+  const activeCategoryObj = COLLECTIONS.find(c => c.id === selectedCategory);
+  const categoryName = activeCategoryObj ? activeCategoryObj.name : (selectedCategory ? selectedCategory.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') : '');
+  const dynamicTitle = categoryName
+    ? `${categoryName} | The Botanical Bazaar St. Petersburg FL`
+    : (selectedTag
+        ? `${selectedTag.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')} Plants | The Botanical Bazaar`
+        : "Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL");
+
+  const dynamicDescription = categoryName
+    ? `Browse our selection of ${categoryName.toLowerCase()} grown in St. Petersburg, FL. Standard shipping & local nursery pickup available.`
+    : "Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL.";
+
   return (
     <div className="shop-container">
       <Head>
-        <title>Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL</title>
-        <meta name="description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL." />
+        <title>{dynamicTitle}</title>
+        <meta name="description" content={dynamicDescription} />
         <link rel="canonical" href="https://thebotanicalbazaar.com/shop" />
-        <meta property="og:title" content="Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL" />
-        <meta property="og:description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL." />
+        <meta property="og:title" content={dynamicTitle} />
+        <meta property="og:description" content={dynamicDescription} />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
         <meta property="og:url" content="https://thebotanicalbazaar.com/shop" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Shop Rare Tropical Plants & Orchids | The Botanical Bazaar" />
-        <meta name="twitter:description" content="Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids." />
+        <meta name="twitter:title" content={dynamicTitle} />
+        <meta name="twitter:description" content={dynamicDescription} />
         <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
       </Head>
 

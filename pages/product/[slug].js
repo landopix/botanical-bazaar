@@ -290,10 +290,11 @@ export default function ProductDetail({ initialProduct }) {
   };
 
   const SITE_ORIGIN = 'https://thebotanicalbazaar.com';
-  const pageUrl = `${SITE_ORIGIN}/product/${product.slug}`;
+  const cleanSlug = String(product.slug || '').split('?')[0];
+  const pageUrl = `${SITE_ORIGIN}/product/${cleanSlug}`;
   const galleryImages = product.images && product.images.length > 0 ? product.images : [product.image || '/assets/placeholder.png'];
   const imageUrl = galleryImages[0]?.startsWith('http') ? galleryImages[0] : `${SITE_ORIGIN}${galleryImages[0]?.startsWith('/') ? galleryImages[0] : '/' + galleryImages[0]}`;
-  const descriptionText = product.description || `${product.name} live plant available for purchase.`;
+  const descriptionText = product.description || `${product.name} live plant available for purchase at The Botanical Bazaar.`;
 
   const structuredSchema = {
     '@context': 'https://schema.org',
@@ -302,12 +303,19 @@ export default function ProductDetail({ initialProduct }) {
     'description': descriptionText,
     'image': imageUrl,
     'sku': product.slug,
+    'category': product.type || 'Plants',
     'offers': {
       '@type': 'Offer',
       'priceCurrency': 'USD',
       'price': activePrice,
+      'itemCondition': 'https://schema.org/NewCondition',
       'availability': isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       'url': pageUrl,
+      'seller': {
+        '@type': 'Organization',
+        'name': 'The Botanical Bazaar',
+        'url': SITE_ORIGIN
+      },
       'hasMerchantReturnPolicy': {
         '@type': 'MerchantReturnPolicy',
         'name': 'Live Plant Guarantee',
@@ -361,6 +369,7 @@ export default function ProductDetail({ initialProduct }) {
         <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta name="twitter:description" content={descriptionText} />
         <meta name="twitter:image" content={imageUrl} />
