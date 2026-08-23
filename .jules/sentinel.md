@@ -23,3 +23,11 @@
 - Exclude internal administrative/utility routes (`/admin`, `/cancel`, `/success`) from `public/sitemap.xml` to prevent unnecessary search index exposure.
 - Enforce absolute site origin (`https://thebotanicalbazaar.com`) for all canonical tags, `og:url`, and `og:image` metadata across server rendering and client hydration.
 - Unify customer account links across header, footer, mobile sidebar, and redirects to target the configured Shopify customer portal login URL.
+
+## 2026-08-23 - Hardcoded Secret Removal & HTTP Security Headers
+
+**Vulnerability:** `pages/api/revalidate.js` contained a hardcoded fallback secret string ('botanical_bazaar_revalidate_secret') allowing unauthenticated catalog revalidation in production. Additionally, HTTP security headers were missing from global response configurations.
+
+**Learning:** Hardcoded fallback tokens in authentication arrays bypass secret validation if exposed in source code. Standard HTTP response security headers are required to prevent clickjacking, MIME-type sniffing, and framing attacks.
+
+**Prevention:** Rely strictly on process.env secrets (`REVALIDATE_SECRET`, `SHOPIFY_WEBHOOK_SECRET`, etc.) in production, allowing fallback only in non-production environments when no secrets exist. Enforce HTTP security headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) in `next.config.js`.
