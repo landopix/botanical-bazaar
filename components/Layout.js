@@ -34,7 +34,7 @@ export function getZoneFromZip(zipInput) {
 }
 
 import Head from 'next/head';
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
@@ -572,37 +572,36 @@ export default function Layout({ children }) {
 
   const query = searchQuery.trim().toLowerCase();
 
-  const matchingProducts =
-    query !== ""
-      ? allProducts
-          .filter((p) => {
-            let haystack = [p.name, p.title, p.type, p.description, p.sku, p.custom?.pot_size, p.custom?.hardiness_zone]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase();
-            if (Array.isArray(p.categories))
-              haystack += " " + p.categories.join(" ").toLowerCase();
-            if (Array.isArray(p.tags))
-              haystack += " " + p.tags.join(" ").toLowerCase();
-            if (Array.isArray(p.collections))
-              haystack += " " + p.collections.join(" ").toLowerCase();
-            return haystack.includes(query);
-          })
-          .slice(0, 10)
-      : [];
+  const matchingProducts = useMemo(() => {
+    if (query === "") return [];
+    return allProducts
+      .filter((p) => {
+        let haystack = [p.name, p.title, p.type, p.description, p.sku, p.custom?.pot_size, p.custom?.hardiness_zone]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+        if (Array.isArray(p.categories))
+          haystack += " " + p.categories.join(" ").toLowerCase();
+        if (Array.isArray(p.tags))
+          haystack += " " + p.tags.join(" ").toLowerCase();
+        if (Array.isArray(p.collections))
+          haystack += " " + p.collections.join(" ").toLowerCase();
+        return haystack.includes(query);
+      })
+      .slice(0, 10);
+  }, [query, allProducts]);
 
-  const matchingPages =
-    query !== ""
-      ? staticPages
-          .filter((p) => {
-            return (
-              p.title.toLowerCase().includes(query) ||
-              p.category.toLowerCase().includes(query) ||
-              p.description.toLowerCase().includes(query) ||
-              p.content.toLowerCase().includes(query)
-            );
-          })
-      : [];
+  const matchingPages = useMemo(() => {
+    if (query === "") return [];
+    return staticPages.filter((p) => {
+      return (
+        p.title.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.content.toLowerCase().includes(query)
+      );
+    });
+  }, [query]);
 
   return (
     <div className="site-wrapper">
