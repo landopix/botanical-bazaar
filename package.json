@@ -10,7 +10,6 @@
     "build": "next build",
     "start": "next start",
     "seed": "node bin/seed.js",
-    "prebuild": "node bin/generate-sitemap.js",
     "test:e2e": "playwright test"
   },
   "dependencies": {
