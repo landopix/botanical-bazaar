@@ -5,6 +5,60 @@ import { isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
 import { parseProductTitle } from '../lib/shopify';
 
+export function getResolvedPotSize(product, selectedVariant = null) {
+  if (selectedVariant) {
+    if (selectedVariant.selectedOptions && Array.isArray(selectedVariant.selectedOptions)) {
+      const sizeOpt = selectedVariant.selectedOptions.find(
+        opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
+      );
+      if (sizeOpt?.value) return sizeOpt.value;
+    }
+    if (selectedVariant.title && selectedVariant.title !== 'Default Title') {
+      return selectedVariant.title;
+    }
+  }
+
+  const primaryVariant = product?.variants?.[0];
+  if (primaryVariant?.selectedOptions && Array.isArray(primaryVariant.selectedOptions)) {
+    const sizeOpt = primaryVariant.selectedOptions.find(
+      opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
+    );
+    if (sizeOpt?.value) return sizeOpt.value;
+  }
+  if (primaryVariant?.title && primaryVariant.title !== 'Default Title') {
+    return primaryVariant.title;
+  }
+
+  if (product?.custom?.pot_size) return product.custom.pot_size;
+  if (product?.sizes && typeof product.sizes === 'string') {
+    const cleanSizes = product.sizes.split('|')[0].trim();
+    if (cleanSizes && cleanSizes !== 'Default Title') return cleanSizes;
+  }
+  if (product?.potSize) return product.potSize;
+
+  return 'Standard Pot';
+}
+
+export function getResolvedPlantType(product) {
+  if (product?.custom?.plant_type) return product.custom.plant_type;
+  if (product?.plantType) return product.plantType;
+
+  const rawType = product?.type || product?.productType || product?.category;
+  if (rawType && rawType !== 'Plant' && rawType !== 'Default') {
+    return rawType;
+  }
+
+  const tags = Array.isArray(product?.tags) ? product.tags.map(t => t.toLowerCase()) : [];
+  if (tags.includes('orchid') || tags.includes('orchids')) return 'Orchid';
+  if (tags.includes('aroid') || tags.includes('aroids')) return 'Aroid';
+  if (tags.includes('fruit-tree') || tags.includes('fruit tree') || tags.includes('fruit')) return 'Fruit Tree';
+  if (tags.includes('exotic') || tags.includes('rare')) return 'Exotic & Rare';
+  if (tags.includes('herb') || tags.includes('medicinal')) return 'Herb & Medicinal';
+  if (tags.includes('houseplant')) return 'Tropical Houseplant';
+
+  return 'Tropical Plant';
+}
+
 export default function ProductCard({
   product = {},
   titleClamp = 2,
@@ -25,27 +79,8 @@ export default function ProductCard({
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
 
-  // Extract primary variant "Size" option value
-  let extractedSize = null;
-  const primaryVariant = product?.variants?.[0];
-  if (primaryVariant?.selectedOptions && Array.isArray(primaryVariant.selectedOptions)) {
-    const sizeOpt = primaryVariant.selectedOptions.find(
-      opt => opt?.name?.toLowerCase() === 'size'
-    );
-    if (sizeOpt?.value) {
-      extractedSize = sizeOpt.value;
-    }
-  }
-
-  if (!extractedSize && primaryVariant?.title && primaryVariant.title !== 'Default Title') {
-    extractedSize = primaryVariant.title;
-  }
-
-  if (!extractedSize) {
-    extractedSize = product?.custom?.pot_size || product?.sizes || product?.potSize || product?.pot_size || 'Standard Pot';
-  }
-
-  const type = product?.type || product?.category || 'Tropical Plant';
+  const extractedSize = getResolvedPotSize(product);
+  const type = getResolvedPlantType(product);
 
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
 
@@ -166,7 +201,7 @@ export default function ProductCard({
             style={{
               position: 'relative',
               width: '100%',
-              paddingTop: '100%', // aspect-square 1:1
+              paddingTop: '100%',
               borderRadius: '8px',
               overflow: 'hidden',
               backgroundColor: '#1C3D2E',

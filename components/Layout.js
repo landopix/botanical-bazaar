@@ -524,11 +524,8 @@ export default function Layout({ children }) {
       isOpenState: isCollectionsOpen,
       setOpenState: setIsCollectionsOpen,
       items: [
-        { label: "Houseplants", href: "/shop?category=houseplants" },
-        {
-          label: "Orchids & Tropicals",
-          href: "/shop?category=orchids-tropicals",
-        },
+        { label: "Orchids", href: "/shop?category=orchids" },
+        { label: "Tropical Houseplants", href: "/shop?category=tropical-houseplants" },
         { label: "Fruit Trees", href: "/shop?category=fruit-trees" },
         { label: "Herbs & Medicinal", href: "/shop?category=herbs-medicinal" },
         { label: "Seeds", href: "/shop?category=seeds" },
@@ -1135,34 +1132,40 @@ export default function Layout({ children }) {
               id="desktop-shop-dropdown"
               className={`nav-dropdown-menu ${isShopDropdownOpen ? "is-open" : ""}`}
             >
-              <Link href="/shop" className="dropdown-title">
+              <Link href="/shop" className="dropdown-title" onClick={() => setIsShopDropdownOpen(false)}>
                 SHOP ALL
               </Link>
               <div className="dropdown-grid">
                 <div className="dropdown-col">
                   <h4>LIVE PLANTS</h4>
-                  <Link href="/shop?category=houseplants">Houseplants</Link>
-                  <Link href="/shop?category=orchids-tropicals">
-                    Orchids &amp; Tropicals
+                  <Link href="/shop?category=orchids" onClick={() => setIsShopDropdownOpen(false)}>
+                    Orchids
                   </Link>
-                  <Link href="/shop?category=fruit-trees">Fruit Trees</Link>
-                  <Link href="/shop?category=exotics-rare">
+                  <Link href="/shop?category=tropical-houseplants" onClick={() => setIsShopDropdownOpen(false)}>
+                    Tropical Houseplants
+                  </Link>
+                  <Link href="/shop?category=fruit-trees" onClick={() => setIsShopDropdownOpen(false)}>
+                    Fruit Trees
+                  </Link>
+                  <Link href="/shop?category=exotics-rare" onClick={() => setIsShopDropdownOpen(false)}>
                     Exotics &amp; Rare
                   </Link>
                 </div>
                 <div className="dropdown-col">
                   <h4>Botanical Goods</h4>
-                  <Link href="/shop?category=seeds">Seeds</Link>
-                  <Link href="/shop?category=herbs-medicinal">
+                  <Link href="/shop?category=seeds" onClick={() => setIsShopDropdownOpen(false)}>
+                    Seeds
+                  </Link>
+                  <Link href="/shop?category=herbs-medicinal" onClick={() => setIsShopDropdownOpen(false)}>
                     Herbs &amp; Medicinal
                   </Link>
-                  <Link href="/shop?category=stickers-art">
+                  <Link href="/shop?category=stickers-art" onClick={() => setIsShopDropdownOpen(false)}>
                     Stickers &amp; Art
                   </Link>
-                  <Link href="/shop?category=tinctures-apothecary">
+                  <Link href="/shop?category=tinctures-apothecary" onClick={() => setIsShopDropdownOpen(false)}>
                     Tinctures &amp; Apothecary
                   </Link>
-                  <Link href="/shop?category=terrarium-vivarium">
+                  <Link href="/shop?category=terrarium-vivarium" onClick={() => setIsShopDropdownOpen(false)}>
                     Terrarium &amp; Vivarium
                   </Link>
                 </div>
@@ -1205,15 +1208,15 @@ export default function Layout({ children }) {
               className={`nav-dropdown-menu ${isFaqDropdownOpen ? "is-open" : ""}`}
               style={{ minWidth: "260px" }}
             >
-              <Link href="/faq" className="dropdown-title">
+              <Link href="/faq" className="dropdown-title" onClick={() => setIsFaqDropdownOpen(false)}>
                 CUSTOMER HELP & FAQ
               </Link>
               <div className="dropdown-col" style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                <Link href="/faq">FAQ Overview</Link>
-                <Link href="/shipping-pickup">Shipping &amp; Local Pickup</Link>
-                <Link href="/returns">Plant Care Guarantee</Link>
-                <Link href="/terms">Terms &amp; Conditions</Link>
-                <Link href="/privacy">Privacy Policy</Link>
+                <Link href="/faq" onClick={() => setIsFaqDropdownOpen(false)}>FAQ Overview</Link>
+                <Link href="/shipping-pickup" onClick={() => setIsFaqDropdownOpen(false)}>Shipping &amp; Local Pickup</Link>
+                <Link href="/returns" onClick={() => setIsFaqDropdownOpen(false)}>Plant Care Guarantee</Link>
+                <Link href="/terms" onClick={() => setIsFaqDropdownOpen(false)}>Terms &amp; Conditions</Link>
+                <Link href="/privacy" onClick={() => setIsFaqDropdownOpen(false)}>Privacy Policy</Link>
               </div>
             </div>
           </div>
@@ -1422,6 +1425,7 @@ export default function Layout({ children }) {
           height: 25px;
           background: transparent;
           display: block;
+          pointer-events: none;
         }
         .dropdown-title {
           display: block !important;

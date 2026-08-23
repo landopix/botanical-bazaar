@@ -1,3 +1,4 @@
+import { getResolvedPotSize, getResolvedPlantType } from "../../components/ProductCard";
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -186,10 +187,9 @@ export default function ProductDetail({ initialProduct }) {
   // Parse Title for Scientific Name
   const { commonName, scientificName } = parseProductTitle(product.name);
 
-  // Dynamic Size Text
-  const currentSizeDisplay = selectedVariant && selectedVariant.title && selectedVariant.title !== 'Default Title'
-    ? selectedVariant.title
-    : (product.sizes || 'Standard Pot');
+  // Dynamic Size and Type Text
+  const currentSizeDisplay = getResolvedPotSize(product, selectedVariant);
+  const currentTypeDisplay = getResolvedPlantType(product);
 
   const handleAddToCart = () => {
     const itemToAdd = {
@@ -400,7 +400,7 @@ export default function ProductDetail({ initialProduct }) {
 
           <div className="meta-line">
             <p><strong>Size:</strong> {currentSizeDisplay}</p>
-            <p><strong>Type:</strong> {product.type}</p>
+            <p><strong>Type:</strong> {currentTypeDisplay}</p>
           </div>
 
           <div className="price">
