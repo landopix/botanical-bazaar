@@ -21,7 +21,6 @@ export default async function handler(req, res) {
     process.env.SHOPIFY_WEBHOOK_SECRET,
     process.env.SANITY_API_TOKEN,
     process.env.ALMANAC_SEND_SECRET,
-    'botanical_bazaar_revalidate_secret'
   ].filter(Boolean);
 
   let isAuthenticated = false;
