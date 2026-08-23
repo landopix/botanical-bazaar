@@ -7,7 +7,7 @@ import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
 import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Cart() {
-  const { cart, updateQuantity, removeFromCart, cartTotal, fulfillmentMethod, setFulfillmentMethod, userHardinessZone } = useCart();
+  const { cart, updateQuantity, removeFromCart, cartTotal, userHardinessZone } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [checkoutError, setCheckoutError] = useState('');
   const [announcement, setAnnouncement] = useState('');
@@ -32,7 +32,6 @@ export default function Cart() {
             variantId: item.variantId || item.id,
             name: item.name
           })),
-          fulfillment_method: fulfillmentMethod,
           user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
         })
       });
@@ -93,92 +92,6 @@ export default function Cart() {
           {" "}Your cart includes tropical plant species sensitive to cold conditions in Zone {userHardinessZone || "10a"}. Please ensure indoor or greenhouse winter shelter. Live-plant thermal boxing will be included with standard shipping.
         </div>
       )}
-
-      {/* Fulfillment Selection Section */}
-      <fieldset style={{ marginBottom: '2rem', background: '#123826', padding: '1.5rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
-        <legend style={{ fontFamily: 'Cinzel, serif', color: '#D4B06A', margin: '0 0 1rem 0', fontSize: '1.3rem', padding: '0 0.5rem', fontWeight: 'bold' }}>
-          Choose Fulfillment Method
-        </legend>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
-          {/* Standard Shipping Card */}
-          <label
-            htmlFor="cart-fulfillment-shipping"
-            style={{
-              display: 'block',
-              padding: '1.25rem',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              border: fulfillmentMethod === 'shipping' ? '2px solid #D4B06A' : '1px solid #1C3D2E',
-              backgroundColor: fulfillmentMethod === 'shipping' ? '#1C3D2E' : '#00301E',
-              boxShadow: fulfillmentMethod === 'shipping' ? '0 0 10px rgba(212, 176, 106, 0.25)' : 'none',
-              transition: 'all 0.2s ease-in-out'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input
-                  id="cart-fulfillment-shipping"
-                  type="radio"
-                  name="cart-fulfillment"
-                  value="shipping"
-                  checked={fulfillmentMethod === 'shipping'}
-                  aria-checked={fulfillmentMethod === 'shipping'}
-                  onChange={() => setFulfillmentMethod('shipping')}
-                  style={{ accentColor: '#D4B06A', width: '18px', height: '18px', cursor: 'pointer' }}
-                />
-                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
-                  Standard Shipping
-                </span>
-              </div>
-              <span style={{ fontSize: '0.85rem', color: '#E9DCBE', background: 'rgba(212, 176, 106, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
-                Calculated at checkout
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4', paddingLeft: '1.6rem' }}>
-              Shipped with care from St. Petersburg, FL with secure live-plant packaging and weather holds.
-            </p>
-          </label>
-
-          {/* Local Nursery Pickup Card */}
-          <label
-            htmlFor="cart-fulfillment-pickup"
-            style={{
-              display: 'block',
-              padding: '1.25rem',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              border: fulfillmentMethod === 'pickup' ? '2px solid #D4B06A' : '1px solid #1C3D2E',
-              backgroundColor: fulfillmentMethod === 'pickup' ? '#1C3D2E' : '#00301E',
-              boxShadow: fulfillmentMethod === 'pickup' ? '0 0 10px rgba(212, 176, 106, 0.25)' : 'none',
-              transition: 'all 0.2s ease-in-out'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <input
-                  id="cart-fulfillment-pickup"
-                  type="radio"
-                  name="cart-fulfillment"
-                  value="pickup"
-                  checked={fulfillmentMethod === 'pickup'}
-                  aria-checked={fulfillmentMethod === 'pickup'}
-                  onChange={() => setFulfillmentMethod('pickup')}
-                  style={{ accentColor: '#D4B06A', width: '18px', height: '18px', cursor: 'pointer' }}
-                />
-                <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#D4B06A', fontFamily: 'Cinzel, serif' }}>
-                  Local Nursery Pickup
-                </span>
-              </div>
-              <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#27ae60', background: 'rgba(39, 174, 96, 0.15)', padding: '2px 8px', borderRadius: '12px' }}>
-                $0.00 / Free Pickup
-              </span>
-            </div>
-            <p style={{ margin: 0, fontSize: '0.9rem', color: '#E9DCBE', lineHeight: '1.4', paddingLeft: '1.6rem' }}>
-              Pick up directly at our nursery location in St. Petersburg, FL. Flexible scheduled appointment slots available.
-            </p>
-          </label>
-        </div>
-      </fieldset>
 
       {/* Cart Summary Header with CTA */}
       <div
@@ -349,7 +262,7 @@ export default function Cart() {
           <strong>Standard Live Plant Shipping:</strong> Shipped with care from St. Petersburg, FL with secure packaging, insulated boxing, and weather holds.
         </p>
         <p style={{ margin: "0 0 0.75rem 0", fontSize: "0.95rem", lineHeight: "1.4", color: "#E9DCBE" }}>
-          <strong>Local Nursery Pickup:</strong> Free pickup available at our nursery in St. Petersburg, FL ($0.00).
+          <strong>Local Nursery Pickup:</strong> Ready for pickup within 24–48 hours by scheduled appointment at our nursery in St. Petersburg, FL ($0.00).
         </p>
         <div style={{ textAlign: "right" }}>
           <Link
