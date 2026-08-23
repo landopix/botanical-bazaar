@@ -12,11 +12,11 @@ import { isZoneCompatible } from "../lib/fulfillment";
 
 // Static list of requested category collections
 const COLLECTIONS = [
-  { id: "houseplants", name: "Houseplants" },
-  { id: "orchids-tropicals", name: "Orchids & Tropicals" },
+  { id: "orchids", name: "Orchids" },
+  { id: "tropical-houseplants", name: "Tropical Houseplants" },
   { id: "fruit-trees", name: "Fruit Trees" },
-  { id: "herbs-medicinal", name: "Herbs & Medicinal" },
   { id: "exotics-rare", name: "Exotics & Rare" },
+  { id: "herbs-medicinal", name: "Herbs & Medicinal" },
   { id: "seeds", name: "Seeds" },
   { id: "stickers-art", name: "Stickers & Art" },
   { id: "tinctures-apothecary", name: "Tinctures & Apothecary" },
@@ -238,15 +238,16 @@ export default function Shop({ initialProducts = [] }) {
 
         if (matchesCollectionHandle(catLower) || matchesCategory(catLower) || matchesTag(catLower)) return true;
 
-        if (catLower === "houseplants") {
-          return matchesTag("houseplant") || textMatches("houseplant");
+        if (catLower === "orchids" || catLower === "orchid") {
+          return matchesTag("orchid") || matchesCategory("orchids") || textMatches("orchid");
         }
-        if (catLower === "orchids-tropicals" || catLower === "orchids & tropicals") {
+        if (catLower === "tropical-houseplants" || catLower === "houseplants") {
           return (
-            matchesCategory("plants") ||
+            matchesTag("houseplant") ||
             matchesTag("tropical") ||
-            matchesTag("orchid") ||
-            textMatches("orchid") ||
+            matchesCategory("houseplants") ||
+            matchesCategory("tropical-houseplants") ||
+            textMatches("houseplant") ||
             textMatches("tropical")
           );
         }
@@ -458,23 +459,23 @@ export default function Shop({ initialProducts = [] }) {
         return text.includes(keyword);
       };
 
-      if (catLower === "houseplants") {
+      if (catLower === "orchids" || catLower === "orchid") {
         return (
-          hasCategory("houseplants") ||
-          hasTag("houseplant") ||
-          textMatches("houseplant")
+          hasCategory("orchids") ||
+          hasTag("orchid") ||
+          textMatches("orchid")
         );
       }
       if (
-        catLower === "orchids-tropicals" ||
-        catLower === "orchids & tropicals"
+        catLower === "tropical-houseplants" ||
+        catLower === "houseplants"
       ) {
         return (
-          hasCategory("orchids-tropicals") ||
-          hasCategory("plants") ||
+          hasCategory("tropical-houseplants") ||
+          hasCategory("houseplants") ||
+          hasTag("houseplant") ||
           hasTag("tropical") ||
-          hasTag("orchid") ||
-          textMatches("orchid") ||
+          textMatches("houseplant") ||
           textMatches("tropical")
         );
       }
@@ -609,19 +610,7 @@ export default function Shop({ initialProducts = [] }) {
         <>
           <div className="filter-panel">
             <p className="shop-intro">
-              Browse our curated selection of rare and resilient tropical plants
-              grown in St.&nbsp;Petersburg. Use the filters to explore categories
-              like Medicinal, Culinary, Fragrant, Flowering Trees, Seeds, Rare &amp;
-              Unusual, Best Plants for Your Zone and more. All listings reflect live
-              inventory; quantities are limited and updated daily.
-            </p>
-
-            <p className="shop-subtext">
-              Browse our curated selection of plants grown and sourced for our
-              St.&nbsp;Petersburg and Tampa Bay community. We stock tropical
-              houseplants, fruit trees and edibles, orchids, and hardy landscape
-              plants. Inventory changes regularly, so check back often or drop us a
-              note if you're looking for something special.
+              Browse our curated selection of rare tropical plants, orchids, fruit trees, and botanical goods grown in St.&nbsp;Petersburg, FL. All listings reflect live nursery inventory updated daily for nationwide shipping and local pickup.
             </p>
 
             <div className="category-section">
@@ -1006,17 +995,7 @@ export default function Shop({ initialProducts = [] }) {
           cursor: pointer;
         }
 
-        .shop-subtext {
-          max-width: 850px;
-          margin: 0 auto 1.5rem auto;
-          font-size: 1.1rem;
-          line-height: 1.5;
-          text-align: center;
-          color: #f5e7c4;
-          font-family: "Crimson Text", serif;
-          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
-          padding-bottom: 1rem;
-        }
+
 
         .results-count {
           text-align: center;
