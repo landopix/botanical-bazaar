@@ -59,7 +59,7 @@ export function getResolvedPlantType(product) {
   return 'Tropical Plant';
 }
 
-export default function ProductCard({
+function ProductCard({
   product = {},
   titleClamp = 2,
   descClamp = 3,
@@ -296,3 +296,7 @@ export default function ProductCard({
     </div>
   );
 }
+
+// Performance Optimization: Memoize ProductCard to prevent unnecessary re-renders
+// during catalog filtering, searching, and sorting operations in parent components.
+export default React.memo(ProductCard);
