@@ -668,6 +668,14 @@ export default function Layout({ children }) {
                 },
                 {
                   "@type": "AdministrativeArea",
+                  "name": "Tampa Bay Area"
+                },
+                {
+                  "@type": "AdministrativeArea",
+                  "name": "Tampa Bay Region"
+                },
+                {
+                  "@type": "AdministrativeArea",
                   "name": "Pinellas County"
                 },
                 {

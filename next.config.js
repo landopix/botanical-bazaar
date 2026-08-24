@@ -150,7 +150,12 @@ const nextConfig = {
       },
       {
         source: '/zone9b.html',
-        destination: '/zone9b',
+        destination: '/shop',
+        permanent: true,
+      },
+      {
+        source: '/zone9b',
+        destination: '/shop',
         permanent: true,
       },
       {
@@ -160,7 +165,7 @@ const nextConfig = {
       },
       {
         source: '/orchids-gallery.html',
-        destination: '/orchids-gallery',
+        destination: '/shop?category=orchids',
         permanent: true,
       },
       {
@@ -196,6 +201,18 @@ const nextConfig = {
       {
         source: '/cancel.html',
         destination: '/cancel',
+        permanent: true,
+      },
+      {
+        source: '/product.html',
+        has: [
+          {
+            type: 'query',
+            key: 'item',
+            value: '(?<item>.*)',
+          },
+        ],
+        destination: '/product/:item',
         permanent: true,
       },
       {
