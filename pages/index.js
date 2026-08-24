@@ -210,7 +210,6 @@ export default function Index() {
           justify-content: center;
           gap: 3rem;
           width: 100%;
-          min-height: 380px;
         }
         .hero-image {
           flex: 1;
