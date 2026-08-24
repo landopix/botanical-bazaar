@@ -533,9 +533,15 @@ export default function Layout({ children }) {
       }
     };
 
+    document.addEventListener("mousedown", handleDocumentClick, true);
+    document.addEventListener("touchstart", handleDocumentClick, true);
     document.addEventListener("click", handleDocumentClick, true);
-    return () => document.removeEventListener("click", handleDocumentClick, true);
-  }, [isSidebarOpen]);
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick, true);
+      document.removeEventListener("touchstart", handleDocumentClick, true);
+      document.removeEventListener("click", handleDocumentClick, true);
+    };
+  }, [isSidebarOpen, isShopDropdownOpen, isFaqDropdownOpen]);
 
   // Handle scroll trigger for Back to Top
   useEffect(() => {
