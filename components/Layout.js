@@ -145,6 +145,85 @@ const staticPages = [
 const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
 const shopifyAccountUrl = `https://${rawDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
 
+const MEGA_MENU_BLUEPRINT = [
+  {
+    title: "Rare Plants",
+    items: [
+      { label: "Rare Foliage Plants", href: "/shop?tag=rare-foliage", keywords: ["rare", "foliage", "aroid", "philodendron", "monstera", "anthurium", "alocasia"] },
+      { label: "Variegated Plants", href: "/shop?tag=variegated", keywords: ["variegated", "variegata"] },
+      { label: "Bazaar Exclusive Hybrids", href: "/shop?tag=hybrid", keywords: ["hybrid", "bazaar exclusive", "exclusive"] },
+      { label: "View All Rare Plants", href: "/shop?category=exotics-rare", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Fragrant Plants",
+    items: [
+      { label: "Fragrant Rare Plants", href: "/shop?tag=fragrant-rare", keywords: ["fragrant", "scented", "aromatic"], mustAlsoMatch: ["rare", "exotic", "collector"] },
+      { label: "Fragrant Indoor Plants", href: "/shop?tag=fragrant-indoor", keywords: ["fragrant", "scented", "aromatic"], mustAlsoMatch: ["indoor", "houseplant", "windowsill"] },
+      { label: "Fragrant Tropical Plants", href: "/shop?tag=fragrant-tropical", keywords: ["fragrant", "scented", "aromatic"], mustAlsoMatch: ["tropical", "patio", "plumeria", "jasmine", "gardenia"] },
+      { label: "Fragrant Hardy Plants", href: "/shop?tag=fragrant-hardy", keywords: ["fragrant", "scented", "aromatic"], mustAlsoMatch: ["hardy", "perennial"] },
+      { label: "Fragrant Fruiting Plants", href: "/shop?tag=fragrant-fruiting", keywords: ["fragrant", "scented", "aromatic"], mustAlsoMatch: ["fruit", "fruiting", "citrus"] },
+      { label: "View All Fragrant Plants", href: "/shop?tag=fragrant", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Edible & Fruiting Plants",
+    items: [
+      { label: "Tropical Fruiting Plants", href: "/shop?category=fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting", "citrus", "mango", "avocado", "banana", "papaya"] },
+      { label: "Herbs & Spices", href: "/shop?category=herbs-medicinal", keywords: ["herb", "spice", "medicinal", "vanilla", "pepper"] },
+      { label: "Beverage Botanicals", href: "/shop?tag=beverage", keywords: ["beverage", "tea", "coffee", "citrus", "mint", "herbal"] },
+      { label: "Fruiting Container Plants", href: "/shop?tag=container-fruit", keywords: ["container", "pot", "patio", "dwarf"], mustAlsoMatch: ["fruit", "fruiting"] },
+      { label: "Hardy Fruiting Plants", href: "/shop?tag=hardy-fruit", keywords: ["hardy"], mustAlsoMatch: ["fruit", "fruiting", "berry", "fig", "mulberry"] },
+      { label: "View All Fruiting Plants", href: "/shop?category=fruit-trees", alwaysShow: true },
+      { label: "View All Edible Plants", href: "/shop?category=herbs-medicinal", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Indoor Plants",
+    items: [
+      { label: "Indoor Windowsill Houseplants", href: "/shop?tag=windowsill", keywords: ["indoor", "windowsill", "houseplant", "peperomia", "pothos", "hoya"] },
+      { label: "Indoor Succulent Plants", href: "/shop?tag=succulent", keywords: ["succulent", "cactus", "sansevieria", "snake plant"] },
+      { label: "Indoor Tropical Plants", href: "/shop?category=tropical-houseplants", keywords: ["indoor", "houseplant", "tropical", "aroid", "fern", "calathea"] },
+      { label: "Easy to Grow Indoor Houseplants", href: "/shop?tag=easy-to-grow", keywords: ["easy", "low maintenance", "beginner", "easy to grow", "tolerant"] },
+      { label: "View All Indoor Plants", href: "/shop?category=tropical-houseplants", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Tropical Plants",
+    items: [
+      { label: "Tropical Patio & Garden Plants", href: "/shop?tag=patio", keywords: ["tropical", "patio", "garden", "outdoor"] },
+      { label: "Indoor Tropical Plants", href: "/shop?category=tropical-houseplants", keywords: ["tropical"], mustAlsoMatch: ["indoor", "houseplant"] },
+      { label: "Tropical Vines", href: "/shop?tag=vines", keywords: ["vine", "vining", "climber", "monstera", "philodendron", "hoya", "passion"] },
+      { label: "Tropical Summer Garden Plants", href: "/shop?tag=summer-garden", keywords: ["summer", "tropical", "patio", "heat"] },
+      { label: "Tropical Fruiting Plants", href: "/shop?category=fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting"] },
+      { label: "View All Tropical Plants", href: "/shop?category=tropical-houseplants", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Hardy Plants",
+    items: [
+      { label: "Hardy Garden Plants", href: "/shop?tag=hardy-garden", keywords: ["hardy", "perennial", "outdoor", "cold hardy"] },
+      { label: "Hardy Fruiting Plants", href: "/shop?tag=hardy-fruit", keywords: ["hardy"], mustAlsoMatch: ["fruit", "fruiting", "fig", "berry", "mulberry"] },
+      { label: "View All Hardy Plants", href: "/shop?zone=8a", alwaysShow: true }
+    ]
+  },
+  {
+    title: "Orchids",
+    items: [
+      { label: "Cattleya Orchids", href: "/shop?tag=cattleya", keywords: ["cattleya"] },
+      { label: "Coconut Orchids", href: "/shop?tag=coconut-orchid", keywords: ["coconut", "maxillaria", "tenuifolia"] },
+      { label: "Fragrant Orchids", href: "/shop?tag=fragrant-orchid", keywords: ["orchid"], mustAlsoMatch: ["fragrant", "scented", "aromatic"] },
+      { label: "Hardy Orchids", href: "/shop?tag=hardy-orchid", keywords: ["hardy", "ground orchid", "bletilla", "epidendrum"] },
+      { label: "Jewel Orchids", href: "/shop?tag=jewel-orchid", keywords: ["jewel", "ludisia", "macodes", "anoectochilus"] },
+      { label: "Phalaenopsis Orchids", href: "/shop?tag=phalaenopsis", keywords: ["phalaenopsis", "phal"] },
+      { label: "Vanilla Bean Orchids", href: "/shop?tag=vanilla-orchid", keywords: ["vanilla", "planifolia"] },
+      { label: "Orchid Accessories", href: "/shop?tag=orchid-accessories", keywords: ["accessory", "accessories", "pot", "media", "bark", "moss", "mount"] },
+      { label: "View All Orchid Plants", href: "/shop?category=orchids", alwaysShow: true }
+    ]
+  }
+];
+
+
 export default function Layout({ children }) {
   const router = useRouter();
   const { cartCount } = useCart();
@@ -587,6 +666,38 @@ export default function Layout({ children }) {
       })
       .slice(0, 10);
   }, [query, allProducts]);
+
+  const dynamicMegaMenuColumns = useMemo(() => {
+    return MEGA_MENU_BLUEPRINT.map((column) => {
+      const activeItems = column.items.filter((item) => {
+        if (item.alwaysShow) return true;
+        if (!allProducts || allProducts.length === 0) return true;
+
+        const keywords = (item.keywords || []).map((k) => k.toLowerCase());
+        const mustAlso = (item.mustAlsoMatch || []).map((m) => m.toLowerCase());
+
+        return allProducts.some((p) => {
+          if (p?.availableForSale === false) return false;
+          const tags = Array.isArray(p?.tags) ? p.tags.map((t) => t.toLowerCase()) : [];
+          const cats = Array.isArray(p?.categories) ? p.categories.map((c) => c.toLowerCase()) : [];
+          const name = (p?.name || "").toLowerCase();
+          const desc = (p?.description || "").toLowerCase();
+          const ptype = (p?.type || "").toLowerCase();
+          const haystack = `${name} ${desc} ${ptype} ${tags.join(" ")} ${cats.join(" ")}`;
+
+          const kwMatch = keywords.length === 0 || keywords.some((kw) => haystack.includes(kw));
+          const mustMatch = mustAlso.length === 0 || mustAlso.every((mm) => haystack.includes(mm));
+
+          return kwMatch && mustMatch;
+        });
+      });
+
+      return {
+        ...column,
+        items: activeItems,
+      };
+    }).filter((column) => column.items.length > 0);
+  }, [allProducts]);
 
   const matchingPages = useMemo(() => {
     if (query === "") return [];
@@ -1130,45 +1241,27 @@ export default function Layout({ children }) {
             </button>
             <div
               id="desktop-shop-dropdown"
-              className={`nav-dropdown-menu ${isShopDropdownOpen ? "is-open" : ""}`}
+              className={`nav-dropdown-menu mega-menu-container ${isShopDropdownOpen ? "is-open" : ""}`}
             >
               <Link href="/shop" className="dropdown-title" onClick={() => setIsShopDropdownOpen(false)}>
-                SHOP ALL
+                SHOP ALL CATALOG &rarr;
               </Link>
-              <div className="dropdown-grid">
-                <div className="dropdown-col">
-                  <h4>LIVE PLANTS</h4>
-                  <Link href="/shop?category=orchids" onClick={() => setIsShopDropdownOpen(false)}>
-                    Orchids
-                  </Link>
-                  <Link href="/shop?category=tropical-houseplants" onClick={() => setIsShopDropdownOpen(false)}>
-                    Tropical Houseplants
-                  </Link>
-                  <Link href="/shop?category=fruit-trees" onClick={() => setIsShopDropdownOpen(false)}>
-                    Fruit Trees
-                  </Link>
-                  <Link href="/shop?category=exotics-rare" onClick={() => setIsShopDropdownOpen(false)}>
-                    Exotics &amp; Rare
-                  </Link>
-                </div>
-                <div className="dropdown-col">
-                  <h4>Botanical Goods</h4>
-                  <Link href="/shop?category=seeds" onClick={() => setIsShopDropdownOpen(false)}>
-                    Seeds
-                  </Link>
-                  <Link href="/shop?category=herbs-medicinal" onClick={() => setIsShopDropdownOpen(false)}>
-                    Herbs &amp; Medicinal
-                  </Link>
-                  <Link href="/shop?category=stickers-art" onClick={() => setIsShopDropdownOpen(false)}>
-                    Stickers &amp; Art
-                  </Link>
-                  <Link href="/shop?category=tinctures-apothecary" onClick={() => setIsShopDropdownOpen(false)}>
-                    Tinctures &amp; Apothecary
-                  </Link>
-                  <Link href="/shop?category=terrarium-vivarium" onClick={() => setIsShopDropdownOpen(false)}>
-                    Terrarium &amp; Vivarium
-                  </Link>
-                </div>
+              <div className="mega-menu-grid">
+                {dynamicMegaMenuColumns.map((col, cIdx) => (
+                  <div key={cIdx} className="mega-menu-col">
+                    <h4>{col.title}</h4>
+                    {col.items.map((item, iIdx) => (
+                      <Link
+                        key={iIdx}
+                        href={item.href}
+                        className={item.alwaysShow ? "mega-menu-view-all" : ""}
+                        onClick={() => setIsShopDropdownOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -1396,6 +1489,60 @@ export default function Layout({ children }) {
         .nav-dropdown-trigger:focus-visible {
           color: #d4b06a !important;
         }
+        .nav-dropdown-menu.mega-menu-container {
+          min-width: 920px;
+          max-width: 1150px;
+          padding: 1.5rem 1.8rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .mega-menu-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+          gap: 1.2rem 0.9rem;
+        }
+        .mega-menu-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+        .mega-menu-col h4 {
+          color: #d4b06a;
+          font-family: "Cinzel", serif;
+          font-size: 0.82rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
+          padding-bottom: 0.3rem;
+          white-space: nowrap;
+        }
+        .mega-menu-col a {
+          display: block !important;
+          color: #e9dcbe !important;
+          padding: 0.15rem 0 !important;
+          margin: 0 !important;
+          font-size: 0.88rem !important;
+          font-family: "Crimson Text", serif !important;
+          font-weight: normal !important;
+          line-height: 1.35;
+          text-decoration: none !important;
+          transition: color 0.15s ease;
+        }
+        .mega-menu-col a:hover,
+        .mega-menu-col a:focus-visible {
+          color: #d4b06a !important;
+          text-decoration: underline !important;
+        }
+        .mega-menu-col a.mega-menu-view-all {
+          color: #d4b06a !important;
+          font-weight: bold !important;
+          margin-top: 0.3rem !important;
+          font-size: 0.85rem !important;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
         .nav-dropdown-menu {
           display: none;
           position: absolute;
@@ -1413,7 +1560,61 @@ export default function Layout({ children }) {
         }
         .nav-dropdown-menu.is-open,
         .nav-dropdown-wrapper:hover .nav-dropdown-menu,
-        .nav-dropdown-wrapper:focus-within .nav-dropdown-menu {
+        .nav-dropdown-wrapper:focus-within .nav-dropdown-menu.mega-menu-container {
+          min-width: 920px;
+          max-width: 1150px;
+          padding: 1.5rem 1.8rem;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .mega-menu-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+          gap: 1.2rem 0.9rem;
+        }
+        .mega-menu-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+        .mega-menu-col h4 {
+          color: #d4b06a;
+          font-family: "Cinzel", serif;
+          font-size: 0.82rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-top: 0;
+          margin-bottom: 0.5rem;
+          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
+          padding-bottom: 0.3rem;
+          white-space: nowrap;
+        }
+        .mega-menu-col a {
+          display: block !important;
+          color: #e9dcbe !important;
+          padding: 0.15rem 0 !important;
+          margin: 0 !important;
+          font-size: 0.88rem !important;
+          font-family: "Crimson Text", serif !important;
+          font-weight: normal !important;
+          line-height: 1.35;
+          text-decoration: none !important;
+          transition: color 0.15s ease;
+        }
+        .mega-menu-col a:hover,
+        .mega-menu-col a:focus-visible {
+          color: #d4b06a !important;
+          text-decoration: underline !important;
+        }
+        .mega-menu-col a.mega-menu-view-all {
+          color: #d4b06a !important;
+          font-weight: bold !important;
+          margin-top: 0.3rem !important;
+          font-size: 0.85rem !important;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+        .nav-dropdown-menu {
           display: block;
         }
         .nav-dropdown-menu::before {
