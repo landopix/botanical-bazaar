@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import ProductCard from '../../components/ProductCard';
 import Button from '../../components/Button';
 import ProductImageGallery from '../../components/ProductImageGallery';
 import FulfillmentCard from '../../components/FulfillmentCard';
@@ -12,7 +13,7 @@ import ZoneCompatibilityBadges from '../../components/ZoneCompatibilityBadges';
 import CareSpine from '../../components/CareSpine';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
-import { getProductByHandle, getAllProductHandles, parseProductTitle } from '../../lib/shopify';
+import { getProductByHandle, getAllProductHandles, getAllProducts, parseProductTitle } from '../../lib/shopify';
 import useBfcacheReset from '../../hooks/useBfcacheReset';
 
 export async function getStaticPaths() {
@@ -36,7 +37,10 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   try {
-    const product = await getProductByHandle(params.slug);
+    const [product, allProducts] = await Promise.all([
+      getProductByHandle(params.slug),
+      getAllProducts()
+    ]);
     if (!product) {
       return {
         notFound: true,
@@ -45,7 +49,8 @@ export async function getStaticProps({ params }) {
     }
     return {
       props: {
-        initialProduct: product
+        initialProduct: product,
+        allProducts: allProducts || []
       },
       revalidate: 60
     };
@@ -58,7 +63,7 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function ProductDetail({ initialProduct }) {
+export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const router = useRouter();
 
   const [product, setProduct] = useState(initialProduct);
@@ -184,7 +189,45 @@ export default function ProductDetail({ initialProduct }) {
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === product.slug);
   const variantsArray = product.variants && product.variants.length > 0 ? product.variants : [];
 
-  // Parse Title for Scientific Name
+  // Related / Recommended Products derived from same category or tags
+  const recommendedProducts = React.useMemo(() => {
+    if (!product || !allProducts || allProducts.length === 0) return [];
+
+    const currentSlug = product.slug;
+    const currentCats = (product.categories || []).map(c => c.toLowerCase());
+    const currentTags = (product.tags || []).map(t => t.toLowerCase());
+
+    const scored = allProducts
+      .filter(p => p.slug !== currentSlug && p.availableForSale !== false)
+      .map(p => {
+        let score = 0;
+        const pCats = (p.categories || []).map(c => c.toLowerCase());
+        const pTags = (p.tags || []).map(t => t.toLowerCase());
+
+        pCats.forEach(c => {
+          if (currentCats.includes(c)) score += 3;
+        });
+
+        pTags.forEach(t => {
+          if (currentTags.includes(t)) score += 1;
+        });
+
+        return { product: p, score };
+      });
+
+    scored.sort((a, b) => b.score - a.score);
+    const topScored = scored.map(s => s.product);
+
+    // Fallback if less than 4 matches
+    if (topScored.length < 4) {
+      const remaining = allProducts.filter(p => p.slug !== currentSlug && !topScored.some(ts => ts.slug === p.slug));
+      return [...topScored, ...remaining].slice(0, 8);
+    }
+
+    return topScored.slice(0, 8);
+  }, [product, allProducts]);
+
+    // Parse Title for Scientific Name
   const { commonName, scientificName } = parseProductTitle(product.name);
 
   // Dynamic Size and Type Text
@@ -603,6 +646,20 @@ export default function ProductDetail({ initialProduct }) {
         </div>
       </section>
 
+      {/* Recommended / Related Products Horizontal Slider */}
+      {recommendedProducts.length > 0 && (
+        <section className="recommended-section">
+          <h2 className="recommended-title">Recommended Specimen Pairings</h2>
+          <div className="recommended-slider">
+            {recommendedProducts.map((recProd) => (
+              <div key={recProd.slug || recProd.id} className="recommended-card-wrapper">
+                <ProductCard product={recProd} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Two-Column Informational Details Grid */}
       <section className="product-details-grid">
         {/* Column 1 (Left): Description, Care Spine, What You Will Receive, Specs */}
@@ -637,8 +694,59 @@ export default function ProductDetail({ initialProduct }) {
         </div>
       </section>
 
+      {/* Recommended / Related Products Horizontal Slider */}
+      {recommendedProducts.length > 0 && (
+        <section className="recommended-section">
+          <h2 className="recommended-title">Recommended Specimen Pairings</h2>
+          <div className="recommended-slider">
+            {recommendedProducts.map((recProd) => (
+              <div key={recProd.slug || recProd.id} className="recommended-card-wrapper">
+                <ProductCard product={recProd} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <style jsx global>{`
-        .pdp-wrapper {
+        .recommended-section {
+          margin-top: 3rem;
+          padding-top: 2rem;
+          border-top: 1px solid rgba(212, 176, 106, 0.3);
+        }
+        .recommended-title {
+          color: #D4B06A;
+          font-family: "Cinzel", serif;
+          font-size: 1.75rem;
+          text-align: center;
+          margin-bottom: 1.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .recommended-slider {
+          display: flex;
+          gap: 1.5rem;
+          overflow-x: auto;
+          padding-bottom: 1rem;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+        }
+        .recommended-slider::-webkit-scrollbar {
+          height: 8px;
+        }
+        .recommended-slider::-webkit-scrollbar-track {
+          background: #123826;
+          border-radius: 4px;
+        }
+        .recommended-slider::-webkit-scrollbar-thumb {
+          background: #D4B06A;
+          border-radius: 4px;
+        }
+        .recommended-card-wrapper {
+          flex: 0 0 280px;
+          scroll-snap-align: start;
+        }
+                .pdp-wrapper {
           padding: 2rem 1.5rem 4rem 1.5rem;
           max-width: 1100px;
           margin: 0 auto;
