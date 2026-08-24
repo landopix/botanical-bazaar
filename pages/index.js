@@ -226,15 +226,15 @@ export default function Index() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
           align-self: center;
-          text-align: left;
+          text-align: center;
         }
         .hero-text h1 {
           font-size: 2.8rem;
           line-height: 1.15;
-          text-align: left;
+          text-align: center;
           color: #D4B06A;
           margin-top: 0;
           margin-bottom: 0.5rem;
@@ -431,7 +431,9 @@ export default function Index() {
                 display: "flex",
                 gap: "1rem",
                 flexWrap: "wrap",
-                justifyContent: "flex-start",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
               }}
             >
               <Link
@@ -443,6 +445,12 @@ export default function Index() {
                   borderRadius: "24px",
                   fontWeight: "bold",
                   textDecoration: "none",
+                  minHeight: "44px",
+                  minWidth: "44px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxSizing: "border-box",
                 }}
               >
                 Shop the Store
@@ -457,6 +465,12 @@ export default function Index() {
                   fontWeight: "bold",
                   border: "2px solid #D4B06A",
                   textDecoration: "none",
+                  minHeight: "44px",
+                  minWidth: "44px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxSizing: "border-box",
                 }}
               >
                 Book a Consultation
