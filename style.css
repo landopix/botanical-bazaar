@@ -373,8 +373,8 @@ footer p {
   height: 35px;
   background: transparent;
 }
-.nav-dropdown-wrapper:hover .nav-dropdown-menu {
-  display: block;
+.nav-dropdown-menu.is-open {
+  display: block !important;
 }
 .dropdown-title {
   display: block;

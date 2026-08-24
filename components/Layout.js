@@ -515,6 +515,22 @@ export default function Layout({ children }) {
       ) {
         setIsSidebarOpen(false);
       }
+
+      if (
+        isShopDropdownOpen &&
+        shopDropdownRef.current &&
+        !shopDropdownRef.current.contains(e.target)
+      ) {
+        setIsShopDropdownOpen(false);
+      }
+
+      if (
+        isFaqDropdownOpen &&
+        faqDropdownRef.current &&
+        !faqDropdownRef.current.contains(e.target)
+      ) {
+        setIsFaqDropdownOpen(false);
+      }
     };
 
     document.addEventListener("click", handleDocumentClick, true);
@@ -668,24 +684,45 @@ export default function Layout({ children }) {
   }, [query, allProducts]);
 
   const dynamicMegaMenuColumns = useMemo(() => {
+    if (!allProducts || allProducts.length === 0) return [];
+
+    const activeProducts = allProducts.filter(
+      (p) => p && p.availableForSale !== false && (p.quantity === undefined || p.quantity > 0)
+    );
+
     return MEGA_MENU_BLUEPRINT.map((column) => {
       const activeItems = column.items.filter((item) => {
-        if (item.alwaysShow) return true;
-        if (!allProducts || allProducts.length === 0) return true;
-
-        const keywords = (item.keywords || []).map((k) => k.toLowerCase());
-        const mustAlso = (item.mustAlsoMatch || []).map((m) => m.toLowerCase());
-
-        return allProducts.some((p) => {
-          if (p?.availableForSale === false) return false;
+        return activeProducts.some((p) => {
           const tags = Array.isArray(p?.tags) ? p.tags.map((t) => t.toLowerCase()) : [];
           const cats = Array.isArray(p?.categories) ? p.categories.map((c) => c.toLowerCase()) : [];
-          const name = (p?.name || "").toLowerCase();
+          const name = (p?.name || p?.title || "").toLowerCase();
           const desc = (p?.description || "").toLowerCase();
           const ptype = (p?.type || "").toLowerCase();
           const haystack = `${name} ${desc} ${ptype} ${tags.join(" ")} ${cats.join(" ")}`;
 
-          const kwMatch = keywords.length === 0 || keywords.some((kw) => haystack.includes(kw));
+          let urlCategory = null;
+          let urlTag = null;
+          if (item.href && item.href.includes("?")) {
+            const queryString = item.href.split("?")[1];
+            const params = new URLSearchParams(queryString);
+            urlCategory = params.get("category")?.toLowerCase();
+            urlTag = params.get("tag")?.toLowerCase();
+          }
+
+          if (urlCategory) {
+            const catMatch = cats.some((c) => c === urlCategory || c.includes(urlCategory));
+            if (catMatch) return true;
+          }
+
+          if (urlTag) {
+            const tagMatch = tags.some((t) => t === urlTag || t.includes(urlTag) || urlTag.includes(t));
+            if (tagMatch) return true;
+          }
+
+          const keywords = (item.keywords || []).map((k) => k.toLowerCase());
+          const mustAlso = (item.mustAlsoMatch || []).map((m) => m.toLowerCase());
+
+          const kwMatch = keywords.length > 0 && keywords.some((kw) => haystack.includes(kw));
           const mustMatch = mustAlso.length === 0 || mustAlso.every((mm) => haystack.includes(mm));
 
           return kwMatch && mustMatch;
@@ -1183,7 +1220,7 @@ export default function Layout({ children }) {
       </nav>
 
       {/* High-Fidelity Desktop Site Header */}
-      <header ref={headerRef}>
+      <header ref={headerRef} style={{ position: "relative" }}>
         <Link href="/" style={{ display: "inline-block" }}>
           <img
             src="/assets/lantern.png"
@@ -1218,10 +1255,7 @@ export default function Layout({ children }) {
           {/* Shop All Dropdown */}
           <div
             ref={shopDropdownRef}
-            className="nav-dropdown-wrapper"
-            onBlur={handleShopBlur}
-            onMouseEnter={() => setIsShopDropdownOpen(true)}
-            onMouseLeave={() => setIsShopDropdownOpen(false)}
+            className="nav-dropdown-wrapper mega-menu-wrapper"
           >
             <button
               ref={shopTriggerRef}
@@ -1229,10 +1263,15 @@ export default function Layout({ children }) {
               className="nav-dropdown-trigger"
               aria-expanded={isShopDropdownOpen}
               aria-controls="desktop-shop-dropdown"
-              onClick={() => setIsShopDropdownOpen((prev) => !prev)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsFaqDropdownOpen(false);
+                setIsShopDropdownOpen((prev) => !prev);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
+                  setIsFaqDropdownOpen(false);
                   setIsShopDropdownOpen(true);
                 }
               }}
@@ -1276,9 +1315,6 @@ export default function Layout({ children }) {
           <div
             ref={faqDropdownRef}
             className="nav-dropdown-wrapper"
-            onBlur={handleFaqBlur}
-            onMouseEnter={() => setIsFaqDropdownOpen(true)}
-            onMouseLeave={() => setIsFaqDropdownOpen(false)}
           >
             <button
               ref={faqTriggerRef}
@@ -1286,10 +1322,15 @@ export default function Layout({ children }) {
               className="nav-dropdown-trigger"
               aria-expanded={isFaqDropdownOpen}
               aria-controls="desktop-faq-dropdown"
-              onClick={() => setIsFaqDropdownOpen((prev) => !prev)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsShopDropdownOpen(false);
+                setIsFaqDropdownOpen((prev) => !prev);
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
+                  setIsShopDropdownOpen(false);
                   setIsFaqDropdownOpen(true);
                 }
               }}
@@ -1469,8 +1510,9 @@ export default function Layout({ children }) {
         .nav-dropdown-wrapper {
           position: relative;
           display: inline-block;
-          padding-bottom: 0.5rem;
-          margin-bottom: -0.5rem;
+        }
+        .nav-dropdown-wrapper.mega-menu-wrapper {
+          position: static;
         }
         .nav-dropdown-trigger {
           background: none;
@@ -1485,66 +1527,12 @@ export default function Layout({ children }) {
           letter-spacing: 0.05em;
           transition: color 0.2s ease;
         }
-        .nav-dropdown-wrapper:hover .nav-dropdown-trigger,
+        .nav-dropdown-trigger:hover,
         .nav-dropdown-trigger:focus-visible {
           color: #d4b06a !important;
         }
-        .nav-dropdown-menu.mega-menu-container {
-          min-width: 920px;
-          max-width: 1150px;
-          padding: 1.5rem 1.8rem;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-        .mega-menu-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-          gap: 1.2rem 0.9rem;
-        }
-        .mega-menu-col {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-        }
-        .mega-menu-col h4 {
-          color: #d4b06a;
-          font-family: "Cinzel", serif;
-          font-size: 0.82rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-top: 0;
-          margin-bottom: 0.5rem;
-          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
-          padding-bottom: 0.3rem;
-          white-space: nowrap;
-        }
-        .mega-menu-col a {
-          display: block !important;
-          color: #e9dcbe !important;
-          padding: 0.15rem 0 !important;
-          margin: 0 !important;
-          font-size: 0.88rem !important;
-          font-family: "Crimson Text", serif !important;
-          font-weight: normal !important;
-          line-height: 1.35;
-          text-decoration: none !important;
-          transition: color 0.15s ease;
-        }
-        .mega-menu-col a:hover,
-        .mega-menu-col a:focus-visible {
-          color: #d4b06a !important;
-          text-decoration: underline !important;
-        }
-        .mega-menu-col a.mega-menu-view-all {
-          color: #d4b06a !important;
-          font-weight: bold !important;
-          margin-top: 0.3rem !important;
-          font-size: 0.85rem !important;
-          text-transform: uppercase;
-          letter-spacing: 0.03em;
-        }
         .nav-dropdown-menu {
-          display: none;
+          display: none !important;
           position: absolute;
           top: 100%;
           left: 50%;
@@ -1553,23 +1541,26 @@ export default function Layout({ children }) {
           border: 1px solid #d4b06a;
           border-radius: 8px;
           padding: 1.5rem;
-          min-width: 380px;
+          min-width: 320px;
           z-index: 1000;
           box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
           margin-top: 0;
         }
-        .nav-dropdown-menu.is-open,
-        .nav-dropdown-wrapper:hover .nav-dropdown-menu,
-        .nav-dropdown-wrapper:focus-within .nav-dropdown-menu.mega-menu-container {
-          min-width: 920px;
+        .nav-dropdown-menu.is-open {
+          display: block !important;
+        }
+        .nav-dropdown-menu.mega-menu-container {
+          width: 94vw;
           max-width: 1150px;
+          min-width: auto;
           padding: 1.5rem 1.8rem;
           left: 50%;
           transform: translateX(-50%);
+          box-sizing: border-box;
         }
         .mega-menu-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
           gap: 1.2rem 0.9rem;
         }
         .mega-menu-col {
@@ -1613,9 +1604,6 @@ export default function Layout({ children }) {
           font-size: 0.85rem !important;
           text-transform: uppercase;
           letter-spacing: 0.03em;
-        }
-        .nav-dropdown-menu {
-          display: block;
         }
         .nav-dropdown-menu::before {
           content: "";
