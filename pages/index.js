@@ -179,7 +179,7 @@ export default function Index() {
   return (
     <div className="home-container">
       <Head>
-        <title>Tropical Plant Nursery St. Petersburg FL | Rare Botanicals</title>
+        <title>The Botanical Bazaar | Rare Tropical Plants & Orchids St. Petersburg FL</title>
         <meta name="description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup." />
         <link rel="canonical" href="https://thebotanicalbazaar.com/" />
         <meta property="og:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
@@ -210,6 +210,7 @@ export default function Index() {
           justify-content: center;
           gap: 3rem;
           width: 100%;
+          min-height: 380px;
         }
         .hero-image {
           flex: 1;
@@ -218,6 +219,7 @@ export default function Index() {
           display: flex;
           align-items: center;
           justify-content: center;
+          align-self: center;
           position: relative;
           background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
         }
@@ -227,6 +229,7 @@ export default function Index() {
           flex-direction: column;
           align-items: flex-start;
           justify-content: center;
+          align-self: center;
           text-align: left;
         }
         .hero-text h1 {
@@ -234,6 +237,7 @@ export default function Index() {
           line-height: 1.15;
           text-align: left;
           color: #D4B06A;
+          margin-top: 0;
           margin-bottom: 0.5rem;
           font-family: var(--font-heading, 'Cinzel', serif);
           text-transform: uppercase;

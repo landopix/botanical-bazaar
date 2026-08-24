@@ -816,14 +816,6 @@ export default function Layout({ children }) {
                 },
                 {
                   "@type": "AdministrativeArea",
-                  "name": "Tampa Bay Area"
-                },
-                {
-                  "@type": "AdministrativeArea",
-                  "name": "Tampa Bay Region"
-                },
-                {
-                  "@type": "AdministrativeArea",
                   "name": "Pinellas County"
                 },
                 {
@@ -1539,60 +1531,6 @@ export default function Layout({ children }) {
         .nav-dropdown-trigger:focus-visible {
           color: #d4b06a !important;
         }
-        .nav-dropdown-menu.mega-menu-container {
-          min-width: 920px;
-          max-width: 1150px;
-          padding: 1.5rem 1.8rem;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-        .mega-menu-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-          gap: 1.2rem 0.9rem;
-        }
-        .mega-menu-col {
-          display: flex;
-          flex-direction: column;
-          gap: 0.35rem;
-        }
-        .mega-menu-col h4 {
-          color: #d4b06a;
-          font-family: "Cinzel", serif;
-          font-size: 0.82rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-top: 0;
-          margin-bottom: 0.5rem;
-          border-bottom: 1px solid rgba(212, 176, 106, 0.25);
-          padding-bottom: 0.3rem;
-          white-space: nowrap;
-        }
-        .mega-menu-col a {
-          display: block !important;
-          color: #e9dcbe !important;
-          padding: 0.15rem 0 !important;
-          margin: 0 !important;
-          font-size: 0.88rem !important;
-          font-family: "Crimson Text", serif !important;
-          font-weight: normal !important;
-          line-height: 1.35;
-          text-decoration: none !important;
-          transition: color 0.15s ease;
-        }
-        .mega-menu-col a:hover,
-        .mega-menu-col a:focus-visible {
-          color: #d4b06a !important;
-          text-decoration: underline !important;
-        }
-        .mega-menu-col a.mega-menu-view-all {
-          color: #d4b06a !important;
-          font-weight: bold !important;
-          margin-top: 0.3rem !important;
-          font-size: 0.85rem !important;
-          text-transform: uppercase;
-          letter-spacing: 0.03em;
-        }
         .nav-dropdown-menu {
           display: none !important;
           position: absolute;
@@ -1622,25 +1560,29 @@ export default function Layout({ children }) {
         }
         .mega-menu-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-          gap: 1.2rem 0.9rem;
+          grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+          gap: 1.2rem 0.8rem;
         }
         .mega-menu-col {
           display: flex;
           flex-direction: column;
           gap: 0.35rem;
+          min-width: 0;
         }
         .mega-menu-col h4 {
           color: #d4b06a;
           font-family: "Cinzel", serif;
-          font-size: 0.82rem;
+          font-size: 0.8rem;
+          line-height: 1.25;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.04em;
           margin-top: 0;
           margin-bottom: 0.5rem;
           border-bottom: 1px solid rgba(212, 176, 106, 0.25);
-          padding-bottom: 0.3rem;
-          white-space: nowrap;
+          padding-bottom: 0.35rem;
+          white-space: normal;
+          word-break: normal;
+          overflow-wrap: break-word;
         }
         .mega-menu-col a {
           display: block !important;
@@ -1666,9 +1608,6 @@ export default function Layout({ children }) {
           font-size: 0.85rem !important;
           text-transform: uppercase;
           letter-spacing: 0.03em;
-        }
-        .nav-dropdown-menu {
-          display: block;
         }
         .nav-dropdown-menu::before {
           content: "";
