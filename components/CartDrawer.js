@@ -118,9 +118,21 @@ export default function CartDrawer({ isOpen, onClose }) {
                       )}
                       <div className="item-price">${(item.price * item.quantity).toFixed(2)}</div>
                       <div className="quantity-controls">
-                        <button onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}>-</button>
+                        <button
+                          onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}
+                          aria-label={`Decrease quantity of ${item.name}`}
+                          title={`Decrease quantity of ${item.name}`}
+                        >
+                          -
+                        </button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}>+</button>
+                        <button
+                          onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}
+                          aria-label={`Increase quantity of ${item.name}`}
+                          title={`Increase quantity of ${item.name}`}
+                        >
+                          +
+                        </button>
                       </div>
                     </div>
                     <button onClick={() => { removeFromCart(item.slug, item.selectedSize); setAnnouncement(`Removed ${item.name} from cart`); }} className="remove-btn" aria-label={`Remove ${item.name} from cart`}>

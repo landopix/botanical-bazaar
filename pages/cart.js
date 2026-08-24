@@ -187,7 +187,8 @@ export default function Cart() {
                 <button
                   onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}
                   style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
-                  aria-label="Decrease quantity"
+                  aria-label={`Decrease quantity of ${item.name}`}
+                  title={`Decrease quantity of ${item.name}`}
                 >
                   -
                 </button>
@@ -195,7 +196,8 @@ export default function Cart() {
                 <button
                   onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}
                   style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
-                  aria-label="Increase quantity"
+                  aria-label={`Increase quantity of ${item.name}`}
+                  title={`Increase quantity of ${item.name}`}
                 >
                   +
                 </button>
