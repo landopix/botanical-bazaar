@@ -682,14 +682,18 @@ export default function Shop({ initialProducts = [] }) {
                         updateFilters({ search: "" });
                       }
                     }}
-                    aria-label="Search plants"
-                  />
-                  {searchQuery && (
+                  >
+                    All Pot Sizes
+                  </button>
+                  {sortedSizes.map((size) => (
                     <button
+                      key={size}
                       type="button"
-                      onClick={() => updateFilters({ search: "" })}
-                      className="search-clear-btn"
-                      aria-label="Clear search query"
+                      className={selectedSize === size ? "active" : ""}
+                      onClick={(e) => {
+                        updateFilters({ size });
+                        e.target.closest("details").removeAttribute("open");
+                      }}
                     >
                       ✕
                     </button>
@@ -708,7 +712,7 @@ export default function Shop({ initialProducts = [] }) {
                   {sortedSizes.map((size) => (
                     <option key={size} value={size}>
                       {size}
-                    </option>
+                    </button>
                   ))}
                 </select>
               </div>
@@ -739,9 +743,17 @@ export default function Shop({ initialProducts = [] }) {
                 >
                   <option value="">All Zones</option>
                   {sortedZones.map((zone) => (
-                    <option key={zone} value={zone}>
+                    <button
+                      key={zone}
+                      type="button"
+                      className={selectedZone === zone ? "active" : ""}
+                      onClick={(e) => {
+                        updateFilters({ zone });
+                        e.target.closest("details").removeAttribute("open");
+                      }}
+                    >
                       Zone {zone}
-                    </option>
+                    </button>
                   ))}
                 </select>
               </div>
