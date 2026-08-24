@@ -398,7 +398,7 @@ export default function Layout({ children }) {
         triggerElementRef.current.focus();
       }
     }
-  }, [isSidebarOpen, isShopDropdownOpen, isFaqDropdownOpen]);
+  }, [isSidebarOpen]);
 
   // Focus trapping within Navigation Sidebar
   useEffect(() => {

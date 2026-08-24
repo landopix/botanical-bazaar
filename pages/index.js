@@ -210,7 +210,6 @@ export default function Index() {
           justify-content: center;
           gap: 3rem;
           width: 100%;
-          min-height: 380px;
         }
         .hero-image {
           flex: 1;
@@ -227,15 +226,15 @@ export default function Index() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: flex-start;
           justify-content: center;
           align-self: center;
-          text-align: center;
+          text-align: left;
         }
         .hero-text h1 {
           font-size: 2.8rem;
           line-height: 1.15;
-          text-align: center;
+          text-align: left;
           color: #D4B06A;
           margin-top: 0;
           margin-bottom: 0.5rem;
@@ -432,7 +431,7 @@ export default function Index() {
                 display: "flex",
                 gap: "1rem",
                 flexWrap: "wrap",
-                justifyContent: "center",
+                justifyContent: "flex-start",
               }}
             >
               <Link
