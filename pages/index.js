@@ -198,40 +198,61 @@ export default function Index() {
           __html: `
         /* Homepage-specific styles */
         .hero {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          padding: 2rem;
-          gap: 2rem;
+          padding: 2rem 1.5rem;
           position: relative;
+          max-width: 1200px;
+          margin: 0 auto;
         }
-        .hero-text {
+        .hero-split {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           align-items: center;
           justify-content: center;
-          text-align: center;
-        }
-        .hero-text h1 {
-          font-size: 3.2rem;
-          line-height: 1.2;
-          text-align: center;
-          color: #D4B06A;
-          margin-bottom: 0.5rem;
-          font-family: var(--font-heading, 'Cinzel', serif);
-          text-transform: uppercase;
-          letter-spacing: 0.15em;
+          gap: 3rem;
+          width: 100%;
         }
         .hero-image {
-          width: 45%;
-          max-width: 400px;
+          flex: 1;
+          max-width: 420px;
+          width: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
           background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+        }
+        .hero-text {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          text-align: left;
+        }
+        .hero-text h1 {
+          font-size: 2.8rem;
+          line-height: 1.15;
+          text-align: left;
+          color: #D4B06A;
+          margin-bottom: 0.5rem;
+          font-family: var(--font-heading, 'Cinzel', serif);
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+        }
+        @media (max-width: 767px) {
+          .hero-split {
+            flex-direction: column;
+            text-align: center;
+            gap: 2rem;
+          }
+          .hero-text {
+            align-items: center;
+            text-align: center;
+          }
+          .hero-text h1 {
+            text-align: center;
+            font-size: 2.2rem;
+          }
         }
         .featured {
           padding: 2rem;
@@ -354,122 +375,103 @@ export default function Index() {
 
       {/* Hero section */}
       <section className="hero">
-        <div className="hero-text">
-          <h1>THE BOTANICAL BAZAAR</h1>
-          <p
-            style={{
-              fontSize: "1.8rem",
-              lineHeight: "1.4",
-              margin: "0.6rem 0 1.2rem 0",
-              fontFamily: "var(--font-heading, Cinzel, serif)",
-              textTransform: "uppercase",
-              letterSpacing: "0.15em",
-              color: "#E9DCBE",
-            }}
-          >
-            ROOTED IN BEAUTY.
-            <br />
-            GROWN FOR YOU.
-          </p>
-          <p
-            style={{
-              fontSize: "1.1rem",
-              margin: "0.5rem 0 1.5rem 0",
-              maxWidth: "28ch",
-              lineHeight: "1.4",
-            }}
-          >
-            Rare and resilient tropical plants, curated in St.&nbsp;Petersburg,
-            FL - lovingly grown for our community and beyond.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "1rem",
-              flexWrap: "wrap",
-              justifyContent: "center",
-            }}
-          >
-            <Link
-              href="/shop"
+        <div className="hero-split">
+          {/* Left Column: Animated Logo GIF */}
+          <div className="hero-image">
+            <Image
+              src="/assets/logo-animation-optimized.gif"
+              alt="The Botanical Bazaar Animated Logo"
+              width={350}
+              height={350}
+              priority
+              unoptimized={true}
               style={{
-                background: "#D4B06A",
-                color: "#1C3D2E",
-                padding: "0.6rem 1.4rem",
-                borderRadius: "24px",
-                fontWeight: "bold",
-                textDecoration: "none",
+                width: "100%",
+                height: "auto",
+                boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
+                borderRadius: "12px",
+              }}
+            />
+          </div>
+
+          {/* Right Column: Introductory Text & Call to Action Buttons */}
+          <div className="hero-text">
+            <h1>THE BOTANICAL BAZAAR</h1>
+            <p
+              style={{
+                fontSize: "1.6rem",
+                lineHeight: "1.3",
+                margin: "0.5rem 0 1rem 0",
+                fontFamily: "var(--font-heading, Cinzel, serif)",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "#E9DCBE",
               }}
             >
-              Shop the Store
-            </Link>
-            <Link
-              href="/consultations"
+              ROOTED IN BEAUTY.
+              <br />
+              GROWN FOR YOU.
+            </p>
+            <p
               style={{
-                background: "transparent",
-                color: "#D4B06A",
-                padding: "0.6rem 1.4rem",
-                borderRadius: "24px",
-                fontWeight: "bold",
-                border: "2px solid #D4B06A",
-                textDecoration: "none",
+                fontSize: "1.1rem",
+                margin: "0.5rem 0 1.5rem 0",
+                maxWidth: "34ch",
+                lineHeight: "1.4",
               }}
             >
-              Book a Consultation
-            </Link>
+              Rare and resilient tropical plants, curated in St.&nbsp;Petersburg,
+              FL - lovingly grown for our community and beyond.
+            </p>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                flexWrap: "wrap",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Link
+                href="/shop"
+                style={{
+                  background: "#D4B06A",
+                  color: "#1C3D2E",
+                  padding: "0.6rem 1.4rem",
+                  borderRadius: "24px",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                }}
+              >
+                Shop the Store
+              </Link>
+              <Link
+                href="/consultations"
+                style={{
+                  background: "transparent",
+                  color: "#D4B06A",
+                  padding: "0.6rem 1.4rem",
+                  borderRadius: "24px",
+                  fontWeight: "bold",
+                  border: "2px solid #D4B06A",
+                  textDecoration: "none",
+                }}
+              >
+                Book a Consultation
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Hero image with animated GIF using Next.js Image component with unoptimized=true */}
-        <div className="hero-image">
-          <Image
-            src="/assets/logo-animation-optimized.gif"
-            alt="The Botanical Bazaar Animated Logo"
-            width={350}
-            height={350}
-            priority
-            unoptimized={true}
-            style={{
-              width: "100%",
-              height: "auto",
-              boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
-              borderRadius: "12px",
-            }}
-          />
-        </div>
-
-        {/* Almanac Signup Inside Hero */}
+        {/* Almanac Signup Section */}
         <div
           className="almanac-hero"
           style={{
             width: "100%",
             maxWidth: "600px",
-            marginTop: "1rem",
+            margin: "2.5rem auto 1rem auto",
             textAlign: "center",
           }}
         >
-          <h2
-            style={{
-              color: "#D4B06A",
-              marginBottom: "0.4rem",
-              fontFamily: "var(--font-heading, Cinzel, serif)",
-            }}
-          >
-            The Almanac
-          </h2>
-
-          <Link
-            href="/zones"
-            style={{
-              display: "block",
-              color: "#E9DCBE",
-              textDecoration: "none",
-              marginBottom: "1rem",
-            }}
-          >
-            Best Plants for Your Zone
-          </Link>
-
           <div
             className="almanac-signup-inner"
             style={{
