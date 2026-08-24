@@ -6,37 +6,45 @@ import { useWishlist } from '../context/WishlistContext';
 import { parseProductTitle } from '../lib/shopify';
 
 export function getResolvedPotSize(product, selectedVariant = null) {
-  if (selectedVariant) {
-    if (selectedVariant.selectedOptions && Array.isArray(selectedVariant.selectedOptions)) {
-      const sizeOpt = selectedVariant.selectedOptions.find(
-        opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
+  const variantsToInspect = selectedVariant
+    ? [selectedVariant]
+    : Array.isArray(product?.variants)
+    ? product.variants
+    : [];
+
+  for (const variant of variantsToInspect) {
+    if (variant?.selectedOptions && Array.isArray(variant.selectedOptions)) {
+      const sizeOpt = variant.selectedOptions.find(
+        opt => {
+          const optName = opt?.name?.toLowerCase() || "";
+          return optName === "pot size" || optName === "size" || optName === "container" || optName === "pot";
+        }
       );
-      if (sizeOpt?.value) return sizeOpt.value;
+      if (sizeOpt?.value && sizeOpt.value !== "Default Title") return sizeOpt.value;
     }
-    if (selectedVariant.title && selectedVariant.title !== 'Default Title') {
-      return selectedVariant.title;
+    if (variant?.title && variant.title !== "Default Title") {
+      return variant.title;
     }
   }
 
-  const primaryVariant = product?.variants?.[0];
-  if (primaryVariant?.selectedOptions && Array.isArray(primaryVariant.selectedOptions)) {
-    const sizeOpt = primaryVariant.selectedOptions.find(
-      opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
+  if (Array.isArray(product?.options)) {
+    const sizeOptGroup = product.options.find(
+      opt => {
+        const optName = opt?.name?.toLowerCase() || "";
+        return optName === "pot size" || optName === "size" || optName === "container";
+      }
     );
-    if (sizeOpt?.value) return sizeOpt.value;
-  }
-  if (primaryVariant?.title && primaryVariant.title !== 'Default Title') {
-    return primaryVariant.title;
+    if (sizeOptGroup?.values?.[0]) return sizeOptGroup.values[0];
   }
 
   if (product?.custom?.pot_size) return product.custom.pot_size;
-  if (product?.sizes && typeof product.sizes === 'string') {
-    const cleanSizes = product.sizes.split('|')[0].trim();
-    if (cleanSizes && cleanSizes !== 'Default Title') return cleanSizes;
+  if (product?.sizes && typeof product.sizes === "string") {
+    const cleanSizes = product.sizes.split("|")[0].trim();
+    if (cleanSizes && cleanSizes !== "Default Title") return cleanSizes;
   }
   if (product?.potSize) return product.potSize;
 
-  return 'Standard Pot';
+  return "Standard Pot";
 }
 
 export function getResolvedPlantType(product) {

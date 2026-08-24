@@ -611,8 +611,8 @@ export default function Shop({ initialProducts = [] }) {
       ) : (
         <>
           <div className="filter-panel">
-            <p className="shop-intro">
-              Browse our curated selection of rare tropical plants, orchids, fruit trees, and botanical goods grown in St.&nbsp;Petersburg, FL. All listings reflect live nursery inventory updated daily for nationwide shipping and local pickup.
+            <p className="shop-intro" style={{ margin: "0 0 1rem 0", fontSize: "0.95rem", opacity: 0.9 }}>
+              Rare tropical plants, orchids, and fruit trees grown in St. Petersburg, FL. Nationwide shipping &amp; local pickup.
             </p>
 
             <div className="category-section">
@@ -636,110 +636,156 @@ export default function Shop({ initialProducts = [] }) {
               </div>
             </div>
 
-            <div className="filters-grid">
-              <div className="filter-control">
-                <label htmlFor="search-input">Search Plants</label>
-                <div className="search-input-wrapper">
-                  <input
-                    id="search-input"
-                    type="text"
-                    placeholder="Search by name, type..."
-                    value={searchQuery}
-                    onChange={(e) => updateFilters({ search: e.target.value })}
-                    onKeyDown={(e) => {
-                      if (e.key === "Escape") {
-                        updateFilters({ search: "" });
-                      }
+            <div className="compact-filter-toolbar">
+              {/* Search Bar */}
+              <div className="compact-search-wrapper">
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Search catalog..."
+                  value={searchQuery}
+                  onChange={(e) => updateFilters({ search: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") updateFilters({ search: "" });
+                  }}
+                  aria-label="Search plants"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => updateFilters({ search: "" })}
+                    className="compact-search-clear"
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Pot Size Dropdown Popover */}
+              <details className={`filter-popover ${selectedSize ? "has-active" : ""}`}>
+                <summary className="filter-popover-summary">
+                  Size: {selectedSize || "All"} ▾
+                </summary>
+                <div className="filter-popover-content">
+                  <button
+                    type="button"
+                    className={selectedSize === "" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ size: "" });
+                      e.target.closest("details").removeAttribute("open");
                     }}
-                    aria-label="Search plants"
-                  />
-                  {searchQuery && (
+                  >
+                    All Pot Sizes
+                  </button>
+                  {sortedSizes.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      className={selectedSize === size ? "active" : ""}
+                      onClick={(e) => {
+                        updateFilters({ size });
+                        e.target.closest("details").removeAttribute("open");
+                      }}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </details>
+
+              {/* Hardiness Zone Dropdown Popover */}
+              <details className={`filter-popover ${selectedZone ? "has-active" : ""}`}>
+                <summary className="filter-popover-summary">
+                  Zone: {selectedZone ? `Zone ${selectedZone}` : "All"} ▾
+                </summary>
+                <div className="filter-popover-content">
+                  <button
+                    type="button"
+                    className={selectedZone === "" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ zone: "" });
+                      e.target.closest("details").removeAttribute("open");
+                    }}
+                  >
+                    All Hardiness Zones
+                  </button>
+                  {userZone && (
                     <button
                       type="button"
-                      onClick={() => updateFilters({ search: "" })}
-                      className="search-clear-btn"
-                      aria-label="Clear search query"
+                      className={selectedZone === userZone ? "active my-zone-popover-btn" : "my-zone-popover-btn"}
+                      onClick={(e) => {
+                        updateFilters({ zone: selectedZone === userZone ? "" : userZone });
+                        e.target.closest("details").removeAttribute("open");
+                      }}
                     >
-                      ✕
+                      {selectedZone === userZone ? `✓ My Zone (${userZone})` : `Filter My Zone (${userZone})`}
                     </button>
                   )}
-                </div>
-              </div>
-
-              <div className="filter-control">
-                <label htmlFor="size-select">Pot Size / Container</label>
-                <select
-                  id="size-select"
-                  value={selectedSize}
-                  onChange={(e) => updateFilters({ size: e.target.value })}
-                >
-                  <option value="">All Sizes</option>
-                  {sortedSizes.map((size) => (
-                    <option key={size} value={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="filter-control">
-                <label>My Climate Zone</label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (selectedZone === userZone) {
-                      updateFilters({ zone: "" });
-                    } else {
-                      updateFilters({ zone: userZone });
-                    }
-                  }}
-                  className={`my-zone-btn ${selectedZone === userZone ? "active" : ""}`}
-                  style={{
-                    padding: "0.5rem 0.8rem",
-                    borderRadius: "6px",
-                    border: "1px solid #D4B06A",
-                    backgroundColor: selectedZone === userZone ? "#D4B06A" : "#1C3D2E",
-                    color: selectedZone === userZone ? "#00301E" : "#F5E7C4",
-                    fontWeight: "bold",
-                    fontSize: "0.85rem",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
-                  aria-label={`Filter catalog for my hardiness zone ${userZone}`}
-                >
-                  {selectedZone === userZone ? `✓ My Zone (${userZone})` : `Filter My Zone (${userZone})`}
-                </button>
-              </div>
-
-              <div className="filter-control">
-                <label htmlFor="zone-select">Hardiness Zone</label>
-                <select
-                  id="zone-select"
-                  value={selectedZone}
-                  onChange={(e) => updateFilters({ zone: e.target.value })}
-                >
-                  <option value="">All Zones</option>
                   {sortedZones.map((zone) => (
-                    <option key={zone} value={zone}>
+                    <button
+                      key={zone}
+                      type="button"
+                      className={selectedZone === zone ? "active" : ""}
+                      onClick={(e) => {
+                        updateFilters({ zone });
+                        e.target.closest("details").removeAttribute("open");
+                      }}
+                    >
                       Zone {zone}
-                    </option>
+                    </button>
                   ))}
-                </select>
-              </div>
+                </div>
+              </details>
 
-              <div className="filter-control">
-                <label htmlFor="sort-select">Sort By</label>
-                <select
-                  id="sort-select"
-                  value={sortOrder}
-                  onChange={(e) => updateFilters({ sort: e.target.value })}
-                >
-                  <option value="">Featured / Newest</option>
-                  <option value="price-low-to-high">Price: Low to High</option>
-                  <option value="price-high-to-low">Price: High to Low</option>
-                  <option value="alphabetical">Alphabetical (A-Z)</option>
-                </select>
-              </div>
+              {/* Sort By Popover */}
+              <details className={`filter-popover ${sortOrder ? "has-active" : ""}`}>
+                <summary className="filter-popover-summary">
+                  Sort: {sortOrder === "price-low-to-high" ? "Price Low-High" : sortOrder === "price-high-to-low" ? "Price High-Low" : sortOrder === "alphabetical" ? "A-Z" : "Newest"} ▾
+                </summary>
+                <div className="filter-popover-content">
+                  <button
+                    type="button"
+                    className={sortOrder === "" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ sort: "" });
+                      e.target.closest("details").removeAttribute("open");
+                    }}
+                  >
+                    Featured / Newest
+                  </button>
+                  <button
+                    type="button"
+                    className={sortOrder === "price-low-to-high" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ sort: "price-low-to-high" });
+                      e.target.closest("details").removeAttribute("open");
+                    }}
+                  >
+                    Price: Low to High
+                  </button>
+                  <button
+                    type="button"
+                    className={sortOrder === "price-high-to-low" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ sort: "price-high-to-low" });
+                      e.target.closest("details").removeAttribute("open");
+                    }}
+                  >
+                    Price: High to Low
+                  </button>
+                  <button
+                    type="button"
+                    className={sortOrder === "alphabetical" ? "active" : ""}
+                    onClick={(e) => {
+                      updateFilters({ sort: "alphabetical" });
+                      e.target.closest("details").removeAttribute("open");
+                    }}
+                  >
+                    Alphabetical (A-Z)
+                  </button>
+                </div>
+              </details>
             </div>
 
             <div className="toggle-section">
@@ -995,6 +1041,128 @@ export default function Shop({ initialProducts = [] }) {
           height: 18px;
           accent-color: #d4b06a;
           cursor: pointer;
+        }
+
+        .compact-filter-toolbar {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.8rem;
+          margin-bottom: 1rem;
+        }
+
+        .compact-search-wrapper {
+          position: relative;
+          flex: 1 1 200px;
+          min-width: 180px;
+        }
+
+        .compact-search-wrapper input {
+          width: 100%;
+          padding: 0.45rem 2rem 0.45rem 0.8rem;
+          border-radius: 20px;
+          border: 1px solid #D4B06A;
+          background-color: #F5E7C4;
+          color: #00301E;
+          font-family: "Crimson Text", serif;
+          font-size: 0.95rem;
+          outline: none;
+          box-sizing: border-box;
+        }
+
+        .compact-search-clear {
+          position: absolute;
+          right: 0.6rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #00301E;
+          font-size: 0.9rem;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+
+        .filter-popover {
+          position: relative;
+          display: inline-block;
+        }
+
+        .filter-popover-summary {
+          background-color: #1C3D2E;
+          color: #F5E7C4;
+          border: 1px solid #D4B06A;
+          padding: 0.45rem 0.9rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          user-select: none;
+          list-style: none;
+          transition: all 0.2s ease;
+        }
+
+        .filter-popover-summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .filter-popover.has-active .filter-popover-summary {
+          background-color: #D4B06A;
+          color: #00301E;
+          font-weight: bold;
+        }
+
+        .filter-popover-summary:hover {
+          border-color: #E9DCBE;
+        }
+
+        .filter-popover-content {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          margin-top: 0.4rem;
+          background-color: #00301E;
+          border: 1px solid #D4B06A;
+          border-radius: 8px;
+          padding: 0.5rem;
+          min-width: 160px;
+          z-index: 50;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .filter-popover-content button {
+          background: none;
+          border: none;
+          color: #E9DCBE;
+          text-align: left;
+          padding: 0.35rem 0.6rem;
+          font-size: 0.88rem;
+          font-family: "Crimson Text", serif;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: background 0.15s ease;
+        }
+
+        .filter-popover-content button:hover {
+          background: #1C3D2E;
+          color: #D4B06A;
+        }
+
+        .filter-popover-content button.active {
+          background: #D4B06A;
+          color: #00301E;
+          font-weight: bold;
+        }
+
+        .filter-popover-content button.my-zone-popover-btn {
+          border-bottom: 1px solid rgba(212, 176, 106, 0.3);
+          margin-bottom: 0.2rem;
+          padding-bottom: 0.4rem;
+          color: #D4B06A;
+          font-weight: bold;
         }
 
 
