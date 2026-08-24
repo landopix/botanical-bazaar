@@ -26,5 +26,19 @@
     "inquiryType": "newsletter_subscription",
     "timestamp": "2026-08-22T21:10:31.515Z",
     "details": "Newsletter subscription request from homepage for jules.e2e.newsletter@example.com"
+  },
+  {
+    "email": "jules.e2e.newsletter@example.com",
+    "name": "Homepage Subscriber",
+    "inquiryType": "newsletter_subscription",
+    "timestamp": "2026-08-24T10:05:23.565Z",
+    "details": "Newsletter subscription request from homepage for jules.e2e.newsletter@example.com"
+  },
+  {
+    "email": "jules.e2e.newsletter@example.com",
+    "name": "Homepage Subscriber",
+    "inquiryType": "newsletter_subscription",
+    "timestamp": "2026-08-24T10:08:32.466Z",
+    "details": "Newsletter subscription request from homepage for jules.e2e.newsletter@example.com"
   }
 ]

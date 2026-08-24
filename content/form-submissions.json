@@ -26,5 +26,19 @@
     "formType": "contact",
     "timestamp": "2026-08-22T21:10:30.050Z",
     "message": "E2E automated test message for nursery inquiries."
+  },
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-24T10:05:22.024Z",
+    "message": "E2E automated test message for nursery inquiries."
+  },
+  {
+    "email": "jules.e2e@example.com",
+    "name": "Jules E2E",
+    "formType": "contact",
+    "timestamp": "2026-08-24T10:08:30.718Z",
+    "message": "E2E automated test message for nursery inquiries."
   }
 ]
