@@ -401,40 +401,19 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
     }
   };
 
-  // Construct SEO title targeting 50-60 characters
-  const rawPdpName = product?.name ? product.name.trim() : 'Botanical Specimen';
-  let dynamicPdpTitle = `${rawPdpName} | Rare Botanicals St. Petersburg FL`;
-  if (dynamicPdpTitle.length < 50 || dynamicPdpTitle.length > 60) {
-    dynamicPdpTitle = `${rawPdpName} | Tropical Nursery St. Petersburg FL`;
-  }
-  if (dynamicPdpTitle.length < 50 || dynamicPdpTitle.length > 60) {
-    dynamicPdpTitle = `${rawPdpName} | Nursery St. Petersburg FL`;
-  }
-  if (dynamicPdpTitle.length < 50 || dynamicPdpTitle.length > 60) {
-    dynamicPdpTitle = `${rawPdpName} | Tropical Plant Nursery St. Petersburg FL`;
-  }
-  if (dynamicPdpTitle.length > 60) {
-    dynamicPdpTitle = dynamicPdpTitle.slice(0, 57) + '...';
-  } else if (dynamicPdpTitle.length < 50) {
-    dynamicPdpTitle = `${rawPdpName} | Rare Botanicals Nursery St. Petersburg FL`;
-    if (dynamicPdpTitle.length > 60) {
-      dynamicPdpTitle = dynamicPdpTitle.slice(0, 57) + '...';
-    }
-  }
-
   return (
     <div className="pdp-wrapper">
       <Head>
-        <title>{dynamicPdpTitle}</title>
+        <title>{`${product.name} | The Botanical Bazaar`}</title>
         <meta name="description" content={descriptionText} />
         <link rel="canonical" href={pageUrl} />
-        <meta property="og:title" content={dynamicPdpTitle} />
+        <meta property="og:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta property="og:description" content={descriptionText} />
         <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:type" content="product" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={dynamicPdpTitle} />
+        <meta name="twitter:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta name="twitter:description" content={descriptionText} />
         <meta name="twitter:image" content={imageUrl} />
         <script
@@ -666,20 +645,6 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           )}
         </div>
       </section>
-
-      {/* Recommended / Related Products Horizontal Slider */}
-      {recommendedProducts.length > 0 && (
-        <section className="recommended-section">
-          <h2 className="recommended-title">Recommended Specimen Pairings</h2>
-          <div className="recommended-slider">
-            {recommendedProducts.map((recProd) => (
-              <div key={recProd.slug || recProd.id} className="recommended-card-wrapper">
-                <ProductCard product={recProd} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Two-Column Informational Details Grid */}
       <section className="product-details-grid">

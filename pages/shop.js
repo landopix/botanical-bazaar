@@ -565,18 +565,11 @@ export default function Shop({ initialProducts = [] }) {
   // Dynamic meta title and description based on active filters
   const activeCategoryObj = COLLECTIONS.find(c => c.id === selectedCategory);
   const categoryName = activeCategoryObj ? activeCategoryObj.name : (selectedCategory ? selectedCategory.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ') : '');
-  let dynamicTitle = "";
-  if (categoryName) {
-    dynamicTitle = `${categoryName} Nursery St. Petersburg FL | Rare Botanicals`;
-  } else if (selectedTag) {
-    const formattedTag = selectedTag.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
-    dynamicTitle = `${formattedTag} | Tropical Plant Nursery St. Petersburg FL`;
-  } else {
-    dynamicTitle = "Shop Rare Tropical Plants | Nursery in St. Petersburg, FL";
-  }
-  if (dynamicTitle.length > 60) {
-    dynamicTitle = dynamicTitle.slice(0, 57) + "...";
-  }
+  const dynamicTitle = categoryName
+    ? `${categoryName} | The Botanical Bazaar St. Petersburg FL`
+    : (selectedTag
+        ? `${selectedTag.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ')} Plants | The Botanical Bazaar`
+        : "Shop Rare Tropical Plants & Orchids | The Botanical Bazaar St. Petersburg FL");
 
   const dynamicDescription = categoryName
     ? `Browse our selection of ${categoryName.toLowerCase()} grown in St. Petersburg, FL. Standard shipping & local nursery pickup available.`

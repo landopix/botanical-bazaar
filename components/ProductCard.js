@@ -92,11 +92,8 @@ function ProductCard({
     }
   };
 
-  const targetUrl = slug ? `/product/${slug}` : '/shop';
-
   return (
-    <Link
-      href={targetUrl}
+    <div
       className={`product-card flex flex-col justify-between h-full bg-[#F5E7C4] border border-[#D4B06A] rounded-xl overflow-hidden shadow-md relative ${
         isSoldOut ? 'opacity-60' : ''
       } ${className}`}
@@ -110,18 +107,13 @@ function ProductCard({
         borderRadius: '12px',
         overflow: 'hidden',
         position: 'relative',
-        boxSizing: 'border-box',
-        textDecoration: 'none',
-        color: 'inherit',
-        cursor: 'pointer'
+        boxSizing: 'border-box'
       }}
     >
       {isSoldOut ? (
         <div
           className="sold-out-badge"
           style={{
-            cursor: 'default',
-            pointerEvents: 'none',
             position: 'absolute',
             top: '12px',
             left: '12px',
@@ -140,8 +132,6 @@ function ProductCard({
         <div
           className="low-stock-badge"
           style={{
-            cursor: 'default',
-            pointerEvents: 'none',
             position: 'absolute',
             top: '12px',
             left: '12px',
@@ -177,8 +167,6 @@ function ProductCard({
           borderRadius: '50%',
           width: '36px',
           height: '36px',
-          minWidth: '44px',
-          minHeight: '44px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -204,7 +192,10 @@ function ProductCard({
       </button>
 
       <div style={{ display: 'flex', flexDirection: 'column', width: '100%', flexGrow: 1, padding: '1.2rem 1.2rem 0 1.2rem' }}>
-        <div style={{ display: 'block' }}>
+        <Link
+          href={slug ? `/product/${slug}` : '/shop'}
+          style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+        >
           {/* Aspect Square (1:1) Image Wrapper */}
           <div
             style={{
@@ -221,7 +212,7 @@ function ProductCard({
               src={imageSrc}
               alt={commonName}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
               unoptimized={!isSanityCdnUrl(imageSrc)}
               onError={(e) => {
@@ -261,7 +252,7 @@ function ProductCard({
               ({scientificName})
             </span>
           )}
-        </div>
+        </Link>
 
         <p style={{ margin: '0.5rem 0 0.1rem 0', fontSize: '0.9rem', color: '#00301E', textAlign: 'center', fontWeight: '500' }}>
           Size: {extractedSize} &bull; Type: {type}
@@ -270,30 +261,31 @@ function ProductCard({
           {isSoldOut
             ? 'Sold Out'
             : typeof price === 'number'
-            ? `${price.toFixed(2)}`
+            ? `$${price.toFixed(2)}`
             : price ?? 'Price on Request'}
         </p>
       </div>
 
       <div style={{ width: '100%', padding: '0 1.2rem 1.2rem 1.2rem', marginTop: 'auto' }}>
-        <span
+        <Link
+          href={slug ? `/product/${slug}` : '/shop'}
           style={{
             display: 'block',
             width: '100%',
             textAlign: 'center',
-            padding: '0.6rem 1.2rem',
-            minHeight: '44px',
+            padding: '0.5rem 1.2rem',
             borderRadius: '18px',
             background: '#00301E',
             color: '#F5E7C4',
             border: '1px solid #D4B06A',
             fontWeight: 'bold',
             fontSize: '0.95rem',
+            textDecoration: 'none',
             boxSizing: 'border-box'
           }}
         >
           View Plant
-        </span>
+        </Link>
       </div>
       <style jsx>{`
         .wishlist-btn-toggle:focus-visible {
@@ -301,7 +293,7 @@ function ProductCard({
           outline-offset: 2px !important;
         }
       `}</style>
-    </Link>
+    </div>
   );
 }
 
