@@ -92,6 +92,7 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedTag, setSelectedTag] = useState("");
   const [selectedLight, setSelectedLight] = useState("");
   const [selectedBloom, setSelectedBloom] = useState("");
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Verification Gate for Catalog Launch (OPP-001, TBB-001)
   const { hasOverallInventory, hasShippingInventory, hasPickupInventory, launchGatePassed } = useMemo(() => {
@@ -557,6 +558,20 @@ export default function Shop({ initialProducts = [] }) {
     return counts;
   }, [products]);
 
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (selectedSize) count++;
+    if (selectedZone) count++;
+    if (sortOrder) count++;
+    if (viewSoldOut) count++;
+    if (searchQuery) count++;
+    if (selectedTag) count++;
+    if (selectedLight) count++;
+    if (selectedBloom) count++;
+    return count;
+  }, [selectedSize, selectedZone, sortOrder, viewSoldOut, searchQuery, selectedTag, selectedLight, selectedBloom]);
+
   const visibleCollections = useMemo(() => {
     if (products.length === 0) return COLLECTIONS;
     return COLLECTIONS.filter((collection) => (categoryInStockCounts[collection.id] || 0) > 0);
@@ -594,8 +609,8 @@ export default function Shop({ initialProducts = [] }) {
 
       <h1 className="shop-title">Shop All Plants</h1>
 
-      <div className="fulfillment-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.8rem 1.2rem', borderRadius: '10px', marginBottom: '1.2rem', textAlign: 'center', fontSize: '1rem' }}>
-        <strong>Standard Shipping &amp; Local Nursery Pickup:</strong> Now offering Standard Shipping from St. Petersburg, FL with secure live-plant packaging and weather holds, alongside Free Local Nursery Pickup $0.00. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.5rem' }}>View Shipping Details &rarr;</Link>
+      <div className="fulfillment-banner" style={{ background: '#D4B06A', color: '#1C3D2E', padding: '0.35rem 0.8rem', borderRadius: '6px', marginBottom: '0.6rem', textAlign: 'center', fontSize: '0.85rem', lineHeight: '1.3' }}>
+        <strong>Standard Shipping &amp; Local Pickup:</strong> Secure live-plant packaging from St. Petersburg, FL + Free Nursery Pickup. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.3rem' }}>Details &rarr;</Link>
       </div>
 
       {!launchGatePassed ? (
@@ -611,8 +626,8 @@ export default function Shop({ initialProducts = [] }) {
       ) : (
         <>
           <div className="filter-panel">
-            <p className="shop-intro" style={{ margin: "0 0 1rem 0", fontSize: "0.95rem", opacity: 0.9 }}>
-              Rare tropical plants, orchids, and fruit trees grown in St. Petersburg, FL. Nationwide shipping &amp; local pickup.
+            <p className="shop-intro">
+              Browse live nursery inventory grown in St.&nbsp;Petersburg, FL for nationwide shipping and local pickup.
             </p>
 
             <div className="category-section">
@@ -636,177 +651,136 @@ export default function Shop({ initialProducts = [] }) {
               </div>
             </div>
 
-            <div className="compact-filter-toolbar">
-              {/* Search Bar */}
-              <div className="compact-search-wrapper">
-                <input
-                  id="search-input"
-                  type="text"
-                  placeholder="Search catalog..."
-                  value={searchQuery}
-                  onChange={(e) => updateFilters({ search: e.target.value })}
-                  onKeyDown={(e) => {
-                    if (e.key === "Escape") updateFilters({ search: "" });
-                  }}
-                  aria-label="Search plants"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => updateFilters({ search: "" })}
-                    className="compact-search-clear"
-                    aria-label="Clear search"
-                  >
-                    ✕
-                  </button>
-                )}
+            {/* Mobile Filter Toggle Button */}
+            <div className="mobile-filter-toggle-wrapper">
+              <button
+                type="button"
+                className="mobile-filter-toggle-btn"
+                onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+                aria-expanded={isMobileFilterOpen}
+              >
+                <span>Filters {activeFilterCount > 0 ? `(${activeFilterCount} active)` : ''}</span>
+                <span className="toggle-arrow">{isMobileFilterOpen ? '▲' : '▾'}</span>
+              </button>
+              <div className="mobile-results-count" role="status" aria-live="polite">
+                {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
               </div>
+            </div>
 
-              {/* Pot Size Dropdown Popover */}
-              <details className={`filter-popover ${selectedSize ? "has-active" : ""}`}>
-                <summary className="filter-popover-summary">
-                  Size: {selectedSize || "All"} ▾
-                </summary>
-                <div className="filter-popover-content">
-                  <button
-                    type="button"
-                    className={selectedSize === "" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ size: "" });
-                      e.target.closest("details").removeAttribute("open");
+            {/* Combined Toolbar / Filter Controls */}
+            <div className={`filters-toolbar ${isMobileFilterOpen ? 'mobile-open' : ''}`}>
+              <div className="filter-control search-control">
+                <div className="search-input-wrapper">
+                  <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search plants..."
+                    value={searchQuery}
+                    onChange={(e) => updateFilters({ search: e.target.value })}
+                    onKeyDown={(e) => {
+                      if (e.key === "Escape") {
+                        updateFilters({ search: "" });
+                      }
                     }}
-                  >
-                    All Pot Sizes
-                  </button>
-                  {sortedSizes.map((size) => (
-                    <button
-                      key={size}
-                      type="button"
-                      className={selectedSize === size ? "active" : ""}
-                      onClick={(e) => {
-                        updateFilters({ size });
-                        e.target.closest("details").removeAttribute("open");
-                      }}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </details>
-
-              {/* Hardiness Zone Dropdown Popover */}
-              <details className={`filter-popover ${selectedZone ? "has-active" : ""}`}>
-                <summary className="filter-popover-summary">
-                  Zone: {selectedZone ? `Zone ${selectedZone}` : "All"} ▾
-                </summary>
-                <div className="filter-popover-content">
-                  <button
-                    type="button"
-                    className={selectedZone === "" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ zone: "" });
-                      e.target.closest("details").removeAttribute("open");
-                    }}
-                  >
-                    All Hardiness Zones
-                  </button>
-                  {userZone && (
+                    aria-label="Search plants"
+                  />
+                  {searchQuery && (
                     <button
                       type="button"
-                      className={selectedZone === userZone ? "active my-zone-popover-btn" : "my-zone-popover-btn"}
-                      onClick={(e) => {
-                        updateFilters({ zone: selectedZone === userZone ? "" : userZone });
-                        e.target.closest("details").removeAttribute("open");
-                      }}
+                      onClick={() => updateFilters({ search: "" })}
+                      className="search-clear-btn"
+                      aria-label="Clear search query"
                     >
-                      {selectedZone === userZone ? `✓ My Zone (${userZone})` : `Filter My Zone (${userZone})`}
+                      ✕
                     </button>
                   )}
-                  {sortedZones.map((zone) => (
-                    <button
-                      key={zone}
-                      type="button"
-                      className={selectedZone === zone ? "active" : ""}
-                      onClick={(e) => {
-                        updateFilters({ zone });
-                        e.target.closest("details").removeAttribute("open");
-                      }}
-                    >
-                      Zone {zone}
-                    </button>
+                </div>
+              </div>
+
+              <div className="filter-control">
+                <select
+                  id="size-select"
+                  value={selectedSize}
+                  onChange={(e) => updateFilters({ size: e.target.value })}
+                  aria-label="Filter by pot size"
+                >
+                  <option value="">All Sizes</option>
+                  {sortedSizes.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
                   ))}
-                </div>
-              </details>
+                </select>
+              </div>
 
-              {/* Sort By Popover */}
-              <details className={`filter-popover ${sortOrder ? "has-active" : ""}`}>
-                <summary className="filter-popover-summary">
-                  Sort: {sortOrder === "price-low-to-high" ? "Price Low-High" : sortOrder === "price-high-to-low" ? "Price High-Low" : sortOrder === "alphabetical" ? "A-Z" : "Newest"} ▾
-                </summary>
-                <div className="filter-popover-content">
-                  <button
-                    type="button"
-                    className={sortOrder === "" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ sort: "" });
-                      e.target.closest("details").removeAttribute("open");
-                    }}
-                  >
-                    Featured / Newest
-                  </button>
-                  <button
-                    type="button"
-                    className={sortOrder === "price-low-to-high" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ sort: "price-low-to-high" });
-                      e.target.closest("details").removeAttribute("open");
-                    }}
-                  >
-                    Price: Low to High
-                  </button>
-                  <button
-                    type="button"
-                    className={sortOrder === "price-high-to-low" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ sort: "price-high-to-low" });
-                      e.target.closest("details").removeAttribute("open");
-                    }}
-                  >
-                    Price: High to Low
-                  </button>
-                  <button
-                    type="button"
-                    className={sortOrder === "alphabetical" ? "active" : ""}
-                    onClick={(e) => {
-                      updateFilters({ sort: "alphabetical" });
-                      e.target.closest("details").removeAttribute("open");
-                    }}
-                  >
-                    Alphabetical (A-Z)
-                  </button>
-                </div>
-              </details>
-            </div>
+              <div className="filter-control">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedZone === userZone) {
+                      updateFilters({ zone: "" });
+                    } else {
+                      updateFilters({ zone: userZone });
+                    }
+                  }}
+                  className={`my-zone-btn ${selectedZone === userZone ? "active" : ""}`}
+                  aria-label={`Filter catalog for my hardiness zone ${userZone}`}
+                >
+                  {selectedZone === userZone ? `✓ Zone ${userZone}` : `My Zone (${userZone})`}
+                </button>
+              </div>
 
-            <div className="toggle-section">
-              <label className="toggle-label">
-                <input
-                  type="checkbox"
-                  checked={viewSoldOut}
-                  onChange={(e) =>
-                    updateFilters({ view_sold_out: e.target.checked })
-                  }
-                  className="toggle-checkbox"
-                />
-                View Sold Out Plants
-              </label>
+              <div className="filter-control">
+                <select
+                  id="zone-select"
+                  value={selectedZone}
+                  onChange={(e) => updateFilters({ zone: e.target.value })}
+                  aria-label="Filter by hardiness zone"
+                >
+                  <option value="">All Zones</option>
+                  {sortedZones.map((zone) => (
+                    <option key={zone} value={zone}>
+                      Zone {zone}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="filter-control">
+                <select
+                  id="sort-select"
+                  value={sortOrder}
+                  onChange={(e) => updateFilters({ sort: e.target.value })}
+                  aria-label="Sort catalog"
+                >
+                  <option value="">Featured / Newest</option>
+                  <option value="price-low-to-high">Price: Low to High</option>
+                  <option value="price-high-to-low">Price: High to Low</option>
+                  <option value="alphabetical">Alphabetical (A-Z)</option>
+                </select>
+              </div>
+
+              <div className="filter-control toggle-control">
+                <label className="toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={viewSoldOut}
+                    onChange={(e) =>
+                      updateFilters({ view_sold_out: e.target.checked })
+                    }
+                    className="toggle-checkbox"
+                  />
+                  Sold Out
+                </label>
+              </div>
+
+              <div className="desktop-results-count" role="status" aria-live="polite">
+                {filteredProducts.length} {filteredProducts.length === 1 ? "product" : "products"}
+              </div>
             </div>
           </div>
 
-          <div className="results-count" role="status" aria-live="polite">
-            Showing {filteredProducts.length}{" "}
-            {filteredProducts.length === 1 ? "product" : "products"}
-          </div>
+
 
           {selectedCategory &&
           products.length > 0 &&
@@ -875,8 +849,8 @@ export default function Shop({ initialProducts = [] }) {
       <style jsx>{`
         .shop-container {
           max-width: 1150px;
-          margin: 32px auto;
-          padding: 1.5rem;
+          margin: 12px auto 24px auto;
+          padding: 0.75rem 1rem;
           box-sizing: border-box;
           font-family: "Crimson Text", serif;
           color: #f5e7c4;
@@ -884,20 +858,20 @@ export default function Shop({ initialProducts = [] }) {
 
         .shop-title {
           color: #e9dcbe;
-          font-size: 2.5rem;
+          font-size: 1.8rem;
           text-align: center;
-          letter-spacing: 0.15em;
-          margin-top: 0.2em;
-          margin-bottom: 0.4em;
+          letter-spacing: 0.12em;
+          margin-top: 0;
+          margin-bottom: 0.3em;
           font-family: "Cinzel", serif;
           text-transform: uppercase;
         }
 
         .shop-intro {
           max-width: 850px;
-          margin: 0 auto 0.6rem auto;
-          font-size: 1.15rem;
-          line-height: 1.6;
+          margin: 0 auto 0.4rem auto;
+          font-size: 0.95rem;
+          line-height: 1.35;
           color: #e9dcbe;
           text-align: center;
           font-family: "Crimson Text", serif;
@@ -906,29 +880,43 @@ export default function Shop({ initialProducts = [] }) {
         .filter-panel {
           background: #00301e;
           border: 1px solid #d4b06a;
-          border-radius: 12px;
-          padding: 1.5rem;
-          margin-bottom: 2rem;
+          border-radius: 10px;
+          padding: 0.75rem 1rem;
+          margin-bottom: 1.2rem;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .filter-group-label {
-          font-size: 1.1rem;
+          font-size: 0.9rem;
           font-weight: bold;
           color: #d4b06a;
-          margin-bottom: 0.5rem;
-          display: block;
+          margin-bottom: 0;
+          white-space: nowrap;
+          display: inline-block;
           font-family: "Crimson Text", serif;
         }
 
         .category-section {
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.6rem;
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
         }
 
         .category-pills {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.6rem;
+          flex-wrap: nowrap;
+          gap: 0.4rem;
+          overflow-x: auto;
+          white-space: nowrap;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          padding-bottom: 2px;
+          flex: 1;
+        }
+
+        .category-pills::-webkit-scrollbar {
+          display: none;
         }
 
         .category-pills button {
@@ -936,11 +924,12 @@ export default function Shop({ initialProducts = [] }) {
           color: #00301E;
           border: 1px solid #D4B06A;
           font-weight: 700;
-          border-radius: 20px;
-          padding: 0.4rem 1rem;
+          border-radius: 16px;
+          padding: 0.25rem 0.75rem;
           font-family: "Crimson Text", serif;
-          font-size: 1rem;
+          font-size: 0.88rem;
           cursor: pointer;
+          flex-shrink: 0;
           transition: all 0.2s ease;
         }
 
@@ -948,35 +937,38 @@ export default function Shop({ initialProducts = [] }) {
           background: #E9DCBE;
           color: #00301E;
           border-color: #00301E;
-          transform: translateY(-2px) scale(1.02);
+          transform: translateY(-1px);
         }
 
         .category-pills button.active {
           background: #00301E;
           color: #D4B06A;
-          border: 2px solid #D4B06A;
+          border: 1.5px solid #D4B06A;
           font-weight: 700;
-          box-shadow: 0 0 10px rgba(212, 176, 106, 0.35);
+          box-shadow: 0 0 8px rgba(212, 176, 106, 0.3);
         }
 
-        .filters-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1.2rem;
-          margin-bottom: 1.2rem;
+        .mobile-filter-toggle-wrapper {
+          display: none;
+        }
+
+        .filters-toolbar {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 0.5rem 0.6rem;
+          padding-top: 0.4rem;
+          border-top: 1px solid rgba(212, 176, 106, 0.2);
         }
 
         .filter-control {
           display: flex;
-          flex-direction: column;
-          gap: 0.4rem;
+          align-items: center;
         }
 
-        .filter-control label {
-          font-size: 0.95rem;
-          color: #d4b06a;
-          font-weight: bold;
-          font-family: "Crimson Text", serif;
+        .search-control {
+          flex: 1 1 180px;
+          min-width: 140px;
         }
 
         .search-input-wrapper {
@@ -988,12 +980,12 @@ export default function Shop({ initialProducts = [] }) {
 
         .search-input-wrapper input {
           width: 100%;
-          padding-right: 2.2rem !important;
+          padding-right: 1.8rem !important;
         }
 
         .search-clear-btn {
           position: absolute;
-          right: 0.6rem;
+          right: 0.4rem;
           background: none;
           border: none;
           color: #00301e;
@@ -1002,184 +994,80 @@ export default function Shop({ initialProducts = [] }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 4px;
+          padding: 2px;
+          font-size: 0.85rem;
         }
 
         .filter-control input,
         .filter-control select {
-          padding: 0.5rem 0.8rem;
-          border-radius: 8px;
+          padding: 0.35rem 0.6rem;
+          border-radius: 6px;
           border: 1px solid rgba(212, 176, 106, 0.4);
           background: #f5e7c4;
           color: #00301e;
           font-family: "Crimson Text", serif;
-          font-size: 1rem;
+          font-size: 0.88rem;
           outline: none;
           box-sizing: border-box;
+          height: 32px;
         }
 
-        .toggle-section {
-          display: flex;
-          align-items: center;
-          margin-top: 1rem;
-          padding-top: 1rem;
-          border-top: 1px solid rgba(212, 176, 106, 0.2);
+        .my-zone-btn {
+          padding: 0.35rem 0.6rem !important;
+          border-radius: 6px !important;
+          border: 1px solid #D4B06A !important;
+          background-color: #1C3D2E !important;
+          color: #F5E7C4 !important;
+          font-weight: bold !important;
+          font-size: 0.85rem !important;
+          cursor: pointer !important;
+          white-space: nowrap !important;
+          height: 32px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          transition: all 0.2s ease !important;
+        }
+
+        .my-zone-btn.active {
+          background-color: #D4B06A !important;
+          color: #00301E !important;
+        }
+
+        .toggle-control {
+          margin-left: 0.2rem;
         }
 
         .toggle-label {
           display: inline-flex;
           align-items: center;
-          gap: 0.6rem;
+          gap: 0.4rem;
           cursor: pointer;
           color: #f5e7c4;
-          font-size: 1.05rem;
+          font-size: 0.88rem;
           font-family: "Crimson Text", serif;
+          white-space: nowrap;
         }
 
         .toggle-checkbox {
-          width: 18px;
-          height: 18px;
+          width: 15px;
+          height: 15px;
           accent-color: #d4b06a;
           cursor: pointer;
         }
 
-        .compact-filter-toolbar {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 0.8rem;
-          margin-bottom: 1rem;
-        }
-
-        .compact-search-wrapper {
-          position: relative;
-          flex: 1 1 200px;
-          min-width: 180px;
-        }
-
-        .compact-search-wrapper input {
-          width: 100%;
-          padding: 0.45rem 2rem 0.45rem 0.8rem;
-          border-radius: 20px;
-          border: 1px solid #D4B06A;
-          background-color: #F5E7C4;
-          color: #00301E;
-          font-family: "Crimson Text", serif;
-          font-size: 0.95rem;
-          outline: none;
-          box-sizing: border-box;
-        }
-
-        .compact-search-clear {
-          position: absolute;
-          right: 0.6rem;
-          top: 50%;
-          transform: translateY(-50%);
-          background: none;
-          border: none;
-          color: #00301E;
-          font-size: 0.9rem;
-          cursor: pointer;
-          opacity: 0.7;
-        }
-
-        .filter-popover {
-          position: relative;
-          display: inline-block;
-        }
-
-        .filter-popover-summary {
-          background-color: #1C3D2E;
-          color: #F5E7C4;
-          border: 1px solid #D4B06A;
-          padding: 0.45rem 0.9rem;
-          border-radius: 20px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          cursor: pointer;
-          user-select: none;
-          list-style: none;
-          transition: all 0.2s ease;
-        }
-
-        .filter-popover-summary::-webkit-details-marker {
-          display: none;
-        }
-
-        .filter-popover.has-active .filter-popover-summary {
-          background-color: #D4B06A;
-          color: #00301E;
-          font-weight: bold;
-        }
-
-        .filter-popover-summary:hover {
-          border-color: #E9DCBE;
-        }
-
-        .filter-popover-content {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          margin-top: 0.4rem;
-          background-color: #00301E;
-          border: 1px solid #D4B06A;
-          border-radius: 8px;
-          padding: 0.5rem;
-          min-width: 160px;
-          z-index: 50;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-
-        .filter-popover-content button {
-          background: none;
-          border: none;
-          color: #E9DCBE;
-          text-align: left;
-          padding: 0.35rem 0.6rem;
+        .desktop-results-count {
+          margin-left: auto;
           font-size: 0.88rem;
-          font-family: "Crimson Text", serif;
-          cursor: pointer;
-          border-radius: 4px;
-          transition: background 0.15s ease;
-        }
-
-        .filter-popover-content button:hover {
-          background: #1C3D2E;
-          color: #D4B06A;
-        }
-
-        .filter-popover-content button.active {
-          background: #D4B06A;
-          color: #00301E;
-          font-weight: bold;
-        }
-
-        .filter-popover-content button.my-zone-popover-btn {
-          border-bottom: 1px solid rgba(212, 176, 106, 0.3);
-          margin-bottom: 0.2rem;
-          padding-bottom: 0.4rem;
-          color: #D4B06A;
-          font-weight: bold;
-        }
-
-
-
-        .results-count {
-          text-align: center;
-          margin-bottom: 1.5rem;
-          font-size: 1.1rem;
           color: #d4b06a;
           font-weight: bold;
           font-family: "Crimson Text", serif;
+          white-space: nowrap;
         }
 
         .products {
           display: grid;
           grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: 1.5rem;
+          gap: 1.2rem;
           justify-content: center;
           align-items: stretch;
           max-width: 1100px;
@@ -1193,6 +1081,58 @@ export default function Shop({ initialProducts = [] }) {
         }
 
         @media (max-width: 639px) {
+          .shop-title {
+            font-size: 1.5rem;
+          }
+          .mobile-filter-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.4rem;
+            border-top: 1px solid rgba(212, 176, 106, 0.2);
+          }
+          .mobile-filter-toggle-btn {
+            background: #D4B06A;
+            color: #00301E;
+            border: none;
+            border-radius: 6px;
+            padding: 0.35rem 0.8rem;
+            font-family: "Cinzel", serif;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+          }
+          .mobile-results-count {
+            font-size: 0.85rem;
+            color: #d4b06a;
+            font-weight: bold;
+          }
+          .desktop-results-count {
+            display: none;
+          }
+          .filters-toolbar {
+            display: none;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
+            border-top: none;
+          }
+          .filters-toolbar.mobile-open {
+            display: flex;
+          }
+          .filter-control, .search-control {
+            width: 100%;
+          }
+          .filter-control select, .my-zone-btn {
+            width: 100%;
+            justify-content: center;
+          }
           .products {
             grid-template-columns: 1fr;
           }
