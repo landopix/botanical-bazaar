@@ -94,8 +94,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/blog',
+        destination: '/almanac',
+        permanent: true,
+      },
+      {
         source: '/blog.html',
-        destination: '/blog',
+        destination: '/almanac',
         permanent: true,
       },
       {
@@ -144,8 +149,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/terms-full',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
         source: '/terms-full.html',
-        destination: '/terms-full',
+        destination: '/terms',
         permanent: true,
       },
       {
@@ -196,11 +206,6 @@ const nextConfig = {
       {
         source: '/cancel.html',
         destination: '/cancel',
-        permanent: true,
-      },
-      {
-        source: '/product.html',
-        destination: '/shop',
         permanent: true,
       }
     ];
