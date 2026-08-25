@@ -23,6 +23,18 @@ const staticRoutes = [
   '/accessibility'
 ];
 
+const KNOWN_COLLECTIONS = [
+  'orchids',
+  'tropical-houseplants',
+  'fruit-trees',
+  'exotics-rare',
+  'herbs-medicinal',
+  'seeds',
+  'stickers-art',
+  'tinctures-apothecary',
+  'terrarium-vivarium'
+];
+
 function formatDate(dateString, fallbackDate) {
   if (!dateString) return fallbackDate;
   try {
@@ -36,6 +48,17 @@ function formatDate(dateString, fallbackDate) {
 
 function generateSiteMap(products) {
   const currentDate = new Date().toISOString().split('T')[0];
+
+  const collectionHandles = new Set(KNOWN_COLLECTIONS);
+  (products || []).forEach((product) => {
+    if (Array.isArray(product?.collectionHandles)) {
+      product.collectionHandles.forEach((h) => {
+        if (h && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(h)) {
+          collectionHandles.add(h.toLowerCase());
+        }
+      });
+    }
+  });
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -51,6 +74,17 @@ function generateSiteMap(products) {
     <priority>${priority}</priority>
   </url>`;
     })
+    .join('')}
+
+  <!-- Collection Pages -->
+  ${Array.from(collectionHandles)
+    .map((slug) => `
+  <url>
+    <loc>${EXTERNAL_DATA_URL}/collections/${slug}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>`)
     .join('')}
 
   <!-- Dynamic Product Pages -->

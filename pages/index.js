@@ -6,17 +6,43 @@ import { useRouter } from "next/router";
 import useBfcacheReset from "../hooks/useBfcacheReset";
 import ProductCard from "../components/ProductCard";
 import { useWishlist } from "../context/WishlistContext";
-import { isSanityConfigured, sanityClient } from "../lib/sanity";
+import { getAllProducts } from "../lib/shopify";
 
-export default function Index() {
+export async function getStaticProps() {
+  try {
+    const products = await getAllProducts();
+    return {
+      props: {
+        initialProducts: products || [],
+      },
+      revalidate: 60,
+    };
+  } catch (error) {
+    console.error("Error fetching homepage products in getStaticProps:", error);
+    return {
+      props: {
+        initialProducts: [],
+      },
+      revalidate: 60,
+    };
+  }
+}
+
+export default function Index({ initialProducts = [] }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(initialProducts);
 
   useBfcacheReset(() => setSubmitting(false));
+
+  useEffect(() => {
+    if (initialProducts && initialProducts.length > 0) {
+      setProducts(initialProducts);
+    }
+  }, [initialProducts]);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -54,52 +80,13 @@ export default function Index() {
     }
   };
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      if (isSanityConfigured()) {
-        try {
-          const sanityData = await sanityClient.fetch(`*[_type == "product"]{
-            "slug": slug.current,
-            name,
-            sku,
-            "image": image.asset->url,
-            type,
-            description,
-            price,
-            quantity,
-            zones,
-            categories,
-            sizes,
-            tags
-          }`);
-          if (sanityData && sanityData.length > 0) {
-            setProducts(sanityData);
-            return;
-          }
-        } catch (err) {
-          console.error(
-            "Failed to fetch from Sanity.io. Falling back to local catalog.",
-            err,
-          );
-        }
-      }
-
-      // Local offline fallback if window.PRODUCTS is set
-      if (typeof window !== "undefined" && window.PRODUCTS) {
-        setProducts(window.PRODUCTS);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  // Slice the first 5 products for Featured Plants section
-  const featuredProducts = products.slice(0, 5);
+  // Slice the first 6 products for Featured Plants section
+  const featuredProducts = (products || []).slice(0, 6);
 
   // Helper to determine active in-stock count for categories dynamically
   const getActiveCount = (catId) => {
     return products.filter((product) => {
-      const isSoldOut = !product.quantity || product.quantity < 3;
+      const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
       if (isSoldOut) return false;
 
       const catLower = catId.toLowerCase();
@@ -619,37 +606,37 @@ export default function Index() {
           </Link>
           {showCategory("herbs-medicinal") && (
             <Link
-              href="/shop?category=herbs-medicinal"
+              href="/collections/herbs-medicinal"
               className="category-card"
             >
               Herbs&nbsp;&amp;&nbsp;Medicinal
             </Link>
           )}
           {showCategory("fruit-trees") && (
-            <Link href="/shop?category=fruit-trees" className="category-card">
+            <Link href="/collections/fruit-trees" className="category-card">
               Fruit&nbsp;Trees
             </Link>
           )}
           {showCategory("houseplants") && (
-            <Link href="/shop?category=houseplants" className="category-card">
+            <Link href="/collections/tropical-houseplants" className="category-card">
               Houseplants
             </Link>
           )}
           {showCategory("orchids-tropicals") && (
             <Link
-              href="/shop?category=orchids-tropicals"
+              href="/collections/orchids"
               className="category-card"
             >
               Orchids&nbsp;&amp;&nbsp;Tropicals
             </Link>
           )}
           {showCategory("seeds") && (
-            <Link href="/shop?category=seeds" className="category-card">
+            <Link href="/collections/seeds" className="category-card">
               Seeds
             </Link>
           )}
           {showCategory("exotics-rare") && (
-            <Link href="/shop?category=exotics-rare" className="category-card">
+            <Link href="/collections/exotics-rare" className="category-card">
               Exotics&nbsp;&amp;&nbsp;Rare
             </Link>
           )}
