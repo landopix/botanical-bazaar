@@ -35,18 +35,32 @@ export async function getStaticPaths() {
   }
 }
 
+const KEBAB_CASE_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export async function getStaticProps({ params }) {
+  const slug = params?.slug;
+
+  // Validate parameter: enforce strict lowercase kebab-case format
+  if (!slug || typeof slug !== 'string' || !KEBAB_CASE_REGEX.test(slug)) {
+    return {
+      notFound: true,
+      revalidate: 60
+    };
+  }
+
   try {
     const [product, allProducts] = await Promise.all([
-      getProductByHandle(params.slug),
+      getProductByHandle(slug),
       getAllProducts()
     ]);
+
     if (!product) {
       return {
         notFound: true,
         revalidate: 60
       };
     }
+
     return {
       props: {
         initialProduct: product,
@@ -55,7 +69,7 @@ export async function getStaticProps({ params }) {
       revalidate: 60
     };
   } catch (error) {
-    console.error(`Error fetching product handle ${params.slug}:`, error);
+    console.error(`Error fetching product handle ${slug}:`, error);
     return {
       notFound: true,
       revalidate: 60
@@ -152,25 +166,8 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
     }
   };
 
-  // Dynamic redirect for non-existent product pages straight back to /shop
-  useEffect(() => {
-    if (!product && !router.isFallback) {
-      router.replace('/shop');
-    }
-  }, [product, router]);
-
   if (router.isFallback) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading plant details...</div>;
-  }
-
-  if (!product) {
-    return (
-      <div style={{ padding: '4rem', textAlign: 'center' }}>
-        <h2 style={{ color: '#D4B06A' }}>Plant Not Found</h2>
-        <p>Sorry, the tropical plant you are looking for is not in our current catalog.</p>
-        <Button variant="gold-filled" href="/shop">Back to Shop</Button>
-      </div>
-    );
   }
 
   // Handle variant size changes
@@ -675,7 +672,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {/* Policy notes (Standard Shipping & Nursery Pickup) */}
           <div className="policy-note">
             <strong>Nationwide Shipping &amp; Local Nursery Pickup:</strong> Choose between Nationwide Shipping (shipped with care from St. Petersburg, FL with insulated boxing &amp; weather holds; USDA compliance applies for HI, CA, TX, AK) or Free Local Nursery Pickup ($0.00) at checkout. <br />
-            <strong>100% Live Arrival Guarantee:</strong> Guaranteed health upon arrival or collection. Inspect within 48 hours for replacement or store credit. <a href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</a>
+            <strong>100% Live Arrival Guarantee:</strong> Guaranteed health upon arrival or collection. Inspect within 48 hours for replacement or store credit. <Link href="/returns" style={{ color: '#D4B06A', textDecoration: 'underline' }}>View Full Policy &rarr;</Link>
           </div>
         </div>
       </section>

@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Highlight active link
-  var current = window.location.pathname.split('/').pop() || 'index.html';
+  var current = window.location.pathname || '/';
   current = current.split('?')[0];
   var links = document.querySelectorAll('#site-sidebar a');
   links.forEach(function (link) {
@@ -122,10 +122,10 @@ document.addEventListener('DOMContentLoaded', function () {
   // Ensure the collector's gallery appears in navigation
   try {
     var sidebarList = document.querySelector('#site-sidebar ul');
-    if (sidebarList && !sidebarList.querySelector('a[href="orchids-gallery.html"]')) {
+    if (sidebarList && !sidebarList.querySelector('a[href="/orchids-gallery"]')) {
       var li = document.createElement('li');
       var link = document.createElement('a');
-      link.href = 'orchids-gallery.html';
+      link.href = '/orchids-gallery';
       link.textContent = 'Gallery';
       li.appendChild(link);
       var firstGroup = sidebarList.querySelector('li.group');
@@ -136,11 +136,11 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
     var headerNav = document.querySelector('header nav');
-    if (headerNav && !headerNav.querySelector('a[href="orchids-gallery.html"]')) {
+    if (headerNav && !headerNav.querySelector('a[href="/orchids-gallery"]')) {
       var galleryLink = document.createElement('a');
-      galleryLink.href = 'orchids-gallery.html';
+      galleryLink.href = '/orchids-gallery';
       galleryLink.textContent = 'Gallery';
-      var contactLink = headerNav.querySelector('a[href="contact.html"]');
+      var contactLink = headerNav.querySelector('a[href="/contact"]');
       if (contactLink) {
         headerNav.insertBefore(galleryLink, contactLink);
       } else {

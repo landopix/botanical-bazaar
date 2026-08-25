@@ -201,6 +201,16 @@ export async function getServerSideProps(context) {
     console.error('Error fetching Builder.io page content:', err);
   }
 
+  const slugName = pagePath.replace(/^\//, '') || 'index';
+  const localTemplate = LOCAL_TEMPLATES[slugName];
+
+  // If no GrapesJS file, no Builder.io content, and no local fallback template exists, return true 404 status
+  if (!builderContent && !localTemplate) {
+    return {
+      notFound: true
+    };
+  }
+
   return {
     props: {
       builderContent,
