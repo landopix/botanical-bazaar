@@ -34,6 +34,7 @@ export function getZoneFromZip(zipInput) {
 }
 
 import Head from 'next/head';
+import Script from 'next/script';
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -569,6 +570,21 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen, isZoneModalOpen]);
 
+  // Initialize Google Customer Reviews Badge widget on route change if script already loaded
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
+      try {
+        window.merchantwidget.start({
+          merchant_id: 5843329915,
+          position: "BOTTOM_RIGHT",
+          region: "US"
+        });
+      } catch (err) {
+        console.error("Google Merchant Widget start error:", err);
+      }
+    }
+  }, [router.pathname]);
+
   // Route Change State Cleanup
   useEffect(() => {
     const handleRouteChange = () => {
@@ -759,6 +775,24 @@ export default function Layout({ children }) {
       <a href="#main-content" className="skip-to-content">
         Skip to main content
       </a>
+      <Script
+        id="merchantWidgetScript"
+        src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
+            try {
+              window.merchantwidget.start({
+                merchant_id: 5843329915,
+                position: "BOTTOM_RIGHT",
+                region: "US"
+              });
+            } catch (err) {
+              console.error("Google Merchant Widget onLoad error:", err);
+            }
+          }
+        }}
+      />
       <Head>
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
         <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
