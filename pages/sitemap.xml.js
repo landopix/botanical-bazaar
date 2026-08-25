@@ -8,6 +8,7 @@ const staticRoutes = [
   '/about',
   '/almanac',
   '/events',
+  '/consultations',
   '/faq',
   '/zones',
   '/returns',
@@ -15,14 +16,23 @@ const staticRoutes = [
   '/sourcing',
   '/terms',
   '/privacy',
-  '/cart',
-  '/wishlist',
   '/contact',
   '/help',
   '/sales',
   '/orchids-gallery',
   '/accessibility'
 ];
+
+function formatDate(dateString, fallbackDate) {
+  if (!dateString) return fallbackDate;
+  try {
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return fallbackDate;
+    return d.toISOString().split('T')[0];
+  } catch (e) {
+    return fallbackDate;
+  }
+}
 
 function generateSiteMap(products) {
   const currentDate = new Date().toISOString().split('T')[0];
@@ -47,10 +57,11 @@ function generateSiteMap(products) {
   ${(products || [])
     .map((product) => {
       if (!product || !product.slug) return '';
+      const lastmod = formatDate(product.updatedAt || product.createdAt, currentDate);
       return `
   <url>
     <loc>${EXTERNAL_DATA_URL}/product/${product.slug}</loc>
-    <lastmod>${currentDate}</lastmod>
+    <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>`;
@@ -65,12 +76,9 @@ function SiteMap() {
 }
 
 export async function getServerSideProps({ res }) {
-  let products = [];
-  try {
-    products = await getAllProducts();
-  } catch (error) {
-    console.error('Error fetching products for sitemap:', error);
-  }
+  // Let errors propagate so Next.js handles it as a server error (500)
+  // rather than serving a falsely complete sitemap without dynamic products.
+  const products = await getAllProducts();
 
   const sitemap = generateSiteMap(products);
 
