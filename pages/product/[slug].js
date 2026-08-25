@@ -70,10 +70,8 @@ export async function getStaticProps({ params }) {
     };
   } catch (error) {
     console.error(`Error fetching product handle ${slug}:`, error);
-    return {
-      notFound: true,
-      revalidate: 60
-    };
+    // Re-throw upstream API exceptions so Next.js ISR preserves the last successfully generated cached page
+    throw error;
   }
 }
 
@@ -336,13 +334,15 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const imageUrl = galleryImages[0]?.startsWith('http') ? galleryImages[0] : `${SITE_ORIGIN}${galleryImages[0]?.startsWith('/') ? galleryImages[0] : '/' + galleryImages[0]}`;
   const descriptionText = product.description || `${product.name} live plant available for purchase at The Botanical Bazaar.`;
 
+  const activeSku = selectedVariant?.sku || product.sku || product.slug;
+
   const structuredSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     'name': product.name,
     'description': descriptionText,
     'image': imageUrl,
-    'sku': product.slug,
+    'sku': activeSku,
     'category': product.type || 'Plants',
     'offers': {
       '@type': 'Offer',
@@ -358,44 +358,38 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
       },
       'hasMerchantReturnPolicy': {
         '@type': 'MerchantReturnPolicy',
-        'name': 'Live Plant Guarantee',
-        'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
-        'merchantReturnDays': 2,
-        'returnMethod': 'https://schema.org/ReturnNotPermitted',
-        'refundType': 'StoreCredit'
-      },
-      'shippingDetails': {
-        '@type': 'OfferShippingDetails',
-        'shippingRate': {
-          '@type': 'MonetaryAmount',
-          'value': 0,
-          'currency': 'USD'
-        },
-        'shippingDestination': {
-          '@type': 'DefinedRegion',
-          'addressCountry': 'US'
-        },
-        'deliveryTime': {
-          '@type': 'ShippingDeliveryTime',
-          'handlingTime': {
-            '@type': 'QuantitativeValue',
-            'minValue': 1,
-            'maxValue': 3,
-            'unitCode': 'DAY'
-          },
-          'transitTime': {
-            '@type': 'QuantitativeValue',
-            'minValue': 2,
-            'maxValue': 5,
-            'unitCode': 'DAY'
-          }
-        }
+        'returnPolicyCategory': 'https://schema.org/MerchantReturnNotPermitted'
       }
     },
     'brand': {
       '@type': 'Brand',
       'name': 'The Botanical Bazaar'
     }
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': SITE_ORIGIN
+      },
+      {
+        '@type': 'ListItem',
+        'position': 2,
+        'name': 'Shop',
+        'item': `${SITE_ORIGIN}/shop`
+      },
+      {
+        '@type': 'ListItem',
+        'position': 3,
+        'name': product.name,
+        'item': pageUrl
+      }
+    ]
   };
 
   return (
@@ -417,6 +411,11 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           id="product-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredSchema) }}
+        />
+        <script
+          id="breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
       </Head>
 
