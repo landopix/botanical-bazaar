@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Resend } from 'resend';
+import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
@@ -103,6 +104,16 @@ export default async function handler(req, res) {
     budgetRange: budgetRange ? String(budgetRange).trim() : undefined,
     desiredMaturity: desiredMaturity ? String(desiredMaturity).trim() : undefined,
     details: cleanDetails !== 'None provided.' ? cleanDetails : undefined
+  });
+
+  // Automatically sync subscriber to Shopify Admin API if configured
+  createOrUpdateShopifyCustomer({
+    email: cleanEmail,
+    name: cleanName,
+    phone: cleanPhone !== 'N/A' ? cleanPhone : undefined,
+    tags: ['newsletter', inquiryType],
+  }).catch(err => {
+    console.error('Shopify customer sync error:', err);
   });
 
   const safeType = escapeHtml(inquiryType);
