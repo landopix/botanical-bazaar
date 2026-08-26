@@ -58,20 +58,50 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
         <div className="modal-overlay" onClick={() => setShowMicroclimateModal(false)} role="dialog" aria-modal="true">
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>St. Petersburg Microclimate Guidance</h3>
+              <h3>Zone {userZone} Microclimate Guidance</h3>
               <button onClick={() => setShowMicroclimateModal(false)} className="close-btn">✕</button>
             </div>
             <div className="modal-body">
-              <p>
-                <strong>Coastal Buffering vs Inland Frost:</strong> Microclimates across St. Petersburg and Tampa Bay vary significantly based on proximity to Tampa Bay and the Gulf of Mexico.
-              </p>
-              <ul>
-                <li><strong>Coastal / Urban Core (Zone 10a/10b):</strong> Enjoys thermal buffering from surrounding water, protecting tropicals during mild cold snaps.</li>
-                <li><strong>Inland / North County (Zone 9b):</strong> Radiational cooling on clear winter nights can cause localized frost pockets requiring temporary fabric covers or patio movement.</li>
-              </ul>
-              <p>
-                <strong>Tip:</strong> Container plants can easily be shifted under covered lanais or indoors when night forecasts drop below 45°F.
-              </p>
+              {userNum >= 10 ? (
+                <>
+                  <p>
+                    <strong>Coastal Buffering & Sub-Tropical Protection (Zone {userZone}):</strong> Regional microclimates vary significantly based on urban heat islands and proximity to coastal waters.
+                  </p>
+                  <ul>
+                    <li><strong>Coastal / Urban Zones (10a/10b):</strong> Enjoys thermal buffering from surrounding bodies of water, keeping winter temperatures mild.</li>
+                    <li><strong>Inland Microclimates:</strong> Radiational cooling on clear winter nights can cause localized frost pockets requiring temporary fabric covers or patio movement.</li>
+                  </ul>
+                  <p>
+                    <strong>Tip:</strong> Move potted container plants under covered lanais or indoors when night forecasts drop below 45°F.
+                  </p>
+                </>
+              ) : userNum >= 8 ? (
+                <>
+                  <p>
+                    <strong>Sub-Tropical & Moderate Hardiness Guidance (Zone {userZone}):</strong> Microclimates in Zone {userZone} experience occasional winter freeze events and frost risk.
+                  </p>
+                  <ul>
+                    <li><strong>Outdoor Beds:</strong> Mulch heavily around root bases and utilize frost cloth during winter freeze advisories.</li>
+                    <li><strong>Patio & Container Cultivation:</strong> Tropicals thrive outdoors during spring through autumn but require indoor protection when temperatures approach freezing.</li>
+                  </ul>
+                  <p>
+                    <strong>Tip:</strong> Bring tender potted specimens indoors before night temperatures drop below 45°F–50°F.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>
+                    <strong>Cold Climate & Overwintering Protection (Zone {userZone}):</strong> Outdoor winter temperatures in Zone {userZone} fall below tropical plant survival thresholds.
+                  </p>
+                  <ul>
+                    <li><strong>Indoor Culture:</strong> Maintain tropical plants as houseplants in bright indirect light or grow under supplemental LED lights during winter.</li>
+                    <li><strong>Summer Patio Season:</strong> Shift containers outdoors after the last spring frost date once ambient temperatures consistently exceed 55°F.</li>
+                  </ul>
+                  <p>
+                    <strong>Tip:</strong> Always bring potted specimens indoors before the first autumn freeze in Zone {userZone}.
+                  </p>
+                </>
+              )}
             </div>
             <button onClick={() => setShowMicroclimateModal(false)} className="modal-close-btn">
               Got It

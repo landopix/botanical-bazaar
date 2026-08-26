@@ -214,8 +214,8 @@ export default function Index({ initialProducts = [] }) {
           object-fit: cover;
           border-radius: 12px;
           box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
-          -webkit-mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
-          mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
+          -webkit-mask-image: radial-gradient(circle, #000 50%, rgba(0, 0, 0, 0) 75%);
+          mask-image: radial-gradient(circle, #000 50%, rgba(0, 0, 0, 0) 75%);
         }
         .hero-text {
           flex: 1;
@@ -389,8 +389,8 @@ export default function Index({ initialProducts = [] }) {
                 boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
                 borderRadius: "12px",
                 objectFit: "cover",
-                WebkitMaskImage: "radial-gradient(circle, #000 72%, transparent 100%)",
-                maskImage: "radial-gradient(circle, #000 72%, transparent 100%)",
+                WebkitMaskImage: "radial-gradient(circle, #000 50%, transparent 75%)",
+                maskImage: "radial-gradient(circle, #000 50%, transparent 75%)",
               }}
             />
           </div>

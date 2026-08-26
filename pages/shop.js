@@ -265,7 +265,9 @@ export default function Shop({ initialProducts = [] }) {
           return matchesTag("seed") || textMatches("seed");
         }
         if (catLower === "stickers-art" || catLower === "stickers & art") {
-          return matchesCategory("art") || matchesTag("sticker") || matchesTag("art") || textMatches("sticker") || textMatches("art");
+          const isPlant = (product?.type || "").toLowerCase().includes("plant") || (product?.type || "").toLowerCase().includes("tree") || (Array.isArray(product?.tags) && product.tags.some(t => ["plant", "houseplant", "tree", "aroid", "orchid", "tropical", "rare", "succulent", "cactus"].includes(t.toLowerCase())));
+          if (isPlant) return false;
+          return matchesCollectionHandle("stickers-art") || matchesCategory("stickers-art") || matchesCategory("art") || matchesTag("sticker") || matchesTag("stickers-art") || (matchesTag("art") && !isPlant);
         }
         if (catLower === "tinctures-apothecary" || catLower === "tinctures & apothecary") {
           return matchesCategory("apothecary") || matchesTag("tincture") || matchesTag("apothecary") || textMatches("tincture");
@@ -517,13 +519,13 @@ export default function Shop({ initialProducts = [] }) {
           return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
         }
         if (catLower === "stickers-art" || catLower === "stickers & art") {
+          const isPlant = (product?.type || "").toLowerCase().includes("plant") || (product?.type || "").toLowerCase().includes("tree") || (Array.isArray(product?.tags) && product.tags.some(t => ["plant", "houseplant", "tree", "aroid", "orchid", "tropical", "rare", "succulent", "cactus"].includes(t.toLowerCase())));
+          if (isPlant) return false;
           return (
             hasCategory("stickers-art") ||
             hasCategory("art") ||
             hasTag("sticker") ||
-            hasTag("art") ||
-            textMatches("sticker") ||
-            textMatches("art")
+            hasTag("stickers-art")
           );
         }
         if (catLower === "tinctures-apothecary" || catLower === "tinctures & apothecary") {
@@ -905,6 +907,7 @@ export default function Shop({ initialProducts = [] }) {
 
         .category-pills {
           display: flex;
+          justify-content: center;
           flex-wrap: nowrap;
           gap: 0.4rem;
           overflow-x: auto;
