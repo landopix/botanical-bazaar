@@ -206,7 +206,10 @@ export default function Index({ initialProducts = [] }) {
           justify-content: center;
           align-self: center;
           position: relative;
-          background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+          background-color: #00301E;
+          border-radius: 20px;
+          padding: 6px;
+          background: radial-gradient(circle, rgba(0, 48, 30, 0.9) 0%, rgba(0, 48, 30, 0.4) 70%, transparent 100%);
         }
         .hero-text {
           flex: 1;
@@ -376,9 +379,10 @@ export default function Index({ initialProducts = [] }) {
               style={{
                 width: "100%",
                 height: "auto",
-                boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
-                borderRadius: "12px",
+                borderRadius: "16px",
+                boxShadow: "0 0 30px 15px rgba(0, 48, 30, 0.8), 0 0 50px 25px rgba(1, 61, 36, 0.35)",
                 objectFit: "cover",
+                backgroundColor: "#00301E",
               }}
             />
           </div>
