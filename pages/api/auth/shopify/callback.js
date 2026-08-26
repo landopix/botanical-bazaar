@@ -1,7 +1,21 @@
 import crypto from 'crypto';
 
+function sanitizeShopDomain(str) {
+  if (typeof str !== 'string') return null;
+  let domain = str.trim();
+  if (domain.startsWith('https://')) domain = domain.slice(8);
+  if (domain.startsWith('http://')) domain = domain.slice(7);
+  while (domain.endsWith('/')) {
+    domain = domain.slice(0, -1);
+  }
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*\.myshopify\.com$/.test(domain)) {
+    return null;
+  }
+  return domain;
+}
+
 function verifyShopifyHmac(query, clientSecret) {
-  if (!clientSecret || !query || !query.hmac) return true; // fallback if secret not yet provided in dev
+  if (!clientSecret || !query || !query.hmac) return true;
 
   const { hmac, signature, ...params } = query;
   const message = Object.keys(params)
@@ -39,16 +53,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed. Please use GET.' });
   }
 
-  const { code, hmac, shop, state } = req.query;
+  const { code, shop: rawShop } = req.query;
+  const cleanShop = sanitizeShopDomain(rawShop || process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
 
-  if (!code || !shop) {
+  if (!code || !cleanShop) {
     return res.status(400).send(`
       <!DOCTYPE html>
       <html>
         <head><title>Shopify OAuth Error</title></head>
         <body style="font-family: sans-serif; background: #00301E; color: #F5E7C4; padding: 40px;">
           <h2>Shopify OAuth Authorization Failed</h2>
-          <p style="color: #ff8888;">Missing mandatory parameter: <code>code</code> or <code>shop</code> in callback query.</p>
+          <p style="color: #ff8888;">Invalid or missing <code>code</code> or <code>shop</code> domain parameter.</p>
         </body>
       </html>
     `);
@@ -71,7 +86,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    const cleanShop = String(shop).replace(/^https?:\/\//i, '').replace(/\/+$/, '');
     const tokenUrl = `https://${cleanShop}/admin/oauth/access_token`;
 
     const tokenResponse = await fetch(tokenUrl, {
@@ -83,7 +97,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         client_id: clientId,
         client_secret: clientSecret || '',
-        code: code,
+        code: String(code),
       }),
     });
 
