@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import useBfcacheReset from "../hooks/useBfcacheReset";
 import ProductCard from "../components/ProductCard";
@@ -366,20 +365,20 @@ export default function Index({ initialProducts = [] }) {
       {/* Hero section */}
       <section className="hero">
         <div className="hero-split">
-          {/* Left Column: Animated Logo GIF */}
+          {/* Left Column: Animated Logo Video */}
           <div className="hero-image">
-            <Image
-              src="/assets/logo-animation-optimized.gif"
-              alt="The Botanical Bazaar Animated Logo"
-              width={350}
-              height={350}
-              priority
-              unoptimized={true}
+            <video
+              src="/assets/logo-animation.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
               style={{
                 width: "100%",
                 height: "auto",
                 boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
                 borderRadius: "12px",
+                objectFit: "cover",
               }}
             />
           </div>
