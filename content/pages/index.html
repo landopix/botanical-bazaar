@@ -297,16 +297,24 @@ body {
       }
     }
 
-    /* Hero image (GIF) styles */
+    /* Hero video container and vignette fade styles */
     .hero-image {
       width: 45%;
       max-width: 400px;
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Radial gradient behind the animated GIF to soften edges */
       position: relative;
-      background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+      background: radial-gradient(circle, rgba(0, 66, 38, 0.6) 0%, rgba(0, 48, 30, 0.2) 70%, transparent 100%);
+    }
+    .hero-video {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+      -webkit-mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
+      mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
     }
     .hero-image img {
       width: 100%;
@@ -503,7 +511,7 @@ body {
     </div>
     <!-- Optimised animated logo video in place of the slideshow. -->
     <div class="hero-image">
-      <video src="/assets/logo-animation.mp4" autoplay loop muted playsinline style="width:100%;height:auto;border-radius:12px;box-shadow:0 0 40px 20px rgba(1, 61, 36, 0.35);object-fit:cover;"></video>
+      <video src="/assets/logo-animation.mp4" autoplay loop muted playsinline class="hero-video" style="width:100%;height:auto;border-radius:12px;box-shadow:0 0 40px 20px rgba(1, 61, 36, 0.35);object-fit:cover;-webkit-mask-image:radial-gradient(circle, #000 72%, transparent 100%);mask-image:radial-gradient(circle, #000 72%, transparent 100%);"></video>
     </div>
     <!-- Almanac links and signup have been elevated into the hero. This
          container holds quick links into the gardening guides and a

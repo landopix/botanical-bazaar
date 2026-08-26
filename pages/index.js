@@ -206,7 +206,16 @@ export default function Index({ initialProducts = [] }) {
           justify-content: center;
           align-self: center;
           position: relative;
-          background: radial-gradient(circle, rgba(0,66,38,0.5) 0%, rgba(0,66,38,0.1) 60%, transparent 90%);
+          background: radial-gradient(circle, rgba(0, 66, 38, 0.6) 0%, rgba(0, 48, 30, 0.2) 70%, transparent 100%);
+        }
+        .hero-video {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+          border-radius: 12px;
+          box-shadow: 0 0 40px 20px rgba(1, 61, 36, 0.35);
+          -webkit-mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
+          mask-image: radial-gradient(circle, #000 72%, rgba(0, 0, 0, 0) 100%);
         }
         .hero-text {
           flex: 1;
@@ -373,12 +382,15 @@ export default function Index({ initialProducts = [] }) {
               loop
               muted
               playsInline
+              className="hero-video"
               style={{
                 width: "100%",
                 height: "auto",
                 boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
                 borderRadius: "12px",
                 objectFit: "cover",
+                WebkitMaskImage: "radial-gradient(circle, #000 72%, transparent 100%)",
+                maskImage: "radial-gradient(circle, #000 72%, transparent 100%)",
               }}
             />
           </div>
