@@ -639,7 +639,7 @@
           // Ignore clicks on the summary element so the details can be toggled normally
           if (e.target.closest('summary')) return;
           const imgSrc = card.getAttribute('data-image') || 'assets/placeholder.png';
-          lightboxImg.src = imgSrc;
+          lightboxImg.src = encodeURI(imgSrc);
           lightbox.style.display = 'flex';
           lightbox.setAttribute('aria-hidden', 'false');
         });

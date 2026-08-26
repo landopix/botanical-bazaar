@@ -276,7 +276,7 @@ export default function Sandbox() {
         {/* Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <a
-            href={selectedPage === 'index' ? '/' : `/${selectedPage}`}
+            href={selectedPage === 'index' ? '/' : `/${encodeURIComponent(selectedPage)}`}
             target="_blank"
             rel="noopener noreferrer"
             style={{
