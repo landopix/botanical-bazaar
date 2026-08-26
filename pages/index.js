@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useBfcacheReset from "../hooks/useBfcacheReset";
@@ -82,84 +82,100 @@ export default function Index({ initialProducts = [] }) {
   // Slice the first 6 products for Featured Plants section
   const featuredProducts = (products || []).slice(0, 6);
 
-  // Helper to determine active in-stock count for categories dynamically
-  const getActiveCount = (catId) => {
-    return products.filter((product) => {
-      const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
-      if (isSoldOut) return false;
+  // Performance Optimization: Pre-compute in-stock item counts per category using useMemo
+  // so that catalog array filtering is executed once per products inventory update rather
+  // than repeatedly on every component re-render (e.g. user keystrokes in newsletter input).
+  const categoryInStockCounts = useMemo(() => {
+    const counts = {};
+    const categoriesToCheck = [
+      "houseplants",
+      "orchids-tropicals",
+      "fruit-trees",
+      "herbs-medicinal",
+      "exotics-rare",
+      "seeds",
+    ];
 
-      const catLower = catId.toLowerCase();
-      const hasCategory = (c) =>
-        Array.isArray(product.categories) &&
-        product.categories.some((pc) => pc.toLowerCase() === c.toLowerCase());
-      const hasTag = (t) =>
-        Array.isArray(product.tags) &&
-        product.tags.some((pt) => pt.toLowerCase() === t.toLowerCase());
-      const textMatches = (keyword) => {
-        const text =
-          `${product.name} ${product.description || ""}`.toLowerCase();
-        return text.includes(keyword);
-      };
+    categoriesToCheck.forEach((catId) => {
+      counts[catId] = products.filter((product) => {
+        const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
+        if (isSoldOut) return false;
 
-      if (catLower === "houseplants") {
-        return (
-          hasCategory("houseplants") ||
-          hasTag("houseplant") ||
-          textMatches("houseplant")
-        );
-      }
-      if (
-        catLower === "orchids-tropicals" ||
-        catLower === "orchids & tropicals"
-      ) {
-        return (
-          hasCategory("orchids-tropicals") ||
-          hasCategory("plants") ||
-          hasTag("tropical") ||
-          hasTag("orchid") ||
-          textMatches("orchid") ||
-          textMatches("tropical")
-        );
-      }
-      if (catLower === "fruit-trees" || catLower === "fruit trees") {
-        return (
-          hasCategory("fruit-trees") ||
-          hasTag("fruit-tree") ||
-          textMatches("fruit tree") ||
-          textMatches("fruit")
-        );
-      }
-      if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
-        return (
-          hasCategory("herbs-medicinal") ||
-          hasTag("herb") ||
-          hasTag("medicinal") ||
-          textMatches("herb") ||
-          textMatches("medicinal") ||
-          textMatches("aromatic")
-        );
-      }
-      if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-        return (
-          hasCategory("exotics-rare") ||
-          hasTag("rare") ||
-          hasTag("exotic") ||
-          textMatches("rare") ||
-          textMatches("exotic") ||
-          textMatches("unusual")
-        );
-      }
-      if (catLower === "seeds") {
-        return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
-      }
+        const catLower = catId.toLowerCase();
+        const hasCategory = (c) =>
+          Array.isArray(product.categories) &&
+          product.categories.some((pc) => pc.toLowerCase() === c.toLowerCase());
+        const hasTag = (t) =>
+          Array.isArray(product.tags) &&
+          product.tags.some((pt) => pt.toLowerCase() === t.toLowerCase());
+        const textMatches = (keyword) => {
+          const text =
+            `${product.name} ${product.description || ""}`.toLowerCase();
+          return text.includes(keyword);
+        };
 
-      return hasCategory(catId);
-    }).length;
-  };
+        if (catLower === "houseplants") {
+          return (
+            hasCategory("houseplants") ||
+            hasTag("houseplant") ||
+            textMatches("houseplant")
+          );
+        }
+        if (
+          catLower === "orchids-tropicals" ||
+          catLower === "orchids & tropicals"
+        ) {
+          return (
+            hasCategory("orchids-tropicals") ||
+            hasCategory("plants") ||
+            hasTag("tropical") ||
+            hasTag("orchid") ||
+            textMatches("orchid") ||
+            textMatches("tropical")
+          );
+        }
+        if (catLower === "fruit-trees" || catLower === "fruit trees") {
+          return (
+            hasCategory("fruit-trees") ||
+            hasTag("fruit-tree") ||
+            textMatches("fruit tree") ||
+            textMatches("fruit")
+          );
+        }
+        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
+          return (
+            hasCategory("herbs-medicinal") ||
+            hasTag("herb") ||
+            hasTag("medicinal") ||
+            textMatches("herb") ||
+            textMatches("medicinal") ||
+            textMatches("aromatic")
+          );
+        }
+        if (catLower === "exotics-rare" || catLower === "exotics & rare") {
+          return (
+            hasCategory("exotics-rare") ||
+            hasTag("rare") ||
+            hasTag("exotic") ||
+            textMatches("rare") ||
+            textMatches("exotic") ||
+            textMatches("unusual")
+          );
+        }
+        if (catLower === "seeds") {
+          return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
+        }
+
+        return hasCategory(catId);
+      }).length;
+    });
+
+    return counts;
+  }, [products]);
 
   const showCategory = (catId) => {
     if (products.length === 0) return true; // keep visible during initial load
-    return getActiveCount(catId) > 0;
+    return (categoryInStockCounts[catId] || 0) > 0;
   };
 
   return (
