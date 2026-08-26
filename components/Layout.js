@@ -1296,18 +1296,20 @@ export default function Layout({ children }) {
           <div
             ref={shopDropdownRef}
             className="nav-dropdown-wrapper mega-menu-wrapper"
+            onMouseEnter={() => {
+              setIsFaqDropdownOpen(false);
+              setIsShopDropdownOpen(true);
+            }}
+            onMouseLeave={() => {
+              setIsShopDropdownOpen(false);
+            }}
           >
-            <button
+            <Link
               ref={shopTriggerRef}
-              type="button"
+              href="/shop"
               className="nav-dropdown-trigger"
               aria-expanded={isShopDropdownOpen}
               aria-controls="desktop-shop-dropdown"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsFaqDropdownOpen(false);
-                setIsShopDropdownOpen((prev) => !prev);
-              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
@@ -1317,7 +1319,7 @@ export default function Layout({ children }) {
               }}
             >
               SHOP ALL ▾
-            </button>
+            </Link>
             <div
               id="desktop-shop-dropdown"
               className={`nav-dropdown-menu mega-menu-container ${isShopDropdownOpen ? "is-open" : ""}`}
@@ -1355,18 +1357,20 @@ export default function Layout({ children }) {
           <div
             ref={faqDropdownRef}
             className="nav-dropdown-wrapper"
+            onMouseEnter={() => {
+              setIsShopDropdownOpen(false);
+              setIsFaqDropdownOpen(true);
+            }}
+            onMouseLeave={() => {
+              setIsFaqDropdownOpen(false);
+            }}
           >
-            <button
+            <Link
               ref={faqTriggerRef}
-              type="button"
+              href="/faq"
               className="nav-dropdown-trigger"
               aria-expanded={isFaqDropdownOpen}
               aria-controls="desktop-faq-dropdown"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsShopDropdownOpen(false);
-                setIsFaqDropdownOpen((prev) => !prev);
-              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
@@ -1376,7 +1380,7 @@ export default function Layout({ children }) {
               }}
             >
               FAQ ▾
-            </button>
+            </Link>
             <div
               id="desktop-faq-dropdown"
               className={`nav-dropdown-menu ${isFaqDropdownOpen ? "is-open" : ""}`}
@@ -1555,6 +1559,7 @@ export default function Layout({ children }) {
           position: static;
         }
         .nav-dropdown-trigger {
+          display: inline-block;
           background: none;
           border: none;
           padding: 0;

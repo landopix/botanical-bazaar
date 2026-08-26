@@ -76,6 +76,7 @@ export async function getStaticProps({ params }) {
 }
 
 export default function ProductDetail({ initialProduct, allProducts = [] }) {
+  const recommendedRef = React.useRef(null);
   const router = useRouter();
 
   const [product, setProduct] = useState(initialProduct);
@@ -182,7 +183,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const isVariantAvailable = selectedVariant ? selectedVariant.availableForSale : product.availableForSale;
   const isSoldOut = !isVariantAvailable || !product.quantity || product.quantity < 3;
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === product.slug);
-  const variantsArray = product.variants && product.variants.length > 0 ? product.variants : [];
+  const variantsArray = (product.variants && product.variants.length > 0 ? product.variants : []).filter(
+    v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
+  );
 
   // Related / Recommended Products derived from same category or tags
   const recommendedProducts = React.useMemo(() => {
@@ -679,13 +682,39 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
       {/* Recommended / Related Products Horizontal Slider */}
       {recommendedProducts.length > 0 && (
         <section className="recommended-section">
-          <h2 className="recommended-title">Recommended Specimen Pairings</h2>
-          <div className="recommended-slider">
-            {recommendedProducts.map((recProd) => (
-              <div key={recProd.slug || recProd.id} className="recommended-card-wrapper">
-                <ProductCard product={recProd} />
-              </div>
-            ))}
+          <h2 className="recommended-title">Recommended</h2>
+          <div className="recommended-carousel-wrapper">
+            <button
+              className="rec-nav-btn rec-nav-prev"
+              onClick={() => {
+                if (recommendedRef.current) {
+                  recommendedRef.current.scrollBy({ left: -300, behavior: "smooth" });
+                }
+              }}
+              aria-label="Scroll recommended products left"
+              type="button"
+            >
+              ‹
+            </button>
+            <div className="recommended-slider" ref={recommendedRef}>
+              {recommendedProducts.map((recProd) => (
+                <div key={recProd.slug || recProd.id} className="recommended-card-wrapper">
+                  <ProductCard product={recProd} />
+                </div>
+              ))}
+            </div>
+            <button
+              className="rec-nav-btn rec-nav-next"
+              onClick={() => {
+                if (recommendedRef.current) {
+                  recommendedRef.current.scrollBy({ left: 300, behavior: "smooth" });
+                }
+              }}
+              aria-label="Scroll recommended products right"
+              type="button"
+            >
+              ›
+            </button>
           </div>
         </section>
       )}
@@ -695,6 +724,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           margin-top: 3rem;
           padding-top: 2rem;
           border-top: 1px solid rgba(212, 176, 106, 0.3);
+          position: relative;
         }
         .recommended-title {
           color: #D4B06A;
@@ -705,28 +735,62 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           text-transform: uppercase;
           letter-spacing: 0.08em;
         }
+        .recommended-carousel-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          width: 100%;
+        }
         .recommended-slider {
           display: flex;
-          gap: 1.5rem;
+          gap: 1.2rem;
           overflow-x: auto;
-          padding-bottom: 1rem;
+          padding: 0.5rem 0.2rem 1rem 0.2rem;
           scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
           -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          width: 100%;
         }
         .recommended-slider::-webkit-scrollbar {
-          height: 8px;
-        }
-        .recommended-slider::-webkit-scrollbar-track {
-          background: #123826;
-          border-radius: 4px;
-        }
-        .recommended-slider::-webkit-scrollbar-thumb {
-          background: #D4B06A;
-          border-radius: 4px;
+          display: none;
         }
         .recommended-card-wrapper {
-          flex: 0 0 280px;
+          flex: 0 0 calc(25% - 0.9rem);
+          min-width: 220px;
           scroll-snap-align: start;
+          box-sizing: border-box;
+        }
+        .rec-nav-btn {
+          position: absolute;
+          top: 45%;
+          transform: translateY(-50%);
+          background: #00301E;
+          color: #D4B06A;
+          border: 1.5px solid #D4B06A;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.6rem;
+          font-weight: bold;
+          cursor: pointer;
+          z-index: 10;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          transition: all 0.2s ease;
+        }
+        .rec-nav-btn:hover {
+          background: #D4B06A;
+          color: #00301E;
+        }
+        .rec-nav-prev {
+          left: -18px;
+        }
+        .rec-nav-next {
+          right: -18px;
         }
                 .pdp-wrapper {
           padding: 2rem 1.5rem 4rem 1.5rem;
@@ -945,12 +1009,18 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           padding: 0.55rem 0.8rem;
           border-radius: 8px;
           border: 1px solid rgba(212, 176, 106, 0.4);
-          background: #D4B06A;
-          color: #00301E;
+          background: #F5E7C4 !important;
+          color: #00301E !important;
           font-family: inherit;
           font-size: 0.95rem;
+          font-weight: bold;
           outline: none;
           box-sizing: border-box;
+        }
+        .notify-input::placeholder {
+          color: #00301E !important;
+          opacity: 0.75;
+          font-weight: normal;
         }
         .notify-submit-btn {
           background: #D4B06A;
