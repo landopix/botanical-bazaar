@@ -50,7 +50,7 @@ export async function getServerSideProps(context) {
     res.write(htmlContent);
     res.end();
   } catch (error) {
-    console.error(`Error rendering page ${pageName}:`, error);
+    console.error('Error rendering page:', pageName, error);
     res.statusCode = 500;
     res.write('Internal Server Error');
     res.end();
