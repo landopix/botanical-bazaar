@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
@@ -58,6 +59,14 @@ export default async function handler(req, res) {
 
   if (!html || typeof html !== 'string' || html.trim().length === 0) {
     return res.status(400).json({ error: 'Email HTML content is required.' });
+  }
+
+  // Automatically sync recipients to Shopify Admin API if configured
+  for (const email of targetList) {
+    createOrUpdateShopifyCustomer({
+      email,
+      tags: ['almanac', 'newsletter'],
+    }).catch(err => console.error('[Shopify Almanac Customer Sync Error]', err));
   }
 
   try {
