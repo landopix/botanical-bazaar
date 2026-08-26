@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import { Resend } from 'resend';
 import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 
@@ -29,40 +27,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-function persistSubscriber(email, name, inquiryType, extraData = {}) {
-  try {
-    const dirPath = path.join(process.cwd(), 'content');
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-
-    const filePath = path.join(dirPath, 'subscribers.json');
-    let subscribers = [];
-
-    if (fs.existsSync(filePath)) {
-      try {
-        const content = fs.readFileSync(filePath, 'utf8');
-        subscribers = JSON.parse(content);
-      } catch (e) {
-        console.error('Error reading/parsing subscribers file:', e);
-      }
-    }
-
-    const entry = {
-      email,
-      name,
-      inquiryType,
-      timestamp: new Date().toISOString(),
-      ...extraData
-    };
-
-    subscribers.push(entry);
-    fs.writeFileSync(filePath, JSON.stringify(subscribers, null, 2), 'utf8');
-  } catch (err) {
-    console.error('Failed to persist subscriber lead:', err);
-  }
 }
 
 export default async function handler(req, res) {
@@ -96,15 +60,6 @@ export default async function handler(req, res) {
   const cleanEmail = rawEmail.trim();
   const cleanPhone = phone ? String(phone).trim() : 'N/A';
   const cleanDetails = (additionalDetails || message || '').trim() || 'None provided.';
-
-  // Save lead locally to ensure zero lead loss
-  persistSubscriber(cleanEmail, cleanName, inquiryType, {
-    phone: cleanPhone !== 'N/A' ? cleanPhone : undefined,
-    plantName: plantName ? String(plantName).trim() : undefined,
-    budgetRange: budgetRange ? String(budgetRange).trim() : undefined,
-    desiredMaturity: desiredMaturity ? String(desiredMaturity).trim() : undefined,
-    details: cleanDetails !== 'None provided.' ? cleanDetails : undefined
-  });
 
   // Automatically sync subscriber to Shopify Admin API if configured
   createOrUpdateShopifyCustomer({
@@ -201,7 +156,7 @@ export default async function handler(req, res) {
       if (process.env.NODE_ENV === 'production') {
         console.error('[Resend API Error] RESEND_API_KEY is not configured or invalid in production.');
         return res.status(500).json({
-          error: 'Email service is currently unconfigured. Your request has been saved to our team queue.'
+          error: 'Email service is currently unconfigured. Please try again later or contact support directly.'
         });
       }
       console.warn('[Resend API Warning] Valid RESEND_API_KEY is not configured in development mode. Simulating email dispatch.');

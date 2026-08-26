@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 function isSimpleEmail(str) {
   if (typeof str !== "string") return false;
   const email = str.trim();
@@ -33,44 +30,10 @@ export default async function notifyMeHandler(req, res) {
   const cleanName = name.trim().slice(0, 200);
   const cleanType = typeof type === 'string' && type.trim() ? type.trim().slice(0, 50) : 'restock_notification';
 
-  try {
-    const dirPath = path.join(process.cwd(), 'content');
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
+  console.log(`[Notify Me Capture] Registered request successfully for ${cleanEmail} on ${cleanName} (${cleanSlug}) [type: ${cleanType}]`);
 
-    const filePath = path.join(dirPath, 'restock-requests.json');
-    let requests = [];
-
-    if (fs.existsSync(filePath)) {
-      try {
-        const fileContent = fs.readFileSync(filePath, 'utf8');
-        requests = JSON.parse(fileContent);
-      } catch (e) {
-        console.error('Error reading/parsing existing restock requests file, resetting:', e);
-      }
-    }
-
-    const newRequest = {
-      email: cleanEmail,
-      slug: cleanSlug,
-      name: cleanName,
-      type: cleanType,
-      timestamp: new Date().toISOString()
-    };
-
-    requests.push(newRequest);
-
-    fs.writeFileSync(filePath, JSON.stringify(requests, null, 2), 'utf8');
-
-    console.log(`[Notify Me Capture] Registered request successfully for ${cleanEmail} on ${cleanName} (${cleanSlug}) [type: ${newRequest.type}]`);
-
-    return res.status(200).json({
-      success: true,
-      message: "You're on the list! We'll email you the moment this specimen returns."
-    });
-  } catch (error) {
-    console.error('[Notify Me Capture] Server Error:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
+  return res.status(200).json({
+    success: true,
+    message: "You're on the list! We'll email you the moment this specimen returns."
+  });
 }
