@@ -7,13 +7,22 @@ export default function handler(req, res) {
   }
 
   const { page } = req.query;
-  if (!page) {
-    return res.status(400).json({ message: 'Missing page parameter' });
+  if (!page || typeof page !== 'string') {
+    return res.status(400).json({ message: 'Missing or invalid page parameter' });
   }
 
-  // Define pathways
-  const htmlPath = path.join(process.cwd(), 'content', 'pages', `${page}.html`);
-  const cssPath = path.join(process.cwd(), 'content', 'pages', `${page}.css`);
+  // Sanitize parameter to disallow null bytes, relative traversal, or absolute paths
+  if (page.includes('\0') || page.includes('..') || path.isAbsolute(page)) {
+    return res.status(400).json({ message: 'Invalid page parameter' });
+  }
+
+  const allowedBaseDir = path.resolve(process.cwd(), 'content', 'pages');
+  const htmlPath = path.resolve(allowedBaseDir, `${page}.html`);
+  const cssPath = path.resolve(allowedBaseDir, `${page}.css`);
+
+  if (!htmlPath.startsWith(allowedBaseDir + path.sep) && htmlPath !== allowedBaseDir) {
+    return res.status(403).json({ message: 'Access denied: Target path outside permitted directory' });
+  }
 
   if (!fs.existsSync(htmlPath)) {
     return res.status(404).json({ message: `Page ${page} not found` });
@@ -37,7 +46,7 @@ export default function handler(req, res) {
       css: cssContent,
     });
   } catch (error) {
-    console.error(`Error loading page ${page}:`, error);
+    console.error('Error loading page:', page, error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }

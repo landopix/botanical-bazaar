@@ -8,13 +8,22 @@ export default function handler(req, res) {
   }
 
   const { page, html, css } = req.body;
-  if (!page || html === undefined || css === undefined) {
-    return res.status(400).json({ message: 'Missing page, html, or css parameter' });
+  if (!page || html === undefined || css === undefined || typeof page !== 'string') {
+    return res.status(400).json({ message: 'Missing or invalid parameters' });
   }
 
-  // Define pathways
-  const htmlPath = path.join(process.cwd(), 'content', 'pages', `${page}.html`);
-  const cssPath = path.join(process.cwd(), 'content', 'pages', `${page}.css`);
+  // Sanitize parameter to disallow null bytes, relative traversal, or absolute paths
+  if (page.includes('\0') || page.includes('..') || path.isAbsolute(page)) {
+    return res.status(400).json({ message: 'Invalid page parameter' });
+  }
+
+  const allowedBaseDir = path.resolve(process.cwd(), 'content', 'pages');
+  const htmlPath = path.resolve(allowedBaseDir, `${page}.html`);
+  const cssPath = path.resolve(allowedBaseDir, `${page}.css`);
+
+  if (!htmlPath.startsWith(allowedBaseDir + path.sep) && htmlPath !== allowedBaseDir) {
+    return res.status(403).json({ message: 'Access denied: Target path outside permitted directory' });
+  }
 
   if (!fs.existsSync(htmlPath)) {
     return res.status(404).json({ message: `Page ${page} not found` });
@@ -66,7 +75,7 @@ export default function handler(req, res) {
 
     return res.status(200).json({ message: 'Success' });
   } catch (error) {
-    console.error(`Error saving page ${page}:`, error);
+    console.error('Error saving page:', page, error);
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 }

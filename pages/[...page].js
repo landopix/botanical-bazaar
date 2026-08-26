@@ -181,7 +181,7 @@ export async function getServerSideProps(context) {
         }
       };
     } catch (error) {
-      console.error(`Error rendering GrapesJS page ${pageName}:`, error);
+      console.error('Error rendering GrapesJS page:', pageName, error);
     }
   }
 

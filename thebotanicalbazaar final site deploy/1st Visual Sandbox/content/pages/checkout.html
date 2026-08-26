@@ -177,12 +177,13 @@ body {
       cart.forEach(item => {
         const total = (item.price || 0) * (item.quantity || 1);
         subtotal += total;
-        summaryHtml += `<li style="display:flex;justify-content:space-between;margin-bottom:0.6rem;font-size:1.1rem;">
-          <span style="color:#D4B06A;">${item.name} × ${item.quantity}</span>
-          <span style="color:#E9DCBE;">$${total.toFixed(2)}</span>
-        </li>`;
+        const safeName = String(item.name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        summaryHtml += '<li style="display:flex;justify-content:space-between;margin-bottom:0.6rem;font-size:1.1rem;">' +
+          '<span style="color:#D4B06A;">' + safeName + ' × ' + Number(item.quantity || 1) + '</span>' +
+          '<span style="color:#E9DCBE;">$' + total.toFixed(2) + '</span>' +
+        '</li>';
       });
-      summaryHtml += `</ul><p style="font-size:1.3rem;color:#E9DCBE;margin-top:1rem;"><strong>Subtotal: $${subtotal.toFixed(2)}</strong></p>`;
+      summaryHtml += '</ul><p style="font-size:1.3rem;color:#E9DCBE;margin-top:1rem;"><strong>Subtotal: $' + subtotal.toFixed(2) + '</strong></p>';
       details.innerHTML = summaryHtml;
       button.style.display = 'inline-block';
       button.textContent = 'Proceed to Payment';

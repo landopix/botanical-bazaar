@@ -292,25 +292,26 @@ body {
       itemsContainer.innerHTML = cart.map((item, index) => {
         const price = (item.price || 0) * (item.quantity || 1);
         subtotal += price;
-        const sizeLabel = item.selectedSize ? `<span style="font-size:0.85rem;color:#E9DCBE;display:block;">Size: ${item.selectedSize}</span>` : '';
-        const resolvedImage = item.image
-          ? (item.image.startsWith('http') || item.image.startsWith('/') ? item.image : '/' + item.image)
-          : '/assets/placeholder.png';
+        const safeName = String(item.name || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const safeSize = item.selectedSize ? String(item.selectedSize).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : '';
+        const sizeLabel = safeSize ? '<span style="font-size:0.85rem;color:#E9DCBE;display:block;">Size: ' + safeSize + '</span>' : '';
+        const rawImg = item.image ? (item.image.startsWith('http') || item.image.startsWith('/') ? item.image : '/' + item.image) : '/assets/placeholder.png';
+        const safeImg = String(rawImg).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-        return `<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #749c7f;padding:0.6rem 0;">
-          <div style="display:flex;align-items:center;gap:0.8rem;">
-            <img src="${resolvedImage}" alt="${item.name}" loading="lazy" onerror="this.src='/assets/placeholder.png'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;background:#e9dcbe11;">
-            <div style="text-align:left;">
-              <strong style="color:#D4B06A;">${item.name}</strong>
-              ${sizeLabel}
-              <span style="font-size:0.9rem;color:#E9DCBE;">Qty: ${item.quantity}</span>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:1rem;">
-            <div style="color:#E9DCBE;font-weight:600;">$${price.toFixed(2)}</div>
-            <button onclick="removeItem(${index})" style="background:none;border:none;color:#ba2f2f;cursor:pointer;font-weight:bold;font-size:1.2rem;padding:0.2rem 0.5rem;" title="Remove item">✕</button>
-          </div>
-        </div>`;
+        return '<div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #749c7f;padding:0.6rem 0;">' +
+          '<div style="display:flex;align-items:center;gap:0.8rem;">' +
+            '<img src="' + safeImg + '" alt="' + safeName + '" loading="lazy" onerror="this.src=\'/assets/placeholder.png\'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;background:#e9dcbe11;">' +
+            '<div style="text-align:left;">' +
+              '<strong style="color:#D4B06A;">' + safeName + '</strong>' +
+              sizeLabel +
+              '<span style="font-size:0.9rem;color:#E9DCBE;">Qty: ' + Number(item.quantity || 1) + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:1rem;">' +
+            '<div style="color:#E9DCBE;font-weight:600;">$' + price.toFixed(2) + '</div>' +
+            '<button onclick="removeItem(' + index + ')" style="background:none;border:none;color:#ba2f2f;cursor:pointer;font-weight:bold;font-size:1.2rem;padding:0.2rem 0.5rem;" title="Remove item">✕</button>' +
+          '</div>' +
+        '</div>';
       }).join('');
 
       summaryElem.innerHTML = `<strong>Subtotal:</strong> $${subtotal.toFixed(2)}`;
