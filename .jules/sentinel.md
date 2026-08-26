@@ -31,3 +31,11 @@
 **Learning:** Hardcoded fallback tokens in authentication arrays bypass secret validation if exposed in source code. Standard HTTP response security headers are required to prevent clickjacking, MIME-type sniffing, and framing attacks.
 
 **Prevention:** Rely strictly on process.env secrets (`REVALIDATE_SECRET`, `SHOPIFY_WEBHOOK_SECRET`, etc.) in production, allowing fallback only in non-production environments when no secrets exist. Enforce HTTP security headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`) in `next.config.js`.
+
+## 2026-08-24 - Tech Stack Fingerprint Prevention (`poweredByHeader: false`)
+
+**Vulnerability:** Default Next.js header output includes `X-Powered-By: Next.js`, exposing backend framework identity to external security scanners and potential attackers.
+
+**Learning:** Server banner and tech stack headers allow potential attackers to perform targeted vulnerability scans and exploit framework-specific edge cases.
+
+**Prevention:** Explicitly configure `poweredByHeader: false` in `next.config.js` to strip `X-Powered-By` headers from HTTP responses across all Next.js routes.
