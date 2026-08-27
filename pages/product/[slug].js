@@ -35,6 +35,14 @@ export async function getStaticPaths() {
   }
 }
 
+function getFirstAvailableVariant(product) {
+  if (!product || !product.variants || product.variants.length === 0) return null;
+  const available = product.variants.find(
+    v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
+  );
+  return available || product.variants[0];
+}
+
 const KEBAB_CASE_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export async function getStaticProps({ params }) {
@@ -81,10 +89,10 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
 
   const [product, setProduct] = useState(initialProduct);
   const [selectedVariant, setSelectedVariant] = useState(
-    initialProduct?.variants?.[0] || null
+    getFirstAvailableVariant(initialProduct)
   );
   const [selectedSize, setSelectedSize] = useState(
-    initialProduct?.variants?.[0]?.title || ''
+    getFirstAvailableVariant(initialProduct)?.title || ''
   );
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
@@ -103,7 +111,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   useEffect(() => {
     if (initialProduct) {
       setProduct(initialProduct);
-      const defaultVariant = initialProduct.variants?.[0] || null;
+      const defaultVariant = getFirstAvailableVariant(initialProduct);
       setSelectedVariant(defaultVariant);
       setSelectedSize(defaultVariant?.title || '');
     }
@@ -181,7 +189,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   // Active price and sold-out status derived from selected variant or product overall
   const activePrice = selectedVariant ? selectedVariant.price : product.price;
   const isVariantAvailable = selectedVariant ? selectedVariant.availableForSale : product.availableForSale;
-  const isSoldOut = !isVariantAvailable || !product.quantity || product.quantity < 3;
+  const isSoldOut = !isVariantAvailable || (selectedVariant?.quantityAvailable !== undefined ? selectedVariant.quantityAvailable < 1 : (!product.quantity || product.quantity < 1));
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === product.slug);
   const variantsArray = (product.variants && product.variants.length > 0 ? product.variants : []).filter(
     v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
