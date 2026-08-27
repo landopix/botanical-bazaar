@@ -1677,14 +1677,14 @@ export default function Layout({ children }) {
           text-transform: uppercase;
           letter-spacing: 0.03em;
         }
-        /* UX Fix: Invisible hover bridge pseudo-element bridging the gap between nav links & dropdown container */
+        /* UX Fix: Refined hover bridge pseudo-element strictly bridging the vertical gap below the nav trigger */
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
-          top: -25px;
+          top: -12px;
           left: 0;
           right: 0;
-          height: 25px;
+          height: 12px;
           background: transparent;
           display: block;
           pointer-events: auto;
