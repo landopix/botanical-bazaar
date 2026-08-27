@@ -257,6 +257,38 @@ export default function Layout({ children }) {
   const shopTriggerRef = useRef(null);
   const faqTriggerRef = useRef(null);
 
+  // UX Fix: Hover delay timers to prevent menu from vanishing during diagonal mouse movement
+  const shopTimerRef = useRef(null);
+  const faqTimerRef = useRef(null);
+
+  const handleShopMouseEnter = () => {
+    if (shopTimerRef.current) clearTimeout(shopTimerRef.current);
+    if (faqTimerRef.current) clearTimeout(faqTimerRef.current);
+    setIsFaqDropdownOpen(false);
+    setIsShopDropdownOpen(true);
+  };
+
+  const handleShopMouseLeave = () => {
+    // UX Fix: 150ms transition delay on mouse leave for smooth diagonal cursor tracking
+    shopTimerRef.current = setTimeout(() => {
+      setIsShopDropdownOpen(false);
+    }, 150);
+  };
+
+  const handleFaqMouseEnter = () => {
+    if (shopTimerRef.current) clearTimeout(shopTimerRef.current);
+    if (faqTimerRef.current) clearTimeout(faqTimerRef.current);
+    setIsShopDropdownOpen(false);
+    setIsFaqDropdownOpen(true);
+  };
+
+  const handleFaqMouseLeave = () => {
+    // UX Fix: 150ms transition delay on mouse leave for smooth diagonal cursor tracking
+    faqTimerRef.current = setTimeout(() => {
+      setIsFaqDropdownOpen(false);
+    }, 150);
+  };
+
   const mainContentRef = useRef(null);
   const headerRef = useRef(null);
   const footerRef = useRef(null);
@@ -1297,13 +1329,8 @@ export default function Layout({ children }) {
           <div
             ref={shopDropdownRef}
             className="nav-dropdown-wrapper mega-menu-wrapper"
-            onMouseEnter={() => {
-              setIsFaqDropdownOpen(false);
-              setIsShopDropdownOpen(true);
-            }}
-            onMouseLeave={() => {
-              setIsShopDropdownOpen(false);
-            }}
+            onMouseEnter={handleShopMouseEnter}
+            onMouseLeave={handleShopMouseLeave}
           >
             <Link
               ref={shopTriggerRef}
@@ -1358,13 +1385,8 @@ export default function Layout({ children }) {
           <div
             ref={faqDropdownRef}
             className="nav-dropdown-wrapper"
-            onMouseEnter={() => {
-              setIsShopDropdownOpen(false);
-              setIsFaqDropdownOpen(true);
-            }}
-            onMouseLeave={() => {
-              setIsFaqDropdownOpen(false);
-            }}
+            onMouseEnter={handleFaqMouseEnter}
+            onMouseLeave={handleFaqMouseLeave}
           >
             <Link
               ref={faqTriggerRef}
@@ -1655,6 +1677,7 @@ export default function Layout({ children }) {
           text-transform: uppercase;
           letter-spacing: 0.03em;
         }
+        /* UX Fix: Invisible hover bridge pseudo-element bridging the gap between nav links & dropdown container */
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
@@ -1664,7 +1687,7 @@ export default function Layout({ children }) {
           height: 25px;
           background: transparent;
           display: block;
-          pointer-events: none;
+          pointer-events: auto;
         }
         .dropdown-title {
           display: block !important;
