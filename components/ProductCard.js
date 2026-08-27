@@ -152,9 +152,10 @@ function ProductCard({
       <button
         type="button"
         onClick={handleWishlistClick}
+        aria-pressed={isWishlisted}
         aria-label={isWishlisted ? `Remove ${commonName} from Wishlist` : `Save ${commonName} to Wishlist`}
         title={isWishlisted ? "In Wishlist Sanctuary" : "Add to Wishlist"}
-        className="wishlist-btn-toggle"
+        className={`wishlist-btn-toggle ${isWishlisted ? "is-active" : ""}`}
         style={{
           position: 'absolute',
           top: '10px',
@@ -288,9 +289,34 @@ function ProductCard({
         </Link>
       </div>
       <style jsx>{`
+        .wishlist-btn-toggle {
+          transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .wishlist-btn-toggle:hover {
+          transform: scale(1.12);
+          background-color: rgba(0, 48, 30, 0.95) !important;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4) !important;
+        }
+        .wishlist-btn-toggle:active {
+          transform: scale(0.92);
+        }
+        .wishlist-btn-toggle svg {
+          transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .wishlist-btn-toggle:hover svg {
+          transform: scale(1.1);
+        }
+        .wishlist-btn-toggle.is-active svg {
+          animation: heartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
         .wishlist-btn-toggle:focus-visible {
           outline: 2px solid #D4B06A !important;
           outline-offset: 2px !important;
+        }
+        @keyframes heartPop {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.3); }
+          100% { transform: scale(1); }
         }
       `}</style>
     </div>
