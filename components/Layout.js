@@ -498,14 +498,11 @@ export default function Layout({ children }) {
     });
   }, [isSidebarOpen, isZoneModalOpen]);
 
-  // Global event delegation for mobile toggle and outside clicks
+  // Global event handler for outside clicks to close sidebar drawer and header dropdowns
   useEffect(() => {
     const handleDocumentClick = (e) => {
       const toggleBtn = e.target.closest(".header-mobile-toggle, .sidebar-toggle");
       if (toggleBtn) {
-        e.preventDefault();
-        triggerElementRef.current = toggleBtn;
-        setIsSidebarOpen((prev) => !prev);
         return;
       }
 
@@ -534,13 +531,9 @@ export default function Layout({ children }) {
       }
     };
 
-    document.addEventListener("mousedown", handleDocumentClick, true);
-    document.addEventListener("touchstart", handleDocumentClick, true);
-    document.addEventListener("click", handleDocumentClick, true);
+    document.addEventListener("mousedown", handleDocumentClick);
     return () => {
-      document.removeEventListener("mousedown", handleDocumentClick, true);
-      document.removeEventListener("touchstart", handleDocumentClick, true);
-      document.removeEventListener("click", handleDocumentClick, true);
+      document.removeEventListener("mousedown", handleDocumentClick);
     };
   }, [isSidebarOpen, isShopDropdownOpen, isFaqDropdownOpen]);
 
@@ -907,6 +900,10 @@ export default function Layout({ children }) {
           aria-label="Toggle navigation search menu"
           aria-controls="site-sidebar"
           aria-expanded={isSidebarOpen}
+          onClick={(e) => {
+            triggerElementRef.current = e.currentTarget;
+            setIsSidebarOpen((prev) => !prev);
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1274,6 +1271,10 @@ export default function Layout({ children }) {
           aria-label="Toggle mobile menu"
           aria-expanded={isSidebarOpen}
           aria-controls="site-sidebar"
+          onClick={(e) => {
+            triggerElementRef.current = e.currentTarget;
+            setIsSidebarOpen((prev) => !prev);
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
