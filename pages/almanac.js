@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
+import { getAlmanacArticles } from '../lib/shopify';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
 import useBfcacheReset from '../hooks/useBfcacheReset';
 
-export default function Almanac({ careSheets, articles, events }) {
+export default function Almanac({ careSheets, articles, shopifyArticles, events }) {
   const sheets = careSheets && careSheets.length > 0 ? careSheets : [];
-  const articleList = articles && articles.length > 0 ? articles : [];
+  const articleList = shopifyArticles && shopifyArticles.length > 0 ? shopifyArticles : (articles && articles.length > 0 ? articles : []);
   const eventList = events && events.length > 0 ? events : [];
 
   // Almanac subscription form state
@@ -162,21 +163,46 @@ export default function Almanac({ careSheets, articles, events }) {
         </h2>
         {articleList.length > 0 ? (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-            {articleList.map((article, i) => (
-              <div key={article._id || i} style={{ background: '#1C3D2E', border: '1px solid #D4B06A', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div>
-                  {article.imageUrl && (
-                    <img src={article.imageUrl} alt={article.name || article.seoTitle || 'Article Image'} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '8px', marginBottom: '1rem' }} />
+            {articleList.map((article, i) => {
+              const title = article.title || article.name || article.seoTitle || 'Seasonal Gardening Note';
+              const excerpt = article.excerpt || article.seoDescription || 'Read our latest insights on seasonal plant care and soil preparation.';
+              const link = article.onlineStoreUrl || (article.slug ? '/page/' + article.slug : '#');
+              const imageUrl = article.imageUrl || '/assets/lantern.png';
+              const imageAlt = article.imageAlt || title;
+              const publishedDate = article.publishedAt
+                ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : null;
+
+              return (
+                <div key={article.id || article._id || i} style={{ background: '#1C3D2E', border: '1px solid #D4B06A', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
+                  <div>
+                    {imageUrl && (
+                      <div style={{ width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden', marginBottom: '1.2rem', background: '#00301E' }}>
+                        <img src={imageUrl} alt={imageAlt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
+                    )}
+                    {(publishedDate || article.author) && (
+                      <div style={{ color: '#D4B06A', fontSize: '0.85rem', fontFamily: 'Cinzel, serif', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                        {publishedDate}{publishedDate && article.author ? ' • ' : ''}{article.author ? 'By ' + article.author : ''}
+                      </div>
+                    )}
+                    <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, marginBottom: '0.8rem', fontSize: '1.35rem', lineHeight: '1.3' }}>
+                      {title}
+                    </h3>
+                    <p style={{ color: '#F5E7C4', fontSize: '1rem', lineHeight: '1.6', margin: '0 0 1.2rem 0' }}>
+                      {excerpt}
+                    </p>
+                  </div>
+                  {link && (
+                    <div style={{ marginTop: 'auto', paddingTop: '0.5rem' }}>
+                      <Button variant="gold-filled" href={link} target={article.onlineStoreUrl ? "_blank" : undefined} rel={article.onlineStoreUrl ? "noopener noreferrer" : undefined}>
+                        Read Full Article
+                      </Button>
+                    </div>
                   )}
-                  <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.3rem' }}>
-                    {article.name || article.seoTitle || 'Seasonal Gardening Note'}
-                  </h3>
-                  <p style={{ color: '#F5E7C4', fontSize: '1rem', lineHeight: '1.5' }}>
-                    {article.seoDescription || 'Read our latest insights on seasonal plant care and soil preparation.'}
-                  </p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div style={{ background: '#00301E', border: '1px solid rgba(212, 176, 106, 0.4)', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
@@ -283,6 +309,13 @@ export async function getStaticProps() {
   let careSheets = null;
   let articles = null;
   let events = null;
+  let shopifyArticles = [];
+
+  try {
+    shopifyArticles = await getAlmanacArticles('the-almanac');
+  } catch (err) {
+    console.warn('Shopify Almanac articles fetch error:', err.message);
+  }
 
   try {
     if (isSanityConfigured()) {
@@ -333,6 +366,7 @@ export async function getStaticProps() {
     props: {
       careSheets,
       articles,
+      shopifyArticles,
       events
     },
     revalidate: 60,
