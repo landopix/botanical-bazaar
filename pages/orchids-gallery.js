@@ -1,10 +1,12 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Button from '../components/Button';
 import GalleryItemCard from '../components/GalleryItemCard';
 import GalleryItemSkeleton from '../components/skeletons/GalleryItemSkeleton';
 import { sanityClient } from '../lib/sanity';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 const CATEGORY_MAP = {
   orchid: 'Orchid',
@@ -83,6 +85,14 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
   const filteredImages = activeCategory === 'All'
     ? images
     : images.filter(img => img?.category === activeCategory);
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
+
+  const modalImageSrc = selectedImage?.imageUrl || selectedImage?.image || '/assets/placeholder.png';
 
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
@@ -233,11 +243,14 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
               ✕
             </button>
             <div style={{ width: '100%', height: '400px', background: '#001F14', position: 'relative' }}>
-              <img
-                src={selectedImage?.imageUrl || selectedImage?.image || '/assets/placeholder.png'}
+              <Image
+                src={modalImageSrc}
                 alt={selectedImage?.alt || selectedImage?.title || 'Gallery Specimen'}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
+                fill
+                sizes="(max-width: 900px) 100vw, 850px"
+                style={{ objectFit: 'contain' }}
+                unoptimized={!isLocalOrAllowedCdn(modalImageSrc)}
+                onError={(e) => { if (e.target) e.target.src = '/assets/placeholder.png'; }}
               />
             </div>
             <div style={{ padding: '2rem' }}>

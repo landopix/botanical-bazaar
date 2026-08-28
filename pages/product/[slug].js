@@ -2,19 +2,22 @@ import { getResolvedPotSize, getResolvedPlantType } from "../../components/Produ
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ProductCard from '../../components/ProductCard';
 import Button from '../../components/Button';
 import ProductImageGallery from '../../components/ProductImageGallery';
-import FulfillmentCard from '../../components/FulfillmentCard';
-import WhatYouWillReceiveCard from '../../components/WhatYouWillReceiveCard';
-import LiveArrivalGuarantee from '../../components/LiveArrivalGuarantee';
-import ZoneCompatibilityBadges from '../../components/ZoneCompatibilityBadges';
-import CareSpine from '../../components/CareSpine';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles, getAllProducts, parseProductTitle } from '../../lib/shopify';
 import useBfcacheReset from '../../hooks/useBfcacheReset';
+
+// Dynamic imports for below-the-fold non-critical components
+const FulfillmentCard = dynamic(() => import('../../components/FulfillmentCard'));
+const WhatYouWillReceiveCard = dynamic(() => import('../../components/WhatYouWillReceiveCard'));
+const LiveArrivalGuarantee = dynamic(() => import('../../components/LiveArrivalGuarantee'));
+const ZoneCompatibilityBadges = dynamic(() => import('../../components/ZoneCompatibilityBadges'));
+const CareSpine = dynamic(() => import('../../components/CareSpine'));
 
 export async function getStaticPaths() {
   try {

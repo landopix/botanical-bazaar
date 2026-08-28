@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
+import Image from 'next/image';
 import Button from '../components/Button';
 
 export default function Zones() {
@@ -27,6 +28,9 @@ export default function Zones() {
         </h2>
         <div
           style={{
+            position: 'relative',
+            width: '100%',
+            height: '350px',
             background: '#123826',
             padding: '0.75rem',
             borderRadius: '16px',
@@ -35,16 +39,14 @@ export default function Zones() {
             overflow: 'hidden'
           }}
         >
-          <img
+          <Image
             src="/assets/usda-map-official.png"
             alt="USDA Plant Hardiness Zone Map Reference"
+            fill
+            sizes="(max-width: 800px) 100vw, 800px"
             style={{
-              width: '100%',
-              height: 'auto',
-              maxHeight: '500px',
               objectFit: 'contain',
-              borderRadius: '10px',
-              display: 'block'
+              borderRadius: '10px'
             }}
           />
         </div>

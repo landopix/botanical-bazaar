@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Button from '../components/Button';
 import { sanityClient } from '../lib/sanity';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 export async function getStaticProps() {
   let aboutData = null;
@@ -27,6 +29,12 @@ export async function getStaticProps() {
 }
 
 export default function AboutPage({ aboutData }) {
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
+
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
       <Head>
@@ -44,12 +52,17 @@ export default function AboutPage({ aboutData }) {
             {/* Header Hero */}
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               {aboutData.logoImageUrl && (
-                <img
-                  src={aboutData.logoImageUrl}
-                  alt="The Botanical Bazaar Emblem"
-                  style={{ height: '80px', marginBottom: '1rem', objectFit: 'contain' }}
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
+                <div style={{ position: 'relative', width: '200px', height: '80px', margin: '0 auto 1rem auto' }}>
+                  <Image
+                    src={aboutData.logoImageUrl}
+                    alt="The Botanical Bazaar Emblem"
+                    fill
+                    sizes="200px"
+                    style={{ objectFit: 'contain' }}
+                    unoptimized={!isLocalOrAllowedCdn(aboutData.logoImageUrl)}
+                    onError={(e) => { if (e.target) e.target.style.display = 'none'; }}
+                  />
+                </div>
               )}
               <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
                 {aboutData.title}
@@ -74,10 +87,13 @@ export default function AboutPage({ aboutData }) {
                 background: '#001F14',
                 position: 'relative'
               }}>
-                <img
+                <Image
                   src={aboutData.bannerImageUrl}
                   alt="The Botanical Bazaar Nursery Banner"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  fill
+                  sizes="(max-width: 1000px) 100vw, 1000px"
+                  style={{ objectFit: 'cover' }}
+                  unoptimized={!isLocalOrAllowedCdn(aboutData.bannerImageUrl)}
                 />
               </div>
             )}
