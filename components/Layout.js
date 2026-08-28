@@ -144,7 +144,7 @@ const staticPages = [
 ];
 
 const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
-const shopifyAccountUrl = `https://${rawDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
+const shopifyAccountUrl = 'https://account.thebotanicalbazaar.com';
 
 const MEGA_MENU_BLUEPRINT = [
   {
