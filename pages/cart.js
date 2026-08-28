@@ -10,6 +10,7 @@ import useBfcacheReset from '../hooks/useBfcacheReset';
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
   const [notes, setNotes] = useState('');
 
   useBfcacheReset(() => setLoading(false));
@@ -21,46 +22,58 @@ export default function Cart() {
   };
 
   const handleCheckout = async () => {
-    if (cart.length === 0) return;
+    // Pull active cart from React state or fallback to localStorage
+    let activeCart = cart;
+    if ((!activeCart || activeCart.length === 0) && typeof window !== 'undefined') {
+      try {
+        const storedCart = localStorage.getItem('botanical_cart');
+        if (storedCart) {
+          activeCart = JSON.parse(storedCart);
+        }
+      } catch (err) {
+        console.error('Failed to parse localStorage cart fallback:', err);
+      }
+    }
+
+    if (!activeCart || activeCart.length === 0) {
+      setCheckoutError('Your cart is empty. Please add items before checking out.');
+      return;
+    }
+
     setLoading(true);
+    setCheckoutError('');
 
     try {
       const storedZone = typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a';
 
-      const lineItems = cart.map(item => ({
-        variantId: item.variantId || item.variants?.[0]?.id || item.id,
-        quantity: item.quantity || 1,
-        customAttributes: [
-          { key: 'USDA Hardiness Zone', value: storedZone },
-          { key: 'Pot Size', value: item.selectedSize || 'Standard' }
-        ]
-      }));
-
-      const customAttributes = [
-        { key: 'USDA Hardiness Zone', value: typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a' }
-      ];
-
-      if (notes.trim()) {
-        customAttributes.push({ key: 'Customer Order Notes', value: notes.trim() });
-      }
-
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lineItems, customAttributes })
+        body: JSON.stringify({
+          cart: activeCart.map(item => ({
+            slug: item.slug,
+            quantity: item.quantity,
+            selectedSize: item.selectedSize,
+            variantId: item.variantId || item.id,
+            name: item.name
+          })),
+          user_hardiness_zone: storedZone,
+          notes: notes.trim() || undefined
+        })
       });
 
       const data = await response.json();
+      const checkoutRedirectUrl = data.webUrl || data.url;
 
-      if (response.ok && data.webUrl) {
-        window.location.href = data.webUrl;
+      if (response.ok && checkoutRedirectUrl) {
+        window.location.href = checkoutRedirectUrl;
       } else {
-        alert(data.error || 'Failed to initialize Shopify Checkout. Please try again.');
+        setCheckoutError(data.error || 'Failed to initialize Shopify Checkout. Please try again.');
         setLoading(false);
       }
     } catch (err) {
       console.error('Checkout error:', err);
-      alert('An unexpected error occurred while redirecting to Checkout. Please try again.');
+      setCheckoutError('An unexpected error occurred while redirecting to Checkout. Please try again.');
       setLoading(false);
     }
   };
@@ -132,7 +145,7 @@ export default function Cart() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #D4B06A', borderRadius: '20px', overflow: 'hidden', background: '#00301E' }}>
                   <button
-                    onClick={() => updateQuantity(item.id, item.selectedSize, Math.max(1, item.quantity - 1))}
+                    onClick={() => updateQuantity(item.slug || item.id, item.selectedSize, Math.max(1, item.quantity - 1))}
                     aria-label={`Decrease quantity of ${item.name}`}
                     title={`Decrease quantity of ${item.name}`}
                     style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '1.1rem' }}
@@ -141,7 +154,7 @@ export default function Cart() {
                   </button>
                   <span style={{ padding: '0 0.8rem', fontWeight: 'bold' }}>{item.quantity}</span>
                   <button
-                    onClick={() => updateQuantity(item.id, item.selectedSize, item.quantity + 1)}
+                    onClick={() => updateQuantity(item.slug || item.id, item.selectedSize, item.quantity + 1)}
                     aria-label={`Increase quantity of ${item.name}`}
                     title={`Increase quantity of ${item.name}`}
                     style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '1.1rem' }}
@@ -155,7 +168,7 @@ export default function Cart() {
                 </p>
 
                 <button
-                  onClick={() => removeFromCart(item.id, item.selectedSize)}
+                  onClick={() => removeFromCart(item.slug || item.id, item.selectedSize)}
                   aria-label={`Remove ${item.name} from cart`}
                   title={`Remove ${item.name} from cart`}
                   style={{ background: 'none', border: 'none', color: '#ba2f2f', cursor: 'pointer', fontSize: '1.2rem', padding: '0.4rem' }}
@@ -191,6 +204,25 @@ export default function Cart() {
         <p style={{ fontSize: '0.9rem', color: '#E9DCBE', margin: '0 0 1.5rem 0', fontStyle: 'italic', textAlign: 'center' }}>
           Taxes, Standard Shipping, and Free Nursery Pickup options selected during checkout.
         </p>
+
+        {checkoutError && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            style={{
+              background: 'rgba(186, 47, 47, 0.2)',
+              border: '1px solid #ff6b6b',
+              color: '#ff8a8a',
+              padding: '0.8rem 1rem',
+              borderRadius: '8px',
+              marginBottom: '1.5rem',
+              textAlign: 'center',
+              fontSize: '0.95rem'
+            }}
+          >
+            {checkoutError}
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           <button

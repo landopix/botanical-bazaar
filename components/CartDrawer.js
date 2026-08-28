@@ -32,28 +32,50 @@ export default function CartDrawer({ isOpen, onClose }) {
   const handleCheckout = async (e) => {
     if (e) e.preventDefault();
     if (isRedirecting) return;
+
+    // Pull latest cart from React state or fallback to localStorage
+    let activeCart = cart;
+    if ((!activeCart || activeCart.length === 0) && typeof window !== 'undefined') {
+      try {
+        const storedCart = localStorage.getItem('botanical_cart');
+        if (storedCart) {
+          activeCart = JSON.parse(storedCart);
+        }
+      } catch (err) {
+        console.error('Failed to parse localStorage cart fallback:', err);
+      }
+    }
+
+    if (!activeCart || activeCart.length === 0) {
+      setCheckoutError('Your cart is empty. Please add items before checking out.');
+      return;
+    }
+
     setIsRedirecting(true);
     setCheckoutError('');
 
     try {
+      const storedZone = userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a');
+
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          cart: cart.map(item => ({
+          cart: activeCart.map(item => ({
             slug: item.slug,
             quantity: item.quantity,
             selectedSize: item.selectedSize,
             variantId: item.variantId || item.id,
             name: item.name
           })),
-          user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
+          user_hardiness_zone: storedZone
         })
       });
 
       const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
+      const checkoutRedirectUrl = data.url || data.webUrl;
+      if (res.ok && checkoutRedirectUrl) {
+        window.location.href = checkoutRedirectUrl;
       } else {
         setCheckoutError(data.error || 'Failed to initialize checkout session. Please try again.');
         setIsRedirecting(false);
