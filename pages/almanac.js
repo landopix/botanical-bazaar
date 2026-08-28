@@ -46,7 +46,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       const data = await res.json();
       if (res.ok && data.success) {
         setStatusType('success');
-        setStatusMsg('Welcome! You are subscribed to our monthly Almanac botanical dispatches.');
+        setStatusMsg('Welcome! You are subscribed to our monthly Almanac botanical dispatches. Check your inbox for your welcome email.');
         setEmail('');
       } else {
         setStatusType('error');
@@ -373,3 +373,4 @@ export async function getStaticProps() {
     revalidate: 60,
   };
 }
+
