@@ -6,7 +6,7 @@ import ProductCard from '../../components/ProductCard';
 import Button from '../../components/Button';
 import NurseryUpdateFallback from '../../components/NurseryUpdateFallback';
 import { getAllProducts } from '../../lib/shopify';
-import { isZoneCompatible } from '../../lib/fulfillment';
+import { isZoneCompatible, normalizePotSize, getProductSizes, getAvailableZones } from '../../lib/fulfillment';
 
 const KNOWN_COLLECTIONS = {
   'orchids': 'Orchids',

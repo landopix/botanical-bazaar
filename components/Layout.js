@@ -1477,7 +1477,7 @@ export default function Layout({ children }) {
             </p>
             <p className="contact-item">Phone: <a href="tel:7273507876" style={{ color: "inherit", textDecoration: "underline" }}>(727) 350-7876</a></p>
             <p className="contact-item">Email: info@thebotanicalbazaar.com</p>
-            <p className="contact-item">Hours: Thurs - Sun: 10AM - 5PM</p>
+            <p className="contact-item">Pickup coordination hours: Thurs - Sun: 10AM - 5PM</p>
           </div>
           <div className="footer-column">
             <h3>Ordering Info</h3>
