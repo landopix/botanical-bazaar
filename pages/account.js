@@ -1,4 +1,4 @@
-const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
+const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
 const LOGIN_URL = `https://${SHOPIFY_DOMAIN.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
 import React, { useEffect } from 'react';
 import Head from 'next/head';

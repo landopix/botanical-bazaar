@@ -1,15 +1,15 @@
 import crypto from 'crypto';
 
 function sanitizeShopDomain(str) {
-  if (typeof str !== 'string') return 'the-botanical-bazaar.myshopify.com';
+  if (typeof str !== 'string') return 'shop.thebotanicalbazaar.com';
   let domain = str.trim();
   if (domain.startsWith('https://')) domain = domain.slice(8);
   if (domain.startsWith('http://')) domain = domain.slice(7);
   while (domain.endsWith('/')) {
     domain = domain.slice(0, -1);
   }
-  if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*\.myshopify\.com$/.test(domain)) {
-    return 'the-botanical-bazaar.myshopify.com';
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9-]*\.(?:myshopify\.com|thebotanicalbazaar\.com)$/.test(domain)) {
+    return 'shop.thebotanicalbazaar.com';
   }
   return domain;
 }
