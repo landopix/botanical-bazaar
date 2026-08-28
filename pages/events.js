@@ -39,13 +39,29 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setStatusMsg('Success! You are subscribed for event updates.');
+        if (data.alreadySubscribed) {
+          setStatusMsg('Looks like you are already subscribed to The Almanac!');
+        } else {
+          setStatusMsg('Success! You are subscribed for event updates.');
+        }
         setEmail('');
       } else {
-        setStatusMsg(data.error || 'Unable to subscribe right now. Please try again.');
+        const isDuplicate = data?.alreadySubscribed || (typeof data?.error === 'string' && (
+          data.error.toLowerCase().includes('already exist') ||
+          data.error.toLowerCase().includes('already in list') ||
+          data.error.toLowerCase().includes('already subscribed') ||
+          data.error.toLowerCase().includes('duplicate')
+        ));
+
+        if (isDuplicate) {
+          setStatusMsg('Looks like you are already subscribed to The Almanac!');
+          setEmail('');
+        } else {
+          setStatusMsg('Unable to subscribe right now. Please try again later.');
+        }
       }
     } catch (err) {
-      setStatusMsg('An unexpected error occurred. Please try again.');
+      setStatusMsg('An unexpected error occurred. Please try again later.');
     } finally {
       setLoading(false);
     }
