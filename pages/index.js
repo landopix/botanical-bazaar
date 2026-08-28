@@ -540,7 +540,7 @@ export default function Index({ initialProducts = [] }) {
             </p>
             {subscribed ? (
               <p role="status" aria-live="polite" style={{ color: "#D4B06A", fontWeight: "bold" }}>
-                Thank you! You are now subscribed to the Almanac.
+                Thank you! You are subscribed. Check your inbox for your Almanac welcome email.
               </p>
             ) : (
               <form
@@ -696,3 +696,4 @@ export default function Index({ initialProducts = [] }) {
     </div>
   );
 }
+
