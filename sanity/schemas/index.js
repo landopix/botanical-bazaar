@@ -5,6 +5,7 @@ import accountDashboardCopy from './accountDashboardCopy';
 import globalSettings from './globalSettings';
 import page from './page';
 import plantCareSheet from './plantCareSheet';
+import { collectorGallery } from './collectorGallery';
 
 export const schemaTypes = [
   galleryImage,
@@ -14,4 +15,5 @@ export const schemaTypes = [
   globalSettings,
   page,
   plantCareSheet,
+  collectorGallery,
 ];
