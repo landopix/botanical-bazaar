@@ -1,8 +1,11 @@
 import { Resend } from 'resend';
+import { createHash } from 'crypto';
 import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
 const resendToEmail = 'info@thebotanicalbazaar.com';
+const almanacWelcomeTemplateId = process.env.RESEND_ALMANAC_WELCOME_TEMPLATE_ID || 'almanac-registry-welcome';
+const almanacSubscriptionTypes = new Set(['newsletter_subscription', 'almanac_subscription']);
 
 function isSimpleEmail(str) {
   if (typeof str !== "string") return false;
@@ -72,6 +75,7 @@ export default async function handler(req, res) {
   const cleanEmail = rawEmail.trim();
   const cleanPhone = phone ? String(phone).trim() : 'N/A';
   const cleanDetails = (additionalDetails || message || '').trim() || 'None provided.';
+  const isAlmanacSubscription = almanacSubscriptionTypes.has(inquiryType);
 
   // Automatically sync subscriber to Shopify Admin API if configured
   createOrUpdateShopifyCustomer({
@@ -205,13 +209,22 @@ export default async function handler(req, res) {
       });
     }
 
-    const { data, error } = await resend.emails.send({
-      from: resendFromEmail,
-      to: resendToEmail,
-      replyTo: cleanEmail,
-      subject: subject,
-      html: htmlContent
-    });
+    const subscriberHash = isAlmanacSubscription
+      ? createHash('sha256').update(cleanEmail.toLowerCase()).digest('hex').slice(0, 32)
+      : null;
+
+    const { data, error } = await resend.emails.send(
+      {
+        from: resendFromEmail,
+        to: resendToEmail,
+        replyTo: cleanEmail,
+        subject: subject,
+        html: htmlContent
+      },
+      subscriberHash
+        ? { idempotencyKey: `almanac-signup-notice/${subscriberHash}` }
+        : undefined
+    );
 
     if (error) {
       console.warn('Resend API returned error:', error);
@@ -227,9 +240,34 @@ export default async function handler(req, res) {
       });
     }
 
+    let welcomeEmailId = null;
+    if (isAlmanacSubscription) {
+      const { data: welcomeData, error: welcomeError } = await resend.emails.send(
+        {
+          to: cleanEmail,
+          template: {
+            id: almanacWelcomeTemplateId
+          }
+        },
+        {
+          idempotencyKey: `almanac-welcome/${subscriberHash}`
+        }
+      );
+
+      if (welcomeError) {
+        console.error('[Resend Welcome Email Error] Failed to send Almanac welcome email:', welcomeError);
+        return res.status(502).json({
+          error: 'Your subscription was received, but the welcome email could not be sent. Please try again.'
+        });
+      }
+
+      welcomeEmailId = welcomeData?.id || null;
+    }
+
     return res.status(200).json({
       success: true,
-      data
+      data,
+      ...(welcomeEmailId ? { welcomeEmailId } : {})
     });
   } catch (err) {
     console.error('Error dispatching inquiry email via Resend:', err);
@@ -238,3 +276,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
