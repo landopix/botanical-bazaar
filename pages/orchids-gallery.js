@@ -7,6 +7,10 @@ import GalleryItemSkeleton from '../components/skeletons/GalleryItemSkeleton';
 import { sanityClient } from '../lib/sanity';
 
 const CATEGORY_MAP = {
+  orchid: 'Orchid',
+  aroid: 'Aroid',
+  tropicalFoliage: 'Tropical Foliage',
+  other: 'Other',
   'collector-orchids': 'Collector Orchids',
   'tropical-fruit-trees': 'Tropical Fruit Trees',
   'herbs-medicinal': 'Herbs & Medicinal',
@@ -16,37 +20,58 @@ const CATEGORY_MAP = {
 
 export async function getStaticProps() {
   let images = [];
+  let page = null;
   try {
     if (sanityClient) {
-      const query = `*[_type == "galleryImage"]{
-        _id,
+      const query = `*[_type == "collectorGallery" && slug.current == "orchids-gallery"][0]{
         title,
-        category,
-        description,
-        "imageUrl": image.asset->url
+        intro,
+        seo,
+        items[]{
+          _key,
+          scientificName,
+          commonName,
+          plantGroup,
+          caption,
+          action,
+          "imageUrl": image.asset->url,
+          "alt": image.alt
+        }
       }`;
-      const cmsImages = await sanityClient.fetch(query);
-      if (Array.isArray(cmsImages) && cmsImages.length > 0) {
-        images = cmsImages.map(img => ({
-          ...img,
-          categoryLabel: CATEGORY_MAP[img?.category] || img?.category || 'Botanical Highlight',
-          alt: img?.title
+      page = await sanityClient.fetch(query);
+      if (Array.isArray(page?.items) && page.items.length > 0) {
+        images = page.items.map(item => ({
+          _id: item?._key,
+          title: item?.scientificName || item?.commonName || 'Botanical Specimen',
+          commonName: item?.commonName || '',
+          scientificName: item?.scientificName || '',
+          category: item?.plantGroup || 'other',
+          categoryLabel: CATEGORY_MAP[item?.plantGroup] || item?.plantGroup || 'Botanical Highlight',
+          description: item?.caption || '',
+          imageUrl: item?.imageUrl || '',
+          alt: item?.alt || item?.scientificName || item?.commonName || 'Botanical specimen',
+          action: item?.action || null
         }));
       }
     }
   } catch (err) {
-    console.warn("Sanity fetch failed for galleryImage:", err.message);
+    console.warn("Sanity fetch failed for collectorGallery:", err.message);
   }
 
   return {
     props: {
-      initialImages: images
+      initialImages: images,
+      pageContent: page ? {
+        title: page.title || '',
+        intro: page.intro || '',
+        seo: page.seo || null
+      } : null
     },
     revalidate: 60
   };
 }
 
-export default function OrchidsGallery({ initialImages = [] }) {
+export default function OrchidsGallery({ initialImages = [], pageContent = null }) {
   const images = initialImages;
   const [activeCategory, setActiveCategory] = useState('All');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -62,8 +87,8 @@ export default function OrchidsGallery({ initialImages = [] }) {
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
       <Head>
-        <title>Collector Orchid &amp; Tropical Specimen Gallery | The Botanical Bazaar St. Petersburg FL</title>
-        <meta name="description" content="High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar." />
+        <title>{pageContent?.seo?.title || 'Collector Orchid & Tropical Specimen Gallery | The Botanical Bazaar St. Petersburg FL'}</title>
+        <meta name="description" content={pageContent?.seo?.description || 'High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar.'} />
         <link rel="canonical" href="https://thebotanicalbazaar.com/orchids-gallery" />
         <meta property="og:title" content="Collector Orchid &amp; Tropical Specimen Gallery | The Botanical Bazaar" />
         <meta property="og:description" content="Visual showcase of rare orchids and tropical specimens cultivated in St. Petersburg, FL." />
@@ -73,10 +98,10 @@ export default function OrchidsGallery({ initialImages = [] }) {
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
-            Botanical Collector Gallery
+            {pageContent?.title || 'Botanical Collector Gallery'}
           </h1>
           <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: '#F5E7C4', maxWidth: '700px', margin: '0 auto 1.5rem' }}>
-            High-resolution photographic highlights of rare orchids, mature tropical specimens, and exotic varieties nurtured at our St. Petersburg nursery.
+            {pageContent?.intro || 'High-resolution photographic highlights of rare orchids, mature tropical specimens, and exotic varieties nurtured at our St. Petersburg nursery.'}
           </p>
           <div style={{ width: '80px', height: '2px', background: '#D4B06A', margin: '0 auto' }}></div>
         </div>
@@ -224,11 +249,18 @@ export default function OrchidsGallery({ initialImages = [] }) {
               <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: '0.3rem', marginBottom: '1rem' }}>
                 {selectedImage?.title || 'Botanical Specimen'}
               </h2>
+              {selectedImage?.commonName && (
+                <p style={{ color: '#8DA38B', fontStyle: 'italic', marginTop: '-0.6rem', marginBottom: '1rem' }}>
+                  {selectedImage.commonName}
+                </p>
+              )}
               <p style={{ color: '#F5E7C4', fontSize: '1.05rem', lineHeight: '1.6', marginBottom: '1.8rem' }}>
                 {selectedImage?.description || ''}
               </p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
+                <Button variant="gold-filled" href={selectedImage?.action?.href || '/shop'}>
+                  {selectedImage?.action?.label || 'Browse Nursery Catalog'}
+                </Button>
                 <button
                   onClick={() => setSelectedImage(null)}
                   style={{
