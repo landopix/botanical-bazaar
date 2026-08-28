@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import Button from './Button';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 export default function CareSheetCard({
   sheet = {},
@@ -17,6 +19,12 @@ export default function CareSheetCard({
   const imageSrc = rawImage
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
 
   return (
     <div
@@ -44,19 +52,17 @@ export default function CareSheetCard({
             backgroundColor: '#001F14'
           }}
         >
-          <img
+          <Image
             src={imageSrc}
             alt={commonName || botanicalName}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
               objectFit: 'cover'
             }}
+            unoptimized={!isLocalOrAllowedCdn(imageSrc)}
             onError={(e) => {
-              e.target.src = '/assets/placeholder.png';
+              if (e.target) e.target.src = '/assets/placeholder.png';
             }}
           />
         </div>

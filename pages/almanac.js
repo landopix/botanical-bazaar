@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import { getAlmanacArticles } from '../lib/shopify';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
 import useBfcacheReset from '../hooks/useBfcacheReset';
@@ -18,6 +20,12 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
   const [statusType, setStatusType] = useState('success');
 
   useBfcacheReset(() => setSubmitting(false));
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -178,8 +186,16 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
                 <div key={article.id || article._id || i} style={{ background: '#1C3D2E', border: '1px solid #D4B06A', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>
                   <div>
                     {imageUrl && (
-                      <div style={{ width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden', marginBottom: '1.2rem', background: '#00301E' }}>
-                        <img src={imageUrl} alt={imageAlt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <div style={{ position: 'relative', width: '100%', height: '200px', borderRadius: '8px', overflow: 'hidden', marginBottom: '1.2rem', background: '#00301E' }}>
+                        <Image
+                          src={imageUrl}
+                          alt={imageAlt}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          style={{ objectFit: 'cover' }}
+                          unoptimized={!isLocalOrAllowedCdn(imageUrl)}
+                          onError={(e) => { if (e.target) e.target.src = '/assets/lantern.png'; }}
+                        />
                       </div>
                     )}
                     {(publishedDate || article.author) && (

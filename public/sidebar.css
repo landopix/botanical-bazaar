@@ -4,7 +4,7 @@
    serif reminiscent of the small caps seen in the logo, while Crimson Text
    continues to serve as a body font fallback. Including both weights allows
    headings and body copy to harmonize across the site. */
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:wght@400;700&display=swap&display=swap");
 
 /* Define CSS variables for fonts so they can be referenced throughout the
    stylesheets. This makes it easy to update the typeface in one place. */

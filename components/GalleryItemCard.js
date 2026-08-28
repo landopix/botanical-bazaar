@@ -1,4 +1,6 @@
 import React from 'react';
+import Image from 'next/image';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 const CATEGORY_MAP = {
   'collector-orchids': 'Collector Orchids',
@@ -24,6 +26,12 @@ export default function GalleryItemCard({
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
   const alt = item?.alt || title;
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
 
   return (
     <div
@@ -53,21 +61,19 @@ export default function GalleryItemCard({
             backgroundColor: '#001F14'
           }}
         >
-          <img
+          <Image
             src={imageSrc}
             alt={alt}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
               objectFit: 'cover',
               transition: 'transform 0.4s ease'
             }}
             className="gallery-img"
+            unoptimized={!isLocalOrAllowedCdn(imageSrc)}
             onError={(e) => {
-              e.target.src = '/assets/placeholder.png';
+              if (e.target) e.target.src = '/assets/placeholder.png';
             }}
           />
 
@@ -85,7 +91,8 @@ export default function GalleryItemCard({
                 fontSize: '0.75rem',
                 fontFamily: 'Cinzel, serif',
                 textTransform: 'uppercase',
-                backdropFilter: 'blur(4px)'
+                backdropFilter: 'blur(4px)',
+                zIndex: 2
               }}
             >
               {displayCategory}

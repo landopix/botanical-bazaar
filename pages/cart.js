@@ -1,293 +1,214 @@
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Button from '../components/Button';
 import { useCart } from '../context/CartContext';
-import { checkAgRestrictions, getZoneCompatibility } from '../lib/fulfillment';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 import useBfcacheReset from '../hooks/useBfcacheReset';
 
 export default function Cart() {
-  const { cart, updateQuantity, removeFromCart, cartTotal, userHardinessZone } = useCart();
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [checkoutError, setCheckoutError] = useState('');
-  const [announcement, setAnnouncement] = useState('');
+  const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [notes, setNotes] = useState('');
 
-  useBfcacheReset(() => setIsRedirecting(false));
+  useBfcacheReset(() => setLoading(false));
 
-  const handleCheckout = async (e) => {
-    if (e) e.preventDefault();
-    if (isRedirecting) return;
-    setIsRedirecting(true);
-    setCheckoutError('');
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
+
+  const handleCheckout = async () => {
+    if (cart.length === 0) return;
+    setLoading(true);
 
     try {
-      const res = await fetch('/api/checkout', {
+      const storedZone = typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a';
+
+      const lineItems = cart.map(item => ({
+        variantId: item.variantId || item.variants?.[0]?.id || item.id,
+        quantity: item.quantity || 1,
+        customAttributes: [
+          { key: 'USDA Hardiness Zone', value: storedZone },
+          { key: 'Pot Size', value: item.selectedSize || 'Standard' }
+        ]
+      }));
+
+      const customAttributes = [
+        { key: 'USDA Hardiness Zone', value: typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a' }
+      ];
+
+      if (notes.trim()) {
+        customAttributes.push({ key: 'Customer Order Notes', value: notes.trim() });
+      }
+
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cart: cart.map(item => ({
-            slug: item.slug,
-            quantity: item.quantity,
-            selectedSize: item.selectedSize,
-            variantId: item.variantId || item.id,
-            name: item.name
-          })),
-          user_hardiness_zone: userHardinessZone || (typeof window !== 'undefined' ? localStorage.getItem('user_hardiness_zone') || '10a' : '10a')
-        })
+        body: JSON.stringify({ lineItems, customAttributes })
       });
 
-      const data = await res.json();
-      if (res.ok && data.url) {
-        window.location.href = data.url;
+      const data = await response.json();
+
+      if (response.ok && data.webUrl) {
+        window.location.href = data.webUrl;
       } else {
-        setCheckoutError(data.error || 'Failed to initialize checkout session. Please try again.');
-        setIsRedirecting(false);
+        alert(data.error || 'Failed to initialize Shopify Checkout. Please try again.');
+        setLoading(false);
       }
     } catch (err) {
       console.error('Checkout error:', err);
-      setCheckoutError('An error occurred during checkout setup.');
-      setIsRedirecting(false);
+      alert('An unexpected error occurred while redirecting to Checkout. Please try again.');
+      setLoading(false);
     }
   };
 
   if (cart.length === 0) {
     return (
-      <div style={{ padding: '5rem 1.5rem', textAlign: 'center' }}>
+      <div style={{ padding: '4rem 1.5rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
         <Head>
-          <title>Your Shopping Cart | The Botanical Bazaar St. Petersburg FL</title>
-          <meta name="description" content="Review your tropical plant selections and choose between Standard Shipping and Free Local Nursery Pickup at The Botanical Bazaar." />
-          <link rel="canonical" href="https://thebotanicalbazaar.com/cart" />
+          <title>Shopping Cart | The Botanical Bazaar</title>
         </Head>
-        <h1 style={{ color: '#D4B06A', marginBottom: '1.5rem' }}>Your Cart is Empty</h1>
-        <p style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>Ready to fill your garden with rare and resilient tropical plants?</p>
-        <Button variant="gold-filled" href="/shop">Browse the Catalog</Button>
+        <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Your Cart is Empty</h1>
+        <p style={{ fontSize: '1.2rem', marginBottom: '2rem', lineHeight: '1.6' }}>
+          Looks like you haven't added any tropical specimens or rare orchids to your cart yet.
+        </p>
+        <Button variant="gold-filled" href="/shop">Browse Botanical Catalog</Button>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto', color: '#F5E7C4' }}>
       <Head>
-        <title>Your Shopping Cart | The Botanical Bazaar St. Petersburg FL</title>
-        <meta name="description" content="Review your tropical plant selections and choose between Standard Shipping and Free Local Nursery Pickup at The Botanical Bazaar." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/cart" />
+        <title>Shopping Cart | The Botanical Bazaar</title>
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <h1 style={{ color: '#D4B06A', textAlign: 'center', marginBottom: '2.5rem' }}>Shopping Cart</h1>
-      <div style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }} role="status" aria-live="polite">{announcement}</div>
+      <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '2rem', textAlign: 'center' }}>Your Cart</h1>
 
-      {/* Cold Hardiness Advisory Banner */}
-      {cart.some(item => getZoneCompatibility(item, userHardinessZone || "10a").matchStatus === "NOT_RECOMMENDED") && (
-        <div style={{
-          background: "rgba(186, 47, 47, 0.15)",
-          border: "1px solid #ba2f2f",
-          borderRadius: "10px",
-          padding: "1rem 1.25rem",
-          marginBottom: "2rem",
-          color: "#F5E7C4",
-          fontSize: "0.95rem",
-          lineHeight: "1.4"
-        }}>
-          <strong style={{ color: "#ff8a8a", fontFamily: "Cinzel, serif" }}>Cold Protection Advisory (USDA Zone {userHardinessZone || "10a"}):</strong>
-          {" "}Your cart includes tropical plant species sensitive to cold conditions in Zone {userHardinessZone || "10a"}. Please ensure indoor or greenhouse winter shelter. Live-plant thermal boxing will be included with standard shipping.
-        </div>
-      )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2.5rem' }}>
+        {cart.map((item, index) => {
+          const itemImg = item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png";
 
-      {/* Cart Summary Header with CTA */}
-      <div
-        style={{
-          marginBottom: '2rem',
-          background: '#D4B06A',
-          padding: '1.75rem 2rem',
-          borderRadius: '12px',
-          color: '#00301E'
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <h2 style={{ fontFamily: 'Cinzel, serif', margin: '0 0 0.3rem 0', color: '#00301E' }}>Cart Summary</h2>
-            <p style={{ fontSize: '1.05rem', margin: '0', color: '#00301E' }}>
-              Subtotal ({cart.reduce((a, b) => a + b.quantity, 0)} {cart.reduce((a, b) => a + b.quantity, 0) === 1 ? 'item' : 'items'}): <strong style={{ fontSize: '1.4rem' }}>${cartTotal.toFixed(2)}</strong>
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <Button variant="outline" href="/shop">Continue Shopping</Button>
-            <button
-              onClick={handleCheckout}
-              disabled={isRedirecting}
+          return (
+            <div
+              key={`${item.id}-${item.selectedSize}-${index}`}
               style={{
-                background: '#00301E',
-                color: '#D4B06A',
+                background: '#1C3D2E',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '1.5rem',
+                borderRadius: '12px',
                 border: '1px solid #D4B06A',
-                padding: '0.85rem 1.75rem',
-                borderRadius: '24px',
-                fontWeight: 'bold',
-                fontSize: '1rem',
-                cursor: isRedirecting ? 'not-allowed' : 'pointer',
-                opacity: isRedirecting ? 0.8 : 1,
-                transition: 'all 0.2s ease-in-out',
-                fontFamily: 'inherit'
+                justifyContent: 'space-between',
+                gap: '1rem',
+                flexWrap: 'wrap'
               }}
             >
-              {isRedirecting ? (
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ animation: 'spin 1s linear infinite' }}>
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
-                  <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" style={{ opacity: 0.75 }}></path>
-                </svg>
-                Redirecting to secure checkout...
-              </span>
-            ) : 'Proceed to Checkout'}
-            </button>
-          </div>
-        </div>
-        {checkoutError && (
-          <p style={{ color: '#ba2f2f', margin: '0.75rem 0 0 0', fontWeight: 'bold', textAlign: 'right' }} role="alert" aria-live="assertive">{checkoutError}</p>
-        )}
-      </div>
-
-      {/* Cart Items List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2.5rem' }}>
-        {cart.map((item) => (
-          <div
-            key={`${item.slug}-${item.selectedSize}`}
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '1.5rem',
-              alignItems: 'center',
-              background: '#1C3D2E',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              border: '1px solid #D4B06A',
-              justifyContent: 'space-between'
-            }}
-          >
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-              <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`}>
-                <img
-                  src={item.image ? (item.image.startsWith("http") || item.image.startsWith("/") ? item.image : "/" + item.image) : "/assets/placeholder.png"}
-                  alt={item.name}
-                  onError={(e) => { e.target.src = '/assets/placeholder.png'; }}
-                  style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', cursor: 'pointer' }}
-                />
-              </Link>
-              <div>
-                <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} style={{ textDecoration: 'none' }}>
-                  <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif', cursor: 'pointer' }}>{String(item.name || "")}</h3>
+              <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} style={{ position: 'relative', width: '80px', height: '80px', flexShrink: 0, display: 'block', borderRadius: '8px', overflow: 'hidden' }}>
+                  <Image
+                    src={itemImg}
+                    alt={String(item.name || "Botanical specimen")}
+                    fill
+                    sizes="80px"
+                    style={{ objectFit: 'cover' }}
+                    unoptimized={!isLocalOrAllowedCdn(itemImg)}
+                    onError={(e) => { if (e.target) e.target.src = '/assets/placeholder.png'; }}
+                  />
                 </Link>
-                <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>Size: {item.selectedSize || 'Default'}</p>
-                <p style={{ margin: '0', fontWeight: 'bold', color: '#F4F1E1' }}>${(item.price || 0).toFixed(2)}</p>
+                <div>
+                  <Link href={`/product/${encodeURIComponent(String(item.slug || ""))}`} style={{ textDecoration: 'none' }}>
+                    <h3 style={{ margin: '0 0 0.3rem 0', color: '#D4B06A', fontFamily: 'Cinzel, serif', cursor: 'pointer' }}>{String(item.name || "")}</h3>
+                  </Link>
+                  <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.9rem', color: '#E9DCBE' }}>Size: {item.selectedSize || 'Default'}</p>
+                  <p style={{ margin: '0', fontWeight: 'bold', color: '#F4F1E1' }}>${(item.price || 0).toFixed(2)}</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #D4B06A', borderRadius: '20px', overflow: 'hidden', background: '#00301E' }}>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.selectedSize, Math.max(1, item.quantity - 1))}
+                    aria-label={`Decrease quantity of ${item.name}`}
+                    title={`Decrease quantity of ${item.name}`}
+                    style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '1.1rem' }}
+                  >
+                    -
+                  </button>
+                  <span style={{ padding: '0 0.8rem', fontWeight: 'bold' }}>{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.selectedSize, item.quantity + 1)}
+                    aria-label={`Increase quantity of ${item.name}`}
+                    title={`Increase quantity of ${item.name}`}
+                    style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer', fontSize: '1.1rem' }}
+                  >
+                    +
+                  </button>
+                </div>
+
+                <p style={{ margin: 0, fontWeight: 'bold', fontSize: '1.1rem', minWidth: '70px', textAlign: 'right', color: '#D4B06A' }}>
+                  ${((item.price || 0) * item.quantity).toFixed(2)}
+                </p>
+
+                <button
+                  onClick={() => removeFromCart(item.id, item.selectedSize)}
+                  aria-label={`Remove ${item.name} from cart`}
+                  title={`Remove ${item.name} from cart`}
+                  style={{ background: 'none', border: 'none', color: '#ba2f2f', cursor: 'pointer', fontSize: '1.2rem', padding: '0.4rem' }}
+                >
+                  ✕
+                </button>
               </div>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-              {/* Quantity Select */}
-              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #D4B06A', borderRadius: '24px', overflow: 'hidden' }}>
-                <button
-                  onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity - 1); setAnnouncement(`Decreased quantity of ${item.name} to ${item.quantity - 1}`); }}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
-                  aria-label={`Decrease quantity of ${item.name}`}
-                  title={`Decrease quantity of ${item.name}`}
-                >
-                  -
-                </button>
-                <span style={{ padding: '0 0.8rem', color: '#F4F1E1', fontWeight: 'bold' }}>{item.quantity}</span>
-                <button
-                  onClick={() => { updateQuantity(item.slug, item.selectedSize, item.quantity + 1); setAnnouncement(`Increased quantity of ${item.name} to ${item.quantity + 1}`); }}
-                  style={{ background: 'none', border: 'none', color: '#D4B06A', padding: '0.4rem 0.8rem', cursor: 'pointer' }}
-                  aria-label={`Increase quantity of ${item.name}`}
-                  title={`Increase quantity of ${item.name}`}
-                >
-                  +
-                </button>
-              </div>
-
-              {/* Price Calc */}
-              <div style={{ fontWeight: 'bold', fontSize: '1.1rem', minWidth: '80px', textAlign: 'right' }}>
-                ${((item.price || 0) * item.quantity).toFixed(2)}
-              </div>
-
-              {/* Remove button */}
-              <button
-                onClick={() => { removeFromCart(item.slug, item.selectedSize); setAnnouncement(`Removed ${item.name} from cart`); }}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#ba2f2f',
-                  cursor: 'pointer',
-                  fontWeight: 'bold',
-                  fontSize: '1rem'
-                }}
-              >
-                Remove
-              </button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Shipping & Pickup Information Card */}
-      <div
-        style={{
-          background: "#00301E",
-          border: "1px solid #1C3D2E",
-          borderRadius: "8px",
-          padding: "1.25rem",
-          marginBottom: "1.5rem",
-          textAlign: "left",
-          color: "#E9DCBE",
-          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)"
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "Cinzel, serif",
-            fontSize: "1rem",
-            fontWeight: "bold",
-            color: "#D4B06A",
-            marginBottom: "0.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem"
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4B06A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="1" y="3" width="15" height="13"></rect>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-          </svg>
-          Shipping &amp; Nursery Pickup Details
+      <div style={{ background: '#123826', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label htmlFor="order-notes" style={{ display: 'block', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+            Special Instructions / Delivery &amp; Pickup Notes:
+          </label>
+          <textarea
+            id="order-notes"
+            rows="3"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Add any specific requests or order notes..."
+            style={{ width: '100%', padding: '0.8rem', borderRadius: '8px', border: '1px solid #D4B06A', background: '#00301E', color: '#F5E7C4', fontFamily: 'inherit', boxSizing: 'border-box' }}
+          />
         </div>
-        <p style={{ margin: "0 0 0.5rem 0", fontSize: "0.95rem", lineHeight: "1.4", color: "#E9DCBE" }}>
-          <strong>Standard Live Plant Shipping:</strong> Shipped with care from St. Petersburg, FL with secure packaging, insulated boxing, and weather holds.
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(212, 176, 106, 0.3)', paddingTop: '1.5rem', marginBottom: '1.5rem' }}>
+          <span style={{ fontSize: '1.3rem', fontFamily: 'Cinzel, serif', color: '#D4B06A' }}>Estimated Subtotal:</span>
+          <span style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#F5E7C4' }}>${cartTotal.toFixed(2)}</span>
+        </div>
+
+        <p style={{ fontSize: '0.9rem', color: '#E9DCBE', margin: '0 0 1.5rem 0', fontStyle: 'italic', textAlign: 'center' }}>
+          Taxes, Standard Shipping, and Free Nursery Pickup options selected during checkout.
         </p>
-        <p style={{ margin: "0 0 0.75rem 0", fontSize: "0.95rem", lineHeight: "1.4", color: "#E9DCBE" }}>
-          <strong>Local Nursery Pickup:</strong> Ready for pickup within 24–48 hours by scheduled appointment at our nursery in St. Petersburg, FL ($0.00).
-        </p>
-        <div style={{ textAlign: "right" }}>
-          <Link
-            href="/shipping-pickup"
-            style={{
-              color: "#D4B06A",
-              fontWeight: "bold",
-              fontSize: "0.9rem",
-              textDecoration: "underline",
-              fontFamily: "Crimson Text, serif"
-            }}
+
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+          <button
+            onClick={clearCart}
+            style={{ background: 'transparent', border: '1px solid #ba2f2f', color: '#ba2f2f', borderRadius: '24px', padding: '0.8rem 1.5rem', cursor: 'pointer', fontFamily: 'Cinzel, serif' }}
           >
-            View Full Shipping &amp; Pickup Policy &rarr;
-          </Link>
+            Clear Cart
+          </button>
+          <Button
+            variant="gold-filled"
+            onClick={handleCheckout}
+            disabled={loading}
+            style={{ minWidth: '220px', textAlign: 'center' }}
+          >
+            {loading ? 'Redirecting to Checkout...' : 'Proceed to Checkout'}
+          </Button>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }

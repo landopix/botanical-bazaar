@@ -1,5 +1,7 @@
 import React from 'react';
+import Image from 'next/image';
 import Button from './Button';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 export default function EventCard({
   event = {},
@@ -16,6 +18,12 @@ export default function EventCard({
   const imageSrc = rawImage
     ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : null;
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
 
   return (
     <div
@@ -47,19 +55,17 @@ export default function EventCard({
               marginBottom: '0.5rem'
             }}
           >
-            <img
+            <Image
               src={imageSrc}
               alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
                 objectFit: 'cover'
               }}
+              unoptimized={!isLocalOrAllowedCdn(imageSrc)}
               onError={(e) => {
-                e.target.style.display = 'none';
+                if (e.target) e.target.style.display = 'none';
               }}
             />
           </div>
