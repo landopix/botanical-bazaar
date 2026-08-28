@@ -147,7 +147,7 @@ export default function Sourcing() {
             </button>
           </div>
         ) : (
-          <form className="sourcing-form" onSubmit={handleSubmit} noValidate>
+          <form className="sourcing-form" onSubmit={handleSubmit}>
             {serverError && (
               <div id="sourcing-server-error" className="error-banner" role="alert">
                 {serverError}
@@ -163,6 +163,7 @@ export default function Sourcing() {
                   type="text"
                   id="customerName"
                   name="customerName"
+                  required
                   value={formData.customerName}
                   onChange={handleChange}
                   placeholder="e.g. Jane Doe"
@@ -186,6 +187,7 @@ export default function Sourcing() {
                   type="email"
                   id="customerEmail"
                   name="customerEmail"
+                  required
                   value={formData.customerEmail}
                   onChange={handleChange}
                   placeholder="e.g. jane@example.com"
@@ -210,6 +212,7 @@ export default function Sourcing() {
                 type="text"
                 id="plantName"
                 name="plantName"
+                required
                 value={formData.plantName}
                 onChange={handleChange}
                 placeholder="e.g. Philodendron Spiritus Sancti, Variegated Monstera, or Queen Anthurium"
@@ -233,6 +236,7 @@ export default function Sourcing() {
                 <select
                   id="budgetRange"
                   name="budgetRange"
+                  required
                   value={formData.budgetRange}
                   onChange={handleChange}
                   aria-required="true"
@@ -265,6 +269,7 @@ export default function Sourcing() {
                         type="radio"
                         id={`maturity-${opt.value}`}
                         name="desiredMaturity"
+                        required
                         value={opt.value}
                         checked={formData.desiredMaturity === opt.value}
                         onChange={handleChange}

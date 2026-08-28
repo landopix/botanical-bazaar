@@ -416,6 +416,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
         <title>{`${product.name} | The Botanical Bazaar`}</title>
         <meta name="description" content={descriptionText} />
         <link rel="canonical" href={pageUrl} />
+        <link rel="preload" as="image" href={imageUrl} />
         <meta property="og:title" content={`${product.name} | The Botanical Bazaar`} />
         <meta property="og:description" content={descriptionText} />
         <meta property="og:image" content={imageUrl} />

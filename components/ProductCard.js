@@ -1,52 +1,68 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { isSanityCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
-import { parseProductTitle } from '../lib/shopify';
 
-export function getLowestAvailableVariant(product) {
-  if (!product || !product.variants || !Array.isArray(product.variants) || product.variants.length === 0) {
-    return null;
+export function parseProductTitle(rawTitle = '') {
+  if (!rawTitle || typeof rawTitle !== 'string') {
+    return { commonName: 'Botanical Specimen', scientificName: '' };
   }
-  const available = product.variants.filter(
-    v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
-  );
-  if (available.length > 0) {
-    return available.reduce((lowest, v) => {
-      const vPrice = typeof v.price === "number" ? v.price : parseFloat(v.price || 0);
-      const lowestPrice = typeof lowest.price === "number" ? lowest.price : parseFloat(lowest.price || 0);
-      return vPrice < lowestPrice ? v : lowest;
-    }, available[0]);
+
+  const match = rawTitle.match(/^(.*?)\s*\((.*?)\)$/);
+  if (match) {
+    return {
+      commonName: match[1].trim(),
+      scientificName: match[2].trim()
+    };
   }
-  return product.variants[0];
+
+  return {
+    commonName: rawTitle.trim(),
+    scientificName: ''
+  };
 }
 
-export function getResolvedPotSize(product, selectedVariant = null) {
-  const targetVariant = selectedVariant || getLowestAvailableVariant(product);
-  if (targetVariant) {
-    if (targetVariant.selectedOptions && Array.isArray(targetVariant.selectedOptions)) {
-      const sizeOpt = targetVariant.selectedOptions.find(
-        opt => opt?.name?.toLowerCase() === "size" || opt?.name?.toLowerCase() === "pot size"
-      );
-      if (sizeOpt?.value) return sizeOpt.value;
-    }
-    if (targetVariant.title && targetVariant.title !== "Default Title") {
-      return targetVariant.title;
-    }
-  }
+export function getLowestAvailableVariant(product = {}) {
+  const variants = Array.isArray(product?.variants) ? product.variants : [];
+  if (variants.length === 0) return null;
 
+  const inStockVariants = variants.filter(v => {
+    if (!v) return false;
+    const isAvail = v.availableForSale ?? true;
+    const qty = v.quantityAvailable ?? v.quantity ?? 10;
+    return isAvail && qty > 0;
+  });
+
+  const pool = inStockVariants.length > 0 ? inStockVariants : variants;
+
+  return pool.reduce((lowest, curr) => {
+    if (!lowest) return curr;
+    const lowestPrice = typeof lowest.price === 'number' ? lowest.price : parseFloat(lowest.price || 0);
+    const currPrice = typeof curr.price === 'number' ? curr.price : parseFloat(curr.price || 0);
+    return currPrice < lowestPrice ? curr : lowest;
+  }, null);
+}
+
+export function getResolvedPotSize(product = {}) {
   if (product?.custom?.pot_size) return product.custom.pot_size;
-  if (product?.sizes && typeof product.sizes === "string") {
-    const cleanSizes = product.sizes.split("|")[0].trim();
-    if (cleanSizes && cleanSizes !== "Default Title") return cleanSizes;
-  }
   if (product?.potSize) return product.potSize;
 
-  return "Standard Pot";
+  const lowestVariant = getLowestAvailableVariant(product);
+  if (lowestVariant?.title && lowestVariant.title !== 'Default Title') {
+    return lowestVariant.title;
+  }
+
+  const tags = Array.isArray(product?.tags) ? product.tags : [];
+  const sizeTag = tags.find(t =>
+    typeof t === 'string' && (t.toLowerCase().includes('pot') || t.toLowerCase().includes('gal'))
+  );
+  if (sizeTag) return sizeTag;
+
+  return 'Standard Pot';
 }
 
-export function getResolvedPlantType(product) {
+export function getResolvedPlantType(product = {}) {
   if (product?.custom?.plant_type) return product.custom.plant_type;
   if (product?.plantType) return product.plantType;
 
@@ -80,6 +96,12 @@ function ProductCard({
 
   const lowestVariant = getLowestAvailableVariant(product);
   const price = lowestVariant ? (typeof lowestVariant.price === "number" ? lowestVariant.price : parseFloat(lowestVariant.price)) : product?.price;
+  const compareAtPrice = lowestVariant?.compareAtPrice ? (typeof lowestVariant.compareAtPrice === "number" ? lowestVariant.compareAtPrice : parseFloat(lowestVariant.compareAtPrice)) : (product?.compareAtPrice ? (typeof product.compareAtPrice === "number" ? product.compareAtPrice : parseFloat(product.compareAtPrice)) : null);
+
+  const hasDiscount = compareAtPrice && price && compareAtPrice > price;
+  const discountAmount = hasDiscount ? compareAtPrice - price : 0;
+  const discountPercent = hasDiscount ? Math.round((discountAmount / compareAtPrice) * 100) : 0;
+
   const quantity = product?.quantity ?? 10;
   const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
   const rawImage = product?.image ?? product?.imageUrl ?? product?.featuredImage?.url;
@@ -91,6 +113,12 @@ function ProductCard({
   const type = getResolvedPlantType(product);
 
   const isWishlisted = Array.isArray(wishlist) && wishlist.some(item => (item?.slug?.current || item?.slug) === slug);
+
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
 
   const handleWishlistClick = (e) => {
     e.preventDefault();
@@ -118,43 +146,59 @@ function ProductCard({
         boxSizing: 'border-box'
       }}
     >
-      {isSoldOut ? (
-        <div
-          className="sold-out-badge"
-          style={{
-            position: 'absolute',
-            top: '12px',
-            left: '12px',
-            background: '#ba2f2f',
-            color: '#ffffff',
-            padding: '0.2rem 0.6rem',
-            borderRadius: '4px',
-            fontSize: '0.8rem',
-            fontWeight: 'bold',
-            zIndex: 10
-          }}
-        >
-          Sold Out
-        </div>
-      ) : (quantity === 1 || quantity === 2) ? (
-        <div
-          className="low-stock-badge"
-          style={{
-            position: 'absolute',
-            top: '12px',
-            left: '12px',
-            background: '#D4B06A',
-            color: '#00301E',
-            padding: '0.2rem 0.6rem',
-            borderRadius: '4px',
-            fontSize: '0.8rem',
-            fontWeight: 'bold',
-            zIndex: 10
-          }}
-        >
-          {`Only ${quantity} Left!`}
-        </div>
-      ) : null}
+      {/* Badges container */}
+      <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {isSoldOut ? (
+          <div
+            className="sold-out-badge"
+            style={{
+              background: '#ba2f2f',
+              color: '#ffffff',
+              padding: '0.2rem 0.6rem',
+              borderRadius: '4px',
+              fontSize: '0.8rem',
+              fontWeight: 'bold'
+            }}
+          >
+            Sold Out
+          </div>
+        ) : (
+          <>
+            {hasDiscount && (
+              <div
+                className="sale-badge"
+                style={{
+                  background: '#11402A',
+                  color: '#D4B06A',
+                  border: '1px solid #D4B06A',
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: '4px',
+                  fontSize: '0.8rem',
+                  fontWeight: 'bold',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                }}
+              >
+                {discountPercent > 0 ? `${discountPercent}% OFF` : 'SALE'}
+              </div>
+            )}
+            {(quantity === 1 || quantity === 2) && (
+              <div
+                className="low-stock-badge"
+                style={{
+                  background: '#D4B06A',
+                  color: '#00301E',
+                  padding: '0.2rem 0.6rem',
+                  borderRadius: '4px',
+                  fontSize: '0.8rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                {`Only ${quantity} Left!`}
+              </div>
+            )}
+          </>
+        )}
+      </div>
 
       {/* Floating Wishlist Heart Trigger */}
       <button
@@ -223,7 +267,7 @@ function ProductCard({
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-              unoptimized={!isSanityCdnUrl(imageSrc)}
+              unoptimized={!isLocalOrAllowedCdn(imageSrc)}
               onError={(e) => {
                 if (e.target) e.target.src = '/assets/placeholder.png';
               }}
@@ -266,13 +310,23 @@ function ProductCard({
         <p style={{ margin: '0.5rem 0 0.1rem 0', fontSize: '0.9rem', color: '#00301E', textAlign: 'center', fontWeight: '500' }}>
           Size: {extractedSize} &bull; Type: {type}
         </p>
-        <p style={{ fontWeight: 'bold', margin: '0.4rem 0 0.8rem 0', fontSize: '1.1rem', color: '#11402A', textAlign: 'center' }}>
-          {isSoldOut
-            ? 'Sold Out'
-            : typeof price === 'number'
-            ? `$${price.toFixed(2)}`
-            : price ?? 'Price on Request'}
-        </p>
+
+        <div style={{ margin: '0.4rem 0 0.8rem 0', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+          {isSoldOut ? (
+            <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#ba2f2f' }}>Sold Out</span>
+          ) : (
+            <>
+              <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#11402A' }}>
+                {typeof price === 'number' ? `$${price.toFixed(2)}` : price ?? 'Price on Request'}
+              </span>
+              {hasDiscount && (
+                <span style={{ textDecoration: 'line-through', fontSize: '0.95rem', color: '#7f8c8d' }}>
+                  ${compareAtPrice.toFixed(2)}
+                </span>
+              )}
+            </>
+          )}
+        </div>
       </div>
 
       <div style={{ width: '100%', padding: '0 1.2rem 1.2rem 1.2rem', marginTop: 'auto' }}>

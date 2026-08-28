@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { isSanityCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl } from '../lib/image-utils';
 
 export default function ProductImageGallery({ images = [], alt = 'Product Image' }) {
   const galleryImages = Array.isArray(images) && images.length > 0
@@ -50,6 +50,12 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
   const activeImage = galleryImages[currentIndex] || '/assets/placeholder.png';
   const hasMultiple = galleryImages.length > 1;
 
+  const isLocalOrAllowedCdn = (url) => {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/')) return true;
+    return isOptimizedCdnUrl(url);
+  };
+
   return (
     <div className="product-gallery-container">
       <div
@@ -62,10 +68,10 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
           src={activeImage}
           alt={`${alt} - Image ${currentIndex + 1}`}
           fill
-          sizes="(max-width: 800px) 100vw, 400px"
+          sizes="(max-width: 800px) 100vw, 500px"
           style={{ objectFit: 'contain', width: '100%', height: '100%', borderRadius: '14px' }}
           priority={currentIndex === 0}
-          unoptimized={!isSanityCdnUrl(activeImage)}
+          unoptimized={!isLocalOrAllowedCdn(activeImage)}
         />
 
         {hasMultiple && (
@@ -114,7 +120,7 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
                   fill
                   sizes="60px"
                   style={{ objectFit: 'cover', borderRadius: '6px' }}
-                  unoptimized={!isSanityCdnUrl(img)}
+                  unoptimized={!isLocalOrAllowedCdn(img)}
                 />
               </div>
             </button>
@@ -138,6 +144,7 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
           background: #1C3D2E;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
           user-select: none;
+          aspect-ratio: 4 / 3;
         }
         .gallery-nav-btn {
           position: absolute;
