@@ -595,15 +595,19 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen, isZoneModalOpen]);
 
-  // Initialize Google Customer Reviews Badge widget on route change if script already loaded
+  // Initialize Google Customer Reviews Badge widget on route change idempotently
   useEffect(() => {
     if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
       try {
-        window.merchantwidget.start({
-          merchant_id: 5843329915,
-          position: "BOTTOM_RIGHT",
-          region: "US"
-        });
+        const existingIframe = document.querySelector('iframe[src*="merchantcenter"], iframe[id*="merchantwidget"], iframe[src*="google.com/shopping/merchant"]');
+        if (!existingIframe && !window.__merchantwidget_initialized) {
+          window.merchantwidget.start({
+            merchant_id: 5843329915,
+            position: "BOTTOM_RIGHT",
+            region: "US"
+          });
+          window.__merchantwidget_initialized = true;
+        }
       } catch (err) {
         console.error("Google Merchant Widget start error:", err);
       }
@@ -807,11 +811,15 @@ export default function Layout({ children }) {
         onLoad={() => {
           if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
             try {
-              window.merchantwidget.start({
-                merchant_id: 5843329915,
-                position: "BOTTOM_RIGHT",
-                region: "US"
-              });
+              const existingIframe = document.querySelector('iframe[src*="merchantcenter"], iframe[id*="merchantwidget"], iframe[src*="google.com/shopping/merchant"]');
+              if (!existingIframe && !window.__merchantwidget_initialized) {
+                window.merchantwidget.start({
+                  merchant_id: 5843329915,
+                  position: "BOTTOM_RIGHT",
+                  region: "US"
+                });
+                window.__merchantwidget_initialized = true;
+              }
             } catch (err) {
               console.error("Google Merchant Widget onLoad error:", err);
             }

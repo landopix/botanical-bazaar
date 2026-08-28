@@ -56,6 +56,18 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'A valid email address is required.' });
   }
 
+  if (inquiryType === 'sourcing_request') {
+    if (!customerName || typeof customerName !== 'string' || !customerName.trim()) {
+      return res.status(400).json({ error: 'Customer Name is required.' });
+    }
+    if (!plantName || typeof plantName !== 'string' || !plantName.trim()) {
+      return res.status(400).json({ error: 'Plant Botanical or Common Name is required.' });
+    }
+    if (!budgetRange || typeof budgetRange !== 'string' || !budgetRange.trim()) {
+      return res.status(400).json({ error: 'Budget Range is required.' });
+    }
+  }
+
   const cleanName = rawName.trim();
   const cleanEmail = rawEmail.trim();
   const cleanPhone = phone ? String(phone).trim() : 'N/A';
