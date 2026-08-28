@@ -59,7 +59,6 @@ export default function Index({ initialProducts = [] }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerEmail: email,
-          customerName: "Homepage Subscriber",
           inquiryType: "newsletter_subscription",
           subject: "Homepage Newsletter Subscription",
           message: `Newsletter subscription request from homepage for ${email}`

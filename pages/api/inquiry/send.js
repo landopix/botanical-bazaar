@@ -5,7 +5,9 @@ import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
 const resendToEmail = 'info@thebotanicalbazaar.com';
 const almanacWelcomeTemplateId = process.env.RESEND_ALMANAC_WELCOME_TEMPLATE_ID || 'almanac-registry-welcome';
+const resendNewsletterSegmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID || '473dba20-b0a5-4d9c-a470-4d464acd0d7b';
 const almanacSubscriptionTypes = new Set(['newsletter_subscription', 'almanac_subscription']);
+const genericSubscriberNames = new Set(['Homepage Subscriber', 'Almanac Subscriber', 'Anonymous Subscriber']);
 
 function isSimpleEmail(str) {
   if (typeof str !== "string") return false;
@@ -37,6 +39,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed. Please use POST.' });
   }
 
+  const requestBody = req.body || {};
   const {
     inquiryType = 'sourcing_request',
     customerName,
@@ -50,10 +53,16 @@ export default async function handler(req, res) {
     phone,
     eventDate,
     guestCount
-  } = req.body || {};
+  } = requestBody;
 
-  const rawName = customerName || req.body.name || 'Anonymous Subscriber';
-  const rawEmail = customerEmail || req.body.email;
+  const isAlmanacSubscription = almanacSubscriptionTypes.has(inquiryType);
+  const submittedName = typeof customerName === 'string'
+    ? customerName.trim()
+    : (typeof requestBody.name === 'string' ? requestBody.name.trim() : '');
+  const cleanName = isAlmanacSubscription && genericSubscriberNames.has(submittedName)
+    ? ''
+    : (submittedName || (isAlmanacSubscription ? '' : 'Anonymous Subscriber'));
+  const rawEmail = customerEmail || requestBody.email;
 
   if (!rawEmail || typeof rawEmail !== 'string' || !isSimpleEmail(rawEmail.trim())) {
     return res.status(400).json({ error: 'A valid email address is required.' });
@@ -71,26 +80,25 @@ export default async function handler(req, res) {
     }
   }
 
-  const cleanName = rawName.trim();
   const cleanEmail = rawEmail.trim();
   const cleanPhone = phone ? String(phone).trim() : 'N/A';
   const cleanDetails = (additionalDetails || message || '').trim() || 'None provided.';
-  const isAlmanacSubscription = almanacSubscriptionTypes.has(inquiryType);
 
   // Automatically sync subscriber to Shopify Admin API if configured
-  createOrUpdateShopifyCustomer({
-    email: cleanEmail,
-    name: cleanName,
-    phone: cleanPhone !== 'N/A' ? cleanPhone : undefined,
-    tags: ['newsletter', inquiryType],
-  }).catch(err => {
+  try {
+    await createOrUpdateShopifyCustomer({
+      email: cleanEmail,
+      name: cleanName,
+      phone: cleanPhone !== 'N/A' ? cleanPhone : undefined,
+      tags: ['newsletter', inquiryType],
+    });
+  } catch (err) {
     console.error('Shopify customer sync error:', err);
-  });
+  }
 
-  // Sync subscriber to Resend Audience list via Resend Contacts API
+  // Sync the contact to Resend and place Almanac signups in the newsletter segment.
   if (resend) {
-    const audienceId = process.env.RESEND_AUDIENCE_ID || process.env.RESEND_AUDIENCE_KEY;
-    const nameParts = cleanName && cleanName !== 'Anonymous Subscriber' ? cleanName.split(' ') : [];
+    const nameParts = cleanName ? cleanName.split(/\s+/) : [];
     const firstName = nameParts.length > 0 ? nameParts[0] : undefined;
     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : undefined;
 
@@ -99,22 +107,31 @@ export default async function handler(req, res) {
       ...(firstName ? { firstName } : {}),
       ...(lastName ? { lastName } : {}),
       unsubscribed: false,
-      ...(audienceId ? { audienceId } : {})
+      ...(isAlmanacSubscription && resendNewsletterSegmentId
+        ? { segmentIds: [resendNewsletterSegmentId] }
+        : {})
     };
 
-    resend.contacts.create(contactPayload).then(({ data, error }) => {
+    try {
+      const { data, error } = await resend.contacts.create(contactPayload);
       if (error) {
         console.warn('[Resend Contacts Error] Failed to create contact:', error);
+        if (isAlmanacSubscription) {
+          return res.status(502).json({ error: 'We could not save your subscription right now. Please try again.' });
+        }
       } else {
         console.log('[Resend Contacts] Contact added successfully:', data?.id || cleanEmail);
       }
-    }).catch(contactErr => {
+    } catch (contactErr) {
       console.error('[Resend Contacts Exception] Error adding contact:', contactErr);
-    });
+      if (isAlmanacSubscription) {
+        return res.status(502).json({ error: 'We could not save your subscription right now. Please try again.' });
+      }
+    }
   }
 
   const safeType = escapeHtml(inquiryType);
-  const safeName = escapeHtml(cleanName);
+  const safeName = escapeHtml(cleanName || 'Subscriber');
   const safeEmail = escapeHtml(cleanEmail);
   const safePhone = escapeHtml(cleanPhone);
   const safePlantName = plantName ? escapeHtml(String(plantName).trim()) : '';
