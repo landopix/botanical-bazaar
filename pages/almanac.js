@@ -52,17 +52,35 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
 
       const data = await res.json();
       if (res.ok && data.success) {
-        setStatusType('success');
-        setStatusMsg('Welcome! You are subscribed to our monthly Almanac botanical dispatches. Check your inbox for your welcome email.');
+        if (data.alreadySubscribed) {
+          setStatusType('info');
+          setStatusMsg('Looks like you are already subscribed to The Almanac!');
+        } else {
+          setStatusType('success');
+          setStatusMsg('Welcome! You are subscribed to our monthly Almanac botanical dispatches. Check your inbox for your welcome email.');
+        }
         setEmail('');
       } else {
-        setStatusType('error');
-        setStatusMsg(data.error || 'Unable to subscribe right now. Please try again.');
+        const isDuplicate = data?.alreadySubscribed || (typeof data?.error === 'string' && (
+          data.error.toLowerCase().includes('already exist') ||
+          data.error.toLowerCase().includes('already in list') ||
+          data.error.toLowerCase().includes('already subscribed') ||
+          data.error.toLowerCase().includes('duplicate')
+        ));
+
+        if (isDuplicate) {
+          setStatusType('info');
+          setStatusMsg('Looks like you are already subscribed to The Almanac!');
+          setEmail('');
+        } else {
+          setStatusType('error');
+          setStatusMsg('Unable to subscribe right now. Please try again later.');
+        }
       }
     } catch (err) {
       console.error('Almanac subscription error:', err);
       setStatusType('error');
-      setStatusMsg('An unexpected error occurred. Please try again.');
+      setStatusMsg('An unexpected error occurred. Please try again later.');
     } finally {
       setSubmitting(false);
     }

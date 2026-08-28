@@ -33,6 +33,7 @@ export default function Index({ initialProducts = [] }) {
   const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
   const [products, setProducts] = useState(initialProducts);
 
   useBfcacheReset(() => setSubmitting(false));
@@ -68,11 +69,28 @@ export default function Index({ initialProducts = [] }) {
       const data = await res.json();
       if (res.ok && data.success) {
         setSubscribed(true);
+        if (data.alreadySubscribed) {
+          setSuccessMsg("Looks like you are already subscribed to The Almanac!");
+        } else {
+          setSuccessMsg("Thank you! You are subscribed. Check your inbox for your Almanac welcome email.");
+        }
       } else {
-        setErrorMsg(data.error || "Unable to subscribe right now. Please try again.");
+        const isDuplicate = data?.alreadySubscribed || (typeof data?.error === "string" && (
+          data.error.toLowerCase().includes("already exist") ||
+          data.error.toLowerCase().includes("already in list") ||
+          data.error.toLowerCase().includes("already subscribed") ||
+          data.error.toLowerCase().includes("duplicate")
+        ));
+
+        if (isDuplicate) {
+          setSubscribed(true);
+          setSuccessMsg("Looks like you are already subscribed to The Almanac!");
+        } else {
+          setErrorMsg("Unable to subscribe right now. Please try again later.");
+        }
       }
     } catch (err) {
-      setErrorMsg("An unexpected error occurred. Please try again.");
+      setErrorMsg("An unexpected error occurred. Please try again later.");
     } finally {
       setSubmitting(false);
     }
@@ -539,7 +557,7 @@ export default function Index({ initialProducts = [] }) {
             </p>
             {subscribed ? (
               <p role="status" aria-live="polite" style={{ color: "#D4B06A", fontWeight: "bold" }}>
-                Thank you! You are subscribed. Check your inbox for your Almanac welcome email.
+                {successMsg || "Thank you! You are subscribed. Check your inbox for your Almanac welcome email."}
               </p>
             ) : (
               <form

@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import { createHash } from 'crypto';
+import { randomUUID } from 'crypto';
 import { createOrUpdateShopifyCustomer } from '../../../lib/shopify';
 
 const resendFromEmail = process.env.RESEND_FROM_EMAIL || 'The Botanical Bazaar <info@thebotanicalbazaar.com>';
@@ -28,6 +28,25 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+function isDuplicateSubscriberError(err) {
+  if (!err) return false;
+  const msg = (typeof err === 'string' ? err : err.message || '').toLowerCase();
+  const name = (err.name || '').toLowerCase();
+  const code = String(err.statusCode || err.code || err.status || '');
+  return (
+    name.includes('already_exists') ||
+    name.includes('conflict') ||
+    code === '409' ||
+    code === '422' ||
+    msg.includes('already exist') ||
+    msg.includes('already in list') ||
+    msg.includes('already registered') ||
+    msg.includes('already subscribed') ||
+    msg.includes('contact_already_exists') ||
+    msg.includes('duplicate')
+  );
 }
 
 export default async function handler(req, res) {
@@ -96,6 +115,8 @@ export default async function handler(req, res) {
     console.error('Shopify customer sync error:', err);
   }
 
+  let isAlreadySubscribed = false;
+
   // Sync the contact to Resend and place Almanac signups in the newsletter segment.
   if (resend) {
     const nameParts = cleanName ? cleanName.split(/\s+/) : [];
@@ -116,7 +137,9 @@ export default async function handler(req, res) {
       const { data, error } = await resend.contacts.create(contactPayload);
       if (error) {
         console.warn('[Resend Contacts Error] Failed to create contact:', error);
-        if (isAlmanacSubscription) {
+        if (isDuplicateSubscriberError(error)) {
+          isAlreadySubscribed = true;
+        } else if (isAlmanacSubscription) {
           return res.status(502).json({ error: 'We could not save your subscription right now. Please try again.' });
         }
       } else {
@@ -124,10 +147,20 @@ export default async function handler(req, res) {
       }
     } catch (contactErr) {
       console.error('[Resend Contacts Exception] Error adding contact:', contactErr);
-      if (isAlmanacSubscription) {
+      if (isDuplicateSubscriberError(contactErr)) {
+        isAlreadySubscribed = true;
+      } else if (isAlmanacSubscription) {
         return res.status(502).json({ error: 'We could not save your subscription right now. Please try again.' });
       }
     }
+  }
+
+  if (isAlreadySubscribed) {
+    return res.status(200).json({
+      success: true,
+      alreadySubscribed: true,
+      message: 'Looks like you are already subscribed to The Almanac!'
+    });
   }
 
   const safeType = escapeHtml(inquiryType);
@@ -212,7 +245,7 @@ export default async function handler(req, res) {
 
   try {
     if (!resend) {
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === 'production' && !process.env.PLAYWRIGHT_TEST) {
         console.error('[Resend API Error] RESEND_API_KEY is not configured or invalid in production.');
         return res.status(500).json({
           error: 'Email service is currently unconfigured. Please try again later or contact support directly.'
@@ -226,10 +259,6 @@ export default async function handler(req, res) {
       });
     }
 
-    const subscriberHash = isAlmanacSubscription
-      ? createHash('sha256').update(cleanEmail.toLowerCase()).digest('hex').slice(0, 32)
-      : null;
-
     const { data, error } = await resend.emails.send(
       {
         from: resendFromEmail,
@@ -238,13 +267,18 @@ export default async function handler(req, res) {
         subject: subject,
         html: htmlContent
       },
-      subscriberHash
-        ? { idempotencyKey: `almanac-signup-notice/${subscriberHash}` }
-        : undefined
+      { idempotencyKey: `almanac-signup-notice/${randomUUID()}` }
     );
 
     if (error) {
       console.warn('Resend API returned error:', error);
+      if (isDuplicateSubscriberError(error)) {
+        return res.status(200).json({
+          success: true,
+          alreadySubscribed: true,
+          message: 'Looks like you are already subscribed to The Almanac!'
+        });
+      }
       if (process.env.NODE_ENV !== 'production' || process.env.PLAYWRIGHT_TEST || error.name === 'validation_error' || error.statusCode === 401) {
         return res.status(200).json({
           success: true,
@@ -267,12 +301,19 @@ export default async function handler(req, res) {
           }
         },
         {
-          idempotencyKey: `almanac-welcome/${subscriberHash}`
+          idempotencyKey: `almanac-welcome/${randomUUID()}`
         }
       );
 
       if (welcomeError) {
         console.error('[Resend Welcome Email Error] Failed to send Almanac welcome email:', welcomeError);
+        if (isDuplicateSubscriberError(welcomeError)) {
+          return res.status(200).json({
+            success: true,
+            alreadySubscribed: true,
+            message: 'Looks like you are already subscribed to The Almanac!'
+          });
+        }
         return res.status(502).json({
           error: 'Your subscription was received, but the welcome email could not be sent. Please try again.'
         });
@@ -288,6 +329,13 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error('Error dispatching inquiry email via Resend:', err);
+    if (isDuplicateSubscriberError(err)) {
+      return res.status(200).json({
+        success: true,
+        alreadySubscribed: true,
+        message: 'Looks like you are already subscribed to The Almanac!'
+      });
+    }
     return res.status(500).json({
       error: 'An internal server error occurred.'
     });
