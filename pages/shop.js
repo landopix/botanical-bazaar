@@ -8,7 +8,7 @@ import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 import NurseryUpdateFallback from "../components/NurseryUpdateFallback";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
-import { isZoneCompatible } from "../lib/fulfillment";
+import { isZoneCompatible, normalizePotSize, getProductSizes, getAvailableZones } from "../lib/fulfillment";
 
 // Static list of requested category collections
 const COLLECTIONS = [
@@ -407,22 +407,7 @@ export default function Shop({ initialProducts = [] }) {
 
   // Dynamically extract unique available hardiness zones
   const sortedZones = useMemo(() => {
-    const availableZones = new Set();
-    products.forEach((prod) => {
-      if (prod?.custom?.hardiness_zone) {
-        availableZones.add(prod.custom.hardiness_zone.trim());
-      }
-      if (Array.isArray(prod?.zones)) {
-        prod.zones.forEach((zone) => {
-          if (zone && zone !== "1" && zone !== "2") {
-            availableZones.add(zone);
-          }
-        });
-      }
-    });
-    return Array.from(availableZones).sort(
-      (a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b),
-    );
+    return getAvailableZones(products);
   }, [products]);
 
   // Dynamically extract unique pot size options

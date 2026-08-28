@@ -71,6 +71,32 @@ export default async function handler(req, res) {
     console.error('Shopify customer sync error:', err);
   });
 
+  // Sync subscriber to Resend Audience list via Resend Contacts API
+  if (resend) {
+    const audienceId = process.env.RESEND_AUDIENCE_ID || process.env.RESEND_AUDIENCE_KEY;
+    const nameParts = cleanName && cleanName !== 'Anonymous Subscriber' ? cleanName.split(' ') : [];
+    const firstName = nameParts.length > 0 ? nameParts[0] : undefined;
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : undefined;
+
+    const contactPayload = {
+      email: cleanEmail,
+      ...(firstName ? { firstName } : {}),
+      ...(lastName ? { lastName } : {}),
+      unsubscribed: false,
+      ...(audienceId ? { audienceId } : {})
+    };
+
+    resend.contacts.create(contactPayload).then(({ data, error }) => {
+      if (error) {
+        console.warn('[Resend Contacts Error] Failed to create contact:', error);
+      } else {
+        console.log('[Resend Contacts] Contact added successfully:', data?.id || cleanEmail);
+      }
+    }).catch(contactErr => {
+      console.error('[Resend Contacts Exception] Error adding contact:', contactErr);
+    });
+  }
+
   const safeType = escapeHtml(inquiryType);
   const safeName = escapeHtml(cleanName);
   const safeEmail = escapeHtml(cleanEmail);
