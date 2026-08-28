@@ -458,7 +458,7 @@ body {
       const policyHtml = `
         <div class="policy-note" style="margin-top:1.2rem;font-size:0.95em;line-height:1.45;color:#d9cba9;">
           <strong>Local Pickup Only:</strong> All purchases are available for pickup at our nursery in St.&nbsp;Petersburg, Florida. We do not ship at this time. <br>
-          <strong>Live Plant Guarantee:</strong> Please inspect your plant at pickup. If any hidden issues arise within 7&nbsp;days, we\'ll exchange it or issue store credit. Beyond this window, returns are not accepted.
+          <strong>Live Plant Guarantee:</strong> Whether your order travels across the country with nationwide shipping or is handed to you at our St. Petersburg nursery, we guarantee 100% live arrival on every botanical specimen.<br><br>Email your photos and order number to info@thebotanicalbazaar.com within 48 hours of carrier delivery timestamp or pickup. Our nursery team will review your photos promptly and dispatch a replacement plant or issue store credit.
         </div>`;
       main.innerHTML = `
         <a href="shop.html" class="back-link">&larr; Back to Shop</a>
@@ -521,13 +521,13 @@ body {
           'availability': availabilityUrl,
           'url': new URL(window.location.href).href,
           // Add a truthful merchant return policy. Live plants can be
-          // exchanged or store credit issued within 7 days after pickup. No
+          // exchanged or store credit issued within 48 hours after delivery or pickup. No
           // traditional returns are accepted beyond this window.
           'hasMerchantReturnPolicy': {
             '@type': 'MerchantReturnPolicy',
             'name': 'Live Plant Guarantee',
             'returnPolicyCategory': 'MerchantReturnFiniteReturnWindow',
-            'merchantReturnDays': 7,
+            'merchantReturnDays': 2,
             'returnMethod': 'InStoreOnly',
             'refundType': 'StoreCredit'
           },
