@@ -44,7 +44,6 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerEmail: email,
-          customerName: 'Almanac Subscriber',
           inquiryType: 'almanac_subscription',
           subject: 'Botanical Almanac Monthly Care Dispatch Signup',
           message: `Subscriber requested monthly Almanac care dispatches for ${email}`
