@@ -670,7 +670,7 @@ export default function Index({ initialProducts = [] }) {
           <Link href="/zones" className="category-card">
             Best&nbsp;Plants&nbsp;for&nbsp;Your&nbsp;Zone
           </Link>
-          <Link href="/orchids-gallery" className="category-card">
+          <Link href="/gallery" className="category-card">
             Collector's&nbsp;Gallery
           </Link>
         </div>

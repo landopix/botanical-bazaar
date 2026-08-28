@@ -23,7 +23,7 @@ const STATIC_ROUTES = [
   '/contact',
   '/help',
   '/sales',
-  '/orchids-gallery',
+  '/gallery',
   '/accessibility'
 ];
 

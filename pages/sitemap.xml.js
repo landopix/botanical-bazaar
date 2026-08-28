@@ -19,7 +19,7 @@ const staticRoutes = [
   '/contact',
   '/help',
   '/sales',
-  '/orchids-gallery',
+  '/gallery',
   '/accessibility'
 ];
 

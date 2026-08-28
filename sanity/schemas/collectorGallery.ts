@@ -84,6 +84,10 @@ export const collectorGallery = defineType({
                     title: 'Tropical Foliage',
                     value: 'tropicalFoliage',
                   },
+                  {
+                    title: 'Exotic Blooms',
+                    value: 'exoticBlooms',
+                  },
                   {title: 'Other', value: 'other'},
                 ],
                 layout: 'radio',

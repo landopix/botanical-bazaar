@@ -175,8 +175,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/orchids-gallery',
+        destination: '/gallery',
+        permanent: true,
+      },
+      {
         source: '/orchids-gallery.html',
-        destination: '/orchids-gallery',
+        destination: '/gallery',
         permanent: true,
       },
       {

@@ -101,7 +101,7 @@ const staticPages = [
   },
   {
     title: "Orchids Gallery",
-    href: "/orchids-gallery",
+    href: "/gallery",
     category: "Gallery",
     description: "High-resolution photos of our rare orchid varieties and custom arrangements.",
     content: "gallery orchids flowers visual photos greenhouse orchid display designs"
@@ -662,7 +662,7 @@ export default function Layout({ children }) {
     { label: "The Almanac", href: "/almanac" },
     { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
-    { label: "Gallery", href: "/orchids-gallery" },
+    { label: "Gallery", href: "/gallery" },
     {
       label: "Bazaar Collections",
       isGroup: true,
@@ -1386,7 +1386,7 @@ export default function Layout({ children }) {
           <Link href="/consultations">Consultations</Link>
           <Link href="/almanac">The Almanac</Link>
           <Link href="/events">Events</Link>
-          <Link href="/orchids-gallery">Gallery</Link>
+          <Link href="/gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
 
           {/* FAQ Rich Dropdown Menu */}
