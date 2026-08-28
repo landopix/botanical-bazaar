@@ -651,7 +651,7 @@ export default function Index({ initialProducts = [] }) {
           )}
           {showCategory("orchids-tropicals") && (
             <Link
-              href="/collections/orchids"
+              href="/shop?category=tropical-houseplants"
               className="category-card"
             >
               Orchids&nbsp;&amp;&nbsp;Tropicals
