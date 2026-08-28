@@ -1,4 +1,4 @@
-const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'the-botanical-bazaar.myshopify.com';
+const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
 const shopifyAccountUrl = `https://${rawDomain.replace(/^https?:\/\//, '').replace(/\/$/, '')}/account/login`;
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
