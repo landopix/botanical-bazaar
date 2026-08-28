@@ -108,7 +108,7 @@ export default async function handler(req, res) {
       ...(lastName ? { lastName } : {}),
       unsubscribed: false,
       ...(isAlmanacSubscription && resendNewsletterSegmentId
-        ? { segmentIds: [resendNewsletterSegmentId] }
+        ? { segments: [{ id: resendNewsletterSegmentId }] }
         : {})
     };
 
