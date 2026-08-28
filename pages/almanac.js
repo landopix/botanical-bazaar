@@ -166,7 +166,8 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
             {articleList.map((article, i) => {
               const title = article.title || article.name || article.seoTitle || 'Seasonal Gardening Note';
               const excerpt = article.excerpt || article.seoDescription || 'Read our latest insights on seasonal plant care and soil preparation.';
-              const link = article.onlineStoreUrl || (article.slug ? '/page/' + article.slug : '#');
+              const rawLink = article.onlineStoreUrl || (article.slug ? '/page/' + article.slug : '#');
+              const link = rawLink.replace(/^https?:\/\/[^\/]+\.myshopify\.com/, 'https://thebotanicalbazaar.com');
               const imageUrl = article.imageUrl || '/assets/lantern.png';
               const imageAlt = article.imageAlt || title;
               const publishedDate = article.publishedAt

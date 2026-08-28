@@ -62,3 +62,18 @@ To prevent any residual traffic or search indexing on `the-botanical-bazaar.mysh
 
 - Visit `https://the-botanical-bazaar.myshopify.com/` in an incognito window. It should immediately redirect to `https://thebotanicalbazaar.com/`.
 - Initiate a test cart/checkout sequence from the custom site. In the checkout flow, clicking the brand logo or "Return to store" link should return the buyer to `https://thebotanicalbazaar.com/`.
+
+
+---
+
+## 5. Shopify Liquid Theme Navigation Links (Home, Catalog, Contact, Logo)
+
+To ensure Shopify-hosted pages (such as checkout, account portal, and liquid templates) keep buyers on our primary branded site and prevent leaking raw `.myshopify.com` URLs, update your main navigation menu and liquid header templates in Shopify Admin:
+
+1. In Shopify Admin, go to **Online Store** > **Navigation**.
+2. Edit **Main menu**:
+   - **Home**: Link to `https://thebotanicalbazaar.com/`
+   - **Catalog**: Link to `https://thebotanicalbazaar.com/shop`
+   - **Contact**: Link to `https://thebotanicalbazaar.com/contact`
+3. Edit **Header Logo Link** in your theme editor (**Online Store** > **Themes** > **Customize**):
+   - Set the Logo destination URL to `https://thebotanicalbazaar.com/`

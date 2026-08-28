@@ -60,6 +60,11 @@ export default async function handler(req, res) {
   try {
     // Revalidate the primary catalog page
     await res.revalidate('/shop');
+    try {
+      await res.revalidate('/');
+    } catch (homeErr) {
+      console.warn('Could not revalidate homepage:', homeErr);
+    }
 
     // Optionally revalidate individual product page if handle is provided in payload
     const productHandle = req.body?.handle || req.query?.handle;

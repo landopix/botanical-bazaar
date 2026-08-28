@@ -5,38 +5,45 @@ import { isSanityCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
 import { parseProductTitle } from '../lib/shopify';
 
+export function getLowestAvailableVariant(product) {
+  if (!product || !product.variants || !Array.isArray(product.variants) || product.variants.length === 0) {
+    return null;
+  }
+  const available = product.variants.filter(
+    v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
+  );
+  if (available.length > 0) {
+    return available.reduce((lowest, v) => {
+      const vPrice = typeof v.price === "number" ? v.price : parseFloat(v.price || 0);
+      const lowestPrice = typeof lowest.price === "number" ? lowest.price : parseFloat(lowest.price || 0);
+      return vPrice < lowestPrice ? v : lowest;
+    }, available[0]);
+  }
+  return product.variants[0];
+}
+
 export function getResolvedPotSize(product, selectedVariant = null) {
-  if (selectedVariant) {
-    if (selectedVariant.selectedOptions && Array.isArray(selectedVariant.selectedOptions)) {
-      const sizeOpt = selectedVariant.selectedOptions.find(
-        opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
+  const targetVariant = selectedVariant || getLowestAvailableVariant(product);
+  if (targetVariant) {
+    if (targetVariant.selectedOptions && Array.isArray(targetVariant.selectedOptions)) {
+      const sizeOpt = targetVariant.selectedOptions.find(
+        opt => opt?.name?.toLowerCase() === "size" || opt?.name?.toLowerCase() === "pot size"
       );
       if (sizeOpt?.value) return sizeOpt.value;
     }
-    if (selectedVariant.title && selectedVariant.title !== 'Default Title') {
-      return selectedVariant.title;
+    if (targetVariant.title && targetVariant.title !== "Default Title") {
+      return targetVariant.title;
     }
   }
 
-  const primaryVariant = product?.variants?.[0];
-  if (primaryVariant?.selectedOptions && Array.isArray(primaryVariant.selectedOptions)) {
-    const sizeOpt = primaryVariant.selectedOptions.find(
-      opt => opt?.name?.toLowerCase() === 'size' || opt?.name?.toLowerCase() === 'pot size'
-    );
-    if (sizeOpt?.value) return sizeOpt.value;
-  }
-  if (primaryVariant?.title && primaryVariant.title !== 'Default Title') {
-    return primaryVariant.title;
-  }
-
   if (product?.custom?.pot_size) return product.custom.pot_size;
-  if (product?.sizes && typeof product.sizes === 'string') {
-    const cleanSizes = product.sizes.split('|')[0].trim();
-    if (cleanSizes && cleanSizes !== 'Default Title') return cleanSizes;
+  if (product?.sizes && typeof product.sizes === "string") {
+    const cleanSizes = product.sizes.split("|")[0].trim();
+    if (cleanSizes && cleanSizes !== "Default Title") return cleanSizes;
   }
   if (product?.potSize) return product.potSize;
 
-  return 'Standard Pot';
+  return "Standard Pot";
 }
 
 export function getResolvedPlantType(product) {
@@ -71,7 +78,8 @@ function ProductCard({
   const rawName = product?.name ?? product?.title ?? 'Botanical Specimen';
   const { commonName, scientificName } = parseProductTitle(rawName);
 
-  const price = product?.price;
+  const lowestVariant = getLowestAvailableVariant(product);
+  const price = lowestVariant ? (typeof lowestVariant.price === "number" ? lowestVariant.price : parseFloat(lowestVariant.price)) : product?.price;
   const quantity = product?.quantity ?? 10;
   const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
   const rawImage = product?.image ?? product?.imageUrl ?? product?.featuredImage?.url;

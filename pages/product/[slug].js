@@ -36,11 +36,18 @@ export async function getStaticPaths() {
 }
 
 function getFirstAvailableVariant(product) {
-  if (!product || !product.variants || product.variants.length === 0) return null;
-  const available = product.variants.find(
+  if (!product || !product.variants || !Array.isArray(product.variants) || product.variants.length === 0) return null;
+  const available = product.variants.filter(
     v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
   );
-  return available || product.variants[0];
+  if (available.length > 0) {
+    return available.reduce((lowest, v) => {
+      const vPrice = typeof v.price === "number" ? v.price : parseFloat(v.price || 0);
+      const lowestPrice = typeof lowest.price === "number" ? lowest.price : parseFloat(lowest.price || 0);
+      return vPrice < lowestPrice ? v : lowest;
+    }, available[0]);
+  }
+  return product.variants[0];
 }
 
 const KEBAB_CASE_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
