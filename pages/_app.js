@@ -45,6 +45,22 @@ function MyApp({ Component, pageProps }) {
               `,
             }}
           />
+          {/* Ahrefs Web Analytics */}
+          <Script
+            src="https://analytics.ahrefs.com/analytics.js"
+            data-key="DjAqi8i2492m5GWfN+oQjw"
+            strategy="afterInteractive"
+          />
+          {/* Leadfeeder Tracker */}
+          <Script
+            id="leadfeeder-tracker"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce("https://sc.lfeeder.com/lftracker_v1_"+ss+(ex?"_"+ex:"")+".js"); })(document,"script"); })("XbploaE0oqg4EdVj");
+              `,
+            }}
+          />
           <Layout>
             <Component {...pageProps} />
           </Layout>
