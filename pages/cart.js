@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -81,9 +82,7 @@ export default function Cart() {
   if (cart.length === 0) {
     return (
       <div style={{ padding: '4rem 1.5rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
-        <Head>
-          <title>Shopping Cart | The Botanical Bazaar</title>
-        </Head>
+        <SEO title="Shopping Cart" description="Review your selected live plant specimens and botanical goods in your cart before checkout." />
         <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Your Cart is Empty</h1>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem', lineHeight: '1.6' }}>
           Looks like you haven't added any tropical specimens or rare orchids to your cart yet.
@@ -95,10 +94,7 @@ export default function Cart() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto', color: '#F5E7C4' }}>
-      <Head>
-        <title>Shopping Cart | The Botanical Bazaar</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
+      <SEO title="Shopping Cart" description="Review your selected live plant specimens and botanical goods in your cart before checkout." />
 
       <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '2rem', textAlign: 'center' }}>Your Cart</h1>
 

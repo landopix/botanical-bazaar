@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -88,14 +89,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1050px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
-      <Head>
-        <title>The Almanac & Plant Care Guides | The Botanical Bazaar</title>
-        <meta name="description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/almanac" />
-        <meta property="og:title" content="The Almanac & Plant Care Guides | The Botanical Bazaar" />
-        <meta property="og:description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
-      </Head>
+      <SEO title="The Almanac & Plant Care Guides" description="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
 
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '1rem' }}>
         The Almanac

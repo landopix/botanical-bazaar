@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -5,14 +6,7 @@ import Link from 'next/link';
 export default function Terms() {
   return (
     <>
-      <Head>
-        <title>Terms of Service & Sales Policies | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Review the terms of service, live plant sales policies, ordering terms, weather holds, USDA regulations, and guarantees for The Botanical Bazaar LLC in St. Petersburg, FL."
-        />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/terms" />
-      </Head>
+      <SEO title="Terms of Service & Sales Policies" description="Terms of service, website usage agreements, and purchase conditions for The Botanical Bazaar." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', borderBottom: '1px solid rgba(212, 176, 106, 0.3)', paddingBottom: '2rem' }}>

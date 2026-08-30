@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -6,21 +7,7 @@ import Button from '../components/Button';
 export default function ShippingPickup() {
   return (
     <>
-      <Head>
-        <title>Shipping & Nursery Pickup | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, USDA regulations, and transit acclimatization."
-        />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/shipping-pickup" />
-        <meta property="og:title" content="Shipping & Nursery Pickup | The Botanical Bazaar" />
-        <meta
-          property="og:description"
-          content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, USDA regulations, and transit acclimatization."
-        />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
-        <meta property="og:url" content="https://thebotanicalbazaar.com/shipping-pickup" />
-      </Head>
+      <SEO title="Shipping & Nursery Pickup" description="Shipping rates, live plant packaging, local pickup options, and transit details for The Botanical Bazaar." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '850px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem', fontSize: '2.4rem' }}>

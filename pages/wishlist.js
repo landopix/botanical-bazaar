@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
@@ -19,9 +20,7 @@ export default function WishlistPage() {
   if (!wishlist || wishlist.length === 0) {
     return (
       <div style={{ padding: '4rem 1.5rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
-        <Head>
-          <title>Wishlist Sanctuary | The Botanical Bazaar</title>
-        </Head>
+        <SEO title="Wishlist Sanctuary" description="View and manage your saved tropical plant specimens and wishlisted rare collector flora." />
         <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>
           Your Wishlist Sanctuary is Empty
         </h1>
@@ -35,10 +34,7 @@ export default function WishlistPage() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1100px', margin: '0 auto', color: '#F5E7C4' }}>
-      <Head>
-        <title>Wishlist Sanctuary | The Botanical Bazaar</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
+      <SEO title="Wishlist Sanctuary" description="View and manage your saved tropical plant specimens and wishlisted rare collector flora." />
 
       <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
         <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.2rem', marginBottom: '0.5rem' }}>

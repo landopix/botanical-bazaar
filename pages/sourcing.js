@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React, { useState } from 'react';
 import Head from 'next/head';
 import useBfcacheReset from '../hooks/useBfcacheReset';
@@ -117,13 +118,7 @@ export default function Sourcing() {
 
   return (
     <>
-      <Head>
-        <title>Plant Sourcing & Inquiry | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Can't find a rare plant or exotic specimen? Submit a custom plant sourcing inquiry to The Botanical Bazaar and let our nursery network locate it for you."
-        />
-      </Head>
+      <SEO title="Plant Sourcing & Inquiries" description="Cannot find a rare plant or exotic specimen? Submit a custom plant sourcing inquiry to The Botanical Bazaar and let our nursery network locate it for you." />
 
       <div className="sourcing-container">
         <header className="sourcing-header">

@@ -1,17 +1,11 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 
 export default function Privacy() {
   return (
     <>
-      <Head>
-        <title>Privacy Policy | The Botanical Bazaar LLC</title>
-        <meta
-          name="description"
-          content="Read the official Privacy Policy of The Botanical Bazaar LLC in St. Petersburg, Florida. Learn how we collect, store, and safeguard your data across our secure infrastructure and essential service providers."
-        />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/privacy" />
-      </Head>
+      <SEO title="Privacy Policy" description="How we collect, protect, and handle your personal customer data at The Botanical Bazaar." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         {/* Main Title Section */}

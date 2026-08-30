@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -96,14 +97,7 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
 
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
-      <Head>
-        <title>{pageContent?.seo?.title || 'Collector Orchid & Tropical Specimen Gallery | The Botanical Bazaar St. Petersburg FL'}</title>
-        <meta name="description" content={pageContent?.seo?.description || 'High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar.'} />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/orchids-gallery" />
-        <meta property="og:title" content="Collector Orchid &amp; Tropical Specimen Gallery | The Botanical Bazaar" />
-        <meta property="og:description" content="Visual showcase of rare orchids and tropical specimens cultivated in St. Petersburg, FL." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-      </Head>
+      <SEO title="Collector Orchid & Specimen Gallery" description="High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar." />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>

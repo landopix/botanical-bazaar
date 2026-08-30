@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Button from '../components/Button';
@@ -101,17 +102,7 @@ Goals & Notes: ${formData.message || 'None provided.'}`
 
   return (
     <>
-      <Head>
-        <title>Plant Consultations | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Book one-on-one plant care and garden design consultations with grower guides at The Botanical Bazaar. Tailored advice for Zone 10a/10b microclimates in St. Petersburg & Tampa Bay."
-        />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/consultations" />
-        <meta property="og:title" content="Plant Consultations | The Botanical Bazaar" />
-        <meta property="og:description" content="Expert plant advice and landscape planning for Zone 10a/10b microclimates in St. Petersburg & Tampa Bay." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-      </Head>
+      <SEO title="Plant Consultations" description="Book one-on-one plant care and garden design consultations with grower guides at The Botanical Bazaar. Tailored advice for Zone 10a/10b microclimates in St. Petersburg & Tampa Bay." />
 
       <div className="consultations-container">
         <header className="consultations-header">

@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React from 'react';
 import Link from 'next/link';
@@ -36,10 +37,7 @@ export async function getStaticProps() {
 export default function Sales({ saleProducts = [], recommendations = [] }) {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1150px', margin: '0 auto', color: '#E9DCBE' }}>
-      <Head>
-        <title>Special Nursery Sales | The Botanical Bazaar</title>
-        <meta name="description" content="Explore current sales, seasonal discounts, and featured promotional plant offers at The Botanical Bazaar in St. Petersburg, FL." />
-      </Head>
+      <SEO title="Special Nursery Sales" description="Explore current sales, seasonal discounts, and featured promotional plant offers at The Botanical Bazaar in St. Petersburg, FL." />
 
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.8rem' }}>
         Special Nursery Sales

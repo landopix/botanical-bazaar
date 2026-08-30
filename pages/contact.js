@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React, { useState } from 'react';
 import Button from '../components/Button';
@@ -46,16 +47,7 @@ export default function Contact() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '700px', margin: '0 auto', fontFamily: 'Crimson Text, serif', color: '#E9DCBE' }}>
-      <Head>
-        <title>Contact Our Nursery Guides | The Botanical Bazaar</title>
-        <meta name="description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL for plant availability, care guides, and nursery pickup details." />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/contact" />
-        <meta property="og:title" content="Contact Our Nursery Guides | The Botanical Bazaar" />
-        <meta property="og:description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content="https://thebotanicalbazaar.com/contact" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
+      <SEO title="Contact Our Nursery Guides" description="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL for plant availability, care guides, and nursery pickup details." />
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1rem', fontSize: '2.5rem' }}>
         Contact Our Nursery Guides
       </h1>

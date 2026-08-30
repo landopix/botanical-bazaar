@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -5,10 +6,7 @@ import Link from 'next/link';
 export default function HelpHub() {
   return (
     <div className="help-hub-container">
-      <Head>
-        <title>Help & Support Hub | The Botanical Bazaar</title>
-        <meta name="description" content="Centralized support hub for plant care guidance, order tracking, shipping policies, returns, and plant sourcing inquiries." />
-      </Head>
+      <SEO title="Help & Support Hub" description="Centralized support hub for plant care guidance, order tracking, shipping policies, returns, and plant sourcing inquiries." />
 
       <div className="hub-header">
         <h1 className="hub-title">Help &amp; Support Hub</h1>

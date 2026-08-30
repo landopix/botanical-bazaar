@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import SEO from '../components/SEO';
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -583,20 +583,11 @@ export default function Shop({ initialProducts = [] }) {
 
   return (
     <div className="shop-container">
-      <Head>
-        <title>{dynamicTitle}</title>
-        <meta name="description" content={dynamicDescription} />
-        <link rel="canonical" href={dynamicCanonicalUrl} />
-        <meta property="og:title" content={dynamicTitle} />
-        <meta property="og:description" content={dynamicDescription} />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content={dynamicCanonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={dynamicTitle} />
-        <meta name="twitter:description" content={dynamicDescription} />
-        <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-      </Head>
+      <SEO
+        title={dynamicTitle}
+        description={dynamicDescription}
+        canonical={dynamicCanonicalUrl}
+      />
 
       <h1 className="shop-title">Shop All Plants</h1>
 

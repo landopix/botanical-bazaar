@@ -1,9 +1,9 @@
-import Head from 'next/head';
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useBfcacheReset from "../hooks/useBfcacheReset";
 import ProductCard from "../components/ProductCard";
+import SEO from "../components/SEO";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
 
@@ -99,9 +99,6 @@ export default function Index({ initialProducts = [] }) {
   // Slice the first 6 products for Featured Plants section
   const featuredProducts = (products || []).slice(0, 6);
 
-  // Performance Optimization: Pre-compute in-stock item counts per category using useMemo
-  // so that catalog array filtering is executed once per products inventory update rather
-  // than repeatedly on every component re-render (e.g. user keystrokes in newsletter input).
   const categoryInStockCounts = useMemo(() => {
     const counts = {};
     const categoriesToCheck = [
@@ -191,26 +188,16 @@ export default function Index({ initialProducts = [] }) {
   }, [products]);
 
   const showCategory = (catId) => {
-    if (products.length === 0) return true; // keep visible during initial load
+    if (products.length === 0) return true;
     return (categoryInStockCounts[catId] || 0) > 0;
   };
 
   return (
     <div className="home-container">
-      <Head>
-        <title>Rare Tropical Plants & Orchids | The Botanical Bazaar</title>
-        <meta name="description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup." />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/" />
-        <meta property="og:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
-        <meta property="og:description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content="https://thebotanicalbazaar.com/" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
-        <meta name="twitter:description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL." />
-        <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-      </Head>
+      <SEO
+        title="Rare Tropical Plants & Orchids"
+        description="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup."
+      />
       {/* Homepage specific styles injected cleanly */}
       <style
         dangerouslySetInnerHTML={{

@@ -1,5 +1,6 @@
 import { getResolvedPotSize, getResolvedPlantType } from "../../components/ProductCard";
 import React, { useState, useEffect } from 'react';
+import SEO from '../../components/SEO';
 import Head from 'next/head';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -415,20 +416,14 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
 
   return (
     <div className="pdp-wrapper">
-      <Head>
-        <title>{`${product.name} | The Botanical Bazaar`}</title>
-        <meta name="description" content={descriptionText} />
-        <link rel="canonical" key="canonical" href={pageUrl} />
+      <SEO
+        title={`${product.name}`}
+        description={descriptionText}
+        image={imageUrl}
+        url={pageUrl}
+        type="product"
+      >
         <link rel="preload" as="image" href={imageUrl} />
-        <meta property="og:title" content={`${product.name} | The Botanical Bazaar`} />
-        <meta property="og:description" content={descriptionText} />
-        <meta property="og:image" content={imageUrl} />
-        <meta property="og:url" content={pageUrl} />
-        <meta property="og:type" content="product" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${product.name} | The Botanical Bazaar`} />
-        <meta name="twitter:description" content={descriptionText} />
-        <meta name="twitter:image" content={imageUrl} />
         <script
           id="product-schema"
           type="application/ld+json"
@@ -439,7 +434,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
-      </Head>
+      </SEO>
 
       <Link href="/shop" className="back-link">
         &larr; Back to Shop

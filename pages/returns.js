@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -5,14 +6,7 @@ import Link from 'next/link';
 export default function Returns() {
   return (
     <>
-      <Head>
-        <title>Plant Care Guarantee & Claims | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Learn about our 100% Live Arrival Guarantee, 48-hour claim window, replacement and store credit remedies, and transit acclimatization guidelines at The Botanical Bazaar in St. Petersburg, FL."
-        />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/returns" />
-      </Head>
+      <SEO title="Plant Care Guarantee & Claims" description="Our return policy, plant care guarantees, and claim procedures for live arrival at The Botanical Bazaar." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '850px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', borderBottom: '1px solid rgba(212, 176, 106, 0.3)', paddingBottom: '2rem' }}>

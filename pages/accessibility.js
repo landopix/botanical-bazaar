@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -5,13 +6,7 @@ import Link from 'next/link';
 export default function Accessibility() {
   return (
     <>
-      <Head>
-        <title>Accessibility Statement | The Botanical Bazaar</title>
-        <meta
-          name="description"
-          content="Accessibility Statement and commitment to web accessibility for The Botanical Bazaar LLC."
-        />
-      </Head>
+      <SEO title="Accessibility Statement" description="Accessibility commitment and statement for The Botanical Bazaar storefront." />
       <div className="min-h-screen bg-[#00301E] text-[#F5E7C4] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-[#1C3D2E] border border-[#D4B06A] rounded-lg p-6 sm:p-10 shadow-xl">
           <h1 className="text-3xl sm:text-4xl font-serif text-[#D4B06A] tracking-wider text-center uppercase mb-8 border-b border-[#D4B06A]/30 pb-4">

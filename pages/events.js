@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React, { useState } from 'react';
 import { sanityClient } from '../lib/sanity';
@@ -71,11 +72,7 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
-      <Head>
-        <title>Upcoming Events & Workshops | The Botanical Bazaar</title>
-        <meta name="description" content="See upcoming plant sales, tropical workshops, markets and community events hosted by The Botanical Bazaar in St. Petersburg, Florida." />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/events" />
-      </Head>
+      <SEO title="Upcoming Events & Workshops" description="See upcoming plant sales, tropical workshops, markets and community events hosted by The Botanical Bazaar in St. Petersburg, Florida." />
 
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.8rem' }}>
         Upcoming Events &amp; Workshops
