@@ -577,16 +577,20 @@ export default function Shop({ initialProducts = [] }) {
     ? `Browse our selection of ${categoryName.toLowerCase()} grown in St. Petersburg, FL. Standard shipping & local nursery pickup available.`
     : "Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL.";
 
+  const dynamicCanonicalUrl = selectedCategory
+    ? `https://thebotanicalbazaar.com/shop?category=${encodeURIComponent(selectedCategory)}`
+    : "https://thebotanicalbazaar.com/shop";
+
   return (
     <div className="shop-container">
       <Head>
         <title>{dynamicTitle}</title>
         <meta name="description" content={dynamicDescription} />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/shop" />
+        <link rel="canonical" href={dynamicCanonicalUrl} />
         <meta property="og:title" content={dynamicTitle} />
         <meta property="og:description" content={dynamicDescription} />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content="https://thebotanicalbazaar.com/shop" />
+        <meta property="og:url" content={dynamicCanonicalUrl} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={dynamicTitle} />
