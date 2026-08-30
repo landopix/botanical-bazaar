@@ -53,8 +53,22 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed. Please use GET.' });
   }
 
-  const { code, shop: rawShop } = req.query;
+  const { code, state, shop: rawShop } = req.query;
+  const storedState = req.cookies?.shopify_oauth_state;
   const cleanShop = sanitizeShopDomain(rawShop || process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN);
+
+  if (!storedState || !state || state !== storedState) {
+    return res.status(400).send(`
+      <!DOCTYPE html>
+      <html>
+        <head><title>Shopify OAuth Error</title></head>
+        <body style="font-family: sans-serif; background: #00301E; color: #F5E7C4; padding: 40px;">
+          <h2>Shopify OAuth CSRF Validation Error</h2>
+          <p style="color: #ff8888;">OAuth state parameter mismatch or missing state token.</p>
+        </body>
+      </html>
+    `);
+  }
 
   if (!code || !cleanShop) {
     return res.status(400).send(`
