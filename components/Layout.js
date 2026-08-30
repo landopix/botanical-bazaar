@@ -965,6 +965,7 @@ export default function Layout({ children }) {
         {router.pathname !== '/checkout' && (
           <Link
             href="/cart"
+            rel="nofollow"
             className="cart-btn"
             aria-label={`View cart with ${cartCount} items`}
             style={{ position: "relative" }}
@@ -1015,6 +1016,7 @@ export default function Layout({ children }) {
         {/* Wishlist Action Link */}
         <Link
           href="/wishlist"
+          rel="nofollow"
           className="wishlist-btn"
           aria-label={`View wishlist with ${wishlist.length} items`}
           style={{ position: "relative" }}
