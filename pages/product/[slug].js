@@ -603,7 +603,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
               {product.tags.map(tag => {
                 const label = tag.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
                 return (
-                  <Link key={tag} href={`/shop?tag=${encodeURIComponent(tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}`} className="product-tag-link">
+                  <Link key={tag} href={`/shop?tag=${encodeURIComponent(tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}`} rel="nofollow" className="product-tag-link">
                     {label}
                   </Link>
                 );
