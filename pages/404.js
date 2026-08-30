@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -45,10 +46,7 @@ export default function Custom404() {
 
   return (
     <div className="not-found-container">
-      <Head>
-        <title>404 - Page Not Found | The Botanical Bazaar</title>
-        <meta name="description" content="The botanical specimen or path you requested could not be found. Explore our nursery catalog or return home." />
-      </Head>
+      <SEO title="404 - Page Not Found" description="The botanical specimen or path you requested could not be found. Explore our nursery catalog or return home." />
 
       <div className="not-found-card">
         <div className="not-found-badge">404 &bull; Sanctuary Misdirection</div>

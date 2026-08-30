@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
 const LOGIN_URL = 'https://account.thebotanicalbazaar.com';
 import React, { useEffect } from 'react';
@@ -120,10 +121,7 @@ export default function Account() {
 
   return (
     <div style={{ padding: '5rem 1.5rem', textAlign: 'center', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <Head>
-        <title>Customer Account Portal | The Botanical Bazaar</title>
-        <meta name="robots" content="noindex, follow" />
-      </Head>
+      <SEO title="Customer Account Portal" description="Access your customer account, track plant orders, and manage account details." />
       <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem', fontSize: '1.8rem' }}>
         Redirecting to Shopify Customer Portal...
       </h1>

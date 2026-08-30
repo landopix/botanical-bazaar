@@ -29,13 +29,15 @@ export default {
       name: 'seoTitle',
       title: 'SEO Title',
       type: 'string',
-      validation: Rule => Rule.required()
+      description: 'Title for search engines and social cards (recommended max 60 characters).',
+      validation: Rule => Rule.required().max(60).warning('SEO Titles should ideally be 60 characters or fewer for search engines.')
     },
     {
       name: 'seoDescription',
       title: 'Meta Description',
       type: 'text',
-      validation: Rule => Rule.required()
+      description: 'Meta description for search engine listings (recommended max 155 characters).',
+      validation: Rule => Rule.required().max(155).warning('Meta descriptions should ideally be 155 characters or fewer.')
     },
     {
       name: 'seoCanonical',

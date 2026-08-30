@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import SEO from '../../components/SEO';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -260,25 +261,17 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
 
   return (
     <div className="collection-container">
-      <Head>
-        <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <link rel="canonical" key="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
+      <SEO
+        title={`${collectionTitle} Collection`}
+        description={metaDescription}
+        canonical={canonicalUrl}
+      >
         <script
           id="breadcrumb-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
-      </Head>
+      </SEO>
 
       <div className="breadcrumbs">
         <Link href="/">Home</Link> &rsaquo; <Link href="/shop">Shop</Link> &rsaquo; <span>{collectionTitle}</span>

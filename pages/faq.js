@@ -1,3 +1,4 @@
+import SEO from "../components/SEO";
 import Head from 'next/head';
 import React from 'react';
 import Button from '../components/Button';
@@ -24,16 +25,7 @@ export default function FAQ() {
 
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
-      <Head>
-        <title>Frequently Asked Questions | The Botanical Bazaar</title>
-        <meta name="description" content="Answers to common questions about ordering, nationwide shipping, USDA regulations, local nursery pickup, live plant guarantee, and acclimatization." />
-        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/faq" />
-        <meta property="og:title" content="Frequently Asked Questions | The Botanical Bazaar" />
-        <meta property="og:description" content="Answers to common questions about ordering, nationwide shipping, local nursery pickup, and tropical plant care." />
-        <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
-        <meta property="og:url" content="https://thebotanicalbazaar.com/faq" />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
+      <SEO title="Frequently Asked Questions" description="Answers to common questions about ordering, nationwide shipping, USDA regulations, local nursery pickup, live plant guarantee, and acclimatization." />
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '2.5rem' }}>Frequently Asked Questions</h1>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
