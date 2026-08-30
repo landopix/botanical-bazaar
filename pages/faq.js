@@ -25,10 +25,10 @@ export default function FAQ() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
       <Head>
-        <title>Frequently Asked Questions | The Botanical Bazaar St. Petersburg FL</title>
+        <title>Frequently Asked Questions | The Botanical Bazaar</title>
         <meta name="description" content="Answers to common questions about ordering, nationwide shipping, USDA regulations, local nursery pickup, live plant guarantee, and acclimatization." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/faq" />
-        <meta property="og:title" content="Frequently Asked Questions | The Botanical Bazaar St. Petersburg FL" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/faq" />
+        <meta property="og:title" content="Frequently Asked Questions | The Botanical Bazaar" />
         <meta property="og:description" content="Answers to common questions about ordering, nationwide shipping, local nursery pickup, and tropical plant care." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
         <meta property="og:url" content="https://thebotanicalbazaar.com/faq" />

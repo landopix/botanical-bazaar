@@ -7,13 +7,13 @@ export default function ShippingPickup() {
   return (
     <>
       <Head>
-        <title>Shipping & Local Nursery Pickup Policies | The Botanical Bazaar</title>
+        <title>Shipping & Nursery Pickup | The Botanical Bazaar</title>
         <meta
           name="description"
           content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, USDA regulations, and transit acclimatization."
         />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/shipping-pickup" />
-        <meta property="og:title" content="Shipping & Local Nursery Pickup Policies | The Botanical Bazaar" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/shipping-pickup" />
+        <meta property="og:title" content="Shipping & Nursery Pickup | The Botanical Bazaar" />
         <meta
           property="og:description"
           content="Read our transparent shipping and local nursery pickup policies at The Botanical Bazaar in St. Petersburg, FL. Learn about secure live-plant packaging, weather holds, USDA regulations, and transit acclimatization."

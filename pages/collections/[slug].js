@@ -263,7 +263,7 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
       <Head>
         <title>{pageTitle}</title>
         <meta name="description" content={metaDescription} />
-        <link rel="canonical" href={canonicalUrl} />
+        <link rel="canonical" key="canonical" href={canonicalUrl} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />

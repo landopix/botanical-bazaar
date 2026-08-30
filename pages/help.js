@@ -6,7 +6,7 @@ export default function HelpHub() {
   return (
     <div className="help-hub-container">
       <Head>
-        <title>Help &amp; Support Hub | The Botanical Bazaar St. Petersburg FL</title>
+        <title>Help & Support Hub | The Botanical Bazaar</title>
         <meta name="description" content="Centralized support hub for plant care guidance, order tracking, shipping policies, returns, and plant sourcing inquiries." />
       </Head>
 

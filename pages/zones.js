@@ -7,10 +7,10 @@ export default function Zones() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '800px', margin: '0 auto' }}>
       <Head>
-        <title>USDA Hardiness Zone Guide & Cold Tolerance | The Botanical Bazaar</title>
+        <title>USDA Hardiness Zone Guide | The Botanical Bazaar</title>
         <meta name="description" content="Determine cold hardiness guidance and temperature thresholds for rare tropical plants, orchids, and aroids in USDA Zones 9b, 10a, and 10b." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/zones" />
-        <meta property="og:title" content="USDA Hardiness Zone Guide & Cold Tolerance | The Botanical Bazaar" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/zones" />
+        <meta property="og:title" content="USDA Hardiness Zone Guide | The Botanical Bazaar" />
         <meta property="og:description" content="Determine cold hardiness guidance and temperature thresholds for rare tropical plants, orchids, and aroids." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
         <meta property="og:url" content="https://thebotanicalbazaar.com/zones" />

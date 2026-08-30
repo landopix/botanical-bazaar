@@ -582,7 +582,7 @@ export default function Shop({ initialProducts = [] }) {
       <Head>
         <title>{dynamicTitle}</title>
         <meta name="description" content={dynamicDescription} />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/shop" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/shop" />
         <meta property="og:title" content={dynamicTitle} />
         <meta property="og:description" content={dynamicDescription} />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />

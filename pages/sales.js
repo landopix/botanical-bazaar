@@ -37,7 +37,7 @@ export default function Sales({ saleProducts = [], recommendations = [] }) {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '1150px', margin: '0 auto', color: '#E9DCBE' }}>
       <Head>
-        <title>Special Nursery Sales &amp; Promotions | The Botanical Bazaar</title>
+        <title>Special Nursery Sales | The Botanical Bazaar</title>
         <meta name="description" content="Explore current sales, seasonal discounts, and featured promotional plant offers at The Botanical Bazaar in St. Petersburg, FL." />
       </Head>
 

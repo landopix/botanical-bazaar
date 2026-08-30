@@ -10,7 +10,7 @@ export default function Privacy() {
           name="description"
           content="Read the official Privacy Policy of The Botanical Bazaar LLC in St. Petersburg, Florida. Learn how we collect, store, and safeguard your data across our secure infrastructure and essential service providers."
         />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/privacy" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/privacy" />
       </Head>
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>

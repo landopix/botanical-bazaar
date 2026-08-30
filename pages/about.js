@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Button from '../components/Button';
 import { sanityClient } from '../lib/sanity';
-import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 
 export async function getStaticProps() {
   let aboutData = null;
@@ -38,9 +38,9 @@ export default function AboutPage({ aboutData }) {
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
       <Head>
-        <title>About Us | The Botanical Bazaar St. Petersburg FL</title>
+        <title>About Our Nursery | The Botanical Bazaar</title>
         <meta name="description" content="Learn about The Botanical Bazaar LLC in St. Petersburg, FL—our tropical plant propagation philosophy, rare collector orchids, and local nursery history." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/about" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/about" />
         <meta property="og:title" content="About Us | The Botanical Bazaar" />
         <meta property="og:description" content="Learn about our tropical plant nursery and rare flora collection in St. Petersburg, FL." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
