@@ -39,3 +39,11 @@
 **Learning:** Server banner and tech stack headers allow potential attackers to perform targeted vulnerability scans and exploit framework-specific edge cases.
 
 **Prevention:** Explicitly configure `poweredByHeader: false` in `next.config.js` to strip `X-Powered-By` headers from HTTP responses across all Next.js routes.
+
+## 2026-08-25 - OAuth CSRF Protection State Validation
+
+**Vulnerability:** `pages/api/auth/shopify/callback.js` did not validate the OAuth `state` query parameter against the stored `shopify_oauth_state` session cookie during authorization code exchange.
+
+**Learning:** OAuth 2.0 flows without strict state verification are vulnerable to Cross-Site Request Forgery (CSRF) attacks, where an attacker can trick a user or system into performing unauthorized authorization exchanges.
+
+**Prevention:** Always verify incoming `req.query.state` against the stored HttpOnly cookie (`req.cookies.shopify_oauth_state`) before exchanging authorization codes for access tokens in OAuth callbacks.
