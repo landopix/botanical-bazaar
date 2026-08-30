@@ -15,6 +15,7 @@ Disallow: /checkout.html
 Disallow: /cancel.html
 Disallow: /success.html
 Disallow: /wishlist.html
+Disallow: /shop?
 
 # Explicitly Allow AI Scrapers, SearchBots, and LLM Crawlers
 User-agent: GPTBot

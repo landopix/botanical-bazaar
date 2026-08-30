@@ -143,6 +143,9 @@ export default function Sourcing() {
           </div>
         ) : (
           <form className="sourcing-form" onSubmit={handleSubmit}>
+            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', margin: '0 0 1.5rem' }}>
+              Tell Us What You Are Looking For
+            </h2>
             {serverError && (
               <div id="sourcing-server-error" className="error-banner" role="alert">
                 {serverError}

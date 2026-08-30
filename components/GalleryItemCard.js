@@ -64,10 +64,15 @@ export default function GalleryItemCard({
           <Image
             src={imageSrc}
             alt={alt}
-            fill
+            width={1200}
+            height={900}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{
               objectFit: 'cover',
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
               transition: 'transform 0.4s ease'
             }}
             className="gallery-img"

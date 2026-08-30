@@ -348,6 +348,8 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
         </div>
       </div>
 
+      <h2 className="collection-results-heading">Available {collectionTitle} Plants</h2>
+
       {filteredProducts.length === 0 ? (
         <div className="empty-collection-box">
           <h3>Upcoming Batch / Nursery Update</h3>
@@ -379,6 +381,13 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
           box-sizing: border-box;
           font-family: 'Crimson Text', serif;
           color: #f5e7c4;
+        }
+
+        .collection-results-heading {
+          color: #d4b06a;
+          font-family: 'Cinzel', serif;
+          font-size: 1.5rem;
+          margin: 1.5rem 0 1rem;
         }
 
         .breadcrumbs {

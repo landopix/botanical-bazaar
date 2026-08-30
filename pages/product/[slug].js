@@ -343,7 +343,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
 
     return (
       <div className="plant-specs-container">
-        <h3 className="specs-heading">Plant Specifications &amp; Care Details</h3>
+        <h2 className="specs-heading">Plant Specifications &amp; Care Details</h2>
         <div className="plant-specs">{panels}</div>
       </div>
     );
@@ -603,7 +603,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
               {product.tags.map(tag => {
                 const label = tag.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
                 return (
-                  <Link key={tag} href={`/shop?search=${encodeURIComponent(tag)}`} className="product-tag-link">
+                  <Link key={tag} href={`/shop?tag=${encodeURIComponent(tag.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''))}`} className="product-tag-link">
                     {label}
                   </Link>
                 );
@@ -614,9 +614,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {/* Cold Hardiness & Thermal Guidance Card */}
           {product.type === "Plant" && (
             <div className="cold-guidance-card">
-              <h3 className="cold-card-title">
+              <h2 className="cold-card-title">
                 Cold Hardiness &amp; Thermal Guidance
-              </h3>
+              </h2>
 
               {/* Climate Zone Indicator and Selector */}
               <div className="zone-indicator-row">
@@ -635,9 +635,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
 
               {product.minTempInGround && (
                 <div style={{ marginBottom: product.minTempInPot ? '0.8rem' : '0' }}>
-                  <h4 className="cold-hardiness-subtitle">
+                  <h3 className="cold-hardiness-subtitle">
                     In-Ground Hardiness ({product.minTempInGround})
-                  </h4>
+                  </h3>
                   <p className="cold-hardiness-text">
                     In-Ground Soil: The thermal mass of the Earth buffers extreme cold and heat swings, maintaining stable, moderate root zone temperatures.
                   </p>
@@ -646,9 +646,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
 
               {product.minTempInPot && (
                 <div>
-                  <h4 className="cold-hardiness-subtitle">
+                  <h3 className="cold-hardiness-subtitle">
                     In-Pot / Container Hardiness ({product.minTempInPot})
-                  </h4>
+                  </h3>
                   <p className="cold-hardiness-text">
                     In Pots (Containers): Containers cool down and freeze much faster because cold air surrounds all sides, exposing root systems to chilling risks at higher ambient temperatures.
                   </p>
@@ -664,7 +664,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
         {/* Column 1 (Left): Description, Care Spine, What You Will Receive, Specs */}
         <div className="details-col details-col-left">
           <div className="description-card">
-            <h3 className="section-card-title">Botanical Description</h3>
+            <h2 className="section-card-title">Botanical Description</h2>
             <p className="description-text">
               {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
             </p>

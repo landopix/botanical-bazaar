@@ -34,10 +34,15 @@ export default function Zones() {
           <Image
             src="/assets/usda-map-official.png"
             alt="USDA Plant Hardiness Zone Map Reference"
-            fill
+            width={1650}
+            height={1275}
             sizes="(max-width: 800px) 100vw, 800px"
             style={{
               objectFit: 'contain',
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
               borderRadius: '10px'
             }}
           />

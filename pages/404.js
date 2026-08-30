@@ -95,8 +95,9 @@ export default function Custom404() {
                       <Image
                         src={imageSrc.startsWith('http') || imageSrc.startsWith('/') ? imageSrc : '/' + imageSrc}
                         alt={p.name || p.title}
-                        fill
-                        style={{ objectFit: 'cover' }}
+                        width={160}
+                        height={160}
+                        style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                       />
                     </div>
                     <div className="result-info">

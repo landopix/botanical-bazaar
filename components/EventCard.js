@@ -58,10 +58,11 @@ export default function EventCard({
             <Image
               src={imageSrc}
               alt={title}
-              fill
+              width={1200}
+              height={675}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{
-                objectFit: 'cover'
+                objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%'
               }}
               unoptimized={!isLocalOrAllowedCdn(imageSrc)}
               onError={(e) => {

@@ -171,7 +171,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <span className="total-amount">${cartTotal.toFixed(2)}</span>
               </div>
               <div className="footer-actions">
-                <Link href="/cart" rel="nofollow" onClick={onClose} className="view-cart-btn">
+                <Link href="/cart" onClick={onClose} className="view-cart-btn">
                   View Full Cart
                 </Link>
                 <button

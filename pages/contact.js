@@ -62,7 +62,11 @@ export default function Contact() {
           <Button variant="gold-filled" href="/shop">Browse Plants</Button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }} noValidate={false}>
+        <section aria-labelledby="contact-form-heading">
+          <h2 id="contact-form-heading" style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.6rem', marginBottom: '1rem' }}>
+            Send a Plant Question
+          </h2>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A' }} noValidate={false}>
           {errorMsg && (
             <div
               id="contact-error-banner"
@@ -134,7 +138,8 @@ export default function Contact() {
           <Button type="submit" variant="gold-filled" disabled={submitting} style={{ width: '100%' }}>
             {submitting ? 'Sending Message...' : 'Send Message'}
           </Button>
-        </form>
+          </form>
+        </section>
       )}
     </div>
   );

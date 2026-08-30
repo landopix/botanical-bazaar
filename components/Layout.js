@@ -145,6 +145,17 @@ const staticPages = [
 
 const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
 const shopifyAccountUrl = 'https://account.thebotanicalbazaar.com';
+const visuallyHiddenStyle = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: 0,
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+};
 
 const MEGA_MENU_BLUEPRINT = [
   {
@@ -153,7 +164,7 @@ const MEGA_MENU_BLUEPRINT = [
       { label: "Rare Foliage Plants", href: "/shop?tag=rare-foliage", keywords: ["rare", "foliage", "aroid", "philodendron", "monstera", "anthurium", "alocasia"] },
       { label: "Variegated Plants", href: "/shop?tag=variegated", keywords: ["variegated", "variegata"] },
       { label: "Bazaar Exclusive Hybrids", href: "/shop?tag=hybrid", keywords: ["hybrid", "bazaar exclusive", "exclusive"] },
-      { label: "View All Rare Plants", href: "/shop?category=exotics-rare", alwaysShow: true }
+      { label: "View All Rare Plants", href: "/collections/exotics-rare", alwaysShow: true }
     ]
   },
   {
@@ -170,13 +181,13 @@ const MEGA_MENU_BLUEPRINT = [
   {
     title: "Edible & Fruiting Plants",
     items: [
-      { label: "Tropical Fruiting Plants", href: "/shop?category=fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting", "citrus", "mango", "avocado", "banana", "papaya"] },
-      { label: "Herbs & Spices", href: "/shop?category=herbs-medicinal", keywords: ["herb", "spice", "medicinal", "vanilla", "pepper"] },
+      { label: "Tropical Fruiting Plants", href: "/collections/fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting", "citrus", "mango", "avocado", "banana", "papaya"] },
+      { label: "Herbs & Spices", href: "/collections/herbs-medicinal", keywords: ["herb", "spice", "medicinal", "vanilla", "pepper"] },
       { label: "Beverage Botanicals", href: "/shop?tag=beverage", keywords: ["beverage", "tea", "coffee", "citrus", "mint", "herbal"] },
       { label: "Fruiting Container Plants", href: "/shop?tag=container-fruit", keywords: ["container", "pot", "patio", "dwarf"], mustAlsoMatch: ["fruit", "fruiting"] },
       { label: "Hardy Fruiting Plants", href: "/shop?tag=hardy-fruit", keywords: ["hardy"], mustAlsoMatch: ["fruit", "fruiting", "berry", "fig", "mulberry"] },
-      { label: "View All Fruiting Plants", href: "/shop?category=fruit-trees", alwaysShow: true },
-      { label: "View All Edible Plants", href: "/shop?category=herbs-medicinal", alwaysShow: true }
+      { label: "View All Fruiting Plants", href: "/collections/fruit-trees", alwaysShow: true },
+      { label: "View All Edible Plants", href: "/collections/herbs-medicinal", alwaysShow: true }
     ]
   },
   {
@@ -184,20 +195,20 @@ const MEGA_MENU_BLUEPRINT = [
     items: [
       { label: "Indoor Windowsill Houseplants", href: "/shop?tag=windowsill", keywords: ["indoor", "windowsill", "houseplant", "peperomia", "pothos", "hoya"] },
       { label: "Indoor Succulent Plants", href: "/shop?tag=succulent", keywords: ["succulent", "cactus", "sansevieria", "snake plant"] },
-      { label: "Indoor Tropical Plants", href: "/shop?category=tropical-houseplants", keywords: ["indoor", "houseplant", "tropical", "aroid", "fern", "calathea"] },
+      { label: "Indoor Tropical Plants", href: "/collections/tropical-houseplants", keywords: ["indoor", "houseplant", "tropical", "aroid", "fern", "calathea"] },
       { label: "Easy to Grow Indoor Houseplants", href: "/shop?tag=easy-to-grow", keywords: ["easy", "low maintenance", "beginner", "easy to grow", "tolerant"] },
-      { label: "View All Indoor Plants", href: "/shop?category=tropical-houseplants", alwaysShow: true }
+      { label: "View All Indoor Plants", href: "/collections/tropical-houseplants", alwaysShow: true }
     ]
   },
   {
     title: "Tropical Plants",
     items: [
       { label: "Tropical Patio & Garden Plants", href: "/shop?tag=patio", keywords: ["tropical", "patio", "garden", "outdoor"] },
-      { label: "Indoor Tropical Plants", href: "/shop?category=tropical-houseplants", keywords: ["tropical"], mustAlsoMatch: ["indoor", "houseplant"] },
+      { label: "Indoor Tropical Plants", href: "/collections/tropical-houseplants", keywords: ["tropical"], mustAlsoMatch: ["indoor", "houseplant"] },
       { label: "Tropical Vines", href: "/shop?tag=vines", keywords: ["vine", "vining", "climber", "monstera", "philodendron", "hoya", "passion"] },
       { label: "Tropical Summer Garden Plants", href: "/shop?tag=summer-garden", keywords: ["summer", "tropical", "patio", "heat"] },
-      { label: "Tropical Fruiting Plants", href: "/shop?category=fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting"] },
-      { label: "View All Tropical Plants", href: "/shop?category=tropical-houseplants", alwaysShow: true }
+      { label: "Tropical Fruiting Plants", href: "/collections/fruit-trees", keywords: ["tropical"], mustAlsoMatch: ["fruit", "fruiting"] },
+      { label: "View All Tropical Plants", href: "/collections/tropical-houseplants", alwaysShow: true }
     ]
   },
   {
@@ -219,7 +230,7 @@ const MEGA_MENU_BLUEPRINT = [
       { label: "Phalaenopsis Orchids", href: "/shop?tag=phalaenopsis", keywords: ["phalaenopsis", "phal"] },
       { label: "Vanilla Bean Orchids", href: "/shop?tag=vanilla-orchid", keywords: ["vanilla", "planifolia"] },
       { label: "Orchid Accessories", href: "/shop?tag=orchid-accessories", keywords: ["accessory", "accessories", "pot", "media", "bark", "moss", "mount"] },
-      { label: "View All Orchid Plants", href: "/shop?category=orchids", alwaysShow: true }
+      { label: "View All Orchid Plants", href: "/collections/orchids", alwaysShow: true }
     ]
   }
 ];
@@ -670,19 +681,19 @@ export default function Layout({ children }) {
       isOpenState: isCollectionsOpen,
       setOpenState: setIsCollectionsOpen,
       items: [
-        { label: "Orchids", href: "/shop?category=orchids" },
-        { label: "Tropical Houseplants", href: "/shop?category=tropical-houseplants" },
-        { label: "Fruit Trees", href: "/shop?category=fruit-trees" },
-        { label: "Herbs & Medicinal", href: "/shop?category=herbs-medicinal" },
-        { label: "Seeds", href: "/shop?category=seeds" },
-        { label: "Stickers & Art", href: "/shop?category=stickers-art" },
+        { label: "Orchids", href: "/collections/orchids" },
+        { label: "Tropical Houseplants", href: "/collections/tropical-houseplants" },
+        { label: "Fruit Trees", href: "/collections/fruit-trees" },
+        { label: "Herbs & Medicinal", href: "/collections/herbs-medicinal" },
+        { label: "Seeds", href: "/collections/seeds" },
+        { label: "Stickers & Art", href: "/collections/stickers-art" },
         {
           label: "Tinctures & Apothecary",
-          href: "/shop?category=tinctures-apothecary",
+          href: "/collections/tinctures-apothecary",
         },
         {
           label: "Terrarium & Vivarium",
-          href: "/shop?category=terrarium-vivarium",
+          href: "/collections/terrarium-vivarium",
         },
       ],
     },
@@ -970,7 +981,6 @@ export default function Layout({ children }) {
         {router.pathname !== '/checkout' && (
           <Link
             href="/cart"
-            rel="nofollow"
             className="cart-btn"
             aria-label={`View cart with ${cartCount} items`}
             style={{ position: "relative" }}
@@ -990,6 +1000,7 @@ export default function Layout({ children }) {
               <circle cx="20" cy="21" r="1"></circle>
               <path d="M1 1h4l2.68 11.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
+            <span style={visuallyHiddenStyle}>Cart</span>
             {cartCount > 0 && (
               <span
                 style={{
@@ -1021,7 +1032,6 @@ export default function Layout({ children }) {
         {/* Wishlist Action Link */}
         <Link
           href="/wishlist"
-          rel="nofollow"
           className="wishlist-btn"
           aria-label={`View wishlist with ${wishlist.length} items`}
           style={{ position: "relative" }}
@@ -1039,6 +1049,7 @@ export default function Layout({ children }) {
           >
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
+          <span style={visuallyHiddenStyle}>Wishlist</span>
           {wishlist.length > 0 && (
             <span
               style={{
@@ -1083,6 +1094,7 @@ export default function Layout({ children }) {
             <path d="M4 21v-2a4 4 0 0 1 3-3.87"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
+          <span style={visuallyHiddenStyle}>Account</span>
         </a>
       </div>
 
@@ -1105,6 +1117,8 @@ export default function Layout({ children }) {
             <img
               src="/assets/lantern-submark.png"
               alt="Lantern submark"
+              width="442"
+              height="529"
               className="sidebar-search-submark"
             />
           </Link>
@@ -1224,6 +1238,8 @@ export default function Layout({ children }) {
                         <img
                           src={resolvedImageSrc}
                           alt={prod.name}
+                          width="160"
+                          height="160"
                           className="result-img"
                         />
                       </div>
@@ -1309,6 +1325,8 @@ export default function Layout({ children }) {
           <img
             src="/assets/lantern.png"
             alt="Lantern sub mark"
+            width="442"
+            height="529"
             className="lantern-emblem"
             style={{ height: "60px" }}
           />

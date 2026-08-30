@@ -95,9 +95,10 @@ export default function WishlistPage() {
                     <Image
                       src={imageSrc}
                       alt={name}
-                      fill
+                      width={800}
+                      height={800}
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                       unoptimized={!isLocalOrAllowedCdn(imageSrc)}
                       onError={(e) => { if (e.target) e.target.src = '/assets/placeholder.png'; }}
                     />

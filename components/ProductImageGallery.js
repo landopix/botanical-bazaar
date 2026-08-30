@@ -67,9 +67,10 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
         <Image
           src={activeImage}
           alt={`${alt} - Image ${currentIndex + 1}`}
-          fill
+          width={1200}
+          height={1200}
           sizes="(max-width: 800px) 100vw, 500px"
-          style={{ objectFit: 'contain', width: '100%', height: '100%', borderRadius: '14px' }}
+          style={{ objectFit: 'contain', position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: '14px' }}
           priority={currentIndex === 0}
           unoptimized={!isLocalOrAllowedCdn(activeImage)}
         />
@@ -117,9 +118,10 @@ export default function ProductImageGallery({ images = [], alt = 'Product Image'
                 <Image
                   src={img}
                   alt={`${alt} thumbnail ${idx + 1}`}
-                  fill
+                  width={160}
+                  height={160}
                   sizes="60px"
-                  style={{ objectFit: 'cover', borderRadius: '6px' }}
+                  style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%', borderRadius: '6px' }}
                   unoptimized={!isLocalOrAllowedCdn(img)}
                 />
               </div>

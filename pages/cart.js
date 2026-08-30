@@ -122,9 +122,10 @@ export default function Cart() {
                   <Image
                     src={itemImg}
                     alt={String(item.name || "Botanical specimen")}
-                    fill
+                    width={160}
+                    height={160}
                     sizes="80px"
-                    style={{ objectFit: 'cover' }}
+                    style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                     unoptimized={!isLocalOrAllowedCdn(itemImg)}
                     onError={(e) => { if (e.target) e.target.src = '/assets/placeholder.png'; }}
                   />

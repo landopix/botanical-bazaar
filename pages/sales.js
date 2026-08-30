@@ -47,19 +47,24 @@ export default function Sales({ saleProducts = [], recommendations = [] }) {
       </p>
 
       {saleProducts.length > 0 ? (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '1.5rem',
-            alignItems: 'stretch',
-            marginBottom: '3rem'
-          }}
-        >
-          {saleProducts.map((p) => (
-            <ProductCard key={p?.slug || p?.id} product={p} />
-          ))}
-        </div>
+        <section aria-labelledby="current-offers-heading">
+          <h2 id="current-offers-heading" style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.6rem', marginBottom: '1.25rem' }}>
+            Current Plant Offers
+          </h2>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '1.5rem',
+              alignItems: 'stretch',
+              marginBottom: '3rem'
+            }}
+          >
+            {saleProducts.map((p) => (
+              <ProductCard key={p?.slug || p?.id} product={p} />
+            ))}
+          </div>
+        </section>
       ) : (
         <div style={{ background: '#00301E', border: '1px solid #D4B06A', padding: '2.5rem', borderRadius: '12px', textAlign: 'center', marginBottom: '3.5rem' }}>
           <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0 }}>

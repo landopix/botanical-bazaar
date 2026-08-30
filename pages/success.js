@@ -109,7 +109,7 @@ export default function Success() {
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Button variant="gold-filled" href="/shop">Return to Shop</Button>
-            <Button variant="outline" href="/cart" rel="nofollow">View Your Cart</Button>
+            <Button variant="outline" href="/cart">View Your Cart</Button>
           </div>
         </div>
       </>

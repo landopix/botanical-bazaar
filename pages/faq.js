@@ -31,7 +31,7 @@ export default function FAQ() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
         {faqs.map((faq, i) => (
           <div key={i} style={{ background: '#1C3D2E', padding: '1.5rem', borderRadius: '12px', border: '1px solid #D4B06A' }}>
-            <h3 style={{ color: '#D4B06A', margin: '0 0 0.8rem 0', fontFamily: 'Cinzel, serif' }}>{faq.q}</h3>
+            <h2 style={{ color: '#D4B06A', margin: '0 0 0.8rem 0', fontFamily: 'Cinzel, serif', fontSize: '1.25rem' }}>{faq.q}</h2>
             <p style={{ margin: 0, lineHeight: '1.6' }}>{faq.a}</p>
           </div>
         ))}

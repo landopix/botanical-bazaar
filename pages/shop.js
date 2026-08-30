@@ -595,6 +595,10 @@ export default function Shop({ initialProducts = [] }) {
         <strong>Standard Shipping &amp; Local Pickup:</strong> Secure live-plant packaging from St. Petersburg, FL + Free Nursery Pickup. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.3rem' }}>Details &rarr;</Link>
       </div>
 
+      <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.5rem', margin: '1.2rem 0 0.8rem' }}>
+        Available Plants
+      </h2>
+
       {!launchGatePassed ? (
         <NurseryUpdateFallback
           reason={

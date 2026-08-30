@@ -9,7 +9,7 @@ export default function Cancel() {
         No charges were made. Your selected rare tropical plant companion list is preserved safely in your shopping cart!
       </p>
       <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-        <Button variant="gold-filled" href="/cart" rel="nofollow">Return to Cart</Button>
+        <Button variant="gold-filled" href="/cart">Return to Cart</Button>
         <Button variant="outline" href="/shop">Continue Browsing</Button>
       </div>
     </div>

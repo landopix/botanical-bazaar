@@ -50,9 +50,10 @@ export default function AboutPage({ aboutData }) {
                   <Image
                     src={aboutData.logoImageUrl}
                     alt="The Botanical Bazaar Emblem"
-                    fill
+                    width={500}
+                    height={200}
                     sizes="200px"
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                     unoptimized={!isLocalOrAllowedCdn(aboutData.logoImageUrl)}
                     onError={(e) => { if (e.target) e.target.style.display = 'none'; }}
                   />
@@ -84,9 +85,10 @@ export default function AboutPage({ aboutData }) {
                 <Image
                   src={aboutData.bannerImageUrl}
                   alt="The Botanical Bazaar Nursery Banner"
-                  fill
+                  width={1200}
+                  height={384}
                   sizes="(max-width: 1000px) 100vw, 1000px"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                   unoptimized={!isLocalOrAllowedCdn(aboutData.bannerImageUrl)}
                 />
               </div>
@@ -100,11 +102,9 @@ export default function AboutPage({ aboutData }) {
               padding: '2.5rem',
               marginBottom: '3rem'
             }}>
-              {aboutData.storyHeading && (
-                <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '1.2rem' }}>
-                  {aboutData.storyHeading}
-                </h2>
-              )}
+              <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '1.2rem' }}>
+                {aboutData.storyHeading || 'Our St. Petersburg Nursery'}
+              </h2>
               {aboutData.storyParagraph1 && (
                 <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#F5E7C4', marginBottom: '1.5rem' }}>
                   {aboutData.storyParagraph1}
@@ -175,8 +175,14 @@ export default function AboutPage({ aboutData }) {
             <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '2.2rem', marginTop: 0, marginBottom: '1rem', letterSpacing: '0.05em' }}>
               New Botanical Updates Coming Soon!
             </h1>
+            <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.5rem', margin: '0 0 1rem' }}>
+              Rooted in St. Petersburg, Florida
+            </h2>
+            <p style={{ color: '#E9DCBE', fontSize: '1.15rem', margin: '0 0 1rem 0', lineHeight: '1.6' }}>
+              The Botanical Bazaar is a small nursery focused on unusual tropical plants, collector orchids, useful herbs, and fruiting specimens. We select plants for strong growth in warm climates and share clear care guidance for gardeners growing indoors, on patios, and in Florida landscapes.
+            </p>
             <p style={{ color: '#E9DCBE', fontSize: '1.15rem', margin: '0 0 2rem 0', lineHeight: '1.6' }}>
-              Our nursery history and story content is being refreshed in our CMS database. In the meantime, explore our acclimated tropical plant collection.
+              Our nursery story is being refreshed, but our work continues every day: sourcing healthy stock, preparing plants for travel, helping customers choose the right specimen, and offering local pickup in St. Petersburg. Browse the current collection or contact our plant guides for availability and practical growing advice.
             </p>
             <Button variant="gold-filled" href="/shop">Browse Store</Button>
           </div>

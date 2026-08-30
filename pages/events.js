@@ -107,9 +107,9 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
           boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)'
         }}>
 
-          <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
+          <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.8rem', marginTop: 0, marginBottom: '0.8rem', letterSpacing: '0.05em' }}>
             New Botanical Updates Coming Soon!
-          </h3>
+          </h2>
           <p style={{ color: '#E9DCBE', fontSize: '1.1rem', margin: '0 0 1.5rem 0', lineHeight: '1.6' }}>
             We are preparing our upcoming workshop calendar and community plant sales. Subscribe below to receive early notifications!
           </p>

@@ -521,7 +521,7 @@ export default function Index({ initialProducts = [] }) {
               border: "1px solid #D4B06A",
             }}
           >
-            <h3
+            <h2
               style={{
                 color: "#D4B06A",
                 marginTop: "0",
@@ -530,7 +530,7 @@ export default function Index({ initialProducts = [] }) {
               }}
             >
               Join Our Almanac
-            </h3>
+            </h2>
             <p
               style={{
                 margin: "0.5rem auto 1rem auto",

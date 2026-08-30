@@ -43,7 +43,12 @@ export async function getStaticProps() {
       }`;
       page = await sanityClient.fetch(query);
       if (Array.isArray(page?.items) && page.items.length > 0) {
-        images = page.items.map(item => ({
+        images = page.items.map(item => {
+          const rawAlt = item?.alt || item?.scientificName || item?.commonName || 'Botanical specimen';
+          const conciseAlt = rawAlt.length > 100
+            ? `${item?.scientificName || item?.commonName || 'Botanical specimen'} in bloom`
+            : rawAlt;
+          return ({
           _id: item?._key,
           title: item?.scientificName || item?.commonName || 'Botanical Specimen',
           commonName: item?.commonName || '',
@@ -52,9 +57,10 @@ export async function getStaticProps() {
           categoryLabel: CATEGORY_MAP[item?.plantGroup] || item?.plantGroup || 'Botanical Highlight',
           description: item?.caption || '',
           imageUrl: item?.imageUrl || '',
-          alt: item?.alt || item?.scientificName || item?.commonName || 'Botanical specimen',
+          alt: conciseAlt,
           action: item?.action || null
-        }));
+          });
+        });
       }
     }
   } catch (err) {
@@ -139,6 +145,10 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
             })}
           </div>
         )}
+
+        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.6rem', margin: '0 0 1.5rem' }}>
+          Current Botanical Specimens
+        </h2>
 
         {/* Dynamic Gallery Content vs Branded Empty State */}
         {filteredImages.length > 0 ? (
@@ -240,9 +250,10 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
               <Image
                 src={modalImageSrc}
                 alt={selectedImage?.alt || selectedImage?.title || 'Gallery Specimen'}
-                fill
+                width={1200}
+                height={800}
                 sizes="(max-width: 900px) 100vw, 850px"
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                 unoptimized={!isLocalOrAllowedCdn(modalImageSrc)}
                 onError={(e) => { if (e.target) e.target.src = '/assets/placeholder.png'; }}
               />
