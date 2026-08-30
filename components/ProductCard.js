@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { isOptimizedCdnUrl, isSanityCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, isSanityCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 import { useWishlist } from '../context/WishlistContext';
 
 export function parseProductTitle(rawTitle = '') {
@@ -106,7 +106,7 @@ function ProductCard({
   const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
   const rawImage = product?.image ?? product?.imageUrl ?? product?.featuredImage?.url;
   const imageSrc = rawImage
-    ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
+    ? optimizeCdnUrl(rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
 
   const extractedSize = getResolvedPotSize(product);

@@ -6,12 +6,12 @@ export default function Returns() {
   return (
     <>
       <Head>
-        <title>Plant Care Guarantee & Guarantee Claims Policy | The Botanical Bazaar</title>
+        <title>Plant Care Guarantee & Claims | The Botanical Bazaar</title>
         <meta
           name="description"
           content="Learn about our 100% Live Arrival Guarantee, 48-hour claim window, replacement and store credit remedies, and transit acclimatization guidelines at The Botanical Bazaar in St. Petersburg, FL."
         />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/returns" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/returns" />
       </Head>
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '850px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>

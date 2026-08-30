@@ -198,9 +198,9 @@ export default function Index({ initialProducts = [] }) {
   return (
     <div className="home-container">
       <Head>
-        <title>The Botanical Bazaar | Rare Tropical Plants & Orchids St. Petersburg FL</title>
+        <title>Rare Tropical Plants & Orchids | The Botanical Bazaar</title>
         <meta name="description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/" />
         <meta property="og:title" content="The Botanical Bazaar | Rare Tropical Plants St. Petersburg FL" />
         <meta property="og:description" content="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />

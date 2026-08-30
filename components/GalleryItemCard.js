@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 
 const CATEGORY_MAP = {
   'collector-orchids': 'Collector Orchids',
@@ -23,7 +23,7 @@ export default function GalleryItemCard({
   const displayCategory = item?.categoryLabel || (category ? CATEGORY_MAP[category] || category : null);
   const rawImage = item?.imageUrl ?? item?.image;
   const imageSrc = rawImage
-    ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
+    ? optimizeCdnUrl(rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
   const alt = item?.alt || title;
 

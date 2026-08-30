@@ -102,12 +102,12 @@ Goals & Notes: ${formData.message || 'None provided.'}`
   return (
     <>
       <Head>
-        <title>Horticultural & Landscape Consultations | The Botanical Bazaar St. Petersburg FL</title>
+        <title>Plant Consultations | The Botanical Bazaar</title>
         <meta
           name="description"
           content="Book one-on-one plant care and garden design consultations with grower guides at The Botanical Bazaar. Tailored advice for Zone 10a/10b microclimates in St. Petersburg & Tampa Bay."
         />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/consultations" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/consultations" />
         <meta property="og:title" content="Plant Consultations | The Botanical Bazaar" />
         <meta property="og:description" content="Expert plant advice and landscape planning for Zone 10a/10b microclimates in St. Petersburg & Tampa Bay." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />

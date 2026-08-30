@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { sanityClient, isSanityConfigured } from '../lib/sanity';
 import { getAlmanacArticles } from '../lib/shopify';
-import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 import Button from '../components/Button';
 import CareSheetCard from '../components/CareSheetCard';
 import useBfcacheReset from '../hooks/useBfcacheReset';
@@ -91,7 +91,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       <Head>
         <title>The Almanac & Plant Care Guides | The Botanical Bazaar</title>
         <meta name="description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers by The Botanical Bazaar." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/almanac" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/almanac" />
         <meta property="og:title" content="The Almanac & Plant Care Guides | The Botanical Bazaar" />
         <meta property="og:description" content="Explore tropical plant care sheets, seasonal gardening articles, events, and botanical guides curated for St. Petersburg growers." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/lantern.png" />
@@ -361,7 +361,7 @@ export async function getStaticProps() {
         wateringNeeds,
         zoneCompatibility,
         careInstructions,
-        "imageUrl": image.asset->url
+        "imageUrl": image.asset->url + "?auto=format&fit=max&q=75"
       }`;
 
       const articlesQuery = `*[_type == "page" && status == "published"]{
@@ -379,7 +379,7 @@ export async function getStaticProps() {
         description,
         location,
         ticketUrl,
-        "imageUrl": image.asset->url
+        "imageUrl": image.asset->url + "?auto=format&fit=max&q=75"
       }`;
 
       const [resSheets, resArticles, resEvents] = await Promise.all([

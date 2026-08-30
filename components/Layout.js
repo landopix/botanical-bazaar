@@ -826,7 +826,12 @@ export default function Layout({ children }) {
           }
         }}
       />
-      <Head>
+            <Head>
+        {(() => {
+          const cleanPath = (router.asPath || '/').split('?')[0].split('#')[0];
+          const canonicalUrl = `https://thebotanicalbazaar.com${cleanPath === '/' ? '' : cleanPath}`;
+          return <link rel="canonical" key="canonical" href={canonicalUrl} />;
+        })()}
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
         <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
         <script

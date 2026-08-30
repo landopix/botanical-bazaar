@@ -11,7 +11,7 @@ export default function Terms() {
           name="description"
           content="Review the terms of service, live plant sales policies, ordering terms, weather holds, USDA regulations, and guarantees for The Botanical Bazaar LLC in St. Petersburg, FL."
         />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/terms" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/terms" />
       </Head>
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>

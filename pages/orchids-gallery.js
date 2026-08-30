@@ -6,7 +6,7 @@ import Button from '../components/Button';
 import GalleryItemCard from '../components/GalleryItemCard';
 import GalleryItemSkeleton from '../components/skeletons/GalleryItemSkeleton';
 import { sanityClient } from '../lib/sanity';
-import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 
 const CATEGORY_MAP = {
   orchid: 'Orchid',
@@ -36,7 +36,7 @@ export async function getStaticProps() {
           plantGroup,
           caption,
           action,
-          "imageUrl": image.asset->url,
+          "imageUrl": image.asset->url + "?auto=format&fit=max&q=75",
           "alt": image.alt
         }
       }`;
@@ -99,7 +99,7 @@ export default function OrchidsGallery({ initialImages = [], pageContent = null 
       <Head>
         <title>{pageContent?.seo?.title || 'Collector Orchid & Tropical Specimen Gallery | The Botanical Bazaar St. Petersburg FL'}</title>
         <meta name="description" content={pageContent?.seo?.description || 'High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar.'} />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/orchids-gallery" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/orchids-gallery" />
         <meta property="og:title" content="Collector Orchid &amp; Tropical Specimen Gallery | The Botanical Bazaar" />
         <meta property="og:description" content="Visual showcase of rare orchids and tropical specimens cultivated in St. Petersburg, FL." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />

@@ -72,9 +72,9 @@ export default function Events({ activeEvents = [], archivedEvents = [] }) {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '900px', margin: '0 auto', color: '#E9DCBE', fontFamily: 'Crimson Text, serif' }}>
       <Head>
-        <title>Upcoming Events &amp; Workshops | The Botanical Bazaar St. Petersburg FL</title>
+        <title>Upcoming Events & Workshops | The Botanical Bazaar</title>
         <meta name="description" content="See upcoming plant sales, tropical workshops, markets and community events hosted by The Botanical Bazaar in St. Petersburg, Florida." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/events" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/events" />
       </Head>
 
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '0.8rem' }}>
@@ -166,7 +166,7 @@ export async function getStaticProps() {
         location,
         description,
         ticketUrl,
-        "imageUrl": image.asset->url,
+        "imageUrl": image.asset->url + "?auto=format&fit=max&q=75",
         publishFrom,
         expiresOn
       }`;

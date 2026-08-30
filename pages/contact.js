@@ -47,10 +47,10 @@ export default function Contact() {
   return (
     <div style={{ padding: '3rem 1.5rem', maxWidth: '700px', margin: '0 auto', fontFamily: 'Crimson Text, serif', color: '#E9DCBE' }}>
       <Head>
-        <title>Contact Our Nursery Guides | The Botanical Bazaar St. Petersburg FL</title>
+        <title>Contact Our Nursery Guides | The Botanical Bazaar</title>
         <meta name="description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL for plant availability, care guides, and nursery pickup details." />
-        <link rel="canonical" href="https://thebotanicalbazaar.com/contact" />
-        <meta property="og:title" content="Contact Our Nursery Guides | The Botanical Bazaar St. Petersburg FL" />
+        <link rel="canonical" key="canonical" href="https://thebotanicalbazaar.com/contact" />
+        <meta property="og:title" content="Contact Our Nursery Guides | The Botanical Bazaar" />
         <meta property="og:description" content="Get in touch with the horticulturists at The Botanical Bazaar in St. Petersburg, FL." />
         <meta property="og:image" content="https://thebotanicalbazaar.com/assets/brand-banner.png" />
         <meta property="og:url" content="https://thebotanicalbazaar.com/contact" />

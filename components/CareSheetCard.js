@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Button from './Button';
-import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 
 export default function CareSheetCard({
   sheet = {},
@@ -17,7 +17,7 @@ export default function CareSheetCard({
   const careInstructions = sheet?.careInstructions ?? sheet?.description ?? 'Provide proper air circulation, well-draining soil, and indirect light.';
   const rawImage = sheet?.imageUrl ?? sheet?.imagePath ?? sheet?.image;
   const imageSrc = rawImage
-    ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
+    ? optimizeCdnUrl(rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
     : '/assets/placeholder.png';
 
   const isLocalOrAllowedCdn = (url) => {
