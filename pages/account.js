@@ -1,6 +1,6 @@
 import SEO from "../components/SEO";
 const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
-const LOGIN_URL = 'https://account.thebotanicalbazaar.com';
+const LOGIN_URL = 'https://shop.thebotanicalbazaar.com/account/login';
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 

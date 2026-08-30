@@ -77,3 +77,32 @@ To ensure Shopify-hosted pages (such as checkout, account portal, and liquid tem
    - **Contact**: Link to `https://thebotanicalbazaar.com/contact`
 3. Edit **Header Logo Link** in your theme editor (**Online Store** > **Themes** > **Customize**):
    - Set the Logo destination URL to `https://thebotanicalbazaar.com/`
+
+---
+
+## 6. Storefront Bleed Prevention & Product URL Redirects
+
+To prevent web crawlers from discovering native Shopify product URLs (`https://shop.thebotanicalbazaar.com/products/*`) and triggering 406 or authentication redirects (`/customer_authentication/redirect`), configure redirect rules at the Cloudflare edge or Shopify settings.
+
+### Option A: Cloudflare Worker Redirect (Recommended)
+Deploy the following Worker rule targeting `shop.thebotanicalbazaar.com/products/*`:
+
+```javascript
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith('/products/')) {
+      const cleanPath = url.pathname.replace(/^\/products\//, '/product/');
+      const destination = `https://thebotanicalbazaar.com${cleanPath}${url.search}`;
+      return Response.redirect(destination, 301);
+    }
+    return fetch(request);
+  }
+};
+```
+
+### Option B: Shopify Admin URL Redirects
+1. In Shopify Admin, navigate to **Online Store** > **Navigation** > **View URL Redirects**.
+2. Create redirect pattern rules:
+   - **Redirect from**: `/products/*`
+   - **Redirect to**: `https://thebotanicalbazaar.com/product/*`
