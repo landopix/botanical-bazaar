@@ -114,7 +114,7 @@ export default async function formSubmitHandler(req, res) {
     });
 
     if (error) {
-      console.warn('[Form Delivery] Resend service returned error:', error);
+      console.error('[Form Delivery] Resend service returned error:', error);
       if (process.env.NODE_ENV !== 'production') {
         return res.status(200).json({
           success: true,
@@ -122,7 +122,7 @@ export default async function formSubmitHandler(req, res) {
         });
       }
       return res.status(400).json({
-        error: error.message || 'Failed to dispatch form submission email.'
+        error: 'Failed to dispatch form submission email.'
       });
     }
 

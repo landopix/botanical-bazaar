@@ -90,7 +90,7 @@ export default async function handler(req, res) {
     if (error) {
       console.error('Resend API returned error:', error);
       return res.status(400).json({
-        error: error.message || 'Failed to dispatch email via Resend API.'
+        error: 'Failed to dispatch email via Resend API.'
       });
     }
 

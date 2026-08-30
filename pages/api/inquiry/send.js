@@ -271,7 +271,7 @@ export default async function handler(req, res) {
     );
 
     if (error) {
-      console.warn('Resend API returned error:', error);
+      console.error('Resend API returned error:', error);
       if (isDuplicateSubscriberError(error)) {
         return res.status(200).json({
           success: true,
@@ -287,7 +287,7 @@ export default async function handler(req, res) {
         });
       }
       return res.status(400).json({
-        error: error.message || 'Failed to dispatch inquiry email.'
+        error: 'Failed to dispatch inquiry email.'
       });
     }
 
