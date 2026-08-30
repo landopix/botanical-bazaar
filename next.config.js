@@ -71,6 +71,17 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/',
+        has: [
+          {
+            type: 'host',
+            value: 'shop.thebotanicalbazaar.com',
+          },
+        ],
+        destination: 'https://thebotanicalbazaar.com/',
+        permanent: true,
+      },
+      {
         source: '/index.html',
         destination: '/',
         permanent: true,

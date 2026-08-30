@@ -1,15 +1,44 @@
 import SEO from "../components/SEO";
 import Head from 'next/head';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Button from '../components/Button';
 import ProductCard from '../components/ProductCard';
 import { useWishlist } from '../context/WishlistContext';
 import { isOptimizedCdnUrl } from '../lib/image-utils';
+import { getAllProducts } from '../lib/shopify';
 
 export default function WishlistPage() {
   const { wishlist, clearWishlist, removeFromWishlist } = useWishlist();
+  const [liveProductsMap, setLiveProductsMap] = useState({});
+  const [isLoadingLive, setIsLoadingLive] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveProducts() {
+      try {
+        const products = await getAllProducts();
+        if (isMounted && Array.isArray(products)) {
+          const map = {};
+          products.forEach((p) => {
+            if (p && p.slug) {
+              map[p.slug] = p;
+            }
+          });
+          setLiveProductsMap(map);
+        }
+      } catch (err) {
+        console.error("Failed to fetch live products for wishlist page:", err);
+      } finally {
+        if (isMounted) setIsLoadingLive(false);
+      }
+    }
+    fetchLiveProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const isLocalOrAllowedCdn = (url) => {
     if (!url || typeof url !== 'string') return false;
@@ -56,13 +85,33 @@ export default function WishlistPage() {
       >
         {wishlist.map((item, index) => {
           const slug = item?.slug?.current || item?.slug || '';
-          const name = item?.name || item?.title || 'Botanical Specimen';
-          const rawImage = item?.image || item?.imageUrl || item?.featuredImage?.url;
+          const liveProduct = liveProductsMap[slug];
+
+          const name = liveProduct?.name || item?.name || item?.title || 'Botanical Specimen';
+          const rawImage = liveProduct?.image || item?.image || item?.imageUrl || item?.featuredImage?.url;
           const imageSrc = rawImage
             ? (rawImage.startsWith('http') || rawImage.startsWith('/') ? rawImage : '/' + rawImage)
             : '/assets/placeholder.png';
-          const price = typeof item?.price === 'number' ? item.price : parseFloat(item?.price || 0);
-          const isSoldOut = item?.availableForSale === false || (typeof item?.quantity === 'number' && item.quantity < 1);
+
+          const priceVal = liveProduct ? liveProduct.price : (typeof item?.price === 'number' ? item.price : parseFloat(item?.price || 0));
+          const price = typeof priceVal === 'number' ? priceVal : parseFloat(priceVal || 0);
+
+          // Evaluate live availability status if liveProduct is fetched
+          let isSoldOut = false;
+          if (liveProduct) {
+            const variantId = item?.variantId || item?.variants?.[0]?.id;
+            const matchedVariant = variantId && Array.isArray(liveProduct.variants)
+              ? liveProduct.variants.find(v => v.id === variantId)
+              : null;
+
+            if (matchedVariant) {
+              isSoldOut = matchedVariant.availableForSale === false || (typeof matchedVariant.quantityAvailable === 'number' && matchedVariant.quantityAvailable < 1);
+            } else {
+              isSoldOut = liveProduct.availableForSale === false || (typeof liveProduct.quantity === 'number' && liveProduct.quantity < 1);
+            }
+          } else {
+            isSoldOut = item?.availableForSale === false || (typeof item?.quantity === 'number' && item.quantity < 1);
+          }
 
           return (
             <div

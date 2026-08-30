@@ -325,11 +325,14 @@ export default function Shop({ initialProducts = [] }) {
 
     // 3. Pot Size / Container Filter
     if (selectedSize) {
-      const sizeLower = selectedSize.toLowerCase();
+      const normalizedTargetSize = normalizePotSize(selectedSize);
       result = result.filter((product) => {
-        if (product?.custom?.pot_size) {
-          if (product.custom.pot_size.toLowerCase().includes(sizeLower)) return true;
+        const productSizes = getProductSizes(product);
+        if (productSizes.some((s) => normalizePotSize(s) === normalizedTargetSize)) {
+          return true;
         }
+        const sizeLower = selectedSize.toLowerCase();
+        if (product?.custom?.pot_size && product.custom.pot_size.toLowerCase().includes(sizeLower)) return true;
         if (product?.sizes && typeof product.sizes === "string") {
           const parts = product.sizes.split("|").map((p) => p.trim().toLowerCase());
           return parts.some((p) => p.includes(sizeLower));
@@ -410,22 +413,15 @@ export default function Shop({ initialProducts = [] }) {
     return getAvailableZones(products);
   }, [products]);
 
-  // Dynamically extract unique pot size options
+  // Dynamically extract unique pot size options using normalizePotSize
   const sortedSizes = useMemo(() => {
     const availableSizes = new Set();
     products.forEach((prod) => {
-      if (prod?.custom?.pot_size) {
-        availableSizes.add(prod.custom.pot_size.trim());
-      }
-      if (prod?.sizes && typeof prod.sizes === "string") {
-        const parts = prod.sizes.split("|");
-        parts.forEach((part) => {
-          const clean = part.trim();
-          if (clean) {
-            availableSizes.add(clean);
-          }
-        });
-      }
+      const sizes = getProductSizes(prod);
+      sizes.forEach((s) => {
+        const norm = normalizePotSize(s);
+        if (norm) availableSizes.add(norm);
+      });
     });
     return Array.from(availableSizes).sort();
   }, [products]);

@@ -86,7 +86,7 @@ export default function Contact() {
 
           <div>
             <label htmlFor="contact-name" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Your Full Name
+              Your Full Name <span style={{ color: '#e06c75' }} aria-hidden="true">*</span> <span style={{ fontSize: '0.8rem', color: '#E9DCBE', textTransform: 'none', fontWeight: 'normal' }}>(Required)</span>
             </label>
             <input
               id="contact-name"
@@ -103,7 +103,7 @@ export default function Contact() {
 
           <div>
             <label htmlFor="contact-email" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Email Address
+              Email Address <span style={{ color: '#e06c75' }} aria-hidden="true">*</span> <span style={{ fontSize: '0.8rem', color: '#E9DCBE', textTransform: 'none', fontWeight: 'normal' }}>(Required)</span>
             </label>
             <input
               id="contact-email"
@@ -120,7 +120,7 @@ export default function Contact() {
 
           <div>
             <label htmlFor="contact-message" style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 'bold', color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              How Can We Help You?
+              How Can We Help You? <span style={{ color: '#e06c75' }} aria-hidden="true">*</span> <span style={{ fontSize: '0.8rem', color: '#E9DCBE', textTransform: 'none', fontWeight: 'normal' }}>(Required)</span>
             </label>
             <textarea
               id="contact-message"
