@@ -152,7 +152,6 @@ export async function getStaticProps({ params }) {
         slug,
         collectionTitle,
         collectionProducts: collectionProducts || [],
-        allProducts: products || [],
       },
       revalidate: 60,
     };
@@ -162,7 +161,7 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function CollectionPage({ slug, collectionTitle, collectionProducts = [], allProducts = [] }) {
+export default function CollectionPage({ slug, collectionTitle, collectionProducts = [] }) {
   const router = useRouter();
 
   const [sortOrder, setSortOrder] = useState('');
@@ -203,7 +202,8 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
     } else if (sortOrder === 'alphabetical') {
       result.sort((a, b) => (a?.name || '').localeCompare(b?.name || ''));
     } else {
-      result.sort((a, b) => new Date(b?.createdAt || 0).getTime() - new Date(a?.createdAt || 0).getTime());
+      // Performance Optimization: Use Date.parse() to avoid allocating new Date objects on every sort comparison
+      result.sort((a, b) => (Date.parse(b?.createdAt) || 0) - (Date.parse(a?.createdAt) || 0));
     }
 
     return result;
