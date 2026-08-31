@@ -96,11 +96,6 @@ function ProductCard({
 
   const lowestVariant = getLowestAvailableVariant(product);
   const price = lowestVariant ? (typeof lowestVariant.price === "number" ? lowestVariant.price : parseFloat(lowestVariant.price)) : product?.price;
-  const compareAtPrice = lowestVariant?.compareAtPrice ? (typeof lowestVariant.compareAtPrice === "number" ? lowestVariant.compareAtPrice : parseFloat(lowestVariant.compareAtPrice)) : (product?.compareAtPrice ? (typeof product.compareAtPrice === "number" ? product.compareAtPrice : parseFloat(product.compareAtPrice)) : null);
-
-  const hasDiscount = compareAtPrice && price && compareAtPrice > price;
-  const discountAmount = hasDiscount ? compareAtPrice - price : 0;
-  const discountPercent = hasDiscount ? Math.round((discountAmount / compareAtPrice) * 100) : 0;
 
   const quantity = product?.quantity ?? 10;
   const isSoldOut = product?.availableForSale === false || (typeof quantity === 'number' && quantity < 1);
@@ -147,58 +142,39 @@ function ProductCard({
       }}
     >
       {/* Badges container */}
-      <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        {isSoldOut ? (
-          <div
-            className="sold-out-badge"
-            style={{
-              background: '#ba2f2f',
-              color: '#ffffff',
-              padding: '0.2rem 0.6rem',
-              borderRadius: '4px',
-              fontSize: '0.8rem',
-              fontWeight: 'bold'
-            }}
-          >
-            Sold Out
-          </div>
-        ) : (
-          <>
-            {hasDiscount && (
-              <div
-                className="sale-badge"
-                style={{
-                  background: '#11402A',
-                  color: '#D4B06A',
-                  border: '1px solid #D4B06A',
-                  padding: '0.2rem 0.6rem',
-                  borderRadius: '4px',
-                  fontSize: '0.8rem',
-                  fontWeight: 'bold',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}
-              >
-                {discountPercent > 0 ? `${discountPercent}% OFF` : 'SALE'}
-              </div>
-            )}
-            {(quantity === 1 || quantity === 2) && (
-              <div
-                className="low-stock-badge"
-                style={{
-                  background: '#D4B06A',
-                  color: '#00301E',
-                  padding: '0.2rem 0.6rem',
-                  borderRadius: '4px',
-                  fontSize: '0.8rem',
-                  fontWeight: 'bold'
-                }}
-              >
-                {`Only ${quantity} Left!`}
-              </div>
-            )}
-          </>
-        )}
-      </div>
+      {(isSoldOut || (quantity === 1 || quantity === 2)) && (
+        <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          {isSoldOut ? (
+            <div
+              className="sold-out-badge"
+              style={{
+                background: '#ba2f2f',
+                color: '#ffffff',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '4px',
+                fontSize: '0.8rem',
+                fontWeight: 'bold'
+              }}
+            >
+              Sold Out
+            </div>
+          ) : (
+            <div
+              className="low-stock-badge"
+              style={{
+                background: '#D4B06A',
+                color: '#00301E',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '4px',
+                fontSize: '0.8rem',
+                fontWeight: 'bold'
+              }}
+            >
+              {`Only ${quantity} Left!`}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Floating Wishlist Heart Trigger */}
       <button
@@ -317,16 +293,9 @@ function ProductCard({
           {isSoldOut ? (
             <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#ba2f2f' }}>Sold Out</span>
           ) : (
-            <>
-              <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#11402A' }}>
-                {typeof price === 'number' ? `$${price.toFixed(2)}` : price ?? 'Price on Request'}
-              </span>
-              {hasDiscount && (
-                <span style={{ textDecoration: 'line-through', fontSize: '0.95rem', color: '#7f8c8d' }}>
-                  ${compareAtPrice.toFixed(2)}
-                </span>
-              )}
-            </>
+            <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#11402A' }}>
+              {typeof price === 'number' ? `$${price.toFixed(2)}` : price ?? 'Price on Request'}
+            </span>
           )}
         </div>
       </div>
