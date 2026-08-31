@@ -3,13 +3,11 @@
 
 User-agent: *
 Allow: /
-Disallow: /account
 Disallow: /cart
 Disallow: /checkout
 Disallow: /cancel
 Disallow: /success
 Disallow: /wishlist
-Disallow: /account.html
 Disallow: /cart.html
 Disallow: /checkout.html
 Disallow: /cancel.html
