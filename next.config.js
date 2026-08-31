@@ -98,7 +98,17 @@ const nextConfig = {
       },
       {
         source: '/account.html',
-        destination: '/account',
+        destination: 'https://shop.thebotanicalbazaar.com/account/login',
+        permanent: true,
+      },
+      {
+        source: '/account',
+        destination: 'https://shop.thebotanicalbazaar.com/account/login',
+        permanent: true,
+      },
+      {
+        source: '/customer_authentication/:path*',
+        destination: 'https://shop.thebotanicalbazaar.com/account/login',
         permanent: true,
       },
       {
@@ -138,6 +148,16 @@ const nextConfig = {
       },
       {
         source: '/blog.html',
+        destination: '/almanac',
+        permanent: true,
+      },
+      {
+        source: '/blogs/:path*',
+        destination: '/almanac',
+        permanent: true,
+      },
+      {
+        source: '/almanac/:slug+',
         destination: '/almanac',
         permanent: true,
       },
