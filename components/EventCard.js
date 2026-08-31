@@ -73,7 +73,7 @@ export default function EventCard({
         )}
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem' }}>
-          <h2
+          <h3
             className={`line-clamp-${titleClamp}`}
             style={{
               color: '#D4B06A',
@@ -87,7 +87,7 @@ export default function EventCard({
             }}
           >
             {title}
-          </h2>
+          </h3>
           <span
             style={{
               background: '#00301E',

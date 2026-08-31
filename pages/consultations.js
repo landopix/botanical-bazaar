@@ -114,7 +114,7 @@ Goals & Notes: ${formData.message || 'None provided.'}`
 
         <section className="consultations-info-grid">
           <div className="info-card">
-            <h2>What We Help With</h2>
+            <h3>What We Help With</h3>
             <ul>
               <li>Indoor plant styling, light mapping &amp; layout</li>
               <li>Troubleshooting sick, struggling, or stressed plants</li>
@@ -125,7 +125,7 @@ Goals & Notes: ${formData.message || 'None provided.'}`
           </div>
 
           <div className="info-card">
-            <h2>How It Works</h2>
+            <h3>How It Works</h3>
             <ol>
               <li>Fill out the inquiry form below with a few details about your space and goals.</li>
               <li>We will follow up by email within 1 business day with suggested next steps and available time slots.</li>

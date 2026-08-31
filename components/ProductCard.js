@@ -266,6 +266,7 @@ function ProductCard({
               alt={commonName}
               width={800}
               height={800}
+              quality={65}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
               unoptimized={!isLocalOrAllowedCdn(imageSrc)}

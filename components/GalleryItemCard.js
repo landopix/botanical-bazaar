@@ -66,6 +66,7 @@ export default function GalleryItemCard({
             alt={alt}
             width={1200}
             height={900}
+            quality={65}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{
               objectFit: 'cover',
