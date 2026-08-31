@@ -62,7 +62,7 @@ export async function getStaticProps({ params }) {
   if (!slug || !KEBAB_CASE_REGEX.test(slug)) {
     return {
       notFound: true,
-      revalidate: 60,
+      revalidate: 3600,
     };
   }
 
@@ -153,7 +153,7 @@ export async function getStaticProps({ params }) {
         collectionTitle,
         collectionProducts: collectionProducts || [],
       },
-      revalidate: 60,
+      revalidate: 3600,
     };
   } catch (error) {
     console.error(`Error fetching collection ${slug} in getStaticProps:`, error);

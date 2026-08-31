@@ -5,6 +5,7 @@ const EXTERNAL_DATA_URL = 'https://thebotanicalbazaar.com';
 const staticRoutes = [
   '',
   '/shop',
+  '/collections',
   '/about',
   '/almanac',
   '/events',
