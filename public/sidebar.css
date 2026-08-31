@@ -373,7 +373,7 @@ body::before {
   /* Use the lighter vine pattern with increased brightness so that
      the Art Nouveau botanical overlay remains visible across all
      pages. */
-  background-image: url("assets/vine-pattern-light.png");
+  background-image: url("assets/vine-pattern-light.webp");
   background-repeat: repeat;
   /* Increase the size so the motifs are large and appear less frequently */
   /* Adjust pattern scale and opacity so the vines appear larger and less frequent.

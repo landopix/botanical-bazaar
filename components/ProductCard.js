@@ -194,8 +194,8 @@ function ProductCard({
           WebkitBackdropFilter: 'blur(4px)',
           border: '1px solid #D4B06A',
           borderRadius: '50%',
-          width: '36px',
-          height: '36px',
+          width: '48px',
+          height: '48px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -243,7 +243,7 @@ function ProductCard({
               width={800}
               height={800}
               quality={65}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 480px) calc(100vw - 104px), (max-width: 768px) calc(50vw - 32px), (max-width: 1200px) calc(33vw - 32px), 280px"
               style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
               unoptimized={!isLocalOrAllowedCdn(imageSrc)}
               onError={(e) => {

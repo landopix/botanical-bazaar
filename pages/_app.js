@@ -29,11 +29,11 @@ function MyApp({ Component, pageProps }) {
           {/* Global Google Analytics (G-S0XS3CDM9G) */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
           <Script
             id="google-analytics-init"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `
                 window.dataLayer = window.dataLayer || [];
@@ -49,12 +49,12 @@ function MyApp({ Component, pageProps }) {
           <Script
             src="https://analytics.ahrefs.com/analytics.js"
             data-key="DjAqi8i2492m5GWfN+oQjw"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
           {/* Leadfeeder Tracker */}
           <Script
             id="leadfeeder-tracker"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
             dangerouslySetInnerHTML={{
               __html: `
                 (function(ss,ex){ window.ldfdr=window.ldfdr||function(){(ldfdr._q=ldfdr._q||[]).push([].slice.call(arguments));}; (function(d,s){ fs=d.getElementsByTagName(s)[0]; function ce(src){ var cs=d.createElement(s); cs.src=src; cs.async=1; fs.parentNode.insertBefore(cs,fs); }; ce("https://sc.lfeeder.com/lftracker_v1_"+ss+(ex?"_"+ex:"")+".js"); })(document,"script"); })("Xbp1oaE0oqg4EdVj");

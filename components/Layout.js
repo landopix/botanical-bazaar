@@ -34,6 +34,7 @@ export function getZoneFromZip(zipInput) {
 }
 
 import Head from 'next/head';
+import Image from 'next/image';
 import Script from 'next/script';
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
@@ -142,6 +143,36 @@ const staticPages = [
     content: "privacy policy data collection personal info cookies security tracking"
   }
 ];
+
+const MERCHANT_IFRAME_SELECTOR = 'iframe[src*="merchantcenter"], iframe[id*="merchantwidget"], iframe[src*="google.com/shopping/merchant"]';
+
+function labelMerchantWidgetIframe() {
+  if (typeof document === "undefined") return;
+  const iframe = document.querySelector(MERCHANT_IFRAME_SELECTOR);
+  if (iframe && !iframe.title) {
+    iframe.title = "Google Customer Reviews badge";
+  }
+}
+
+function startMerchantWidget() {
+  if (typeof window === "undefined" || !window.merchantwidget || typeof window.merchantwidget.start !== "function") return;
+
+  try {
+    const existingIframe = document.querySelector(MERCHANT_IFRAME_SELECTOR);
+    if (!existingIframe && !window.__merchantwidget_initialized) {
+      window.merchantwidget.start({
+        merchant_id: 5843329915,
+        position: "BOTTOM_RIGHT",
+        region: "US"
+      });
+      window.__merchantwidget_initialized = true;
+    }
+    labelMerchantWidgetIframe();
+    window.setTimeout(labelMerchantWidgetIframe, 500);
+  } catch (err) {
+    console.error("Google Merchant Widget start error:", err);
+  }
+}
 
 const accountPortalPath = '/account';
 const visuallyHiddenStyle = {
@@ -255,6 +286,7 @@ export default function Layout({ children }) {
   const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
   const [zipError, setZipError] = useState("");
   const [zoneStatusMessage, setZoneStatusMessage] = useState("");
+  const [shouldLoadMerchantWidget, setShouldLoadMerchantWidget] = useState(false);
 
   const sidebarRef = useRef(null);
   const toggleBtnRef = useRef(null);
@@ -334,10 +366,17 @@ export default function Layout({ children }) {
 
   const [showBackToTop, setShowBackToTop] = useState(false);
 
-  // Load products for the live navigation search
+  // Load products only when the navigation search can actually be used.
   useEffect(() => {
+    if (!isSidebarOpen || allProducts.length > 0) return undefined;
+
     let isMounted = true;
     async function fetchSearchProducts() {
+      if (typeof window !== "undefined" && Array.isArray(window.PRODUCTS) && window.PRODUCTS.length > 0) {
+        setAllProducts(window.PRODUCTS);
+        return;
+      }
+
       try {
         const products = await getAllProducts();
         if (isMounted && Array.isArray(products) && products.length > 0) {
@@ -355,7 +394,12 @@ export default function Layout({ children }) {
     }
 
     fetchSearchProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, [isSidebarOpen, allProducts.length]);
 
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const savedZone = localStorage.getItem("user_hardiness_zone");
       if (savedZone) {
@@ -378,11 +422,32 @@ export default function Layout({ children }) {
       window.addEventListener("open_zone_modal", handleOpenZoneModal);
 
       return () => {
-        isMounted = false;
         window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
         window.removeEventListener("open_zone_modal", handleOpenZoneModal);
       };
     }
+    return undefined;
+  }, []);
+
+  // The Google Customer Reviews badge is useful trust content, but its widget
+  // downloads several hundred kilobytes. Load it after genuine interaction so
+  // it never delays the initial storefront render.
+  useEffect(() => {
+    const enableMerchantWidget = () => {
+      setShouldLoadMerchantWidget(true);
+      window.removeEventListener("pointerdown", enableMerchantWidget);
+      window.removeEventListener("keydown", enableMerchantWidget);
+      window.removeEventListener("scroll", enableMerchantWidget);
+    };
+
+    window.addEventListener("pointerdown", enableMerchantWidget, { passive: true });
+    window.addEventListener("keydown", enableMerchantWidget);
+    window.addEventListener("scroll", enableMerchantWidget, { passive: true });
+    return () => {
+      window.removeEventListener("pointerdown", enableMerchantWidget);
+      window.removeEventListener("keydown", enableMerchantWidget);
+      window.removeEventListener("scroll", enableMerchantWidget);
+    };
   }, []);
 
   const handleSelectZone = (newZone) => {
@@ -605,24 +670,10 @@ export default function Layout({ children }) {
     }
   }, [isSidebarOpen, isZoneModalOpen]);
 
-  // Initialize Google Customer Reviews Badge widget on route change idempotently
+  // Initialize the badge on subsequent routes after it has been requested once.
   useEffect(() => {
-    if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
-      try {
-        const existingIframe = document.querySelector('iframe[src*="merchantcenter"], iframe[id*="merchantwidget"], iframe[src*="google.com/shopping/merchant"]');
-        if (!existingIframe && !window.__merchantwidget_initialized) {
-          window.merchantwidget.start({
-            merchant_id: 5843329915,
-            position: "BOTTOM_RIGHT",
-            region: "US"
-          });
-          window.__merchantwidget_initialized = true;
-        }
-      } catch (err) {
-        console.error("Google Merchant Widget start error:", err);
-      }
-    }
-  }, [router.pathname]);
+    if (shouldLoadMerchantWidget) startMerchantWidget();
+  }, [router.pathname, shouldLoadMerchantWidget]);
 
   // Route Change State Cleanup
   useEffect(() => {
@@ -816,26 +867,25 @@ export default function Layout({ children }) {
       <a href="#main-content" className="skip-to-content">
         Skip to main content
       </a>
+      {shouldLoadMerchantWidget && (
+        <Script
+          id="merchantWidgetScript"
+          src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
+          strategy="afterInteractive"
+          onLoad={startMerchantWidget}
+        />
+      )}
       <Script
-        id="merchantWidgetScript"
-        src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (typeof window !== "undefined" && window.merchantwidget && typeof window.merchantwidget.start === "function") {
-            try {
-              const existingIframe = document.querySelector('iframe[src*="merchantcenter"], iframe[id*="merchantwidget"], iframe[src*="google.com/shopping/merchant"]');
-              if (!existingIframe && !window.__merchantwidget_initialized) {
-                window.merchantwidget.start({
-                  merchant_id: 5843329915,
-                  position: "BOTTOM_RIGHT",
-                  region: "US"
-                });
-                window.__merchantwidget_initialized = true;
-              }
-            } catch (err) {
-              console.error("Google Merchant Widget onLoad error:", err);
-            }
-          }
+        id="microsoft-clarity"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID || 'vxxgho3991'}");
+          `
         }}
       />
             <Head>
@@ -846,17 +896,6 @@ export default function Layout({ children }) {
         })()}
         <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || "c0O7LzW_8R4Z-X1"} />
         <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_VERIFICATION || "43E15CEF6A1D8E6E25A3178CD99FE182"} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_ID || 'vxxgho3991'}");
-            `
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -1117,11 +1156,12 @@ export default function Layout({ children }) {
             className="sidebar-search-submark-link"
             aria-label="Home"
           >
-            <img
+            <Image
               src="/assets/lantern-submark.webp"
               alt="Lantern submark"
-              width="442"
-              height="529"
+              width={32}
+              height={32}
+              sizes="32px"
               className="sidebar-search-submark"
             />
           </Link>
@@ -1325,11 +1365,12 @@ export default function Layout({ children }) {
       {/* High-Fidelity Desktop Site Header */}
       <header ref={headerRef} style={{ position: "relative" }}>
         <Link href="/" style={{ display: "inline-block" }}>
-          <img
+          <Image
             src="/assets/lantern.webp"
             alt="Lantern sub mark"
-            width="442"
-            height="529"
+            width={50}
+            height={60}
+            sizes="50px"
             className="lantern-emblem"
             style={{ height: "60px" }}
           />
