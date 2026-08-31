@@ -99,17 +99,12 @@ const nextConfig = {
       },
       {
         source: '/account.html',
-        destination: 'https://shop.thebotanicalbazaar.com/account/login',
-        permanent: true,
-      },
-      {
-        source: '/account',
-        destination: 'https://shop.thebotanicalbazaar.com/account/login',
+        destination: '/account',
         permanent: true,
       },
       {
         source: '/customer_authentication/:path*',
-        destination: 'https://shop.thebotanicalbazaar.com/account/login',
+        destination: '/account',
         permanent: true,
       },
       {

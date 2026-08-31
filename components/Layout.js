@@ -143,8 +143,7 @@ const staticPages = [
   }
 ];
 
-const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
-const shopifyAccountUrl = 'https://shop.thebotanicalbazaar.com/account/login';
+const accountPortalPath = '/account';
 const visuallyHiddenStyle = {
   position: 'absolute',
   width: '1px',
@@ -1082,7 +1081,7 @@ export default function Layout({ children }) {
         </Link>
 
         {/* Account Action Link */}
-        <a href={shopifyAccountUrl} className="account-btn" aria-label="My account login">
+        <Link href={accountPortalPath} className="account-btn" aria-label="My account login">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -1099,7 +1098,7 @@ export default function Layout({ children }) {
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
           <span style={visuallyHiddenStyle}>Account</span>
-        </a>
+        </Link>
       </div>
 
       {/* Stateful Navigation Sidebar */}
@@ -1522,7 +1521,7 @@ export default function Layout({ children }) {
             <Link href="/faq">FAQ</Link>
             <Link href="/shipping-pickup">Shipping &amp; Unpacking</Link>
             <Link href="/returns">Refunds &amp; Guarantee</Link>
-            <a href={shopifyAccountUrl}>Track Order / Account</a>
+            <Link href={accountPortalPath}>Track Order / Account</Link>
             <Link href="/terms">Terms</Link>
           </div>
           <div className="footer-column">

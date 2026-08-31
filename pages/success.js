@@ -1,5 +1,3 @@
-const rawDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN || 'shop.thebotanicalbazaar.com';
-const shopifyAccountUrl = 'https://shop.thebotanicalbazaar.com/account/login';
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -138,7 +136,7 @@ export default function Success() {
           We have secured your selected tropical plant companions! Our nursery guides are preparing your collection. We will email or text you shortly to coordinate your personalized local pickup slot in St. Petersburg, FL.
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <Button variant="gold-filled" href={shopifyAccountUrl}>Go to Customer Account</Button>
+          <Button variant="gold-filled" href="/account">Go to Customer Account</Button>
           <Button variant="outline" href="/shop">Browse More Catalog</Button>
         </div>
       </div>
