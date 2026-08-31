@@ -5,7 +5,7 @@ import Head from 'next/head';
 export default function Privacy() {
   return (
     <>
-      <SEO title="Privacy Policy" description="How we collect, protect, and handle your personal customer data at The Botanical Bazaar." />
+      <SEO title="Privacy Policy" description="Learn how The Botanical Bazaar collects, uses, stores, and protects customer information for orders, payments, communication, analytics, and site security." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         {/* Main Title Section */}

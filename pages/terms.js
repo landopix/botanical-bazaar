@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Terms() {
   return (
     <>
-      <SEO title="Terms of Service & Sales Policies" description="Terms of service, website usage agreements, and purchase conditions for The Botanical Bazaar." />
+      <SEO title="Terms of Service & Sales Policies" description="Review The Botanical Bazaar terms for website use, plant orders, payments, shipping, local pickup, live arrival claims, returns, and customer support." />
 
       <div style={{ padding: '3.5rem 1.5rem', maxWidth: '860px', margin: '0 auto', boxSizing: 'border-box', color: '#E9DCBE', lineHeight: '1.7' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem', borderBottom: '1px solid rgba(212, 176, 106, 0.3)', paddingBottom: '2rem' }}>

@@ -1,4 +1,4 @@
-import { getAllProducts } from '../lib/shopify';
+import { getAllProducts, getAlmanacArticles } from '../lib/shopify';
 
 const EXTERNAL_DATA_URL = 'https://thebotanicalbazaar.com';
 
@@ -47,7 +47,7 @@ function formatDate(dateString, fallbackDate) {
   }
 }
 
-function generateSiteMap(products) {
+function generateSiteMap(products, almanacArticles) {
   const currentDate = new Date().toISOString().split('T')[0];
 
   const collectionHandles = new Set(KNOWN_COLLECTIONS);
@@ -103,6 +103,22 @@ function generateSiteMap(products) {
     })
     .filter(Boolean)
     .join('')}
+
+  <!-- Almanac Articles -->
+  ${(almanacArticles || [])
+    .map((article) => {
+      if (!article?.handle) return '';
+      const lastmod = formatDate(article.publishedAt, currentDate);
+      return `
+  <url>
+    <loc>${EXTERNAL_DATA_URL}/almanac/${article.handle}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+    })
+    .filter(Boolean)
+    .join('')}
 </urlset>`;
 }
 
@@ -113,9 +129,12 @@ function SiteMap() {
 export async function getServerSideProps({ res }) {
   // Let errors propagate so Next.js handles it as a server error (500)
   // rather than serving a falsely complete sitemap without dynamic products.
-  const products = await getAllProducts();
+  const [products, almanacArticles] = await Promise.all([
+    getAllProducts(),
+    getAlmanacArticles('the-almanac'),
+  ]);
 
-  const sitemap = generateSiteMap(products);
+  const sitemap = generateSiteMap(products, almanacArticles);
 
   res.setHeader('Content-Type', 'text/xml');
   res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=59');

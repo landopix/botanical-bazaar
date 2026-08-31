@@ -6,7 +6,7 @@ import Link from 'next/link';
 export default function Accessibility() {
   return (
     <>
-      <SEO title="Accessibility Statement" description="Accessibility commitment and statement for The Botanical Bazaar storefront." />
+      <SEO title="Accessibility Statement" description="Read The Botanical Bazaar accessibility commitment, supported accommodations, feedback process, and contact options for an inclusive shopping experience." />
       <div className="min-h-screen bg-[#00301E] text-[#F5E7C4] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto bg-[#1C3D2E] border border-[#D4B06A] rounded-lg p-6 sm:p-10 shadow-xl">
           <h1 className="text-3xl sm:text-4xl font-serif text-[#D4B06A] tracking-wider text-center uppercase mb-8 border-b border-[#D4B06A]/30 pb-4">
