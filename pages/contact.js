@@ -51,8 +51,11 @@ export default function Contact() {
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1rem', fontSize: '2.5rem' }}>
         Contact Our Nursery Guides
       </h1>
-      <p style={{ textAlign: 'center', fontSize: '1.15rem', marginBottom: '3rem', color: '#E9DCBE', lineHeight: '1.6' }}>
-        Have questions about stock, local pickup schedules, or plant care compatibility? Call or text us at <a href="tel:7273507876" style={{ color: "#D4B06A", textDecoration: "underline" }}>(727) 350-7876</a> or fill out the secure form below.
+      <p style={{ textAlign: 'center', fontSize: '1.15rem', marginBottom: '2rem', color: '#E9DCBE', lineHeight: '1.65' }}>
+        Whether you are inquiring about rare plant availability, arranging local nursery pickup in St. Petersburg, FL, seeking custom microclimate recommendations, or tracking an active order, our dedicated horticultural team is ready to assist you.
+      </p>
+      <p style={{ textAlign: 'center', fontSize: '1.05rem', marginBottom: '3rem', color: '#E9DCBE', lineHeight: '1.6' }}>
+        Call or text our nursery bench at <a href="tel:7273507876" style={{ color: "#D4B06A", textDecoration: "underline" }}>(727) 350-7876</a>, or send a direct inquiry using the secure form below. All plant purchases are backed by our 100% Live Arrival Guarantee.
       </p>
 
       {submitted ? (

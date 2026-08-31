@@ -127,6 +127,7 @@ export default function CartDrawer({ isOpen, onClose }) {
                         alt={item.name}
                         width={60}
                         height={60}
+                        sizes="60px"
                         unoptimized={!isSanityCdnUrl(itemImage)}
                       />
                     </Link>

@@ -187,7 +187,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
               const excerpt = article.excerpt || article.seoDescription || 'Read our latest insights on seasonal plant care and soil preparation.';
               const rawLink = (article.handle ? '/almanac/' + article.handle : null) || article.onlineStoreUrl || (article.slug ? '/page/' + article.slug : '#');
               const link = rawLink.replace(/^https?:\/\/[^\/]+\.(?:myshopify\.com|thebotanicalbazaar\.com)/, '').replace(/\/blogs\/[^\/]+\//, '/almanac/').replace(/\/products\//, '/product/');
-              const imageUrl = article.imageUrl || '/assets/lantern.png';
+              const imageUrl = article.imageUrl || '/assets/lantern.webp';
               const imageAlt = article.imageAlt || title;
               const publishedDate = article.publishedAt
                 ? new Date(article.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -206,7 +206,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                           unoptimized={!isLocalOrAllowedCdn(imageUrl)}
-                          onError={(e) => { if (e.target) e.target.src = '/assets/lantern.png'; }}
+                          onError={(e) => { if (e.target) e.target.src = '/assets/lantern.webp'; }}
                         />
                       </div>
                     )}
