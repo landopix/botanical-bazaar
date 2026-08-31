@@ -380,6 +380,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
       },
       'hasMerchantReturnPolicy': {
         '@type': 'MerchantReturnPolicy',
+        'applicableCountry': 'US',
         'returnPolicyCategory': 'https://schema.org/MerchantReturnNotPermitted'
       }
     },

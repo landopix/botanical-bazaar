@@ -681,6 +681,7 @@ export default function Layout({ children }) {
       isOpenState: isCollectionsOpen,
       setOpenState: setIsCollectionsOpen,
       items: [
+        { label: "All Plant Collections", href: "/collections" },
         { label: "Orchids", href: "/collections/orchids" },
         { label: "Tropical Houseplants", href: "/collections/tropical-houseplants" },
         { label: "Fruit Trees", href: "/collections/fruit-trees" },
@@ -715,6 +716,7 @@ export default function Layout({ children }) {
       isOpenState: isFaqOpen,
       setOpenState: setIsFaqOpen,
       items: [
+        { label: "Help & Support Hub", href: "/help" },
         { label: "FAQ Overview", href: "/faq" },
         { label: "Shipping & Local Pickup", href: "/shipping-pickup" },
         { label: "Plant Care Guarantee", href: "/returns" },
