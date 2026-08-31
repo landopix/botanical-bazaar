@@ -352,9 +352,10 @@ export default function Index({ initialProducts = [] }) {
           width: 100%;
           height: 100%;
           pointer-events: none;
-          background-image: url('/assets/vine-pattern-light.png');
-          background-repeat: repeat;
-          background-size: 800px;
+          background-image:
+            radial-gradient(circle at 18% 30%, rgba(0, 48, 30, 0.22) 0 1px, transparent 2px),
+            radial-gradient(circle at 78% 68%, rgba(245, 231, 196, 0.2) 0 1px, transparent 2px);
+          background-size: 42px 42px, 56px 56px;
           opacity: 0.06;
           mix-blend-mode: soft-light;
           border-radius: inherit;
@@ -521,7 +522,7 @@ export default function Index({ initialProducts = [] }) {
               border: "1px solid #D4B06A",
             }}
           >
-            <h3
+            <h2
               style={{
                 color: "#D4B06A",
                 marginTop: "0",
@@ -530,7 +531,7 @@ export default function Index({ initialProducts = [] }) {
               }}
             >
               Join Our Almanac
-            </h3>
+            </h2>
             <p
               style={{
                 margin: "0.5rem auto 1rem auto",
