@@ -5,7 +5,7 @@ export default function SeasonalArchive({ title, children }) {
     <div className="seasonal-archive-container">
       <div className="archive-header">
         <span className="archive-badge">Past Seasonal Archive</span>
-        <h2 className="archive-title">{title || "Past Seasonal Content"}</h2>
+        <h3 className="archive-title">{title || "Past Seasonal Content"}</h3>
         <p className="archive-note">
           Notice: Active seasonal entries for the current period have concluded or are being updated by our growers. Below is our archived collection for historical reference.
         </p>

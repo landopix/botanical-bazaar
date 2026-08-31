@@ -18,7 +18,7 @@ export default function HelpHub() {
       <div className="hub-grid">
         <div className="hub-card">
 
-          <h2 className="card-title">Shipping &amp; Local Pickup</h2>
+          <h3 className="card-title">Shipping &amp; Local Pickup</h3>
           <p className="card-desc">
             Details on standard live-plant transit, insulated weather holds, and free local pickup at our St. Petersburg nursery.
           </p>
@@ -29,7 +29,7 @@ export default function HelpHub() {
 
         <div className="hub-card">
 
-          <h2 className="card-title">Live-Arrival Guarantee</h2>
+          <h3 className="card-title">Live-Arrival Guarantee</h3>
           <p className="card-desc">
             Learn about our 48-hour live-arrival guarantee, transit coverage, and photo submission requirements for claims.
           </p>
@@ -40,7 +40,7 @@ export default function HelpHub() {
 
         <div className="hub-card">
 
-          <h2 className="card-title">Plant Sourcing &amp; Inquiries</h2>
+          <h3 className="card-title">Plant Sourcing &amp; Inquiries</h3>
           <p className="card-desc">
             Looking for a specific rare aroid, orchid, or fruiting specimen? Submit a custom sourcing request to our growers.
           </p>
@@ -51,7 +51,7 @@ export default function HelpHub() {
 
         <div className="hub-card">
 
-          <h2 className="card-title">Botanical Almanac &amp; Care</h2>
+          <h3 className="card-title">Botanical Almanac &amp; Care</h3>
           <p className="card-desc">
             Access cultivation guides, USDA zone 9b/10a tips, watering schedules, and bench notes from our nurserymen.
           </p>
@@ -62,7 +62,7 @@ export default function HelpHub() {
 
         <div className="hub-card">
 
-          <h2 className="card-title">Frequently Asked Questions</h2>
+          <h3 className="card-title">Frequently Asked Questions</h3>
           <p className="card-desc">
             Quick answers regarding plant acclimation, potting substrates, order processing, and visiting our nursery.
           </p>
@@ -73,7 +73,7 @@ export default function HelpHub() {
 
         <div className="hub-card">
 
-          <h2 className="card-title">Direct Contact</h2>
+          <h3 className="card-title">Direct Contact</h3>
           <p className="card-desc">
             Have a custom question or need order assistance? Send a direct message to our nursery team.
           </p>

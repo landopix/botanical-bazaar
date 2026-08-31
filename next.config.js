@@ -4,11 +4,11 @@ const contentSecurityPolicy = [
   "object-src 'none'",
   "frame-ancestors 'self'",
   "form-action 'self' https://*.shopify.com https://*.myshopify.com https://shop.thebotanicalbazaar.com",
-  "script-src 'self' 'unsafe-inline' https://*.google.com https://*.gstatic.com https://www.googletagmanager.com https://*.clarity.ms https://analytics.ahrefs.com https://*.lfeeder.com https://apis.google.com https://challenges.cloudflare.com",
+  "script-src 'self' 'unsafe-inline' https://*.google.com https://*.gstatic.com https://www.googletagmanager.com https://*.clarity.ms https://analytics.ahrefs.com https://*.lfeeder.com https://sc.lfeeder.com https://apis.google.com https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://cdn.shopify.com https://cdn.sanity.io https://*.google.com https://*.gstatic.com https://*.google-analytics.com https://*.clarity.ms https://*.ahrefs.com https://*.lfeeder.com https://*.bing.com",
+  "img-src 'self' data: blob: https://cdn.shopify.com https://cdn.sanity.io https://*.google.com https://*.gstatic.com https://*.google-analytics.com https://*.clarity.ms https://*.ahrefs.com https://*.lfeeder.com https://sc.lfeeder.com https://*.bing.com",
   "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://shop.thebotanicalbazaar.com https://*.shopify.com https://*.myshopify.com https://cdn.shopify.com https://cdn.sanity.io https://*.sanity.io https://*.google.com https://*.google-analytics.com https://*.clarity.ms https://*.ahrefs.com https://*.lfeeder.com https://challenges.cloudflare.com",
+  "connect-src 'self' https://shop.thebotanicalbazaar.com https://*.shopify.com https://*.myshopify.com https://cdn.shopify.com https://cdn.sanity.io https://*.sanity.io https://*.google.com https://*.google-analytics.com https://*.clarity.ms https://*.ahrefs.com https://*.lfeeder.com https://sc.lfeeder.com https://challenges.cloudflare.com",
   "frame-src 'self' https://*.google.com https://*.gstatic.com https://*.shopify.com https://*.myshopify.com https://shop.thebotanicalbazaar.com https://challenges.cloudflare.com",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
@@ -19,6 +19,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
+    qualities: [65, 75],
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
@@ -34,7 +35,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: "/(.*)",
         headers: [
           {
             key: "X-DNS-Prefetch-Control",

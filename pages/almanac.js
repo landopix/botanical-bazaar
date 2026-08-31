@@ -100,9 +100,9 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
 
       {/* Almanac Email Dispatch Subscription Form */}
       <section style={{ background: '#00301E', padding: '2.5rem 1.8rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center', marginBottom: '3.5rem', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
-        <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.8rem', letterSpacing: '0.05em' }}>
+        <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.8rem', letterSpacing: '0.05em' }}>
           Subscribe to Monthly Almanac Dispatches
-        </h2>
+        </h3>
         <p style={{ maxWidth: '620px', margin: '0.5rem auto 1.5rem auto', fontSize: '1.1rem', color: '#F5E7C4', lineHeight: '1.6' }}>
           Receive seasonal St. Petersburg planting advice, cold hardiness weather alerts, and rare specimen releases straight to your inbox.
         </p>
