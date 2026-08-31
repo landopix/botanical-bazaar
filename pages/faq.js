@@ -28,7 +28,7 @@ export default function FAQ() {
       <SEO title="Frequently Asked Questions" description="Answers to common questions about ordering, nationwide shipping, USDA regulations, local nursery pickup, live plant guarantee, and acclimatization." />
       <h1 style={{ color: '#D4B06A', textAlign: 'center', fontFamily: 'Cinzel, serif', marginBottom: '1.5rem' }}>Frequently Asked Questions</h1>
       <p style={{ textAlign: 'center', fontSize: '1.1rem', color: '#E9DCBE', lineHeight: '1.65', marginBottom: '2.5rem', maxWidth: '750px', marginLeft: 'auto', marginRight: 'auto' }}>
-        Welcome to The Botanical Bazaar reference hub. Here you will find detailed answers regarding our rare plant ordering processes, nationwide climate-controlled shipping standards, USDA agricultural compliance, free local nursery pickup in St. Petersburg, FL, and our 100% Live Arrival Guarantee.
+        Welcome to The Botanical Bazaar reference hub. Here you will find detailed answers about rare plant ordering, nationwide standard shipping with insulated packaging and weather holds when needed, USDA agricultural compliance, free local nursery pickup in St. Petersburg, FL, and our 100% Live Arrival Guarantee.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>

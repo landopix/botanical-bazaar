@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import ProductCard from '../../components/ProductCard';
 import Button from '../../components/Button';
 import NurseryUpdateFallback from '../../components/NurseryUpdateFallback';
+import RelatedCollections from '../../components/RelatedCollections';
 import { getAllProducts } from '../../lib/shopify';
 import { isZoneCompatible, normalizePotSize, getProductSizes, getAvailableZones } from '../../lib/fulfillment';
 
@@ -374,7 +375,8 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
         </div>
       )}
 
-      <CollectionSeoBoilerplate collectionTitle={collectionTitle} />
+      <CollectionSeoBoilerplate collectionSlug={slug} collectionTitle={collectionTitle} />
+      <RelatedCollections currentSlug={slug} />
 
       <style jsx>{`
         .collection-container {
