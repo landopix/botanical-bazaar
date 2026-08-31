@@ -1119,7 +1119,7 @@ export default function Layout({ children }) {
             aria-label="Home"
           >
             <img
-              src="/assets/lantern-submark.png"
+              src="/assets/lantern-submark.webp"
               alt="Lantern submark"
               width="442"
               height="529"
@@ -1327,7 +1327,7 @@ export default function Layout({ children }) {
       <header ref={headerRef} style={{ position: "relative" }}>
         <Link href="/" style={{ display: "inline-block" }}>
           <img
-            src="/assets/lantern.png"
+            src="/assets/lantern.webp"
             alt="Lantern sub mark"
             width="442"
             height="529"

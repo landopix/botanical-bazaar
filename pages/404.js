@@ -97,6 +97,7 @@ export default function Custom404() {
                         alt={p.name || p.title}
                         width={160}
                         height={160}
+                        sizes="42px"
                         style={{ objectFit: 'cover', position: 'absolute', inset: 0, width: '100%', height: '100%' }}
                       />
                     </div>

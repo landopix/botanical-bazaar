@@ -1,3 +1,4 @@
+import CollectionSeoBoilerplate from '../../components/CollectionSeoBoilerplate';
 import React, { useState, useMemo } from 'react';
 import SEO from '../../components/SEO';
 import Head from 'next/head';
@@ -372,6 +373,8 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
           ))}
         </div>
       )}
+
+      <CollectionSeoBoilerplate collectionTitle={collectionTitle} />
 
       <style jsx>{`
         .collection-container {
