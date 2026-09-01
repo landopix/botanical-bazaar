@@ -591,7 +591,7 @@ export default function Shop({ initialProducts = [] }) {
         <strong>Standard Shipping &amp; Local Pickup:</strong> Secure live-plant packaging from St. Petersburg, FL + Free Nursery Pickup. <Link href="/shipping-pickup" style={{ color: '#00301E', textDecoration: 'underline', fontWeight: 'bold', marginLeft: '0.3rem' }}>Details &rarr;</Link>
       </div>
 
-      <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.5rem', margin: '1.2rem 0 0.8rem' }}>
+      <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', fontSize: '1.5rem', margin: '1.2rem 0 0.8rem', textAlign: 'center' }}>
         Available Plants
       </h2>
 
@@ -874,15 +874,17 @@ export default function Shop({ initialProducts = [] }) {
           color: #d4b06a;
           margin-bottom: 0;
           white-space: nowrap;
-          display: inline-block;
+          display: block;
+          text-align: center;
           font-family: "Crimson Text", serif;
         }
 
         .category-section {
           margin-bottom: 0.6rem;
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 0.6rem;
+          gap: 0.4rem;
         }
 
         .category-pills {
