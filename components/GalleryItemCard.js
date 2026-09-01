@@ -56,7 +56,7 @@ export default function GalleryItemCard({
           style={{
             position: 'relative',
             width: '100%',
-            paddingTop: '75%', // 4:3 aspect ratio
+            paddingTop: '75%', // 4:3 aspect ratio container
             overflow: 'hidden',
             backgroundColor: '#001F14'
           }}
@@ -69,7 +69,7 @@ export default function GalleryItemCard({
             quality={65}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             style={{
-              objectFit: 'cover',
+              objectFit: 'contain',
               position: 'absolute',
               inset: 0,
               width: '100%',

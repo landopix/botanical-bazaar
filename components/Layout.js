@@ -277,6 +277,8 @@ export default function Layout({ children }) {
 
   // Desktop Header Dropdowns state
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
+  const [isConsultationsDropdownOpen, setIsConsultationsDropdownOpen] = useState(false);
+  const [isAlmanacDropdownOpen, setIsAlmanacDropdownOpen] = useState(false);
   const [isFaqDropdownOpen, setIsFaqDropdownOpen] = useState(false);
 
   // Hardiness Zone Detector state (defaults to Zone 10a)
@@ -295,37 +297,78 @@ export default function Layout({ children }) {
   const triggerElementRef = useRef(null);
 
   const shopDropdownRef = useRef(null);
+  const consultationsDropdownRef = useRef(null);
+  const almanacDropdownRef = useRef(null);
   const faqDropdownRef = useRef(null);
+
   const shopTriggerRef = useRef(null);
+  const consultationsTriggerRef = useRef(null);
+  const almanacTriggerRef = useRef(null);
   const faqTriggerRef = useRef(null);
 
   // UX Fix: Hover delay timers to prevent menu from vanishing during diagonal mouse movement
   const shopTimerRef = useRef(null);
+  const consultationsTimerRef = useRef(null);
+  const almanacTimerRef = useRef(null);
   const faqTimerRef = useRef(null);
 
-  const handleShopMouseEnter = () => {
+  const clearAllDropdownTimers = () => {
     if (shopTimerRef.current) clearTimeout(shopTimerRef.current);
+    if (consultationsTimerRef.current) clearTimeout(consultationsTimerRef.current);
+    if (almanacTimerRef.current) clearTimeout(almanacTimerRef.current);
     if (faqTimerRef.current) clearTimeout(faqTimerRef.current);
-    setIsFaqDropdownOpen(false);
+  };
+
+  const closeAllDropdownsExcept = (exceptSetter) => {
+    if (exceptSetter !== setIsShopDropdownOpen) setIsShopDropdownOpen(false);
+    if (exceptSetter !== setIsConsultationsDropdownOpen) setIsConsultationsDropdownOpen(false);
+    if (exceptSetter !== setIsAlmanacDropdownOpen) setIsAlmanacDropdownOpen(false);
+    if (exceptSetter !== setIsFaqDropdownOpen) setIsFaqDropdownOpen(false);
+  };
+
+  const handleShopMouseEnter = () => {
+    clearAllDropdownTimers();
+    closeAllDropdownsExcept(setIsShopDropdownOpen);
     setIsShopDropdownOpen(true);
   };
 
   const handleShopMouseLeave = () => {
-    // UX Fix: 150ms transition delay on mouse leave for smooth diagonal cursor tracking
     shopTimerRef.current = setTimeout(() => {
       setIsShopDropdownOpen(false);
     }, 150);
   };
 
+  const handleConsultationsMouseEnter = () => {
+    clearAllDropdownTimers();
+    closeAllDropdownsExcept(setIsConsultationsDropdownOpen);
+    setIsConsultationsDropdownOpen(true);
+  };
+
+  const handleConsultationsMouseLeave = () => {
+    consultationsTimerRef.current = setTimeout(() => {
+      setIsConsultationsDropdownOpen(false);
+    }, 150);
+  };
+
+  const handleAlmanacMouseEnter = () => {
+    clearAllDropdownTimers();
+    closeAllDropdownsExcept(setIsAlmanacDropdownOpen);
+    setIsAlmanacDropdownOpen(true);
+  };
+
+  const handleAlmanacMouseLeave = () => {
+    almanacTimerRef.current = setTimeout(() => {
+      setIsAlmanacDropdownOpen(false);
+    }, 150);
+  };
+
   const handleFaqMouseEnter = () => {
-    if (shopTimerRef.current) clearTimeout(shopTimerRef.current);
-    if (faqTimerRef.current) clearTimeout(faqTimerRef.current);
-    setIsShopDropdownOpen(false);
+    clearAllDropdownTimers();
+    closeAllDropdownsExcept(setIsFaqDropdownOpen);
     setIsFaqDropdownOpen(true);
   };
 
   const handleFaqMouseLeave = () => {
-    // UX Fix: 150ms transition delay on mouse leave for smooth diagonal cursor tracking
     faqTimerRef.current = setTimeout(() => {
       setIsFaqDropdownOpen(false);
     }, 150);
@@ -482,6 +525,12 @@ export default function Layout({ children }) {
         } else if (isShopDropdownOpen) {
           setIsShopDropdownOpen(false);
           shopTriggerRef.current?.focus();
+        } else if (isConsultationsDropdownOpen) {
+          setIsConsultationsDropdownOpen(false);
+          consultationsTriggerRef.current?.focus();
+        } else if (isAlmanacDropdownOpen) {
+          setIsAlmanacDropdownOpen(false);
+          almanacTriggerRef.current?.focus();
         } else if (isFaqDropdownOpen) {
           setIsFaqDropdownOpen(false);
           faqTriggerRef.current?.focus();
@@ -490,7 +539,7 @@ export default function Layout({ children }) {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isSidebarOpen, isZoneModalOpen, isShopDropdownOpen, isFaqDropdownOpen]);
+  }, [isSidebarOpen, isZoneModalOpen, isShopDropdownOpen, isConsultationsDropdownOpen, isAlmanacDropdownOpen, isFaqDropdownOpen]);
 
   // Focus management when opening/closing sidebar
   useEffect(() => {
@@ -630,6 +679,22 @@ export default function Layout({ children }) {
       }
 
       if (
+        isConsultationsDropdownOpen &&
+        consultationsDropdownRef.current &&
+        !consultationsDropdownRef.current.contains(e.target)
+      ) {
+        setIsConsultationsDropdownOpen(false);
+      }
+
+      if (
+        isAlmanacDropdownOpen &&
+        almanacDropdownRef.current &&
+        !almanacDropdownRef.current.contains(e.target)
+      ) {
+        setIsAlmanacDropdownOpen(false);
+      }
+
+      if (
         isFaqDropdownOpen &&
         faqDropdownRef.current &&
         !faqDropdownRef.current.contains(e.target)
@@ -642,7 +707,7 @@ export default function Layout({ children }) {
     return () => {
       document.removeEventListener("mousedown", handleDocumentClick);
     };
-  }, [isSidebarOpen, isShopDropdownOpen, isFaqDropdownOpen]);
+  }, [isSidebarOpen, isShopDropdownOpen, isConsultationsDropdownOpen, isAlmanacDropdownOpen, isFaqDropdownOpen]);
 
   // Handle scroll trigger for Back to Top
   useEffect(() => {
@@ -684,6 +749,8 @@ export default function Layout({ children }) {
       setIsCollectionsOpen(false);
       setIsZoneModalOpen(false);
       setIsShopDropdownOpen(false);
+      setIsConsultationsDropdownOpen(false);
+      setIsAlmanacDropdownOpen(false);
       setIsFaqDropdownOpen(false);
       setSearchQuery("");
       if (typeof document !== "undefined") {
@@ -697,18 +764,6 @@ export default function Layout({ children }) {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
   }, [router]);
-
-  const handleShopBlur = (e) => {
-    if (shopDropdownRef.current && !shopDropdownRef.current.contains(e.relatedTarget)) {
-      setIsShopDropdownOpen(false);
-    }
-  };
-
-  const handleFaqBlur = (e) => {
-    if (faqDropdownRef.current && !faqDropdownRef.current.contains(e.relatedTarget)) {
-      setIsFaqDropdownOpen(false);
-    }
-  };
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1418,7 +1473,7 @@ export default function Layout({ children }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
-                  setIsFaqDropdownOpen(false);
+                  closeAllDropdownsExcept(setIsShopDropdownOpen);
                   setIsShopDropdownOpen(true);
                 }
               }}
@@ -1453,8 +1508,87 @@ export default function Layout({ children }) {
             </div>
           </div>
 
-          <Link href="/consultations">Consultations</Link>
-          <Link href="/almanac">The Almanac</Link>
+          {/* Consultations Dropdown */}
+          <div
+            ref={consultationsDropdownRef}
+            className="nav-dropdown-wrapper"
+            onMouseEnter={handleConsultationsMouseEnter}
+            onMouseLeave={handleConsultationsMouseLeave}
+          >
+            <Link
+              ref={consultationsTriggerRef}
+              href="/consultations"
+              className="nav-dropdown-trigger"
+              aria-expanded={isConsultationsDropdownOpen}
+              aria-controls="desktop-consultations-dropdown"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  closeAllDropdownsExcept(setIsConsultationsDropdownOpen);
+                  setIsConsultationsDropdownOpen(true);
+                }
+              }}
+            >
+              CONSULTATIONS ▾
+            </Link>
+            <div
+              id="desktop-consultations-dropdown"
+              className={`nav-dropdown-menu ${isConsultationsDropdownOpen ? "is-open" : ""}`}
+              style={{ minWidth: "280px" }}
+            >
+              <Link href="/consultations" className="dropdown-title" onClick={() => setIsConsultationsDropdownOpen(false)}>
+                PLANT & LANDSCAPE SERVICES
+              </Link>
+              <div className="dropdown-col" style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <Link href="/consultations#services" onClick={() => setIsConsultationsDropdownOpen(false)}>Sick Plant Diagnosis</Link>
+                <Link href="/consultations#services" onClick={() => setIsConsultationsDropdownOpen(false)}>Indoor Plant Repotting Assistance</Link>
+                <Link href="/consultations#services" onClick={() => setIsConsultationsDropdownOpen(false)}>Indoor Plant Care Guidance</Link>
+                <Link href="/consultations#services" onClick={() => setIsConsultationsDropdownOpen(false)}>Landscaping Estimates</Link>
+              </div>
+            </div>
+          </div>
+
+          {/* The Almanac Dropdown Menu */}
+          <div
+            ref={almanacDropdownRef}
+            className="nav-dropdown-wrapper"
+            onMouseEnter={handleAlmanacMouseEnter}
+            onMouseLeave={handleAlmanacMouseLeave}
+          >
+            <Link
+              ref={almanacTriggerRef}
+              href="/almanac"
+              className="nav-dropdown-trigger"
+              aria-expanded={isAlmanacDropdownOpen}
+              aria-controls="desktop-almanac-dropdown"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+                  e.preventDefault();
+                  closeAllDropdownsExcept(setIsAlmanacDropdownOpen);
+                  setIsAlmanacDropdownOpen(true);
+                }
+              }}
+            >
+              THE ALMANAC ▾
+            </Link>
+            <div
+              id="desktop-almanac-dropdown"
+              className={`nav-dropdown-menu ${isAlmanacDropdownOpen ? "is-open" : ""}`}
+              style={{ minWidth: "300px" }}
+            >
+              <Link href="/almanac" className="dropdown-title" onClick={() => setIsAlmanacDropdownOpen(false)}>
+                BOTANICAL GUIDES & DISPATCHES
+              </Link>
+              <div className="dropdown-col" style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                <Link href="/almanac#subscribe" onClick={() => setIsAlmanacDropdownOpen(false)}>Stay in the loop with email updates</Link>
+                <Link href="/almanac#articles" onClick={() => setIsAlmanacDropdownOpen(false)}>Seasonal Articles and Blog Posts</Link>
+                <Link href="/almanac#care-sheets" onClick={() => setIsAlmanacDropdownOpen(false)}>Plant Care Sheets</Link>
+                <Link href="/events" onClick={() => setIsAlmanacDropdownOpen(false)}>Calendar and Workshops</Link>
+                <Link href="/zones" onClick={() => setIsAlmanacDropdownOpen(false)}>Explore Climate & Care Resources</Link>
+              </div>
+            </div>
+          </div>
+
           <Link href="/events">Events</Link>
           <Link href="/orchids-gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
@@ -1475,7 +1609,7 @@ export default function Layout({ children }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
                   e.preventDefault();
-                  setIsShopDropdownOpen(false);
+                  closeAllDropdownsExcept(setIsFaqDropdownOpen);
                   setIsFaqDropdownOpen(true);
                 }
               }}

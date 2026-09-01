@@ -99,7 +99,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       </p>
 
       {/* Almanac Email Dispatch Subscription Form */}
-      <section style={{ background: '#00301E', padding: '2.5rem 1.8rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center', marginBottom: '3.5rem', boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
+      <section id="subscribe" style={{ background: '#00301E', padding: '2.5rem 1.8rem', borderRadius: '12px', border: '1px solid #D4B06A', textAlign: 'center', marginBottom: '3.5rem', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', scrollMarginTop: '100px' }}>
         <h3 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginTop: 0, fontSize: '1.8rem', letterSpacing: '0.05em' }}>
           Subscribe to Monthly Almanac Dispatches
         </h3>
@@ -176,7 +176,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       </section>
 
       {/* Seasonal Articles & Dispatches Section */}
-      <section style={{ marginBottom: '3.5rem' }}>
+      <section id="articles" style={{ marginBottom: '3.5rem', scrollMarginTop: '100px' }}>
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Seasonal Articles &amp; Dispatches
         </h2>
@@ -243,7 +243,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       </section>
 
       {/* Botanical Care Sheets Section */}
-      <section style={{ marginBottom: '3.5rem' }}>
+      <section id="care-sheets" style={{ marginBottom: '3.5rem', scrollMarginTop: '100px' }}>
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Botanical Care Sheets
         </h2>
@@ -276,7 +276,7 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
       </section>
 
       {/* Nursery Calendar & Events Section */}
-      <section style={{ marginBottom: '3.5rem' }}>
+      <section id="events" style={{ marginBottom: '3.5rem', scrollMarginTop: '100px' }}>
         <h2 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', borderBottom: '1px solid #D4B06A', paddingBottom: '0.5rem', marginBottom: '1.8rem' }}>
           Nursery Calendar &amp; Workshops
         </h2>

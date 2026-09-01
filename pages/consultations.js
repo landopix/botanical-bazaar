@@ -110,16 +110,34 @@ Goals & Notes: ${formData.message || 'None provided.'}`
           <p className="consultations-subtitle">
             Need a second set of eyes on your plants or space? The Botanical Bazaar offers one-on-one guidance for creating and caring for your indoor jungle or outdoor garden, with direct expertise in Zone 10a/10b (Tampa Bay &amp; St.&nbsp;Pete microclimates) conditions.
           </p>
+
+          <div className="hero-services-bar" id="services">
+            <h2 className="hero-services-title">Services We Offer:</h2>
+            <div className="hero-services-grid">
+              <div className="hero-service-pill">
+                <span className="pill-bullet">✦</span> Sick Plant Diagnosis
+              </div>
+              <div className="hero-service-pill">
+                <span className="pill-bullet">✦</span> Indoor Plant Repotting Assistance
+              </div>
+              <div className="hero-service-pill">
+                <span className="pill-bullet">✦</span> Indoor Plant Care Guidance
+              </div>
+              <div className="hero-service-pill">
+                <span className="pill-bullet">✦</span> Landscaping Estimates
+              </div>
+            </div>
+          </div>
         </header>
 
         <section className="consultations-info-grid">
           <div className="info-card">
             <h3>What We Help With</h3>
             <ul>
-              <li>Indoor plant styling, light mapping &amp; layout</li>
-              <li>Troubleshooting sick, struggling, or stressed plants</li>
-              <li>Yard &amp; landscape planning for Zone 10a/10b microclimates</li>
-              <li>Rare plant diagnostics, soil composition &amp; pest protocols</li>
+              <li><strong>Sick Plant Diagnosis</strong> &amp; pest/disease treatment protocols</li>
+              <li><strong>Indoor Plant Repotting Assistance</strong> &amp; custom soil blending</li>
+              <li><strong>Indoor Plant Care Guidance</strong>, light mapping &amp; placement</li>
+              <li><strong>Landscaping Estimates</strong> &amp; outdoor microclimate layout for Zone 10a/10b</li>
               <li>Selection of low-maintenance, high-impact tropical species</li>
             </ul>
           </div>
@@ -306,10 +324,56 @@ Goals & Notes: ${formData.message || 'None provided.'}`
           font-size: 1.1rem;
           color: #e9dcbe;
           line-height: 1.6;
-          margin: 0;
+          margin: 0 0 1.8rem 0;
           max-width: 750px;
           margin-left: auto;
           margin-right: auto;
+        }
+
+        .hero-services-bar {
+          background-color: #123826;
+          border: 1px solid #d4b06a;
+          border-radius: 10px;
+          padding: 1.25rem 1.5rem;
+          margin: 1.5rem auto 0 auto;
+          max-width: 800px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          scroll-margin-top: 100px;
+        }
+
+        .hero-services-title {
+          font-family: 'Cinzel', serif;
+          color: #d4b06a;
+          font-size: 1.1rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin: 0 0 0.8rem 0;
+        }
+
+        .hero-services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 0.8rem;
+          justify-content: center;
+        }
+
+        .hero-service-pill {
+          background-color: #00301e;
+          border: 1px solid rgba(212, 176, 106, 0.4);
+          border-radius: 20px;
+          padding: 0.5rem 1rem;
+          color: #f5e7c4;
+          font-size: 0.95rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        .pill-bullet {
+          color: #d4b06a;
+          font-size: 0.8rem;
         }
 
         .consultations-info-grid {
@@ -326,7 +390,7 @@ Goals & Notes: ${formData.message || 'None provided.'}`
           padding: 1.5rem;
         }
 
-        .info-card h2 {
+        .info-card h3 {
           font-family: 'Cinzel', serif;
           color: #d4b06a;
           font-size: 1.3rem;
@@ -569,6 +633,10 @@ Goals & Notes: ${formData.message || 'None provided.'}`
 
           .consultations-title {
             font-size: 1.7rem;
+          }
+
+          .hero-services-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
