@@ -41,7 +41,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
-import { getAllProducts } from "../lib/shopify";
+import { getAllProducts, getShopifyMegaMenu } from "../lib/shopify";
 
 const staticPages = [
   {
@@ -274,6 +274,7 @@ export default function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [allProducts, setAllProducts] = useState([]);
+  const [shopifyMenuItems, setShopifyMenuItems] = useState([]);
 
   // Desktop Header Dropdowns state
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false);
@@ -335,7 +336,7 @@ export default function Layout({ children }) {
   const handleShopMouseLeave = () => {
     shopTimerRef.current = setTimeout(() => {
       setIsShopDropdownOpen(false);
-    }, 150);
+    }, 250);
   };
 
   const handleConsultationsMouseEnter = () => {
@@ -371,13 +372,31 @@ export default function Layout({ children }) {
   const handleFaqMouseLeave = () => {
     faqTimerRef.current = setTimeout(() => {
       setIsFaqDropdownOpen(false);
-    }, 150);
+    }, 250);
   };
 
   const mainContentRef = useRef(null);
   const headerRef = useRef(null);
   const footerRef = useRef(null);
   const quickActionsRef = useRef(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadMegaMenu() {
+      try {
+        const menuData = await getShopifyMegaMenu('master-mega-menu');
+        if (isMounted && Array.isArray(menuData) && menuData.length > 0) {
+          setShopifyMenuItems(menuData);
+        }
+      } catch (err) {
+        console.error("Error loading master mega menu in Layout:", err);
+      }
+    }
+    loadMegaMenu();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (hardinessZone) {
@@ -853,6 +872,42 @@ export default function Layout({ children }) {
   }, [query, allProducts]);
 
   const dynamicMegaMenuColumns = useMemo(() => {
+    // If shopifyMenuItems exists and has items from master-mega-menu query
+    if (shopifyMenuItems && shopifyMenuItems.length > 0) {
+      // Group menu items into columns if nested, or list top-level items
+      const hasSubItems = shopifyMenuItems.some((item) => item.items && item.items.length > 0);
+      if (hasSubItems) {
+        return shopifyMenuItems.map((col) => ({
+          title: col.title,
+          items: (col.items || []).map((child) => ({
+            label: child.title,
+            href: child.url,
+            productCount: child.productCount,
+          })),
+        })).filter((col) => col.items.length > 0);
+      } else {
+        // Flat menu structure returned from Shopify Storefront API
+        const topCategoryItems = shopifyMenuItems.map((item) => ({
+          label: item.title,
+          href: item.url,
+          productCount: item.productCount,
+        }));
+
+        // Group into primary categories column and all active categories column
+        return [
+          {
+            title: "Featured Collections",
+            items: topCategoryItems.slice(0, Math.ceil(topCategoryItems.length / 2)),
+          },
+          {
+            title: "Live Collections",
+            items: topCategoryItems.slice(Math.ceil(topCategoryItems.length / 2)),
+          },
+        ].filter((col) => col.items.length > 0);
+      }
+    }
+
+    // Fallback to blueprint filtering if shopifyMenuItems isn't loaded yet
     if (!allProducts || allProducts.length === 0) return [];
 
     const activeProducts = allProducts.filter(
@@ -903,7 +958,7 @@ export default function Layout({ children }) {
         items: activeItems,
       };
     }).filter((column) => column.items.length > 0);
-  }, [allProducts]);
+  }, [shopifyMenuItems, allProducts]);
 
   const matchingPages = useMemo(() => {
     if (query === "") return [];
@@ -1893,10 +1948,10 @@ export default function Layout({ children }) {
         .nav-dropdown-menu::before {
           content: "";
           position: absolute;
-          top: -12px;
-          left: 0;
-          right: 0;
-          height: 12px;
+          top: -24px;
+          left: -10px;
+          right: -10px;
+          height: 24px;
           background: transparent;
           display: block;
           pointer-events: auto;
