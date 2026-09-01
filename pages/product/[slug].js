@@ -113,8 +113,13 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const [notifySubscribed, setNotifySubscribed] = useState(false);
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [notifyError, setNotifyError] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
+  const [quantityAnnouncement, setQuantityAnnouncement] = useState('');
 
-  useBfcacheReset(() => setNotifyLoading(false));
+  useBfcacheReset(() => {
+    setNotifyLoading(false);
+    setIsAdding(false);
+  });
 
   // Hardiness zone sync state
   const [hardinessZone, setHardinessZone] = useState('10a');
@@ -252,13 +257,17 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const currentTypeDisplay = getResolvedPlantType(product);
 
   const handleAddToCart = () => {
+    if (isAdding) return;
+    setIsAdding(true);
     const itemToAdd = {
       ...product,
       price: activePrice,
       variantId: selectedVariant?.id || null
     };
     addToCart(itemToAdd, quantity, selectedSize);
-    router.push('/cart');
+    setTimeout(() => {
+      router.push('/cart');
+    }, 250);
   };
 
   const renderSpecs = (productObj) => {
@@ -491,7 +500,14 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
             <div className="action-row">
               <div className="quantity-selector">
                 <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  onClick={() => {
+                    const newQty = Math.max(1, quantity - 1);
+                    setQuantity(newQty);
+                    setQuantityAnnouncement(`Quantity set to ${newQty}`);
+                  }}
+                  disabled={quantity <= 1}
+                  aria-label={`Decrease quantity of ${commonName}`}
+                  title="Decrease quantity"
                   className="qty-btn"
                   type="button"
                 >
@@ -499,16 +515,31 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
                 </button>
                 <span className="qty-val">{quantity}</span>
                 <button
-                  onClick={() => setQuantity(quantity + 1)}
+                  onClick={() => {
+                    const newQty = quantity + 1;
+                    setQuantity(newQty);
+                    setQuantityAnnouncement(`Quantity set to ${newQty}`);
+                  }}
+                  aria-label={`Increase quantity of ${commonName}`}
+                  title="Increase quantity"
                   className="qty-btn"
                   type="button"
                 >
                   +
                 </button>
               </div>
+              <div className="sr-only" role="status" aria-live="polite">
+                {quantityAnnouncement}
+              </div>
 
-              <Button variant="gold-filled" onClick={handleAddToCart} style={{ flex: '1 1 auto', minWidth: '150px' }}>
-                Add to Cart
+              <Button
+                variant="gold-filled"
+                onClick={handleAddToCart}
+                disabled={isAdding}
+                aria-label={isAdding ? `Adding ${quantity} ${commonName} to cart` : `Add ${quantity} ${commonName} to cart`}
+                style={{ flex: '1 1 auto', minWidth: '150px' }}
+              >
+                {isAdding ? 'Adding to Cart...' : 'Add to Cart'}
               </Button>
             </div>
           )}
@@ -942,6 +973,18 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           font-size: 1.2rem;
           cursor: pointer;
           outline: none;
+          transition: background-color 0.15s ease, opacity 0.15s ease;
+        }
+        .qty-btn:hover:not(:disabled) {
+          background-color: rgba(212, 176, 106, 0.15);
+        }
+        .qty-btn:focus-visible {
+          outline: 2px solid #D4B06A !important;
+          outline-offset: -2px !important;
+        }
+        .qty-btn:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
         }
         .qty-val {
           padding: 0 1rem;
