@@ -13,7 +13,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@builder.io/react": "^9.4.3",
+    "@builder.io/react": "^9.4.4",
     "@sanity/client": "^8.2.0",
     "@sanity/image-url": "^2.1.1",
     "js-beautify": "^2.0.3",
