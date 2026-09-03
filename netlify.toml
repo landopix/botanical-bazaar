@@ -1,9 +1,8 @@
 [build]
-  command = "npm install --legacy-peer-deps && npm run build"
+  command = "pnpm build"
   publish = ".next"
 
 [build.environment]
-  NPM_FLAGS = "--legacy-peer-deps"
   NETLIFY_NEXT_SKEW_PROTECTION = "true"
 
 [[plugins]]
