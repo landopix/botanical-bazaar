@@ -1,19 +1,19 @@
 import React from 'react';
 
 const ZONES = [
-  { zone: 'Zone 1', temp: '-60 to -50°F', bg: '#4A6984', text: '#FFFFFF' },
-  { zone: 'Zone 2', temp: '-50 to -40°F', bg: '#4182A4', text: '#FFFFFF' },
-  { zone: 'Zone 3', temp: '-40 to -30°F', bg: '#42A5B3', text: '#FFFFFF' },
-  { zone: 'Zone 4', temp: '-30 to -20°F', bg: '#47B881', text: '#FFFFFF' },
-  { zone: 'Zone 5', temp: '-20 to -10°F', bg: '#62C265', text: '#111111' },
-  { zone: 'Zone 6', temp: '-10 to 0°F', bg: '#91CF50', text: '#111111' },
-  { zone: 'Zone 7', temp: '0 to 10°F', bg: '#C5DF51', text: '#111111' },
-  { zone: 'Zone 8', temp: '10 to 20°F', bg: '#F8E84E', text: '#111111' },
-  { zone: 'Zone 9', temp: '20 to 30°F', bg: '#F6B445', text: '#111111' },
-  { zone: 'Zone 10', temp: '30 to 40°F', bg: '#EF7138', text: '#FFFFFF' },
-  { zone: 'Zone 11', temp: '40 to 50°F', bg: '#E23D38', text: '#FFFFFF' },
-  { zone: 'Zone 12', temp: '50 to 60°F', bg: '#B32857', text: '#FFFFFF' },
-  { zone: 'Zone 13', temp: '60 to 70°F', bg: '#7E1C55', text: '#FFFFFF' },
+  { zone: 'Zone 1', temp: '-60 to -50°F', bg: '#5D2A85', text: '#FFFFFF' },
+  { zone: 'Zone 2', temp: '-50 to -40°F', bg: '#4C2982', text: '#FFFFFF' },
+  { zone: 'Zone 3', temp: '-40 to -30°F', bg: '#6845A3', text: '#FFFFFF' },
+  { zone: 'Zone 4', temp: '-30 to -20°F', bg: '#2A5A9E', text: '#FFFFFF' },
+  { zone: 'Zone 5', temp: '-20 to -10°F', bg: '#3D78BA', text: '#FFFFFF' },
+  { zone: 'Zone 6', temp: '-10 to 0°F', bg: '#1D6E35', text: '#FFFFFF' },
+  { zone: 'Zone 7', temp: '0 to 10°F', bg: '#6CA844', text: '#00301E' },
+  { zone: 'Zone 8', temp: '10 to 20°F', bg: '#ABCD49', text: '#00301E' },
+  { zone: 'Zone 9', temp: '20 to 30°F', bg: '#F4D35E', text: '#00301E' },
+  { zone: 'Zone 10', temp: '30 to 40°F', bg: '#ECA141', text: '#00301E' },
+  { zone: 'Zone 11', temp: '40 to 50°F', bg: '#D97334', text: '#FFFFFF' },
+  { zone: 'Zone 12', temp: '50 to 60°F', bg: '#E84F36', text: '#FFFFFF' },
+  { zone: 'Zone 13', temp: '60 to 70°F', bg: '#D3302E', text: '#FFFFFF' },
 ];
 
 export default function UsdaZoneLegend() {
@@ -57,7 +57,7 @@ export default function UsdaZoneLegend() {
             style={{
               backgroundColor: item.bg,
               color: item.text,
-              padding: '0.5rem 0.85rem',
+              padding: '0.55rem 0.85rem',
               borderRadius: '8px',
               flex: '1 1 120px',
               maxWidth: '180px',
@@ -74,7 +74,7 @@ export default function UsdaZoneLegend() {
             <span
               style={{
                 fontWeight: '700',
-                fontSize: '0.9rem',
+                fontSize: '0.95rem',
                 lineHeight: '1.2',
                 letterSpacing: '0.02em',
               }}
@@ -83,8 +83,8 @@ export default function UsdaZoneLegend() {
             </span>
             <span
               style={{
-                fontSize: '0.78rem',
-                opacity: 0.95,
+                fontSize: '0.8rem',
+                fontWeight: '600',
                 marginTop: '0.2rem',
                 lineHeight: '1.2',
                 whiteSpace: 'nowrap',
