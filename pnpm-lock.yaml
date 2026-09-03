@@ -17,7 +17,7 @@ importers:
   .:
     dependencies:
       '@builder.io/react':
-        specifier: ^9.4.3
+        specifier: ^9.4.4
         version: 9.4.4(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@sanity/client':
         specifier: ^8.2.0
