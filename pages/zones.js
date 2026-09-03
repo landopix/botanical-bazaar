@@ -3,6 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/Button';
+import UsdaZoneLegend from '../components/UsdaZoneLegend';
 
 export default function Zones() {
   return (
@@ -22,7 +23,7 @@ export default function Zones() {
           style={{
             position: 'relative',
             width: '100%',
-            height: '350px',
+            height: '380px',
             background: '#123826',
             padding: '0.75rem',
             borderRadius: '16px',
@@ -32,10 +33,10 @@ export default function Zones() {
           }}
         >
           <Image
-            src="/assets/usda-map-official.png"
+            src="/assets/usda-zone-map-only.jpg"
             alt="USDA Plant Hardiness Zone Map Reference"
-            width={1650}
-            height={1275}
+            width={2585}
+            height={1386}
             sizes="(max-width: 800px) 100vw, 800px"
             style={{
               objectFit: 'contain',
@@ -47,6 +48,7 @@ export default function Zones() {
             }}
           />
         </div>
+        <UsdaZoneLegend />
       </div>
 
       <div style={{ background: '#1C3D2E', padding: '2rem', borderRadius: '12px', border: '1px solid #D4B06A', marginBottom: '3rem' }}>
