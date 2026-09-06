@@ -8,17 +8,22 @@ export default async function handler(req, res) {
 
   const syncSecret = process.env.MERCHANT_SYNC_SECRET || process.env.CRON_SECRET;
 
-  if (syncSecret) {
-    const authHeader = req.headers.authorization || '';
-    const tokenFromHeader = authHeader.replace(/^Bearer\s+/i, '').trim();
-    const tokenFromCustomHeader = req.headers['x-sync-secret'] || '';
-    const tokenFromQuery = req.query?.secret || '';
+  const authHeader = req.headers.authorization || '';
+  const tokenFromHeader = authHeader.replace(/^Bearer\s+/i, '').trim();
+  const tokenFromCustomHeader = req.headers['x-sync-secret'] || '';
+  const tokenFromQuery = req.query?.secret || '';
 
-    const providedSecret = tokenFromHeader || tokenFromCustomHeader || tokenFromQuery;
+  const providedSecret = tokenFromHeader || tokenFromCustomHeader || tokenFromQuery;
 
-    if (providedSecret !== syncSecret) {
-      return res.status(401).json({ error: 'Unauthorized: Invalid or missing sync secret.' });
-    }
+  let isAuthenticated = false;
+  if (syncSecret && providedSecret === syncSecret) {
+    isAuthenticated = true;
+  } else if (!syncSecret && process.env.NODE_ENV !== 'production') {
+    isAuthenticated = true;
+  }
+
+  if (!isAuthenticated) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid or missing sync secret.' });
   }
 
   const correlationId = `gmc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
