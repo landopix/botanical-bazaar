@@ -15,3 +15,9 @@
 **Learning:** On `pages/index.js`, `getActiveCount(catId)` performed unmemoized array filtering across the full product catalog for each category card rendered on every component re-render (e.g., every keystroke in the newsletter signup input). Pre-computing `categoryInStockCounts` via `useMemo` reduces render-time catalog filtering from $O(N \times C)$ on every state update to an $O(1)$ dictionary lookup.
 
 **Action:** Always pre-compute category/collection in-stock counts with `useMemo` on index/landing pages to ensure UI state changes (like form input keystrokes) do not cause main-thread blocking full-catalog array iterations.
+
+## 2026-09-07 - CareSheetCard React.memo Optimization in components/CareSheetCard.js
+
+**Learning:** In pages rendering list items like `pages/almanac.js`, interactive form inputs (such as the Almanac email subscription newsletter input) cause component re-renders on every keystroke. Card components like `CareSheetCard` rendered in list grids were re-rendering unnecessarily without prop changes. Wrapping `CareSheetCard` in `React.memo` prevents unnecessary virtual DOM diffing during parent state updates while preserving strict React import requirements.
+
+**Action:** Wrap reusable list card components like `CareSheetCard` in `React.memo` and ensure `React` or `memo` is explicitly imported from `'react'`.
