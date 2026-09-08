@@ -267,6 +267,7 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
         title={`${collectionTitle} Collection`}
         description={metaDescription}
         canonical={canonicalUrl}
+        noindex={collectionProducts.length === 0}
       >
         <script
           id="breadcrumb-schema"

@@ -27,6 +27,12 @@ export default function SEO({
 
   // Clean canonical / relative path
   let currentPath = (router?.asPath || '/').split('?')[0].split('#')[0];
+  if (currentPath.endsWith('.html')) {
+    currentPath = currentPath.slice(0, -5);
+  }
+  if (currentPath.length > 1 && currentPath.endsWith('/')) {
+    currentPath = currentPath.slice(0, -1);
+  }
   if (currentPath === '/') currentPath = '';
 
   const resolvedCanonicalUrl = canonical || `${DEFAULT_SITE_ORIGIN}${currentPath}`;
