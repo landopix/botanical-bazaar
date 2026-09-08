@@ -25,12 +25,14 @@ export default async function notifyMeHandler(req, res) {
     return res.status(400).json({ error: 'Product details are required.' });
   }
 
-  const cleanEmail = email.trim().slice(0, 254);
-  const cleanSlug = slug.trim().slice(0, 200);
-  const cleanName = name.trim().slice(0, 200);
-  const cleanType = typeof type === 'string' && type.trim() ? type.trim().slice(0, 50) : 'restock_notification';
+  const sanitizeLog = (str) => String(str).replace(/[\r\n\t]/g, ' ').replace(/[\x00-\x1F\x7F]/g, '');
 
-  console.log(`[Notify Me Capture] Registered request successfully for ${cleanEmail} on ${cleanName} (${cleanSlug}) [type: ${cleanType}]`);
+  const cleanEmail = sanitizeLog(email.trim().slice(0, 254));
+  const cleanSlug = sanitizeLog(slug.trim().slice(0, 200));
+  const cleanName = sanitizeLog(name.trim().slice(0, 200));
+  const cleanType = sanitizeLog(typeof type === 'string' && type.trim() ? type.trim().slice(0, 50) : 'restock_notification');
+
+  console.log('[Notify Me Capture] Registered request successfully for:', cleanEmail, 'on:', cleanName, `(${cleanSlug})`, `[type: ${cleanType}]`);
 
   return res.status(200).json({
     success: true,
