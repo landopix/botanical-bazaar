@@ -55,3 +55,10 @@
 **Learning:** Wrapping authentication logic inside an `if (secretEnvVar)` block causes API endpoints to fail open when environment variables are unset or missing.
 
 **Prevention:** Design API endpoints to fail securely: require explicit token matching when secrets are defined, and automatically return HTTP 401 Unauthorized in production if no secret token is configured.
+## 2026-08-26 - Log Injection & Format String Injection Sanitation
+
+**Vulnerability:** `pages/api/notify-me.js` evaluated raw user input strings in `console.log` template literals without stripping carriage returns, newlines, or control characters, allowing potential Log Forgery / Log Injection attacks.
+
+**Learning:** Logging unsanitized user inputs in server logs allows malicious actors to inject newline characters (`\r\n`) to forge log entries or inject control sequences into monitoring logs.
+
+**Prevention:** Sanitize all user-controlled variables by removing control characters (`[\x00-\x1F\x7F]`) and line breaks (`[\r\n\t]`), and use static logging format strings with separate arguments in `console.log`.
