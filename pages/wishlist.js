@@ -195,7 +195,7 @@ export default function WishlistPage() {
                   View Specimen
                 </Button>
                 <button
-                  onClick={() => removeFromWishlist && removeFromWishlist(slug)}
+                  onClick={() => removeFromWishlist && removeFromWishlist(item)}
                   title="Remove from wishlist"
                   aria-label={`Remove ${name} from wishlist`}
                   style={{

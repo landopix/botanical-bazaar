@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const WishlistContext = createContext();
 
@@ -40,6 +41,7 @@ export function normalizeWishlistItem(product) {
 
 export function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     const storedWishlist = localStorage.getItem('botanical_wishlist');
@@ -55,6 +57,18 @@ export function WishlistProvider({ children }) {
     }
   }, []);
 
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
+
+  const showToast = (message, actionLabel = null, actionHref = null) => {
+    setToast({ id: Date.now(), message, actionLabel, actionHref });
+  };
+
   const saveWishlist = (newWishlist) => {
     const normalized = newWishlist.map(normalizeWishlistItem).filter(Boolean);
     setWishlist(normalized);
@@ -69,12 +83,17 @@ export function WishlistProvider({ children }) {
     if (!normalized || !normalized.slug) return;
     if (!wishlist.some((item) => item.slug === normalized.slug)) {
       saveWishlist([...wishlist, normalized]);
+      showToast(`Added "${normalized.name}" to Wishlist Sanctuary`, 'View Sanctuary', '/wishlist');
     }
   };
 
-  const removeFromWishlist = (slug) => {
-    const targetSlug = typeof slug === 'object' ? (slug.slug?.current || slug.slug) : slug;
+  const removeFromWishlist = (target) => {
+    const targetSlug = typeof target === 'object' ? (target.slug?.current || target.slug) : target;
+    const existingItem = wishlist.find((item) => item.slug === targetSlug);
+    const itemName = existingItem?.name || (typeof target === 'object' ? target.name : null) || 'Specimen';
+
     saveWishlist(wishlist.filter((item) => item.slug !== targetSlug));
+    showToast(`Removed "${itemName}" from Wishlist Sanctuary`);
   };
 
   const toggleWishlist = (product) => {
@@ -82,7 +101,7 @@ export function WishlistProvider({ children }) {
     if (!normalized || !normalized.slug) return;
 
     if (wishlist.some((item) => item.slug === normalized.slug)) {
-      removeFromWishlist(normalized.slug);
+      removeFromWishlist(normalized);
     } else {
       addToWishlist(normalized);
     }
@@ -90,6 +109,7 @@ export function WishlistProvider({ children }) {
 
   const clearWishlist = () => {
     saveWishlist([]);
+    showToast('Cleared Wishlist Sanctuary');
   };
 
   return (
@@ -104,6 +124,81 @@ export function WishlistProvider({ children }) {
       }}
     >
       {children}
+      {toast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="wishlist-toast"
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10000,
+            background: '#00301E',
+            color: '#F5E7C4',
+            border: '1px solid #D4B06A',
+            borderRadius: '24px',
+            padding: '0.6rem 1.2rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.8rem',
+            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+            fontSize: '0.95rem',
+            fontFamily: "'Crimson Text', serif",
+            animation: 'toastSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
+          <span style={{ color: '#D4B06A', fontSize: '1.1rem' }}>♥</span>
+          <span>{toast.message}</span>
+          {toast.actionHref && toast.actionLabel && (
+            <Link
+              href={toast.actionHref}
+              onClick={() => setToast(null)}
+              style={{
+                color: '#00301E',
+                background: '#D4B06A',
+                padding: '0.2rem 0.75rem',
+                borderRadius: '12px',
+                fontWeight: 'bold',
+                textDecoration: 'none',
+                fontSize: '0.85rem',
+                fontFamily: "'Cinzel', serif",
+                whiteSpace: 'nowrap'
+              }}
+            >
+              {toast.actionLabel}
+            </Link>
+          )}
+          <button
+            onClick={() => setToast(null)}
+            aria-label="Close notification"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#D4B06A',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              padding: '0 0.2rem',
+              lineHeight: 1
+            }}
+          >
+            ✕
+          </button>
+          <style jsx>{`
+            @keyframes toastSlideUp {
+              from {
+                opacity: 0;
+                transform: translate(-50%, 16px);
+              }
+              to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+              }
+            }
+          `}</style>
+        </div>
+      )}
     </WishlistContext.Provider>
   );
 }
