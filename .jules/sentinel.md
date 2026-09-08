@@ -48,6 +48,13 @@
 
 **Prevention:** Always verify incoming `req.query.state` against the stored HttpOnly cookie (`req.cookies.shopify_oauth_state`) before exchanging authorization codes for access tokens in OAuth callbacks.
 
+## 2026-08-26 - Secret Configuration Authorization Bypass
+
+**Vulnerability:** `pages/api/merchant/sync.js` checked token validity only inside an `if (syncSecret)` block. If no secret environment variables were configured, authorization checks were bypassed entirely, allowing unauthenticated requests to query merchant sync endpoints in production.
+
+**Learning:** Wrapping authentication logic inside an `if (secretEnvVar)` block causes API endpoints to fail open when environment variables are unset or missing.
+
+**Prevention:** Design API endpoints to fail securely: require explicit token matching when secrets are defined, and automatically return HTTP 401 Unauthorized in production if no secret token is configured.
 ## 2026-08-26 - Log Injection & Format String Injection Sanitation
 
 **Vulnerability:** `pages/api/notify-me.js` evaluated raw user input strings in `console.log` template literals without stripping carriage returns, newlines, or control characters, allowing potential Log Forgery / Log Injection attacks.
