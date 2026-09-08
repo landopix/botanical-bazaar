@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Image from 'next/image';
 import Button from './Button';
 import { isOptimizedCdnUrl, optimizeCdnUrl } from '../lib/image-utils';
 
-export default function CareSheetCard({
+function CareSheetCard({
   sheet = {},
   titleClamp = 2,
   descClamp = 3,
@@ -143,3 +143,7 @@ export default function CareSheetCard({
     </div>
   );
 }
+
+// Performance Optimization: Memoize CareSheetCard to prevent unnecessary re-renders
+// during parent component state changes (e.g. newsletter subscription form keystrokes in Almanac).
+export default memo(CareSheetCard);
