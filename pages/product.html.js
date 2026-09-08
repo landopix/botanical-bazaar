@@ -16,7 +16,7 @@ export async function getServerSideProps({ query }) {
         };
       }
     } catch (error) {
-      console.error(`Error checking legacy product item ${cleanSlug}:`, error);
+      console.error('Error checking legacy product item %s:', cleanSlug, error);
     }
 
     // Permanently removed specimen: return strict 404 to resolve Soft 404 flags
