@@ -66,7 +66,7 @@ export function getZoneCompatibility(product, userZone = "10a") {
       if (!isNaN(minZone) && userNum < minZone) {
         matchStatus = "NOT_RECOMMENDED";
         badgeLabel = "Not Recommended Outdoors";
-        badgeColor = "#ba2f2f";
+        badgeColor = "#B8533C";
       }
     }
   }
