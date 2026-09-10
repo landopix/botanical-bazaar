@@ -25,7 +25,6 @@
     "resend": "^6.26.0",
     "sanity": "^3.99.0",
     "sharp": "^0.35.4",
-    "stripe": "^22.6.0",
     "styled-components": "^6.5.3",
     "@netlify/blobs": "10.5.0"
   },
