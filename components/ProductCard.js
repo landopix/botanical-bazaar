@@ -126,7 +126,7 @@ function ProductCard({
   return (
     <div
       className={`product-card flex flex-col justify-between h-full bg-[#F5E7C4] border border-[#D4B06A] rounded-xl overflow-hidden shadow-md relative ${
-        isSoldOut ? 'opacity-60' : ''
+        ''
       } ${className}`}
       style={{
         display: 'flex',
@@ -146,17 +146,21 @@ function ProductCard({
         <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px' }}>
           {isSoldOut ? (
             <div
-              className="sold-out-badge"
+              className="propagating-badge"
               style={{
-                background: '#ba2f2f',
-                color: '#ffffff',
+                border: '1px solid #D4B06A',
+                color: '#D4B06A',
+                background: 'rgba(0, 48, 30, 0.85)',
+                backdropFilter: 'blur(4px)',
+                WebkitBackdropFilter: 'blur(4px)',
                 padding: '0.2rem 0.6rem',
                 borderRadius: '4px',
                 fontSize: '0.8rem',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
+                letterSpacing: '0.05em'
               }}
             >
-              Sold Out
+              PROPAGATING
             </div>
           ) : (
             <div
@@ -290,13 +294,9 @@ function ProductCard({
         </p>
 
         <div style={{ margin: '0.4rem 0 0.8rem 0', textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          {isSoldOut ? (
-            <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#ba2f2f' }}>Sold Out</span>
-          ) : (
-            <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#11402A' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#11402A' }}>
               {typeof price === 'number' ? `$${price.toFixed(2)}` : price ?? 'Price on Request'}
             </span>
-          )}
         </div>
       </div>
 
