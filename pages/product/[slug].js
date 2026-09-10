@@ -1,3 +1,4 @@
+import { getRecommendedProducts } from '../../lib/productRecommendations';
 import { getResolvedPotSize, getResolvedPlantType } from "../../components/ProductCard";
 import React, { useState, useEffect, useRef } from 'react';
 import SEO from '../../components/SEO';
@@ -83,7 +84,7 @@ export async function getStaticProps({ params }) {
     return {
       props: {
         initialProduct: product,
-        allProducts: allProducts || []
+        recommendedProducts: getRecommendedProducts(product, allProducts || [])
       },
       revalidate: 60
     };
@@ -94,7 +95,7 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function ProductDetail({ initialProduct, allProducts = [] }) {
+export default function ProductDetail({ initialProduct, recommendedProducts = [] }) {
   const recommendedRef = React.useRef(null);
   const router = useRouter();
 
@@ -228,43 +229,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
     v => v.availableForSale !== false && (v.quantityAvailable === undefined || v.quantityAvailable > 0)
   );
 
-  // Related / Recommended Products derived from same category or tags
-  const recommendedProducts = React.useMemo(() => {
-    if (!product || !allProducts || allProducts.length === 0) return [];
 
-    const currentSlug = product.slug;
-    const currentCats = (product.categories || []).map(c => c.toLowerCase());
-    const currentTags = (product.tags || []).map(t => t.toLowerCase());
-
-    const scored = allProducts
-      .filter(p => p.slug !== currentSlug && p.availableForSale !== false)
-      .map(p => {
-        let score = 0;
-        const pCats = (p.categories || []).map(c => c.toLowerCase());
-        const pTags = (p.tags || []).map(t => t.toLowerCase());
-
-        pCats.forEach(c => {
-          if (currentCats.includes(c)) score += 3;
-        });
-
-        pTags.forEach(t => {
-          if (currentTags.includes(t)) score += 1;
-        });
-
-        return { product: p, score };
-      });
-
-    scored.sort((a, b) => b.score - a.score);
-    const topScored = scored.map(s => s.product);
-
-    // Fallback if less than 4 matches
-    if (topScored.length < 4) {
-      const remaining = allProducts.filter(p => p.slug !== currentSlug && !topScored.some(ts => ts.slug === p.slug));
-      return [...topScored, ...remaining].slice(0, 8);
-    }
-
-    return topScored.slice(0, 8);
-  }, [product, allProducts]);
 
     // Parse Title for Scientific Name
   const { commonName, scientificName } = parseProductTitle(product.name);
