@@ -1,3 +1,4 @@
+import { isProductInCollection } from '../lib/collectionMembership';
 import { getAllProducts, getAlmanacArticles } from '../lib/shopify';
 
 const EXTERNAL_DATA_URL = 'https://thebotanicalbazaar.com';
@@ -11,7 +12,7 @@ const staticRoutes = [
   '/events',
   '/consultations',
   '/faq',
-  '/gallery',
+  '/orchids-gallery',
   '/zones',
   '/returns',
   '/shipping-pickup',
@@ -47,29 +48,6 @@ function formatDate(dateString, fallbackDate) {
   }
 }
 
-function isProductInCollection(product, slug) {
-  if (!product) return false;
-  const s = slug.toLowerCase();
-  const matchesHandle = Array.isArray(product.collectionHandles) && product.collectionHandles.some((h) => h?.toLowerCase() === s);
-  const matchesCategory = Array.isArray(product.categories) && product.categories.some((c) => c?.toLowerCase() === s);
-  const matchesTag = Array.isArray(product.tags) && product.tags.some((t) => t?.toLowerCase() === s);
-  if (matchesHandle || matchesCategory || matchesTag) return true;
-
-  const text = `${product.name || ''} ${product.description || ''}`.toLowerCase();
-  if (s === 'orchids' || s === 'orchid') return matchesTag('orchid') || matchesCategory('orchids') || text.includes('orchid');
-  if (s === 'tropical-houseplants' || s === 'houseplants') {
-    return matchesTag('houseplant') || matchesTag('tropical') || matchesCategory('houseplants') || text.includes('houseplant') || text.includes('tropical');
-  }
-  if (s === 'fruit-trees' || s === 'fruit-tree') return matchesTag('fruit-tree') || text.includes('fruit tree') || text.includes('fruit');
-  if (s === 'herbs-medicinal') return matchesTag('herb') || matchesTag('medicinal') || text.includes('herb') || text.includes('medicinal');
-  if (s === 'exotics-rare') return matchesTag('rare') || matchesTag('exotic') || text.includes('rare') || text.includes('exotic');
-  if (s === 'seeds') return matchesTag('seed') || text.includes('seed');
-  if (s === 'stickers-art') return matchesCategory('art') || matchesTag('sticker') || matchesTag('art') || text.includes('sticker');
-  if (s === 'tinctures-apothecary') return matchesCategory('apothecary') || matchesTag('tincture') || matchesTag('apothecary') || text.includes('tincture');
-  if (s === 'terrarium-vivarium') return matchesCategory('habitat') || matchesTag('leaf-litter') || text.includes('vivarium') || text.includes('terrarium');
-
-  return false;
-}
 
 function generateSiteMap(products, almanacArticles) {
   const currentDate = new Date().toISOString().split('T')[0];
