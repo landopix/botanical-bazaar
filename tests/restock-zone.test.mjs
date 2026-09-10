@@ -5,6 +5,25 @@ import { validateSignup, registerRestock, deliverRestockEmail, selectionAvailabl
 import { restockEmail } from '../lib/restockEmails.js';
 import { formatShopifyProduct } from '../lib/shopify.js';
 import { checkRestocks } from '../netlify/functions/restock-check.mjs';
+import unsubscribeHandler from '../pages/api/restock-unsubscribe.js';
+
+test('cancellation form rejects injected and repeated parameters without reflecting them', async () => {
+  const id = 'a'.repeat(64), token = 'b'.repeat(64);
+  const request = async (query) => {
+    const res = { setHeader() {}, status(code) { this.code = code; return this; }, send(body) { this.body = body; return this; } };
+    await unsubscribeHandler({ method: 'GET', query }, res);
+    return res;
+  };
+  const valid = await request({ id, token });
+  assert.equal(valid.code, 200);
+  assert.match(valid.body, /form method="post"/);
+  assert.ok(valid.body.includes(`value="${token}"`));
+  for (const query of [{ id: '"><script>alert(1)</script>', token }, { id, token: '"><img src=x onerror=alert(1)>' }, { id: [id], token }, { id, token: [token] }]) {
+    const response = await request(query);
+    assert.equal(response.code, 400);
+    assert.equal(response.body, 'Invalid cancellation link.');
+  }
+});
 
 test('Shopify taxonomy references resolve labels and never treat GIDs as zones', () => {
   const base = { id: 'p', title: 'Plant', handle: 'plant', taxonomyHardinessZoneMetafield: {
