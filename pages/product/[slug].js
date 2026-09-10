@@ -1,5 +1,5 @@
 import { getResolvedPotSize, getResolvedPlantType } from "../../components/ProductCard";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SEO from '../../components/SEO';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -113,6 +113,8 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const [notifySubscribed, setNotifySubscribed] = useState(false);
   const [notifyLoading, setNotifyLoading] = useState(false);
   const [notifyError, setNotifyError] = useState('');
+  const [notifyMessage, setNotifyMessage] = useState('');
+  const notifyRequest = useRef(0);
   const [isAdding, setIsAdding] = useState(false);
   const [quantityAnnouncement, setQuantityAnnouncement] = useState('');
 
@@ -125,13 +127,21 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const [hardinessZone, setHardinessZone] = useState('10a');
 
   useEffect(() => {
+    notifyRequest.current++;
+    setNotifySubscribed(false);
+    setNotifyLoading(false);
+    setNotifyError('');
+    setNotifyMessage('');
+  }, [product?.slug, selectedVariant?.id]);
+
+  useEffect(() => {
     if (initialProduct) {
       setProduct(initialProduct);
-      const defaultVariant = getFirstAvailableVariant(initialProduct);
+      const defaultVariant = initialProduct.variants?.find(v => v.id === router.query.variant) || getFirstAvailableVariant(initialProduct);
       setSelectedVariant(defaultVariant);
       setSelectedSize(defaultVariant?.title || '');
     }
-  }, [initialProduct]);
+  }, [initialProduct, router.query.variant]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -148,8 +158,10 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
       };
 
       window.addEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+      window.addEventListener('storage', handleZoneUpdated);
       return () => {
         window.removeEventListener("user_hardiness_zone_updated", handleZoneUpdated);
+        window.removeEventListener('storage', handleZoneUpdated);
       };
     }
   }, []);
@@ -157,6 +169,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
   const handleNotifyMe = async (e) => {
     e.preventDefault();
     if (!notifyEmail || !notifyEmail.trim() || !product) return;
+    const requestId = ++notifyRequest.current;
 
     setNotifyLoading(true);
     setNotifyError('');
@@ -170,22 +183,26 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
         body: JSON.stringify({
           email: notifyEmail.trim(),
           slug: product.slug,
+          variantId: selectedVariant?.id || '',
           name: product.name,
           type: 'item_waitlist'
         })
       });
 
       const data = await response.json();
-      if (response.ok) {
+      if (requestId !== notifyRequest.current) return;
+      if (response.ok && data.success) {
+        setNotifyMessage(data.message);
         setNotifySubscribed(true);
       } else {
         setNotifyError(data.error || 'Failed to submit. Please try again.');
       }
     } catch (err) {
+      if (requestId !== notifyRequest.current) return;
       console.error('Error submitting notify me request:', err);
       setNotifyError('An error occurred. Please try again.');
     } finally {
-      setNotifyLoading(false);
+      if (requestId === notifyRequest.current) setNotifyLoading(false);
     }
   };
 
@@ -544,14 +561,15 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {isSoldOut && (
             <div className="sold-out-section">
               <div className="sold-out-banner">
-                Sold Out - Propagating
+                Sold Out · Propagating Now
               </div>
+              <p>Check back soon, or get an email when available.</p>
 
               {/* Notify Me Form or Confirmation */}
               <div className="notify-card">
                 {notifySubscribed ? (
                   <div className="notify-success" role="status" aria-live="polite">
-                    You&apos;re on the list! We&apos;ll email you the moment this specimen returns.
+                    {notifyMessage}
                   </div>
                 ) : (
                   <form onSubmit={handleNotifyMe} className="notify-form">
