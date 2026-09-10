@@ -286,6 +286,7 @@ function ProductCard({
             >
               ({scientificName})
             </span>
+          )}
         </Link>
 
         <p style={{ margin: '0.5rem 0 0.1rem 0', fontSize: '0.9rem', color: '#00301E', textAlign: 'center', fontWeight: '500' }}>
