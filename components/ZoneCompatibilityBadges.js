@@ -6,7 +6,7 @@ function getZoneGuidance(userZone) {
 
   if (isNaN(userNum)) {
     return {
-      title: 'Local Climate Guidance',
+      title: 'USDA Zone Guidance',
       note: 'Climate adjustments may be required based on local weather extremes and seasonal temperature shifts.'
     };
   }
@@ -15,8 +15,8 @@ function getZoneGuidance(userZone) {
   if (userNum >= 10) {
     if (userZoneClean === '10a') {
       return {
-        title: 'Zone 10a Florida Nursery Guidance',
-        note: 'Thrives outdoors with year-round growth in Florida microclimates. Manage intense sun and heat in peak summer, and provide temporary microclimate protection or frost cover during rare winter cold snaps.'
+        title: 'Zone 10a USDA Zone Guidance',
+        note: 'Thrives outdoors with year-round growth in mild-winter climates. Manage intense sun and heat in peak summer, and provide temporary microclimate protection or frost cover during rare cold snaps.'
       };
     }
     return {
@@ -43,7 +43,7 @@ function getZoneGuidance(userZone) {
 
   // Fallback
   return {
-    title: `Zone ${userZone.toUpperCase()} Climate Advisory`,
+    title: `Zone ${userZone.toUpperCase()} Planting Guidance`,
     note: 'Climate adjustments may be required based on local weather extremes, microclimates, and seasonal temperature swings.'
   };
 }
@@ -61,7 +61,8 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
 
   let matchStatus = 'SEASONAL'; // 'GOOD_FIT', 'SEASONAL'
   let badgeLabel = `Zone ${userZone.toUpperCase()} Guidance`;
-  let badgeColor = '#249160';
+  let badgeColor = '#B8533C';
+  let textColor = '#FFFFFF';
 
   if (zones.length > 0) {
     const isDirectMatch = zones.includes(userZoneClean) || zones.some(z => z.replace(/[a-b]/g, '') === userZoneClean.replace(/[a-b]/g, ''));
@@ -70,10 +71,12 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
       matchStatus = 'GOOD_FIT';
       badgeLabel = 'Good Fit for Outdoors';
       badgeColor = '#249160';
+      textColor = '#FFFFFF';
     } else {
       matchStatus = 'SEASONAL';
       badgeLabel = 'Seasonal / Protected Culture';
-      badgeColor = '#D4B06A';
+      badgeColor = '#B8533C';
+      textColor = '#FFFFFF';
     }
   }
 
@@ -91,13 +94,13 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
       </div>
 
       <div className="active-badge-status">
-        <span className="badge-pill" style={{ background: badgeColor, color: badgeColor === '#D4B06A' ? '#00301E' : '#FFFFFF' }}>
+        <span className="badge-pill" style={{ background: badgeColor, color: textColor }}>
           {badgeLabel}
         </span>
       </div>
 
-      {/* Terracotta Advisory Box */}
-      <div className="terracotta-advisory-box">
+      {/* Zone Guidance Box */}
+      <div className="zone-guidance-box">
         <h4 className="advisory-title">{guidance.title}</h4>
         <p className="advisory-note">{guidance.note}</p>
       </div>
@@ -201,11 +204,12 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           border-radius: 4px;
           text-transform: uppercase;
         }
-        .terracotta-advisory-box {
-          background-color: #B8533C;
+        .zone-guidance-box {
+          background-color: #00301E;
+          border: 1px solid #D4B06A;
           border-radius: 6px;
           padding: 0.85rem 1rem;
-          color: #FFFFFF;
+          color: #D4B06A;
           margin-top: 0.5rem;
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
         }
@@ -214,7 +218,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           font-size: 0.95rem;
           font-weight: bold;
           margin: 0 0 0.35rem 0;
-          color: #FFFFFF;
+          color: #D4B06A;
           letter-spacing: 0.03em;
           text-transform: uppercase;
         }
@@ -222,8 +226,8 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           margin: 0;
           font-size: 0.95rem;
           line-height: 1.45;
-          color: #FFFFFF;
-          font-weight: 600;
+          color: #F5E7C4;
+          font-weight: 500;
         }
         .modal-overlay {
           position: fixed;
