@@ -24,6 +24,7 @@
     "react-is": "^19.2.8",
     "resend": "^6.26.0",
     "sanity": "^3.99.0",
+    "sharp": "^0.35.4",
     "styled-components": "^6.5.3"
   },
   "devDependencies": {
@@ -34,12 +35,26 @@
     "tailwindcss": "^3.4.19"
   },
   "overrides": {
-    "adm-zip": "^0.6.0",
-    "decompress": "npm:adm-zip@^0.6.0",
+    "adm-zip": ">=0.5.18",
+    "decompress": "npm:adm-zip@>=0.5.18",
     "glob": "^10.5.0",
+    "js-yaml": "^4.1.0",
     "nanoid": "^3.3.18",
     "prismjs": "^1.30.0",
+    "sharp": "^0.35.4",
     "uuid": "^11.1.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "adm-zip": ">=0.5.18",
+      "decompress": "npm:adm-zip@>=0.5.18",
+      "glob": "^10.5.0",
+      "js-yaml": "^4.1.0",
+      "nanoid": "^3.3.18",
+      "prismjs": "^1.30.0",
+      "sharp": "^0.35.4",
+      "uuid": "^11.1.1"
+    }
   },
   "packageManager": "pnpm@10.30.3"
 }
