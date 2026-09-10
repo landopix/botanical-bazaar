@@ -11127,3 +11127,39 @@ snapshots:
     dependencies:
       imurmurhash: 0.1.4
       signal-exit: 4.1.0
+
+  '@fastify/busboy@3.2.2': {}
+
+  '@netlify/runtime-utils@2.2.1': {}
+
+  '@opentelemetry/api@1.9.0': {}
+
+  '@opentelemetry/semantic-conventions@1.28.0': {}
+
+  ansis@4.3.1: {}
+
+  callsite@1.0.0: {}
+
+  cjs-module-lexer@1.4.3: {}
+
+  dettle@1.0.5: {}
+
+  empathic@2.0.1: {}
+
+  env-paths@3.0.0: {}
+
+  image-size@2.0.2: {}
+
+  jpeg-js@0.4.4: {}
+
+  module-details-from-path@1.0.4: {}
+
+  parse-gitignore@2.0.0: {}
+
+  readdirp@4.1.2: {}
+
+  tmp@0.2.7: {}
+
+  type-fest@4.41.0: {}
+
+  uuid@13.0.2: {}
