@@ -470,11 +470,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           </div>
 
           <div className="price">
-            {isSoldOut ? (
-              <span className="sold-out-price">Sold Out</span>
-            ) : (
-              isNaN(activePrice) || !activePrice ? 'Price on Request' : `$${activePrice.toFixed(2)}`
-            )}
+            {isNaN(activePrice) || !activePrice ? 'Price on Request' : `$${activePrice.toFixed(2)}`}
           </div>
 
           {/* Size / Variant dropdown selection */}
@@ -548,7 +544,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {isSoldOut && (
             <div className="sold-out-section">
               <div className="sold-out-banner">
-                Temporarily Sold Out
+                Currently Propagating
               </div>
 
               {/* Notify Me Form or Confirmation */}
@@ -581,7 +577,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
                         disabled={notifyLoading}
                         className="notify-submit-btn"
                       >
-                        {notifyLoading ? 'Submitting...' : 'Notify Me'}
+                        {notifyLoading ? 'Submitting...' : 'Notify Me When Available'}
                       </button>
                     </div>
                     {notifyError && (
@@ -1023,8 +1019,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           margin-bottom: 1.2rem;
         }
         .sold-out-banner {
-          background: #ba2f2f;
-          color: #ffffff;
+          background: rgba(0, 48, 30, 0.85);
+          color: #D4B06A;
+          border: 1px solid #D4B06A;
           padding: 0.75rem;
           border-radius: 8px;
           text-align: center;
