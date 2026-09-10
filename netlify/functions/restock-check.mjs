@@ -2,8 +2,7 @@ import { restockRuntime } from '../../lib/restockRuntime.js';
 import { deliverRestockEmail, selectionAvailable } from '../../lib/restock.js';
 import { getProductByHandle } from '../../lib/shopify.js';
 
-export default async () => {
-  const { store, send } = restockRuntime();
+export async function checkRestocks({ store, send, getProduct = getProductByHandle }) {
   const started = Date.now();
   const products = new Map();
   let processed = 0;
@@ -29,7 +28,7 @@ export default async () => {
         }
         const fresh = await store.get(key, { type: 'json' });
         if (!fresh?.confirmation?.sentAt) continue;
-        if (!products.has(record.slug)) products.set(record.slug, await getProductByHandle(record.slug));
+        if (!products.has(record.slug)) products.set(record.slug, await getProduct(record.slug));
         if (selectionAvailable(products.get(record.slug), record.variantId)) {
           await deliverRestockEmail(store, record.id, 'restock', send);
         }
@@ -37,6 +36,8 @@ export default async () => {
   }
   await store.setJSON('worker-cursor', { key: completed ? '' : lastKey });
   return new Response(JSON.stringify({ processed }), { status: 200 });
-};
+}
+
+export default async () => checkRestocks(restockRuntime());
 
 export const config = { schedule: '*/15 * * * *' };

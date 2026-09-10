@@ -4,6 +4,7 @@ import { getPlantZoneGuidance } from '../lib/zoneGuidance.js';
 import { validateSignup, registerRestock, deliverRestockEmail, selectionAvailable, cancelRestock } from '../lib/restock.js';
 import { restockEmail } from '../lib/restockEmails.js';
 import { formatShopifyProduct } from '../lib/shopify.js';
+import { checkRestocks } from '../netlify/functions/restock-check.mjs';
 
 test('Shopify taxonomy references resolve labels and never treat GIDs as zones', () => {
   const base = { id: 'p', title: 'Plant', handle: 'plant', taxonomyHardinessZoneMetafield: {
@@ -22,6 +23,8 @@ class Store {
   records = new Map();
   version = 0;
   async getWithMetadata(key) { return structuredClone(this.records.get(key) || null); }
+  async get(key) { return (await this.getWithMetadata(key))?.data || null; }
+  async *list({ prefix }) { yield { blobs: [...this.records.keys()].filter(key => key.startsWith(prefix)).map(key => ({ key })) }; }
   async setJSON(key, data, options = {}) {
     const prior = this.records.get(key);
     if ((options.onlyIfNew && prior) || (options.onlyIfMatch && options.onlyIfMatch !== prior?.etag)) return { modified: false };
@@ -116,4 +119,24 @@ test('email includes escaped names, exact selection link, and cancellation link'
   assert.match(email.html, /&lt;Plant&gt;/);
   assert.match(email.text, /variant=gid%3A/);
   assert.match(email.text, /api\/restock-unsubscribe/);
+});
+
+test('scheduled worker completes signup-to-restock only after exact inventory returns', async () => {
+  const store = new Store();
+  const record = await registerRestock(store, input, plant);
+  const messages = [];
+  const send = async (to, message) => { messages.push(message.subject); return { data: { id: `email-${messages.length}` } }; };
+  let product = plant;
+  const run = () => checkRestocks({ store, send, getProduct: async () => product });
+  await run();
+  assert.equal(messages.length, 1);
+  assert.match(messages[0], /waitlist/);
+  product = { ...plant, availableForSale: true, variants: [...plant.variants, { id: 'gid://shopify/ProductVariant/2', availableForSale: true, quantityAvailable: 1 }] };
+  await run();
+  assert.equal(messages.length, 1);
+  product.variants[0] = { ...plant.variants[0], availableForSale: true, quantityAvailable: 1 };
+  await run(); await run();
+  assert.equal(messages.length, 2);
+  assert.match(messages[1], /Back in stock/);
+  assert.equal((await store.get(`requests/${record.id}`)).status, 'notified');
 });
