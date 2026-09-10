@@ -544,7 +544,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {isSoldOut && (
             <div className="sold-out-section">
               <div className="sold-out-banner">
-                Currently Propagating
+                Sold Out - Propagating
               </div>
 
               {/* Notify Me Form or Confirmation */}
@@ -1019,9 +1019,8 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           margin-bottom: 1.2rem;
         }
         .sold-out-banner {
-          background: rgba(0, 48, 30, 0.85);
-          color: #D4B06A;
-          border: 1px solid #D4B06A;
+          background: #B8533C;
+          color: #FFFFFF;
           padding: 0.75rem;
           border-radius: 8px;
           text-align: center;
@@ -1029,6 +1028,7 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           font-size: 1.1rem;
           margin-bottom: 0.8rem;
           font-family: 'Cinzel', serif;
+          letter-spacing: 0.05em;
         }
         .notify-card {
           background: #1C3D2E;

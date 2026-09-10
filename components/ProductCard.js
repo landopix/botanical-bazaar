@@ -148,11 +148,8 @@ function ProductCard({
             <div
               className="propagating-badge"
               style={{
-                border: '1px solid #D4B06A',
-                color: '#D4B06A',
-                background: 'rgba(0, 48, 30, 0.85)',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
+                background: '#B8533C',
+                color: '#FFFFFF',
                 padding: '0.2rem 0.6rem',
                 borderRadius: '4px',
                 fontSize: '0.8rem',
@@ -160,7 +157,7 @@ function ProductCard({
                 letterSpacing: '0.05em'
               }}
             >
-              PROPAGATING
+              Sold Out - Propagating
             </div>
           ) : (
             <div
