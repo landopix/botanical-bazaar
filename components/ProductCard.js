@@ -157,7 +157,7 @@ function ProductCard({
                 letterSpacing: '0.05em'
               }}
             >
-              Sold Out - Propagating
+              Sold Out · Propagating Now
             </div>
           ) : (
             <div
