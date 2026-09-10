@@ -5,8 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  adm-zip: 0.5.8
-  decompress: npm:adm-zip@0.5.8
+  adm-zip: '>=0.5.18'
+  decompress: npm:adm-zip@>=0.5.18
   glob: ^10.5.0
   js-yaml: ^4.1.0
   nanoid: ^3.3.18
