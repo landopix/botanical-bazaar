@@ -660,9 +660,9 @@ export default function ProductDetail({ initialProduct, allProducts = [] }) {
           {/* Cold Hardiness & Thermal Guidance Card */}
           {product.type === "Plant" && (
             <div className="cold-guidance-card">
-              <h3 className="cold-card-title">
+              <h2 className="cold-card-title">
                 Cold Hardiness &amp; Thermal Guidance
-              </h3>
+              </h2>
 
               {/* Climate Zone Indicator and Selector */}
               <div className="zone-indicator-row">

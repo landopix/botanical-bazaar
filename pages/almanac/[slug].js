@@ -110,11 +110,12 @@ export default function AlmanacArticle({ article }) {
             <Image
               src={article.imageUrl}
               alt={article.imageAlt || article.title}
-              fill
+              width={1200}
+              height={800}
               priority
               quality={75}
               sizes="(max-width: 768px) 100vw, 900px"
-              style={{ objectFit: 'cover' }}
+              style={{ objectFit: 'cover', width: '100%', height: '100%', position: 'absolute', inset: 0 }}
             />
           </div>
         )}

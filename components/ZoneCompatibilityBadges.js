@@ -15,7 +15,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
   return (
     <div className="zone-badges-container" aria-live="polite" aria-atomic="true">
       <div className="badges-header">
-        <span className="header-label">USDA Zone Compatibility (Zone {userZone}):</span>
+        <h2 className="header-label">USDA Zone Compatibility (Zone {userZone}):</h2>
         <button
           onClick={() => setShowMicroclimateModal(true)}
           className="microclimate-btn"
@@ -33,7 +33,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
 
       {/* Zone Guidance Box */}
       <div className="zone-guidance-box">
-        <h4 className="advisory-title">{guidance.title}</h4>
+        <h3 className="advisory-title">{guidance.title}</h3>
         <p className="advisory-note">{guidance.note}</p>
       </div>
 
@@ -73,6 +73,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           margin-bottom: 0.6rem;
         }
         .header-label {
+          margin: 0;
           font-family: 'Cinzel', serif;
           color: #D4B06A;
           font-size: 0.95rem;
