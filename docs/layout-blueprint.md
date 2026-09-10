@@ -129,7 +129,7 @@ To prevent color regressions, button styles across the application are locked to
 - **Card Styling Tokens**:
   - Selected Card: Brunswick Green (`#1C3D2E`) background with 2px solid Warm Gold (`#D4B06A`) border and subtle gold drop-shadow (`0 0 10px rgba(212, 176, 106, 0.25)`).
   - Unselected Card: Deep Forest Green (`#00301E`) background with 1px solid Brunswick Green (`#1C3D2E`) border.
-- **Stripe API Checkout Integration**: Selected `fulfillmentMethod` is transmitted to the backend checkout endpoint (`/api/checkout`) and logged in Stripe checkout metadata (`fulfillment_method`).
+- **Shopify API Checkout Integration**: Selected `fulfillmentMethod` is transmitted to the backend checkout endpoint (`/api/checkout`) and attached as custom attributes in the Shopify Storefront API cart session.
 
 ### Analytics & Search Console Integration Points
 - **Microsoft Clarity**: Tracking snippet embedded globally in `<Head>` of `components/Layout.js` and static templates (`content/pages/global-head-template.html` and `.html` files) using environment variable `NEXT_PUBLIC_CLARITY_ID` (fallback project ID `"vxxgho3991"`).

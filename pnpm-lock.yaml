@@ -54,9 +54,6 @@ importers:
       sharp:
         specifier: ^0.35.4
         version: 0.35.4(@types/node@22.20.2)
-      stripe:
-        specifier: ^22.6.0
-        version: 22.6.2(@types/node@22.20.2)
       styled-components:
         specifier: ^6.5.3
         version: 6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -2187,9 +2184,9 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  adm-zip@0.5.8:
-    resolution: {integrity: sha512-QMUp8kR517EEJiB9/XRZPPtNCYxsdXXXL3bBQ4hqvnknN/F3s62omNrLdXUfOWlIMSlyktnywa0ycatnr3f7CA==}
-    engines: {node: '>=6.0'}
+  adm-zip@0.6.0:
+    resolution: {integrity: sha512-XleryMhbuksdKtofnWZ9Sk+4CUTbms4Mb/EU32SZwToAyZ5RgVos/ki8n+yr0LWHOGKuakbXTuuYNHLQjhddgg==}
+    engines: {node: '>=14.0'}
 
   agent-base@7.1.4:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
@@ -4610,15 +4607,6 @@ packages:
     resolution: {integrity: sha512-laJTa3Jb+VQpaC6DseHhF7dXVqHTfJPCRDaEbid/drOhgitgYku/letMUqOXFoWV0zIIUbjpdH2t+tYj4bQMRQ==}
     engines: {node: '>=8'}
 
-  stripe@22.6.2:
-    resolution: {integrity: sha512-PwRE2scocvXqDKPiskMa5vRJEAEkq46W69XyUYmAwrNSLr675lQnfqLwnsndAWizwgihOWw/irLmoFRo3ez7ew==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
   styled-components@6.5.3:
     resolution: {integrity: sha512-vAX79sfpmUerP9fsTTxoTrBDE0RuO4ahjInyWYoohNgqrdg63Ms4q6FJ/o2Fyity82NU3cujOT8Ewl9TThBdwg==}
     engines: {node: '>= 16'}
@@ -6951,7 +6939,7 @@ snapshots:
       '@sanity/util': 3.99.0(@types/react@19.3.0)
       chalk: 4.1.2
       debug: 4.4.3(supports-color@8.1.1)
-      decompress: adm-zip@0.5.8
+      decompress: adm-zip@0.6.0
       esbuild: 0.25.6
       esbuild-register: 3.6.0(esbuild@0.25.6)
       get-it: 8.8.3
@@ -7270,7 +7258,7 @@ snapshots:
       '@oclif/core': 4.14.0
       '@oclif/plugin-help': 6.3.0
       '@sanity/client': 7.27.0
-      adm-zip: 0.5.8
+      adm-zip: 0.6.0
       array-treeify: 0.1.5
       cardinal: 2.1.1
       chalk: 5.6.2
@@ -7656,7 +7644,7 @@ snapshots:
 
   acorn@8.18.0: {}
 
-  adm-zip@0.5.8: {}
+  adm-zip@0.6.0: {}
 
   agent-base@7.1.4: {}
 
@@ -10245,10 +10233,6 @@ snapshots:
   strip-indent@3.0.0:
     dependencies:
       min-indent: 1.0.1
-
-  stripe@22.6.2(@types/node@22.20.2):
-    optionalDependencies:
-      '@types/node': 22.20.2
 
   styled-components@6.5.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:
