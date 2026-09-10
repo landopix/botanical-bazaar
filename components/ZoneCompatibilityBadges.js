@@ -1,19 +1,67 @@
 import React, { useState } from 'react';
 
+function getZoneGuidance(userZone) {
+  const userZoneClean = (userZone || '10a').toLowerCase().trim();
+  const userNum = parseFloat(userZoneClean);
+
+  if (isNaN(userNum)) {
+    return {
+      title: 'Local Climate Guidance',
+      note: 'Climate adjustments may be required based on local weather extremes and seasonal temperature shifts.'
+    };
+  }
+
+  // Warm Zones (10a–13)
+  if (userNum >= 10) {
+    if (userZoneClean === '10a') {
+      return {
+        title: 'Zone 10a Florida Nursery Guidance',
+        note: 'Thrives outdoors with year-round growth in Florida microclimates. Manage intense sun and heat in peak summer, and provide temporary microclimate protection or frost cover during rare winter cold snaps.'
+      };
+    }
+    return {
+      title: `Zone ${userZone.toUpperCase()} Outdoor Success Guidance`,
+      note: 'Focus on year-round outdoor success in warm sub-tropical environments with intense sun/heat management and temporary microclimate protection during rare cold snaps.'
+    };
+  }
+
+  // Moderate/Subtropical Zones (8–9)
+  if (userNum >= 8) {
+    return {
+      title: `Zone ${userZone.toUpperCase()} Subtropical Patio & Container Guidance`,
+      note: 'Thrives outdoors in patio or container plantings during warmer months. Bring indoors or provide substantial thermal shelter during freezing winter nights.'
+    };
+  }
+
+  // Cold Zones (3–7)
+  if (userNum >= 3) {
+    return {
+      title: `Zone ${userZone.toUpperCase()} Summer Outdoor & Overwintering Guidance`,
+      note: 'Makes a wonderful outdoor potted feature during summer months, but must be brought indoors before the first fall frost to overwinter safely.'
+    };
+  }
+
+  // Fallback
+  return {
+    title: `Zone ${userZone.toUpperCase()} Climate Advisory`,
+    note: 'Climate adjustments may be required based on local weather extremes, microclimates, and seasonal temperature swings.'
+  };
+}
+
 export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
   const [showMicroclimateModal, setShowMicroclimateModal] = useState(false);
 
   if (!product) return null;
 
   const zones = Array.isArray(product.zones) ? product.zones.map(z => z.toLowerCase().trim()) : [];
-  const userZoneClean = userZone.toLowerCase().trim();
-
+  const userZoneClean = (userZone || '10a').toLowerCase().trim();
   const userNum = parseFloat(userZoneClean);
 
-  let matchStatus = 'SEASONAL'; // 'GOOD_FIT', 'SEASONAL', 'NOT_RECOMMENDED'
-  let badgeLabel = 'Seasonal / Protected Culture';
-  let badgeColor = '#D4B06A';
-  let badgeDesc = `Suitable outdoors in warm months or with container protection during Zone ${userZone} cold snaps.`;
+  const guidance = getZoneGuidance(userZone);
+
+  let matchStatus = 'SEASONAL'; // 'GOOD_FIT', 'SEASONAL'
+  let badgeLabel = `Zone ${userZone.toUpperCase()} Guidance`;
+  let badgeColor = '#249160';
 
   if (zones.length > 0) {
     const isDirectMatch = zones.includes(userZoneClean) || zones.some(z => z.replace(/[a-b]/g, '') === userZoneClean.replace(/[a-b]/g, ''));
@@ -22,15 +70,10 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
       matchStatus = 'GOOD_FIT';
       badgeLabel = 'Good Fit for Outdoors';
       badgeColor = '#249160';
-      badgeDesc = `This specimen is well-adapted for outdoor growth in USDA Zone ${userZone}.`;
     } else {
-      const minZone = Math.min(...zones.map(z => parseFloat(z)).filter(n => !isNaN(n)));
-      if (!isNaN(minZone) && userNum < minZone) {
-        matchStatus = 'NOT_RECOMMENDED';
-        badgeLabel = 'Not Recommended Outdoors';
-        badgeColor = '#B8533C';
-        badgeDesc = `Zone ${userZone} experiences cold extremes below this plant's outdoor threshold. Grow indoors or in a heated greenhouse.`;
-      }
+      matchStatus = 'SEASONAL';
+      badgeLabel = 'Seasonal / Protected Culture';
+      badgeColor = '#D4B06A';
     }
   }
 
@@ -47,11 +90,16 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
         </button>
       </div>
 
-      <div className="active-badge" style={{ borderColor: badgeColor, background: 'rgba(0,48,30,0.6)' }}>
+      <div className="active-badge-status">
         <span className="badge-pill" style={{ background: badgeColor, color: badgeColor === '#D4B06A' ? '#00301E' : '#FFFFFF' }}>
           {badgeLabel}
         </span>
-        <p className="badge-desc">{badgeDesc}</p>
+      </div>
+
+      {/* Terracotta Advisory Box */}
+      <div className="terracotta-advisory-box">
+        <h4 className="advisory-title">{guidance.title}</h4>
+        <p className="advisory-note">{guidance.note}</p>
       </div>
 
       {showMicroclimateModal && (
@@ -141,10 +189,8 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           font-size: 0.85rem;
           font-family: 'Crimson Text', serif;
         }
-        .active-badge {
-          border-left: 4px solid;
-          padding: 0.75rem;
-          border-radius: 6px;
+        .active-badge-status {
+          margin-bottom: 0.6rem;
         }
         .badge-pill {
           display: inline-block;
@@ -153,14 +199,31 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
           font-weight: bold;
           padding: 0.2rem 0.6rem;
           border-radius: 4px;
-          margin-bottom: 0.4rem;
           text-transform: uppercase;
         }
-        .badge-desc {
+        .terracotta-advisory-box {
+          background-color: #B8533C;
+          border-radius: 6px;
+          padding: 0.85rem 1rem;
+          color: #FFFFFF;
+          margin-top: 0.5rem;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+        .advisory-title {
+          font-family: 'Cinzel', serif;
+          font-size: 0.95rem;
+          font-weight: bold;
+          margin: 0 0 0.35rem 0;
+          color: #FFFFFF;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+        }
+        .advisory-note {
           margin: 0;
           font-size: 0.95rem;
-          color: #E9DCBE;
-          line-height: 1.4;
+          line-height: 1.45;
+          color: #FFFFFF;
+          font-weight: 600;
         }
         .modal-overlay {
           position: fixed;
