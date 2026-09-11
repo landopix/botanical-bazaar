@@ -13,3 +13,26 @@ GHSA-vwc7-r8mq-g2x9 affects adm-zip 0.5.9 through 0.6.0. As of September 10, 202
 Do not downgrade to vulnerable older adm-zip releases or replace packages with incompatible aliases to suppress alerts. Dependabot's existing weekly npm configuration remains enabled. Review the upstream fix when released: https://github.com/advisories/GHSA-vwc7-r8mq-g2x9
 
 Expected closure: after this PR merges, GitHub should automatically close the eight resolved records when it reprocesses both lockfiles. They have not been manually dismissed.
+
+## September 11, 2026 update
+
+### PR #253 — Timing-safe merchant sync secret comparison
+
+Changed `pages/api/merchant/sync.js` from plain `===` string comparison to `crypto.timingSafeEqual` via SHA-256 hash comparison. This prevents theoretical timing side-channel attacks on the secret value. The `safeCompare` function hashes both inputs with SHA-256 to normalize length, then uses `timingSafeEqual` on the fixed-length digests. All fail-closed behavior from PR #227 is preserved.
+
+### Current dependency state (as of September 11, 2026)
+
+- npm audit reports 4 moderate vulnerabilities, all from adm-zip via Sanity CLI tooling chain
+- No direct application import of adm-zip
+- No upstream fix available
+- Next.js: ^16.3.4
+- @netlify/blobs: 10.7.13
+- sharp: ^0.35.4
+- All 18 tests pass across 5 suites
+
+### Security hardening completed this session
+
+- PR #252: Sitemap/gallery SEO duplicate content consolidation
+- PR #253: Timing-safe comparison for merchant sync secret
+- PR #254: Gallery page consolidation and internal link cleanup
+- All CodeQL checks passed

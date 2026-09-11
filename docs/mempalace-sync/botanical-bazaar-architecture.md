@@ -1,0 +1,1 @@
+python -m mempalace mine "C:\Users\Landon\.mempalace" --no-llm
