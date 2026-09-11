@@ -26,7 +26,7 @@
     "sanity": "^3.99.0",
     "sharp": "^0.35.4",
     "styled-components": "^6.5.3",
-    "@netlify/blobs": "10.5.0"
+    "@netlify/blobs": "10.7.13"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.13",

@@ -35,3 +35,8 @@ Pre-existing waitlist requests were sent to the nursery mailbox only. They are n
 - Two clearly marked template previews sent through the connected Resend account to `info@thebotanicalbazaar.com` were confirmed delivered. The old local `.env.local` Resend key was invalid; it is not used as evidence about the protected production key.
 
 References: [Shopify Storefront references](https://shopify.dev/docs/api/storefront/2026-07/unions/MetafieldReference), [Netlify Blobs](https://docs.netlify.com/build/data-and-storage/netlify-blobs/), [scheduled functions](https://docs.netlify.com/build/functions/scheduled-functions/), [Resend idempotency](https://resend.com/docs/dashboard/emails/idempotency-keys).
+
+## Published Resend plant templates
+New item-waitlist deliveries use plant-waitlist-confirmation-v1 and plant-back-in-stock-v1. Both are published in Resend and share the Almanac welcome email's branding. Variables are PLANT_NAME, PRODUCT_URL and CANCEL_URL. Sender and reply-to remain info@thebotanicalbazaar.com. Nursery-wide updates retain their existing separate message.
+
+Old persisted deliveries without a template field retry their original HTML/text. Keep these v1 templates unchanged while retries may be pending; publish a new versioned alias for future content revisions so Resend idempotency keys cannot refer to changed content. Template publication alone does not deploy the website integration.
