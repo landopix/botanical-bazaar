@@ -414,6 +414,7 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
         image={imageUrl}
         url={pageUrl}
         type="product"
+        titleLimit={70}
       >
         <link rel="preload" as="image" href={imageUrl} />
         <script
