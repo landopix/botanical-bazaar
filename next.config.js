@@ -92,6 +92,31 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // Legacy GrapesJS static homepage is still routable at /index via the
+        // [...page].js catch-all; consolidate it into the canonical homepage.
+        source: '/index',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        // Legacy GrapesJS template stubs routable via the [...page].js
+        // catch-all. They serve thin/empty 200 (and 500) responses and are
+        // not linked from the current site. See docs/seo/backlog.md (T-012).
+        source: '/product',
+        destination: '/shop',
+        permanent: true,
+      },
+      {
+        source: '/tag',
+        destination: '/shop',
+        permanent: true,
+      },
+      {
+        source: '/global-head-template',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/cart.html',
         destination: '/cart',
         permanent: true,
