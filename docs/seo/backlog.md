@@ -58,6 +58,25 @@ Statuses: Identified · Needs Investigation · Ready · In Progress · Implement
 | T-007 | `CollectionSeoBoilerplate.js` generates near-identical "About Our X Collection" copy across all 20 collections. Thin/duplicate-content pattern as catalog grows. | `/collections/*` | Live check | P3 | 2 | 3 | 3 | After baseline: rewrite to pull collection-specific value (botanical families, care notes, local relevance). Not urgent at current catalog size. | Deferred | SF near-duplicate content report; Ahrefs rankings per collection |
 | T-010 | Almanac (blog) contains 1 article. Content engine nascent — top-of-funnel gap for topical authority (care guides, acclimation, Florida gardening). | `/almanac/*` | Sitemap | P2 | 4 | 4 | 4 | Post-baseline: build content strategy from keyword gap analysis (workstreams G/H). | Deferred | Ahrefs Content Gap vs organic competitors |
 
+## 1A. Delivery 6 follow-ups
+
+The following items were verified during the T-014/T-015/T-018 delivery and retained
+here so the backlog remains the source of truth for follow-up verification.
+
+| T-014 | Sold-out products remain internally linked through shop, collections, and recommendations. | `/product/*`, `/shop`, `/collections/*` | Live crawl + code | P1 | 4 | 5 | 3 | Show sold-out products by default, badge them, sort them last, and preserve the opt-out filter. | Implemented & Verified | Recheck sold-out PDP and recommendation links after deployment |
+| T-015 | Collection membership uses explicit Shopify signals rather than loose description matching. | `/collections/*` | Code simulation + live crawl | P1 | 4 | 5 | 2 | Keep one membership helper as the source of truth for collection pages, shop filters, counts, and homepage cards. | Implemented & Verified | Unit tests cover orchid false positives and houseplant membership |
+| T-016 | Collection index heading finding was a crawl-extraction false positive. | `/collections` | Source review | P3 | 1 | 4 | 1 | No code change required; retain the existing H1. | Deferred | Confirm H1 in the next crawl |
+| T-017 | Long cultivar names were truncated at the strict site-wide title limit. | `/product/[slug]` | Live crawl + code | P3 | 2 | 4 | 1 | Add an optional SEO title limit and pass 70 characters from PDPs while preserving the default 60-character cap elsewhere. | Implemented - Verification Needed | Confirm production PDP titles and non-PDP regression |
+| T-018 | Collection intro and heading templates duplicated or mismatched collection names. | `/collections/*` | Live crawl | P3 | 2 | 5 | 1 | Use concise collection-specific intro and heading text. | Implemented & Verified | Confirm representative collection pages after deploy |
+
+## Delivery verification notes
+
+The T-017 delivery adds only the SEO prop, PDP override, title utility tests,
+and this backlog document. No robots, redirect, sitemap, or unrelated product
+behavior changes belong in that delivery.
+| T-016 | Collections index H1 verification remains a documentation follow-up. | `/collections` | Crawl verification | P3 | 1 | 4 | 1 | Confirm the H1 is present in rendered HTML. | Deferred | Next crawl |
+
+
 ## 2. Verified / Closed
 
 | ID | Issue | Resolution | Date Closed |

@@ -18,11 +18,14 @@ export default function SEO({
   type = 'website',
   canonical,
   noindex = false,
+  titleLimit = 60,
   children
 }) {
   const router = useRouter();
 
-  const formattedTitle = formatTitle(title);
+  // Page types can raise the title cap (PDPs pass 70 so long cultivar
+  // names render untruncated, T-017); the site-wide default stays at 60.
+  const formattedTitle = formatTitle(title, undefined, titleLimit);
   const formattedDescription = formatDescription(description, DEFAULT_SITE_DESCRIPTION);
 
   // Clean canonical / relative path
