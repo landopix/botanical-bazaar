@@ -1,5 +1,13 @@
+import { timingSafeEqual, createHash } from 'node:crypto';
 import { getAllProducts } from '../../../lib/shopify.js';
 import { mapCatalogToGoogleMerchantItems, syncToGoogleMerchantContentApi } from '../../../lib/google-merchant.js';
+
+function safeCompare(a, b) {
+  if (!a || !b) return false;
+  const hashA = createHash('sha256').update(a).digest();
+  const hashB = createHash('sha256').update(b).digest();
+  return timingSafeEqual(hashA, hashB);
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
@@ -16,7 +24,7 @@ export default async function handler(req, res) {
   const providedSecret = tokenFromHeader || tokenFromCustomHeader || tokenFromQuery;
 
   let isAuthenticated = false;
-  if (syncSecret && providedSecret === syncSecret) {
+  if (syncSecret && safeCompare(providedSecret, syncSecret)) {
     isAuthenticated = true;
   } else if (!syncSecret && process.env.NODE_ENV !== 'production') {
     isAuthenticated = true;
