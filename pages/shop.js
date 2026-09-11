@@ -151,8 +151,6 @@ export default function Shop({ initialProducts = [] }) {
     if (sort !== undefined) setSortOrder(sort || "");
     if (view_sold_out !== undefined) {
       setViewSoldOut(view_sold_out === "true");
-    } else {
-      setViewSoldOut(false);
     }
     if (search !== undefined) setSearchQuery(search || "");
     if (tag !== undefined) setSelectedTag(tag || "");
