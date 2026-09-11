@@ -8,6 +8,7 @@ import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 import NurseryUpdateFallback from "../components/NurseryUpdateFallback";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
+import { isProductInCollection } from "../lib/collectionMembership";
 import { isZoneCompatible, normalizePotSize, getProductSizes, getAvailableZones } from "../lib/fulfillment";
 
 // Static list of requested category collections
@@ -87,7 +88,9 @@ export default function Shop({ initialProducts = [] }) {
   const [selectedZone, setSelectedZone] = useState("");
   const [userZone, setUserZone] = useState("10a");
   const [sortOrder, setSortOrder] = useState("");
-  const [viewSoldOut, setViewSoldOut] = useState(false);
+  // Show sold-out plants by default (badged, sorted last) so sold-out product
+  // URLs keep their internal links from the shop grid (T-014).
+  const [viewSoldOut, setViewSoldOut] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [selectedLight, setSelectedLight] = useState("");
@@ -183,8 +186,7 @@ export default function Shop({ initialProducts = [] }) {
     }
     if (updates.view_sold_out !== undefined) {
       setViewSoldOut(updates.view_sold_out);
-      if (updates.view_sold_out) params.set("view_sold_out", "true");
-      else params.delete("view_sold_out");
+      params.set("view_sold_out", updates.view_sold_out ? "true" : "false");
     }
     if (updates.search !== undefined) {
       setSearchQuery(updates.search);
@@ -219,65 +221,11 @@ export default function Shop({ initialProducts = [] }) {
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // 1. Collection Handle / Category Filter Logic
+    // 1. Collection membership — single source of truth in
+    // lib/collectionMembership.js (explicit signals only, no text matching).
     if (selectedCategory) {
       const catLower = selectedCategory.toLowerCase();
-      result = result.filter((product) => {
-        const matchesCollectionHandle = (handle) =>
-          Array.isArray(product?.collectionHandles) &&
-          product.collectionHandles.some((h) => h?.toLowerCase() === handle.toLowerCase());
-        const matchesCategory = (cat) =>
-          Array.isArray(product?.categories) &&
-          product.categories.some((pc) => pc?.toLowerCase() === cat.toLowerCase());
-        const matchesTag = (t) =>
-          Array.isArray(product?.tags) &&
-          product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
-        const textMatches = (keyword) =>
-          `${product?.name || ""} ${product?.description || ""}`
-            .toLowerCase()
-            .includes(keyword.toLowerCase());
-
-        if (matchesCollectionHandle(catLower) || matchesCategory(catLower) || matchesTag(catLower)) return true;
-
-        if (catLower === "orchids" || catLower === "orchid") {
-          return matchesTag("orchid") || matchesCategory("orchids") || textMatches("orchid");
-        }
-        if (catLower === "tropical-houseplants" || catLower === "houseplants") {
-          return (
-            matchesTag("houseplant") ||
-            matchesTag("tropical") ||
-            matchesCategory("houseplants") ||
-            matchesCategory("tropical-houseplants") ||
-            textMatches("houseplant") ||
-            textMatches("tropical")
-          );
-        }
-        if (catLower === "fruit-trees" || catLower === "fruit trees") {
-          return matchesTag("fruit-tree") || textMatches("fruit tree") || textMatches("fruit");
-        }
-        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
-          return matchesTag("herb") || matchesTag("medicinal") || textMatches("herb") || textMatches("medicinal");
-        }
-        if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-          return matchesTag("rare") || matchesTag("exotic") || textMatches("rare") || textMatches("exotic");
-        }
-        if (catLower === "seeds") {
-          return matchesTag("seed") || textMatches("seed");
-        }
-        if (catLower === "stickers-art" || catLower === "stickers & art") {
-          const isPlant = (product?.type || "").toLowerCase().includes("plant") || (product?.type || "").toLowerCase().includes("tree") || (Array.isArray(product?.tags) && product.tags.some(t => ["plant", "houseplant", "tree", "aroid", "orchid", "tropical", "rare", "succulent", "cactus"].includes(t.toLowerCase())));
-          if (isPlant) return false;
-          return matchesCollectionHandle("stickers-art") || matchesCategory("stickers-art") || matchesCategory("art") || matchesTag("sticker") || matchesTag("stickers-art") || (matchesTag("art") && !isPlant);
-        }
-        if (catLower === "tinctures-apothecary" || catLower === "tinctures & apothecary") {
-          return matchesCategory("apothecary") || matchesTag("tincture") || matchesTag("apothecary") || textMatches("tincture");
-        }
-        if (catLower === "terrarium-vivarium" || catLower === "terrarium & vivarium") {
-          return matchesCategory("habitat") || matchesTag("leaf-litter") || matchesTag("substrate") || textMatches("vivarium") || textMatches("terrarium");
-        }
-
-        return false;
-      });
+      result = result.filter((product) => isProductInCollection(product, catLower));
     }
 
     // 2. Availability Filter
@@ -426,116 +374,19 @@ export default function Shop({ initialProducts = [] }) {
     return Array.from(availableSizes).sort();
   }, [products]);
 
-  // Performance Optimization: Pre-compute in-stock item counts per collection category
-  // using useMemo so that catalog array filtering is executed once per inventory update
-  // rather than repeatedly on every component re-render.
-  const categoryInStockCounts = useMemo(() => {
+  // Member counts per collection category, computed once per inventory update.
+  // Counts include sold-out members so collection chips keep their internal
+  // links while stock is being propagated (T-014); matching lives in
+  // lib/collectionMembership.js (T-015).
+  const categoryCounts = useMemo(() => {
     const counts = {};
-    if (!products || products.length === 0) {
-      COLLECTIONS.forEach((c) => { counts[c.id] = 0; });
-      return counts;
-    }
+    COLLECTIONS.forEach((c) => { counts[c.id] = 0; });
+    if (!products || products.length === 0) return counts;
 
     COLLECTIONS.forEach((collection) => {
-      const categoryId = collection.id;
-      const catLower = categoryId.toLowerCase();
-
-      counts[categoryId] = products.filter((product) => {
-        const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
-        if (isSoldOut) return false;
-
-        const hasCategory = (c) =>
-          Array.isArray(product?.categories) &&
-          product.categories.some((pc) => pc?.toLowerCase() === c.toLowerCase());
-        const hasTag = (t) =>
-          Array.isArray(product?.tags) &&
-          product.tags.some((pt) => pt?.toLowerCase() === t.toLowerCase());
-        const textMatches = (keyword) => {
-          const text = `${product?.name || ""} ${product?.description || ""}`.toLowerCase();
-          return text.includes(keyword);
-        };
-
-        if (catLower === "orchids" || catLower === "orchid") {
-          return hasCategory("orchids") || hasTag("orchid") || textMatches("orchid");
-        }
-        if (catLower === "tropical-houseplants" || catLower === "houseplants") {
-          return (
-            hasCategory("tropical-houseplants") ||
-            hasCategory("houseplants") ||
-            hasTag("houseplant") ||
-            hasTag("tropical") ||
-            textMatches("houseplant") ||
-            textMatches("tropical")
-          );
-        }
-        if (catLower === "fruit-trees" || catLower === "fruit trees") {
-          return (
-            hasCategory("fruit-trees") ||
-            hasTag("fruit-tree") ||
-            textMatches("fruit tree") ||
-            textMatches("fruit")
-          );
-        }
-        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
-          return (
-            hasCategory("herbs-medicinal") ||
-            hasTag("herb") ||
-            hasTag("medicinal") ||
-            textMatches("herb") ||
-            textMatches("medicinal") ||
-            textMatches("aromatic")
-          );
-        }
-        if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-          return (
-            hasCategory("exotics-rare") ||
-            hasTag("rare") ||
-            hasTag("exotic") ||
-            textMatches("rare") ||
-            textMatches("exotic") ||
-            textMatches("unusual")
-          );
-        }
-        if (catLower === "seeds") {
-          return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
-        }
-        if (catLower === "stickers-art" || catLower === "stickers & art") {
-          const isPlant = (product?.type || "").toLowerCase().includes("plant") || (product?.type || "").toLowerCase().includes("tree") || (Array.isArray(product?.tags) && product.tags.some(t => ["plant", "houseplant", "tree", "aroid", "orchid", "tropical", "rare", "succulent", "cactus"].includes(t.toLowerCase())));
-          if (isPlant) return false;
-          return (
-            hasCategory("stickers-art") ||
-            hasCategory("art") ||
-            hasTag("sticker") ||
-            hasTag("stickers-art")
-          );
-        }
-        if (catLower === "tinctures-apothecary" || catLower === "tinctures & apothecary") {
-          return (
-            hasCategory("tinctures-apothecary") ||
-            hasCategory("apothecary") ||
-            hasTag("tincture") ||
-            hasTag("apothecary") ||
-            textMatches("tincture") ||
-            textMatches("apothecary") ||
-            textMatches("drops")
-          );
-        }
-        if (catLower === "terrarium-vivarium" || catLower === "terrarium & vivarium") {
-          return (
-            hasCategory("terrarium-vivarium") ||
-            hasCategory("habitat") ||
-            hasTag("leaf-litter") ||
-            hasTag("substrate") ||
-            textMatches("leaf litter") ||
-            textMatches("habitat") ||
-            textMatches("vivarium") ||
-            textMatches("shrimp") ||
-            textMatches("tank")
-          );
-        }
-
-        return hasCategory(categoryId);
-      }).length;
+      counts[collection.id] = products.filter(
+        (product) => isProductInCollection(product, collection.id)
+      ).length;
     });
 
     return counts;
@@ -547,7 +398,7 @@ export default function Shop({ initialProducts = [] }) {
     if (selectedSize) count++;
     if (selectedZone) count++;
     if (sortOrder) count++;
-    if (viewSoldOut) count++;
+    if (!viewSoldOut) count++;
     if (searchQuery) count++;
     if (selectedTag) count++;
     if (selectedLight) count++;
@@ -557,8 +408,8 @@ export default function Shop({ initialProducts = [] }) {
 
   const visibleCollections = useMemo(() => {
     if (products.length === 0) return COLLECTIONS;
-    return COLLECTIONS.filter((collection) => (categoryInStockCounts[collection.id] || 0) > 0);
-  }, [products, categoryInStockCounts]);
+    return COLLECTIONS.filter((collection) => (categoryCounts[collection.id] || 0) > 0);
+  }, [products, categoryCounts]);
 
   // Dynamic meta title and description based on active filters
   const activeCategoryObj = COLLECTIONS.find(c => c.id === selectedCategory);
@@ -573,9 +424,10 @@ export default function Shop({ initialProducts = [] }) {
     ? `Browse our selection of ${categoryName.toLowerCase()} grown in St. Petersburg, FL. Standard shipping & local nursery pickup available.`
     : "Browse our catalog of rare tropical plants, collector aroids, philodendrons, monstera, and orchids. Standard shipping and local nursery pickup in St. Petersburg, FL.";
 
-  const dynamicCanonicalUrl = selectedCategory
-    ? `https://thebotanicalbazaar.com/shop?category=${encodeURIComponent(selectedCategory)}`
-    : "https://thebotanicalbazaar.com/shop";
+  // All filtered views (category/tag/zone params) consolidate to /shop. The
+  // param URLs are robots-disallowed; the canonical points at the clean URL
+  // so they can never split indexation even if that block is lifted.
+  const dynamicCanonicalUrl = "https://thebotanicalbazaar.com/shop";
 
   return (
     <div className="shop-container">
@@ -766,7 +618,7 @@ export default function Shop({ initialProducts = [] }) {
 
           {selectedCategory &&
           products.length > 0 &&
-          (categoryInStockCounts[selectedCategory] || 0) === 0 ? (
+          filteredProducts.length === 0 ? (
             <div
               style={{
                 width: "100%",
