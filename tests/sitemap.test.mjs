@@ -20,7 +20,7 @@ test('sitemap request emits XML with products, articles and only populated colle
   await context.getServerSideProps({res:{setHeader(k,v){headers[k]=v},write(s){output+=s},end(){}}});
   assert.equal(headers['Content-Type'],'text/xml');
   assert.ok(output.startsWith('<?xml'));
-  for(const path of ['/product/test-orchid','/almanac/plant-care','/collections/orchids','/orchids-gallery'])assert.ok(output.includes(`<loc>https://thebotanicalbazaar.com${path}</loc>`));
+  for(const path of ['/product/test-orchid','/almanac/plant-care','/collections/orchids','/gallery'])assert.ok(output.includes(`<loc>https://thebotanicalbazaar.com${path}</loc>`));
   assert.ok(!output.includes('/collections/seeds</loc>'));
-  assert.ok(!output.includes('/gallery</loc>'));
+  assert.ok(!output.includes('/orchids-gallery</loc>'));
 });
