@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard";
 import SEO from "../components/SEO";
 import { useWishlist } from "../context/WishlistContext";
 import { getAllProducts } from "../lib/shopify";
+import { isProductInCollection } from "../lib/collectionMembership";
 
 export async function getStaticProps() {
   try {
@@ -99,7 +100,11 @@ export default function Index({ initialProducts = [] }) {
   // Slice the first 6 products for Featured Plants section
   const featuredProducts = (products || []).slice(0, 6);
 
-  const categoryInStockCounts = useMemo(() => {
+  // Category-card visibility is based on collection membership (sold-out
+  // members included) so cards — and their links into collections — survive
+  // temporary sell-outs (T-014). Matching lives in lib/collectionMembership.js
+  // (T-015: explicit signals only, no description text matching).
+  const categoryCounts = useMemo(() => {
     const counts = {};
     const categoriesToCheck = [
       "houseplants",
@@ -111,77 +116,12 @@ export default function Index({ initialProducts = [] }) {
     ];
 
     categoriesToCheck.forEach((catId) => {
-      counts[catId] = products.filter((product) => {
-        const isSoldOut = product?.availableForSale === false || (product?.quantity !== undefined && product.quantity < 1);
-        if (isSoldOut) return false;
-
-        const catLower = catId.toLowerCase();
-        const hasCategory = (c) =>
-          Array.isArray(product.categories) &&
-          product.categories.some((pc) => pc.toLowerCase() === c.toLowerCase());
-        const hasTag = (t) =>
-          Array.isArray(product.tags) &&
-          product.tags.some((pt) => pt.toLowerCase() === t.toLowerCase());
-        const textMatches = (keyword) => {
-          const text =
-            `${product.name} ${product.description || ""}`.toLowerCase();
-          return text.includes(keyword);
-        };
-
-        if (catLower === "houseplants") {
-          return (
-            hasCategory("houseplants") ||
-            hasTag("houseplant") ||
-            textMatches("houseplant")
-          );
-        }
-        if (
-          catLower === "orchids-tropicals" ||
-          catLower === "orchids & tropicals"
-        ) {
-          return (
-            hasCategory("orchids-tropicals") ||
-            hasCategory("plants") ||
-            hasTag("tropical") ||
-            hasTag("orchid") ||
-            textMatches("orchid") ||
-            textMatches("tropical")
-          );
-        }
-        if (catLower === "fruit-trees" || catLower === "fruit trees") {
-          return (
-            hasCategory("fruit-trees") ||
-            hasTag("fruit-tree") ||
-            textMatches("fruit tree") ||
-            textMatches("fruit")
-          );
-        }
-        if (catLower === "herbs-medicinal" || catLower === "herbs & medicinal") {
-          return (
-            hasCategory("herbs-medicinal") ||
-            hasTag("herb") ||
-            hasTag("medicinal") ||
-            textMatches("herb") ||
-            textMatches("medicinal") ||
-            textMatches("aromatic")
-          );
-        }
-        if (catLower === "exotics-rare" || catLower === "exotics & rare") {
-          return (
-            hasCategory("exotics-rare") ||
-            hasTag("rare") ||
-            hasTag("exotic") ||
-            textMatches("rare") ||
-            textMatches("exotic") ||
-            textMatches("unusual")
-          );
-        }
-        if (catLower === "seeds") {
-          return hasCategory("seeds") || hasTag("seed") || textMatches("seed");
-        }
-
-        return hasCategory(catId);
-      }).length;
+      // The homepage's "Orchids & Tropicals" card links to the
+      // tropical-houseplants collection, so test against that slug.
+      const slug = catId === "orchids-tropicals" ? "tropical-houseplants" : catId;
+      counts[catId] = (products || []).filter(
+        (product) => isProductInCollection(product, slug)
+      ).length;
     });
 
     return counts;
@@ -189,7 +129,7 @@ export default function Index({ initialProducts = [] }) {
 
   const showCategory = (catId) => {
     if (products.length === 0) return true;
-    return (categoryInStockCounts[catId] || 0) > 0;
+    return (categoryCounts[catId] || 0) > 0;
   };
 
   return (

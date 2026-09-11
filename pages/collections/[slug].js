@@ -116,7 +116,9 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
   const [sortOrder, setSortOrder] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedZone, setSelectedZone] = useState('');
-  const [viewSoldOut, setViewSoldOut] = useState(false);
+  // Show sold-out specimens by default (badged) so collection pages keep
+  // linking to them while stock is being propagated (T-014).
+  const [viewSoldOut, setViewSoldOut] = useState(true);
 
   if (router.isFallback) {
     return <div style={{ padding: '4rem', textAlign: 'center', color: '#D4B06A' }}>Loading collection...</div>;
@@ -230,7 +232,7 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
       <h1 className="collection-title">{collectionTitle}</h1>
 
       <p className="collection-intro">
-        Explore our curated selection of {collectionTitle.toLowerCase()} specimens. Shipped nationwide from St.&nbsp;Petersburg, FL or available for free local nursery pickup.
+        Browse our curated {collectionTitle} collection, hand-picked specimens shipped nationwide from St.&nbsp;Petersburg, FL or available for free local nursery pickup.
       </p>
 
       {/* Filter & Sort Controls Bar */}
@@ -298,7 +300,7 @@ export default function CollectionPage({ slug, collectionTitle, collectionProduc
         </div>
       </div>
 
-      <h2 className="collection-results-heading">Available {collectionTitle} Plants</h2>
+      <h2 className="collection-results-heading">Available {collectionTitle}</h2>
 
       {filteredProducts.length === 0 ? (
         <div className="empty-collection-box">
