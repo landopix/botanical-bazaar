@@ -12,7 +12,7 @@ const staticRoutes = [
   '/events',
   '/consultations',
   '/faq',
-  '/orchids-gallery',
+  '/gallery',
   '/zones',
   '/returns',
   '/shipping-pickup',
