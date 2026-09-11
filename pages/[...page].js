@@ -135,7 +135,16 @@ export async function getServerSideProps(context) {
   const htmlPath = path.join(process.cwd(), 'content', 'pages', `${pageName}.html`);
   const cssPath = path.join(process.cwd(), 'content', 'pages', `${pageName}.css`);
 
-  if (fs.existsSync(htmlPath)) {
+  // T-013: allowlist gate for legacy GrapesJS templates. Files under
+  // content/pages/ are design references, not routable pages - the T-012
+  // zombie URLs (/tag, /index, /product, /global-head-template) were all
+  // served by this catch-all before their redirects existed. Only
+  // explicitly allowlisted paths may serve template HTML; anything else
+  // falls through to 404. Redirects in next.config.js still run BEFORE
+  // routing, so all existing 301s keep winning. To make a legacy template
+  // routable again, add its slug here - never delete the gate.
+  const LEGACY_PAGE_ALLOWLIST = new Set(['zone9b']);
+  if (LEGACY_PAGE_ALLOWLIST.has(pageName) && fs.existsSync(htmlPath)) {
     try {
       // Check if this is a Next.js client-side data request
       const isDataRequest = !!req.headers['x-nextjs-data'];
