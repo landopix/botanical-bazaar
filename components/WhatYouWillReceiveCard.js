@@ -15,7 +15,7 @@ export default function WhatYouWillReceiveCard({ product, selectedVariant }) {
     potSize = product.sizes;
   }
 
-  const heightRange = product.height_range || product.custom?.height_range || '6 - 12 inches (varies by specimen)';
+  const heightRange = product.height_range || product.custom?.height_range || 'Specimen height not recorded';
   const bloomStatus = product.custom?.bloom_status || product.bloom_status || null;
   const dormancyStatus = product.custom?.growth_dormancy || product.growth_dormancy || null;
 

@@ -16,6 +16,14 @@ const contentSecurityPolicy = [
 ].join('; ');
 
 const nextConfig = {
+  webpack(config, { dev }) {
+    if (dev && process.env.PLANT_REFERENCE_PREVIEW === '1') {
+      // Local evidence preview keeps the site's CSP intact by avoiding eval-based source maps.
+      config.plugins = config.plugins.filter(plugin => plugin.constructor?.name !== 'EvalSourceMapDevToolPlugin');
+      config.plugins.push({ apply(compiler) { compiler.options.devtool = 'source-map'; } });
+    }
+    return config;
+  },
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
