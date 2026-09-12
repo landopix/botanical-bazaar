@@ -14,6 +14,9 @@ import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { getProductByHandle, getAllProductHandles, getAllProducts, parseProductTitle } from '../../lib/shopify';
 import useBfcacheReset from '../../hooks/useBfcacheReset';
+import PlantReference from '../../components/PlantReference';
+import ProductDescription from '../../components/ProductDescription';
+import { getPlantReference } from '../../lib/plant-reference-server';
 
 // Dynamic imports for below-the-fold non-critical components
 const FulfillmentCard = dynamic(() => import('../../components/FulfillmentCard'));
@@ -85,6 +88,7 @@ export async function getStaticProps({ params }) {
     return {
       props: {
         initialProduct: product,
+        plantReference: await getPlantReference(slug),
         recommendedProducts: getRecommendedProducts(product, allProducts || [])
       },
       revalidate: 60
@@ -96,7 +100,7 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function ProductDetail({ initialProduct, recommendedProducts = [] }) {
+export default function ProductDetail({ initialProduct, recommendedProducts = [], plantReference = null }) {
   const recommendedRef = React.useRef(null);
   const router = useRouter();
 
@@ -686,21 +690,19 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
         <div className="details-col details-col-left">
           <div className="description-card">
             <h2 className="section-card-title">Botanical Description</h2>
-            <p className="description-text">
-              {product.description || `This highly desired tropical plant species thrives beautifully in hardiness zones ${product.zones ? product.zones.join(', ') : '9, 10, 11'}. Perfect addition to any rare collectors garden.`}
-            </p>
+            <ProductDescription html={product.descriptionHtml} text={product.description} />
           </div>
 
-          <CareSpine product={product} />
+          <PlantReference record={plantReference} />
 
           <WhatYouWillReceiveCard product={product} selectedVariant={selectedVariant} />
 
-          {renderSpecs(product)}
+          {/* Plant facts are rendered from reviewed claims above, not inferred from tags. */}
         </div>
 
         {/* Column 2 (Right): Zone Compatibility, Fulfillment, Guarantee, Policy Note */}
         <div className="details-col details-col-right">
-          <ZoneCompatibilityBadges product={product} userZone={hardinessZone} />
+          {/* Outdoor hardiness belongs to a scoped, cited plant-reference claim. */}
 
           <FulfillmentCard product={product} />
 

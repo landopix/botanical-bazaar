@@ -1,0 +1,1794 @@
+{
+  "version": 1,
+  "accessedAt": "2026-09-12",
+  "records": [
+    {
+      "_id": "plantReference.jatropha-podagrica",
+      "_type": "plantReference",
+      "taxonKey": "jatropha-podagrica",
+      "acceptedName": "Jatropha podagrica",
+      "family": "Euphorbiaceae",
+      "synonyms": [],
+      "commonNames": [
+        "Buddha Belly"
+      ],
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "identificationUncertainty": "Product identity follows existing nursery label; specimen identification has not been independently authenticated.",
+      "blockers": [
+        "Owner review of pilot and publication authorization remain pending."
+      ],
+      "unknownFields": [
+        "care.temperature",
+        "care.humidity",
+        "care.feeding",
+        "care.repotting",
+        "characteristics.fragrance",
+        "characteristics.lifespan",
+        "safety.otherAnimals",
+        "uses.culinary",
+        "uses.agricultural",
+        "uses.traditionalMedicinal",
+        "uses.clinical",
+        "uses.fiber",
+        "uses.dye",
+        "uses.fragrance",
+        "uses.oil",
+        "processing.method",
+        "ecology.destinationRestrictions",
+        "safety.cats",
+        "safety.dogs"
+      ],
+      "claims": [
+        {
+          "_key": "acceptedName-0",
+          "category": "identity",
+          "field": "acceptedName",
+          "text": "Jatropha podagrica is accepted by Kew in Euphorbiaceae.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source1",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:350415-1",
+              "title": "Jatropha podagrica | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "nativeRange-1",
+          "category": "ecology",
+          "field": "nativeRange",
+          "text": "Native range: Southern Mexico to Nicaragua.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Southern Mexico to Nicaragua",
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source1",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:350415-1",
+              "title": "Jatropha podagrica | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        },
+        {
+          "_key": "light-2",
+          "category": "care",
+          "field": "light",
+          "text": "Grow in sun to partial shade.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "water-3",
+          "category": "care",
+          "field": "water",
+          "text": "Allow the soil to dry between waterings; reduce watering in winter.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": "container cultivation",
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "substrate-4",
+          "category": "care",
+          "field": "substrate",
+          "text": "Use well-drained soil and a pot with drainage holes.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "seasonality-5",
+          "category": "characteristics",
+          "field": "seasonality",
+          "text": "Leaves may drop in autumn; flowers can continue after leaf loss.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "human-6",
+          "category": "safety",
+          "field": "human",
+          "text": "Poisonous if eaten; seeds are toxic and sap can irritate skin.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": "seeds; sap",
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "humans",
+            "exposureRoute": "ingestion; skin contact"
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source9",
+              "url": "https://www.poisonsinfo.health.qld.gov.au/plants-and-mushrooms/guatemala-rhubarb-jatropha-podagrica",
+              "title": "Guatemala rhubarb (Jatropha podagrica)",
+              "publisher": "Queensland Poisons Information Centre",
+              "location": "Warning, Symptoms and Details",
+              "publicationDate": "2024-11",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2026-12-12",
+          "safetyReviewer": "Codex source review (not owner publication approval)",
+          "safetyReviewedAt": "2026-09-12"
+        },
+        {
+          "_key": "size-7",
+          "category": "characteristics",
+          "field": "size",
+          "text": "NC State describes roughly 2–3 ft in houseplant cultivation and up to 8 ft in native habitat.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha podagrica",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": "indoor container versus native habitat",
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source6",
+              "url": "https://plants.ces.ncsu.edu/plants/jatropha-podagrica/",
+              "title": "Jatropha podagrica | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        }
+      ],
+      "history": [
+        {
+          "_key": "initial",
+          "date": "2026-09-12",
+          "actor": "Codex source review (not owner publication approval)",
+          "summary": "Initial live-listing pilot; no Shopify or CMS writes."
+        }
+      ]
+    },
+    {
+      "_id": "plantReference.jatropha-gossypiifolia",
+      "_type": "plantReference",
+      "taxonKey": "jatropha-gossypiifolia",
+      "acceptedName": "Jatropha gossypiifolia",
+      "family": "Euphorbiaceae",
+      "synonyms": [
+        "Adenoropium gossypiifolium",
+        "Manihot gossypiifolia"
+      ],
+      "commonNames": [
+        "Bellyache Bush"
+      ],
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "identificationUncertainty": "Product identity follows existing nursery label; specimen identification has not been independently authenticated.",
+      "blockers": [
+        "Owner review of pilot and publication authorization remain pending.",
+        "Independent safety corroboration; Florida sale and destination restrictions not yet established."
+      ],
+      "unknownFields": [
+        "care.temperature",
+        "care.humidity",
+        "care.feeding",
+        "care.repotting",
+        "characteristics.fragrance",
+        "characteristics.lifespan",
+        "safety.otherAnimals",
+        "uses.culinary",
+        "uses.agricultural",
+        "uses.traditionalMedicinal",
+        "uses.clinical",
+        "uses.fiber",
+        "uses.dye",
+        "uses.fragrance",
+        "uses.oil",
+        "processing.method",
+        "ecology.destinationRestrictions",
+        "safety.cats",
+        "safety.dogs"
+      ],
+      "claims": [
+        {
+          "_key": "acceptedName-0",
+          "category": "identity",
+          "field": "acceptedName",
+          "text": "Jatropha gossypiifolia is accepted by Kew in Euphorbiaceae.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha gossypiifolia",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source2",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:323930-2",
+              "title": "Jatropha gossypiifolia | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "nativeRange-1",
+          "category": "ecology",
+          "field": "nativeRange",
+          "text": "Native range: Mexico through tropical America.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha gossypiifolia",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Mexico through tropical America",
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source2",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:323930-2",
+              "title": "Jatropha gossypiifolia | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        },
+        {
+          "_key": "foliage-2",
+          "category": "characteristics",
+          "field": "foliage",
+          "text": "Lobed foliage can be green, red, purple or bronze; flowers are red to purple.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha gossypiifolia",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source18",
+              "url": "https://weeds.dpi.nsw.gov.au/Weed/Bellyachebush",
+              "title": "Bellyache bush",
+              "publisher": "NSW Department of Primary Industries and Regional Development",
+              "location": "Profile; Human poisoning; Livestock poisoning; References",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "human-3",
+          "category": "safety",
+          "field": "human",
+          "text": "Ingestion can cause severe digestive illness; sap may irritate skin and eyes.",
+          "kind": "source fact",
+          "status": "supported",
+          "scope": {
+            "taxon": "Jatropha gossypiifolia",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": "plant; sap",
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "humans",
+            "exposureRoute": "ingestion; skin or eye contact"
+          },
+          "limitations": "NSW cites the Queensland poison reference. These are not counted as two independent safety sources; independent corroboration remains required.",
+          "evidence": [
+            {
+              "_key": "source10",
+              "url": "https://www.poisonsinfo.health.qld.gov.au/plants-and-mushrooms/bellyache-bush-jatropha-gossypiifolia",
+              "title": "Bellyache bush (Jatropha gossypiifolia)",
+              "publisher": "Queensland Poisons Information Centre",
+              "location": "Warning, Symptoms and Details",
+              "publicationDate": "2024-11",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source18",
+              "url": "https://weeds.dpi.nsw.gov.au/Weed/Bellyachebush",
+              "title": "Bellyache bush",
+              "publisher": "NSW Department of Primary Industries and Regional Development",
+              "location": "Profile; Human poisoning; Livestock poisoning; References",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false
+        },
+        {
+          "_key": "invasiveAssessment-4",
+          "category": "ecology",
+          "field": "invasiveAssessment",
+          "text": "UF/IFAS assigns high invasion risk in North, Central and South Florida and does not recommend planting (2017 assessment).",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha gossypiifolia",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": "outdoor Florida",
+            "geography": "Florida: North, Central, South",
+            "audience": null,
+            "exposureRoute": null,
+            "assessmentDate": "2017"
+          },
+          "limitations": "Ecological risk and cultivation recommendation; this is not a determination of Florida sale legality.",
+          "evidence": [
+            {
+              "_key": "source14",
+              "url": "https://assessment.ifas.ufl.edu/assessments/jatropha-gossypiifolia/",
+              "title": "Jatropha gossypiifolia assessment",
+              "publisher": "UF/IFAS",
+              "location": "Conclusions by Zone; Assessment Dates",
+              "publicationDate": "2017",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        }
+      ],
+      "history": [
+        {
+          "_key": "initial",
+          "date": "2026-09-12",
+          "actor": "Codex source review (not owner publication approval)",
+          "summary": "Initial live-listing pilot; no Shopify or CMS writes."
+        }
+      ]
+    },
+    {
+      "_id": "plantReference.jatropha-multifida",
+      "_type": "plantReference",
+      "taxonKey": "jatropha-multifida",
+      "acceptedName": "Jatropha multifida",
+      "family": "Euphorbiaceae",
+      "synonyms": [
+        "Adenoropium multifidum",
+        "Manihot multifida"
+      ],
+      "commonNames": [
+        "Coral Bush"
+      ],
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "identificationUncertainty": "Product identity follows existing nursery label; specimen identification has not been independently authenticated.",
+      "blockers": [
+        "Owner review of pilot and publication authorization remain pending."
+      ],
+      "unknownFields": [
+        "care.temperature",
+        "care.humidity",
+        "care.feeding",
+        "care.repotting",
+        "characteristics.fragrance",
+        "characteristics.lifespan",
+        "safety.otherAnimals",
+        "uses.culinary",
+        "uses.agricultural",
+        "uses.traditionalMedicinal",
+        "uses.clinical",
+        "uses.fiber",
+        "uses.dye",
+        "uses.fragrance",
+        "uses.oil",
+        "processing.method",
+        "ecology.destinationRestrictions",
+        "safety.cats",
+        "safety.dogs"
+      ],
+      "claims": [
+        {
+          "_key": "acceptedName-0",
+          "category": "identity",
+          "field": "acceptedName",
+          "text": "Jatropha multifida is accepted by Kew in Euphorbiaceae.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source3",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:314308-2",
+              "title": "Jatropha multifida | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "nativeRange-1",
+          "category": "ecology",
+          "field": "nativeRange",
+          "text": "Native range: Mexico and the Caribbean.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Mexico and the Caribbean",
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source3",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:314308-2",
+              "title": "Jatropha multifida | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        },
+        {
+          "_key": "light-2",
+          "category": "care",
+          "field": "light",
+          "text": "Full sun to light shade.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source16",
+              "url": "https://blogs.ifas.ufl.edu/charlotteco/2025/09/24/add-the-coral-plant-to-your-garden-reef/",
+              "title": "Add the coral plant to your garden reef",
+              "publisher": "UF/IFAS Extension Charlotte County",
+              "location": "Paragraph beginning Jathropha multifida can grow",
+              "publicationDate": "2025-09-24",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS Extension Charlotte County",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "substrate-3",
+          "category": "care",
+          "field": "substrate",
+          "text": "Provide well-drained soil.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source16",
+              "url": "https://blogs.ifas.ufl.edu/charlotteco/2025/09/24/add-the-coral-plant-to-your-garden-reef/",
+              "title": "Add the coral plant to your garden reef",
+              "publisher": "UF/IFAS Extension Charlotte County",
+              "location": "Paragraph beginning Jathropha multifida can grow",
+              "publicationDate": "2025-09-24",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS Extension Charlotte County",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "habit-4",
+          "category": "characteristics",
+          "field": "habit",
+          "text": "A shrub or small tree with deeply divided foliage and coral-red flower clusters.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source17",
+              "url": "https://sfyl.ifas.ufl.edu/miami-dade/landscapes--gardening/shrubs--hedges-he-p/",
+              "title": "Shrubs & Hedges (HE-P)",
+              "publisher": "UF/IFAS Extension Miami-Dade County",
+              "location": "Coral plant, physic nut row",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS Extension Miami-Dade County",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "human-5",
+          "category": "safety",
+          "field": "human",
+          "text": "Poisonous if eaten; fruit, leaves and sap present ingestion hazards, and sap can irritate skin.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": "fruit; leaves; sap",
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "humans",
+            "exposureRoute": "ingestion; skin contact"
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source11",
+              "url": "https://www.poisonsinfo.health.qld.gov.au/plants-and-mushrooms/coral-plant-jatropha-multifida",
+              "title": "Coral plant (Jatropha multifida)",
+              "publisher": "Queensland Poisons Information Centre",
+              "location": "Warning, Symptoms and Details",
+              "publicationDate": "2024-11",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source17",
+              "url": "https://sfyl.ifas.ufl.edu/miami-dade/landscapes--gardening/shrubs--hedges-he-p/",
+              "title": "Shrubs & Hedges (HE-P)",
+              "publisher": "UF/IFAS Extension Miami-Dade County",
+              "location": "Coral plant, physic nut row",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS Extension Miami-Dade County",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2026-12-12",
+          "safetyReviewer": "Codex source review (not owner publication approval)",
+          "safetyReviewedAt": "2026-09-12"
+        },
+        {
+          "_key": "invasiveAssessment-6",
+          "category": "ecology",
+          "field": "invasiveAssessment",
+          "text": "UF/IFAS records “Not a problem species (un-documented)” for North, Central and South Florida (2019 assessment).",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Jatropha multifida",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Florida: North, Central, South",
+            "audience": null,
+            "exposureRoute": null,
+            "assessmentDate": "2019"
+          },
+          "limitations": "Not a universal non-invasiveness claim; assessment origin text differs from Kew, which owns native-range identity here.",
+          "evidence": [
+            {
+              "_key": "source15",
+              "url": "https://assessment.ifas.ufl.edu/assessments/jatropha-multifida/",
+              "title": "Jatropha multifida assessment",
+              "publisher": "UF/IFAS",
+              "location": "Conclusions by Zone; Assessment Dates",
+              "publicationDate": "2019",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "UF/IFAS",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        }
+      ],
+      "history": [
+        {
+          "_key": "initial",
+          "date": "2026-09-12",
+          "actor": "Codex source review (not owner publication approval)",
+          "summary": "Initial live-listing pilot; no Shopify or CMS writes."
+        }
+      ]
+    },
+    {
+      "_id": "plantReference.hippeastrum-striatum",
+      "_type": "plantReference",
+      "taxonKey": "hippeastrum-striatum",
+      "acceptedName": "Hippeastrum striatum",
+      "family": "Amaryllidaceae",
+      "synonyms": [
+        "Amaryllis striata"
+      ],
+      "commonNames": [
+        "Barbados Lily"
+      ],
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "identificationUncertainty": "Product identity follows existing nursery label; specimen identification has not been independently authenticated.",
+      "blockers": [
+        "Owner review of pilot and publication authorization remain pending.",
+        "Species-specific care and separate cat/dog safety review incomplete; inventory bloom-size assertion unverified."
+      ],
+      "unknownFields": [
+        "care.temperature",
+        "care.humidity",
+        "care.feeding",
+        "care.repotting",
+        "characteristics.fragrance",
+        "characteristics.lifespan",
+        "safety.otherAnimals",
+        "uses.culinary",
+        "uses.agricultural",
+        "uses.traditionalMedicinal",
+        "uses.clinical",
+        "uses.fiber",
+        "uses.dye",
+        "uses.fragrance",
+        "uses.oil",
+        "processing.method",
+        "ecology.destinationRestrictions",
+        "safety.cats",
+        "safety.dogs"
+      ],
+      "claims": [
+        {
+          "_key": "acceptedName-0",
+          "category": "identity",
+          "field": "acceptedName",
+          "text": "Hippeastrum striatum is accepted by Kew in Amaryllidaceae.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Hippeastrum striatum",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source4",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:122839-2",
+              "title": "Hippeastrum striatum | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "nativeRange-1",
+          "category": "ecology",
+          "field": "nativeRange",
+          "text": "Native range: Eastern and southern Brazil.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Hippeastrum striatum",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Eastern and southern Brazil",
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source4",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:122839-2",
+              "title": "Hippeastrum striatum | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        },
+        {
+          "_key": "light-2",
+          "category": "care",
+          "field": "light",
+          "text": "Genus-level Hippeastrum guidance: full sun or partial shade.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Hippeastrum",
+            "level": "genus",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Genus guidance only; species-specific exposure and dormancy requirements remain under review.",
+          "evidence": [
+            {
+              "_key": "source8",
+              "url": "https://plants.ces.ncsu.edu/plants/hippeastrum/",
+              "title": "Hippeastrum | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "water-3",
+          "category": "care",
+          "field": "water",
+          "text": "Genus-level Hippeastrum guidance: provide moisture during active growth with good drainage.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Hippeastrum",
+            "level": "genus",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Do not import holiday forcing schedules or generic hardiness zones into this species record.",
+          "evidence": [
+            {
+              "_key": "source8",
+              "url": "https://plants.ces.ncsu.edu/plants/hippeastrum/",
+              "title": "Hippeastrum | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "human-4",
+          "category": "safety",
+          "field": "human",
+          "text": "Genus-level Hippeastrum warning: ingestion, especially of the bulb, can cause nausea, vomiting and diarrhoea.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Hippeastrum",
+            "level": "genus",
+            "cultivar": null,
+            "plantPart": "bulb",
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "humans",
+            "exposureRoute": "ingestion"
+          },
+          "limitations": "Genus evidence, not species-specific clinical data. Poison-center family label is outdated; use Kew for family.",
+          "evidence": [
+            {
+              "_key": "source8",
+              "url": "https://plants.ces.ncsu.edu/plants/hippeastrum/",
+              "title": "Hippeastrum | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source12",
+              "url": "https://www.poisonsinfo.health.qld.gov.au/plants-and-mushrooms/amaryllis-hippeastrum",
+              "title": "Amaryllis (Hippeastrum)",
+              "publisher": "Queensland Poisons Information Centre",
+              "location": "Warning, Symptoms and Details",
+              "publicationDate": "2024-11",
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Queensland Poisons Information Centre",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2026-12-12",
+          "safetyReviewer": "Codex source review (not owner publication approval)",
+          "safetyReviewedAt": "2026-09-12"
+        }
+      ],
+      "history": [
+        {
+          "_key": "initial",
+          "date": "2026-09-12",
+          "actor": "Codex source review (not owner publication approval)",
+          "summary": "Initial live-listing pilot; no Shopify or CMS writes."
+        }
+      ]
+    },
+    {
+      "_id": "plantReference.dracaena-trifasciata",
+      "_type": "plantReference",
+      "taxonKey": "dracaena-trifasciata",
+      "acceptedName": "Dracaena trifasciata",
+      "family": "Asparagaceae",
+      "synonyms": [
+        "Sansevieria trifasciata"
+      ],
+      "commonNames": [
+        "Bird’s Nest Snake Plant"
+      ],
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "identificationUncertainty": "Product identity follows existing nursery label; specimen identification has not been independently authenticated.",
+      "blockers": [
+        "Owner review of pilot and publication authorization remain pending.",
+        "Human safety corroboration and sap wording unresolved; Hahnii Green label requires nursery confirmation."
+      ],
+      "unknownFields": [
+        "care.temperature",
+        "care.humidity",
+        "care.feeding",
+        "care.repotting",
+        "characteristics.fragrance",
+        "characteristics.lifespan",
+        "safety.otherAnimals",
+        "uses.culinary",
+        "uses.agricultural",
+        "uses.traditionalMedicinal",
+        "uses.clinical",
+        "uses.fiber",
+        "uses.dye",
+        "uses.fragrance",
+        "uses.oil",
+        "processing.method",
+        "ecology.destinationRestrictions"
+      ],
+      "claims": [
+        {
+          "_key": "acceptedName-0",
+          "category": "identity",
+          "field": "acceptedName",
+          "text": "Dracaena trifasciata is accepted by Kew in Asparagaceae.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source5",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77164235-1",
+              "title": "Dracaena trifasciata | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "nativeRange-1",
+          "category": "ecology",
+          "field": "nativeRange",
+          "text": "Native range: Southern Nigeria through west-central tropical Africa, and Tanzania.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": "Southern Nigeria through west-central tropical Africa, and Tanzania",
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source5",
+              "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77164235-1",
+              "title": "Dracaena trifasciata | Plants of the World Online",
+              "publisher": "Royal Botanic Gardens, Kew",
+              "location": "Taxonomy, distribution, synonyms and classification",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "Royal Botanic Gardens, Kew",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-03-12"
+        },
+        {
+          "_key": "water-2",
+          "category": "care",
+          "field": "water",
+          "text": "Allow the soil to dry between waterings and avoid persistently wet roots.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": "indoor container",
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "substrate-3",
+          "category": "care",
+          "field": "substrate",
+          "text": "Use well-drained soil.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "light-4",
+          "category": "care",
+          "field": "light",
+          "text": "Tolerates low light; partial sunlight is also suitable.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": "container",
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "Species guidance; not a measurement or guarantee for the sale specimen.",
+          "evidence": [
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "cultivar-5",
+          "category": "characteristics",
+          "field": "cultivar",
+          "text": "NC State describes Hahnii as a dwarf, short-rosette form.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": "Hahnii",
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": null,
+            "exposureRoute": null
+          },
+          "limitations": "The listing’s Hahnii Green trade label is not independently established as a separate registered cultivar.",
+          "evidence": [
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2027-09-12"
+        },
+        {
+          "_key": "cats-6",
+          "category": "safety",
+          "field": "cats",
+          "text": "ASPCA lists snake plant (Sansevieria trifasciata) as toxic to cats.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "cats",
+            "exposureRoute": "ingestion"
+          },
+          "limitations": "Species-level safety guidance; no cultivar-specific exemption. NC State also flags this animal.",
+          "evidence": [
+            {
+              "_key": "source13",
+              "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/snake-plant",
+              "title": "Snake Plant",
+              "publisher": "ASPCA",
+              "location": "Scientific Name; Toxicity; Clinical Signs",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "ASPCA",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2026-12-12",
+          "safetyReviewer": "Codex source review (not owner publication approval)",
+          "safetyReviewedAt": "2026-09-12"
+        },
+        {
+          "_key": "dogs-7",
+          "category": "safety",
+          "field": "dogs",
+          "text": "ASPCA lists snake plant (Sansevieria trifasciata) as toxic to dogs.",
+          "kind": "source fact",
+          "status": "approved",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "dogs",
+            "exposureRoute": "ingestion"
+          },
+          "limitations": "Species-level safety guidance; no cultivar-specific exemption. NC State also flags this animal.",
+          "evidence": [
+            {
+              "_key": "source13",
+              "url": "https://www.aspca.org/pet-care/aspca-poison-control/toxic-and-non-toxic-plants/snake-plant",
+              "title": "Snake Plant",
+              "publisher": "ASPCA",
+              "location": "Scientific Name; Toxicity; Clinical Signs",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "ASPCA",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            },
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false,
+          "reviewer": "Codex source review (not owner publication approval)",
+          "reviewedAt": "2026-09-12",
+          "recheckBy": "2026-12-12",
+          "safetyReviewer": "Codex source review (not owner publication approval)",
+          "safetyReviewedAt": "2026-09-12"
+        },
+        {
+          "_key": "human-8",
+          "category": "safety",
+          "field": "human",
+          "text": "NC State lists ingestion toxicity for humans.",
+          "kind": "source fact",
+          "status": "supported",
+          "scope": {
+            "taxon": "Dracaena trifasciata",
+            "level": "species",
+            "cultivar": null,
+            "plantPart": null,
+            "preparation": null,
+            "environment": null,
+            "geography": null,
+            "audience": "humans",
+            "exposureRoute": "ingestion"
+          },
+          "limitations": "Independent human-safety corroboration is still required. The NC State sap-irritation statement and dermatitis checkbox also require clarification.",
+          "evidence": [
+            {
+              "_key": "source7",
+              "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+              "title": "Dracaena trifasciata | Extension Gardener Plant Toolbox",
+              "publisher": "NC State Extension",
+              "location": "Description; Cultural Conditions; Poisonous to Humans",
+              "publicationDate": null,
+              "accessedAt": "2026-09-12",
+              "read": true,
+              "evidenceType": "authoritative reference",
+              "originGroup": "NC State Extension",
+              "reuse": "Original factual summary and section locator only; no article text or photographs copied.",
+              "limitations": "Applies only to the stated taxon and context."
+            }
+          ],
+          "actionable": false
+        }
+      ],
+      "history": [
+        {
+          "_key": "initial",
+          "date": "2026-09-12",
+          "actor": "Codex source review (not owner publication approval)",
+          "summary": "Initial live-listing pilot; no Shopify or CMS writes."
+        }
+      ]
+    }
+  ],
+  "links": [
+    {
+      "_id": "productPlantLink.8755847823495",
+      "_type": "productPlantLink",
+      "productId": "gid://shopify/Product/8755847823495",
+      "handle": "buddha-belly-jatropha-podagrica",
+      "taxonKey": "jatropha-podagrica",
+      "plant": {
+        "_type": "reference",
+        "_ref": "plantReference.jatropha-podagrica"
+      },
+      "cultivar": null,
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "inventorySuitability": "Nursery label only; treatment history and consumption suitability not verified."
+    },
+    {
+      "_id": "productPlantLink.8756050296967",
+      "_type": "productPlantLink",
+      "productId": "gid://shopify/Product/8756050296967",
+      "handle": "bellyache-bush-jatropha-gossypiifolia",
+      "taxonKey": "jatropha-gossypiifolia",
+      "plant": {
+        "_type": "reference",
+        "_ref": "plantReference.jatropha-gossypiifolia"
+      },
+      "cultivar": null,
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "inventorySuitability": "Nursery label only; treatment history and consumption suitability not verified."
+    },
+    {
+      "_id": "productPlantLink.8761253363847",
+      "_type": "productPlantLink",
+      "productId": "gid://shopify/Product/8761253363847",
+      "handle": "coral-bush-jatropha-multifida",
+      "taxonKey": "jatropha-multifida",
+      "plant": {
+        "_type": "reference",
+        "_ref": "plantReference.jatropha-multifida"
+      },
+      "cultivar": null,
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "inventorySuitability": "Nursery label only; treatment history and consumption suitability not verified."
+    },
+    {
+      "_id": "productPlantLink.8756136149127",
+      "_type": "productPlantLink",
+      "productId": "gid://shopify/Product/8756136149127",
+      "handle": "barbados-lily-hippeastrum-striatum",
+      "taxonKey": "hippeastrum-striatum",
+      "plant": {
+        "_type": "reference",
+        "_ref": "plantReference.hippeastrum-striatum"
+      },
+      "cultivar": null,
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "inventorySuitability": "Nursery label only; treatment history and consumption suitability not verified."
+    },
+    {
+      "_id": "productPlantLink.8757566832775",
+      "_type": "productPlantLink",
+      "productId": "gid://shopify/Product/8757566832775",
+      "handle": "birds-nest-snake-plant-dracaena-trifasciata-hahnii",
+      "taxonKey": "dracaena-trifasciata",
+      "plant": {
+        "_type": "reference",
+        "_ref": "plantReference.dracaena-trifasciata"
+      },
+      "cultivar": "Hahnii",
+      "status": "supported",
+      "reviewer": "Codex source review (not owner publication approval)",
+      "reviewedAt": "2026-09-12",
+      "inventorySuitability": "Nursery label only; treatment history and consumption suitability not verified."
+    }
+  ]
+}
