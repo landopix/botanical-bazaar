@@ -103,7 +103,7 @@ export default function Gallery({ initialImages = [], pageContent = null }) {
 
   return (
     <div style={{ background: '#00301E', minHeight: '100vh', padding: '3rem 1.5rem', color: '#E9DCBE' }}>
-      <SEO title="Collector Orchid & Specimen Gallery" description="High-resolution visual gallery of rare tropical specimens, collector orchids, variegated aroids, and fruit trees grown at The Botanical Bazaar." />
+      <SEO title="Specialty Tropicals & Rare Specimens Gallery" description="High-resolution visual gallery of specialty tropicals, rare specimens, variegated aroids, and fruit trees grown at The Botanical Bazaar." />
 
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -111,7 +111,7 @@ export default function Gallery({ initialImages = [], pageContent = null }) {
             {pageContent?.title || 'Botanical Collector Gallery'}
           </h1>
           <p style={{ fontSize: '1.2rem', fontStyle: 'italic', color: '#F5E7C4', maxWidth: '700px', margin: '0 auto 1.5rem' }}>
-            {pageContent?.intro || 'High-resolution photographic highlights of rare orchids, mature tropical specimens, and exotic varieties nurtured at our St. Petersburg nursery.'}
+            {pageContent?.intro || 'High-resolution photographic highlights of specialty tropicals, rare specimens, mature foliage, and exotic varieties nurtured at our St. Petersburg nursery.'}
           </p>
           <div style={{ width: '80px', height: '2px', background: '#D4B06A', margin: '0 auto' }}></div>
         </div>
@@ -182,7 +182,7 @@ export default function Gallery({ initialImages = [], pageContent = null }) {
               New Botanical Updates Coming Soon!
             </h3>
             <p style={{ color: '#E9DCBE', fontSize: '1.1rem', margin: '0 0 1.8rem 0', lineHeight: '1.6' }}>
-              Our specimen gallery is currently updating with fresh tropical and orchid photography from our St. Petersburg greenhouse.
+              Our specimen gallery is currently updating with fresh specialty tropical and rare specimen photography from our St. Petersburg greenhouse.
             </p>
             <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
           </div>

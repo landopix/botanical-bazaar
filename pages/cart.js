@@ -84,7 +84,7 @@ export default function Cart() {
         <SEO title="Shopping Cart" description="Review your selected live plant specimens and botanical goods in your cart before checkout." />
         <h1 style={{ color: '#D4B06A', fontFamily: 'Cinzel, serif', marginBottom: '1rem' }}>Your Cart is Empty</h1>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem', lineHeight: '1.6' }}>
-          Looks like you haven't added any tropical specimens or rare orchids to your cart yet.
+          Looks like you haven't added any specialty tropicals or rare specimens to your cart yet.
         </p>
         <Button variant="gold-filled" href="/shop">Browse Botanical Catalog</Button>
       </div>
