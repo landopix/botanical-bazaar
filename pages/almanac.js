@@ -315,7 +315,6 @@ export default function Almanac({ careSheets, articles, shopifyArticles, events 
             <p style={{ color: '#F5E7C4', margin: '0 0 1rem 0', fontStyle: 'italic', fontSize: '1.05rem' }}>
               No upcoming public events currently scheduled. Check back soon for workshops and pop-up plant drops!
             </p>
-            <Button variant="outline" href="/events">View Full Events Calendar</Button>
           </div>
         )}
       </section>

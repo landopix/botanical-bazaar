@@ -87,13 +87,6 @@ const staticPages = [
     content: "almanac garden guides history botanical facts care profiles taxonomy seasonal tips"
   },
   {
-    title: "Events",
-    href: "/events",
-    category: "Information",
-    description: "Upcoming plant sales, workshops, and botanical community meetups.",
-    content: "events plant sale workshop classes meetups nursery schedule activities botanical show calendar"
-  },
-  {
     title: "Contact Us",
     href: "/contact",
     category: "Services",
@@ -795,7 +788,6 @@ export default function Layout({ children }) {
     { label: "Consultations", href: "/consultations" },
     { label: "Plant Sourcing", href: "/sourcing" },
     { label: "The Almanac", href: "/almanac" },
-    { label: "Events", href: "/events" },
     { label: "Contact", href: "/contact" },
     { label: "Gallery", href: "/gallery" },
     {
@@ -1638,13 +1630,11 @@ export default function Layout({ children }) {
                 <Link href="/almanac#subscribe" onClick={() => setIsAlmanacDropdownOpen(false)}>Stay in the loop with email updates</Link>
                 <Link href="/almanac#articles" onClick={() => setIsAlmanacDropdownOpen(false)}>Seasonal Articles and Blog Posts</Link>
                 <Link href="/almanac#care-sheets" onClick={() => setIsAlmanacDropdownOpen(false)}>Plant Care Sheets</Link>
-                <Link href="/events" onClick={() => setIsAlmanacDropdownOpen(false)}>Calendar and Workshops</Link>
                 <Link href="/zones" onClick={() => setIsAlmanacDropdownOpen(false)}>Explore Climate & Care Resources</Link>
               </div>
             </div>
           </div>
 
-          <Link href="/events">Events</Link>
           <Link href="/gallery">Gallery</Link>
           <Link href="/contact">Contact</Link>
 
@@ -1757,7 +1747,7 @@ export default function Layout({ children }) {
           <div className="footer-column">
             <h3>About Us</h3>
             <Link href="/about">Our History</Link>
-            <Link href="/contact">Store Visit</Link>
+            <Link href="/contact">Pickup & Visit Info</Link>
             <Link href="/sourcing">Plant Sourcing</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/accessibility">Accessibility</Link>

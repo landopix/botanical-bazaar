@@ -54,7 +54,7 @@ export default function WishlistPage() {
           Your Wishlist Sanctuary is Empty
         </h1>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem', lineHeight: '1.6', color: '#F5E7C4' }}>
-          Save rare orchids, variegated monstera, and tropical fruit trees to track availability and plan your garden.
+          Save specialty tropicals, rare specimens, variegated monstera, and tropical fruit trees to track availability and plan your garden.
         </p>
         <Button variant="gold-filled" href="/shop">Browse Nursery Catalog</Button>
       </div>

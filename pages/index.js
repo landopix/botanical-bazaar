@@ -151,8 +151,8 @@ export default function Index({ initialProducts = [] }) {
   return (
     <div className="home-container">
       <SEO
-        title="Rare Tropical Plants & Orchids"
-        description="Discover rare tropical plants, collector aroids, specimen orchids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup."
+        title="Specialty Tropicals & Rare Specimens"
+        description="Discover specialty tropicals, rare specimens, collector aroids, and medicinal flora at The Botanical Bazaar in St. Petersburg, FL. Standard shipping & local nursery pickup."
       />
       {/* Homepage specific styles injected cleanly */}
       <style
