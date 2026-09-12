@@ -29,11 +29,11 @@ function MyApp({ Component, pageProps }) {
           {/* Global Google Analytics (G-S0XS3CDM9G) */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-S0XS3CDM9G"
-            strategy="lazyOnload"
+            strategy="afterInteractive"
           />
           <Script
             id="google-analytics-init"
-            strategy="lazyOnload"
+            strategy="afterInteractive"
             dangerouslySetInnerHTML={{
               __html: `
                 window.dataLayer = window.dataLayer || [];

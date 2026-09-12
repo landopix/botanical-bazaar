@@ -1,3 +1,4 @@
+import { trackViewItem, trackAddToCart } from '../../lib/analytics';
 import { getRecommendedProducts } from '../../lib/productRecommendations';
 import { getResolvedPotSize, getResolvedPlantType } from "../../components/ProductCard";
 import React, { useState, useEffect, useRef } from 'react';
@@ -125,7 +126,13 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
   });
 
   // Hardiness zone sync state
-  const [hardinessZone, setHardinessZone] = useState('10a');
+  const [hardinessZone, setHardinessZone] = useState('');
+
+  useEffect(() => {
+    if (product) {
+      trackViewItem(product, selectedVariant);
+    }
+  }, [product?.slug, selectedVariant?.id]);
 
   useEffect(() => {
     notifyRequest.current++;
@@ -241,6 +248,7 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
   const handleAddToCart = () => {
     if (isAdding) return;
     setIsAdding(true);
+    trackAddToCart(product, selectedVariant, quantity);
     const itemToAdd = {
       ...product,
       price: activePrice,
@@ -360,7 +368,7 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
     'offers': {
       '@type': 'Offer',
       'priceCurrency': 'USD',
-      'price': activePrice,
+      'price': parseFloat(activePrice || 0).toFixed(2),
       'itemCondition': 'https://schema.org/NewCondition',
       'availability': isSoldOut ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
       'url': pageUrl,
@@ -413,6 +421,7 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
         description={descriptionText}
         image={imageUrl}
         url={pageUrl}
+        canonical={pageUrl}
         type="product"
         titleLimit={70}
       >
@@ -641,7 +650,7 @@ export default function ProductDetail({ initialProduct, recommendedProducts = []
                   aria-label="Select USDA climate hardiness zone"
                   type="button"
                 >
-                  Zone {hardinessZone} ▾
+                  {hardinessZone ? `Zone ${hardinessZone} ▾` : 'Select Zone ▾'}
                 </button>
               </div>
 

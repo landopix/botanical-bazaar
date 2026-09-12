@@ -282,11 +282,11 @@ export default function Layout({ children }) {
   const [isAlmanacDropdownOpen, setIsAlmanacDropdownOpen] = useState(false);
   const [isFaqDropdownOpen, setIsFaqDropdownOpen] = useState(false);
 
-  // Hardiness Zone Detector state (defaults to Zone 10a)
-  const [hardinessZone, setHardinessZone] = useState("10a");
+  // Hardiness Zone Detector state (defaults to unselected null/empty string)
+  const [hardinessZone, setHardinessZone] = useState("");
   const [isZoneModalOpen, setIsZoneModalOpen] = useState(false);
   const [zipInput, setZipInput] = useState("");
-  const [selectedDropdownZone, setSelectedDropdownZone] = useState("10a");
+  const [selectedDropdownZone, setSelectedDropdownZone] = useState("");
   const [zipError, setZipError] = useState("");
   const [zoneStatusMessage, setZoneStatusMessage] = useState("");
   const [shouldLoadMerchantWidget, setShouldLoadMerchantWidget] = useState(false);
@@ -1791,7 +1791,7 @@ export default function Layout({ children }) {
                   className="zone-pill-btn"
                   aria-label="Select USDA climate hardiness zone"
                 >
-                  Zone {hardinessZone} ▾
+                  {hardinessZone ? `Zone ${hardinessZone} ▾` : "Select Zone ▾"}
                 </button>
               </div>
             </div>
