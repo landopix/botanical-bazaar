@@ -1,3 +1,4 @@
+import { trackAddToCart } from '../lib/analytics';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -64,6 +65,11 @@ export function CartProvider({ children }) {
   };
 
   const addToCart = (product, quantity = 1, selectedSize = null, variantId = null) => {
+    try {
+      trackAddToCart(product, null, quantity);
+    } catch (e) {
+      console.error("Error tracking add_to_cart:", e);
+    }
     let resolvedVariantId = variantId || product.variantId;
     if (!resolvedVariantId && product.variants && product.variants.length > 0) {
       if (selectedSize) {

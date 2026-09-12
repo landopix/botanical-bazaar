@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { getPlantZoneGuidance } from '../lib/zoneGuidance';
 
-export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
+export default function ZoneCompatibilityBadges({ product, userZone = '' }) {
   const [showMicroclimateModal, setShowMicroclimateModal] = useState(false);
 
   if (!product) return null;
@@ -15,7 +15,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
   return (
     <div className="zone-badges-container" aria-live="polite" aria-atomic="true">
       <div className="badges-header">
-        <h2 className="header-label">USDA Zone Compatibility (Zone {userZone}):</h2>
+        <h2 className="header-label">USDA Zone Compatibility{userZone ? ` (Zone ${userZone.toUpperCase()})` : ''}:</h2>
         <button
           onClick={() => setShowMicroclimateModal(true)}
           className="microclimate-btn"
@@ -41,7 +41,7 @@ export default function ZoneCompatibilityBadges({ product, userZone = '10a' }) {
         <div className="modal-overlay" onClick={() => setShowMicroclimateModal(false)} role="dialog" aria-modal="true">
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Zone {userZone} Microclimate Guidance</h3>
+              <h3>{userZone ? `Zone ${userZone.toUpperCase()} Microclimate Guidance` : 'Microclimate Guidance'}</h3>
               <button onClick={() => setShowMicroclimateModal(false)} className="close-btn">✕</button>
             </div>
             <div className="modal-body">

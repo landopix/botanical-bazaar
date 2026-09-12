@@ -33,6 +33,22 @@ export default function Index({ initialProducts = [] }) {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      setPrefersReducedMotion(mediaQuery.matches);
+      const handleChange = (e) => setPrefersReducedMotion(e.matches);
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener("change", handleChange);
+        return () => mediaQuery.removeEventListener("change", handleChange);
+      } else if (mediaQuery.addListener) {
+        mediaQuery.addListener(handleChange);
+        return () => mediaQuery.removeListener(handleChange);
+      }
+    }
+  }, []);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [products, setProducts] = useState(initialProducts);
@@ -339,14 +355,18 @@ export default function Index({ initialProducts = [] }) {
           <div className="hero-image">
             <video
               src="/assets/logo-animation.mp4"
-              autoPlay
-              loop
+              poster="/assets/logo-animation-poster.jpg"
+              width={600}
+              height={600}
+              autoPlay={!prefersReducedMotion}
+              loop={!prefersReducedMotion}
               muted
               playsInline
               className="hero-video"
               style={{
                 width: "100%",
                 height: "auto",
+                aspectRatio: "1 / 1",
                 boxShadow: "0 0 40px 20px rgba(1, 61, 36, 0.35)",
                 borderRadius: "12px",
                 objectFit: "cover",
